@@ -406,10 +406,7 @@
     </div>
   </div>
 </div>
-      <!-- resto della guida -->
-    </div>
-  </div>
-</div>
+      <!-- resto della guida --
 <script>
 const HP_MULT=1.40;
 const DAMAGE_MULT=0.85;
