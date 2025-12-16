@@ -1,6 +1,4 @@
-# jeff-chronicles[index.html](https://github.com/user-attachments/files/24199363/index.html)
-<title>Platform Fighter - Complete</title> <style> *{margin:0;padding:0;box-sizing:border-box} html,body{height:100%} body{ font-family:'VT323', monospace; /* Font di gioco */ background:#000; color:#fff; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; position:relative; }
-  
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
