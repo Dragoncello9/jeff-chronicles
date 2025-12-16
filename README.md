@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Platform Fighter - Complete</title>
-
+  <!-- Link ai font da Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
@@ -233,7 +232,7 @@
 
 
       <!-- Kouvagia card (locked until 51.000 score with Voltryx) -->
-      <div class="character-card disabled" data-char="kouvagia" id="card-kouvagia" title="Sblocca facendo 51.000 punti con Voltryx">
+      <div class="character-card disabled" data-char="kouvagia" id="card-kouvagia" title="Sblocca facendo 50.000 punti con Voltryx">
         <h3>KOUVAGIA</h3>
         <p>"🦉"</p>
         <div class="menu-stats">HP: <span id="menu-hp-kouvagia">-</span> Danno: <span id="menu-dmg-kouvagia">-</span></div>
@@ -428,6 +427,27 @@ const URL_DARK='https://i.postimg.cc/JhpWH3jJ/Copilot-20251209-232827.png';
 const URL_FINAL='https://i.postimg.cc/pTHFKHgz/Progetto-senza-titolo-(2).png';
 const canvas=document.getElementById('gameCanvas');
 const ctx=canvas.getContext('2d');
+function resizeCanvas(){
+  const scale = window.devicePixelRatio || 1;
+
+  // dimensione "logica" del gioco
+  const baseWidth = 1200;
+  const baseHeight = 700;
+
+  canvas.style.width = baseWidth + "px";
+  canvas.style.height = baseHeight + "px";
+
+  canvas.width = baseWidth * scale;
+  canvas.height = baseHeight * scale;
+
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
+}
+
+// prima esecuzione
+resizeCanvas();
+
+// ricalcola se cambia finestra o zoom
+window.addEventListener("resize", resizeCanvas);
 
 const bgDefault=document.getElementById('bgDefault');
 const bgDark=document.getElementById('bgDark');
@@ -651,7 +671,7 @@ function updateVoltryxUnlockUI(){
 
 
 function voltryxAbove51k(){
-  return (records.voltryx||0) >= 51000;
+  return (records.voltryx||0) >= 50000;
 }
 
 function updateKouvagiaUnlockUI(){
@@ -669,7 +689,7 @@ function updateKouvagiaUnlockUI(){
     badge.textContent='LOCKED';
     badge.style.color='#f39c12';
     badge.style.borderColor='#f39c12';
-    card.title='Sblocca facendo 51.000 punti con Voltryx';
+    card.title='Sblocca facendo 50.000 punti con Voltryx';
   }
 }
 
@@ -878,7 +898,7 @@ function updateProjectiles(){
             // single target
             const dmg=Math.round(p.damage);
             const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
-            createParticles(e.x,e.y,'#ffd54f',8,4);
+            createParticles(e.x,e.y,' #5da9e8',8,4);
             showDamageNumber(e.x,e.y, _final);
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
@@ -2175,7 +2195,7 @@ class ShooterEnemy extends Enemy{
       spawnProjectile({
         x:this.x+this.width/2,y:this.y+this.height/2,
         vx,vy,damage:Math.max(1,Math.round(this.damage*0.6)),ttl:4000,
-        color:'#ffd54f',radius:6,friendly:false
+        color:' #5da9e8',radius:6,friendly:false
       })
     }
   }
