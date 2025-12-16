@@ -1,11 +1,12 @@
 # jeff-chronicles[index.html](https://github.com/user-attachments/files/24199363/index.html)
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Platform Fighter - Complete</title>
-  <!-- Link ai font da Google Fonts -->
+
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
