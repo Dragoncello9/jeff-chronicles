@@ -88,7 +88,22 @@
       font-size:38;color:#e74c3c;text-shadow:3px 3px 6px #000;margin-bottom:12px
     }
 
-    .character-select{display:flex;gap:16px;justify-content:center;margin:18px 0;flex-wrap:wrap}
+    .character-select{
+      display:flex;
+      gap:16px;
+      justify-content:center;
+      margin:18px 0;
+      flex-wrap:wrap;
+
+      /* NEW: scrollable character list (extra slots) */
+      max-height:360px;
+      overflow-y:auto;
+      overflow-x:hidden;
+      padding:8px 6px;
+    }
+    .character-select::-webkit-scrollbar{width:10px}
+    .character-select::-webkit-scrollbar-thumb{background:#555;border:2px solid #111;border-radius:10px}
+    .character-select::-webkit-scrollbar-track{background:#111}
 
     /* Ridotte leggermente le card personaggio per evitare sovrapposizioni */
     .character-card{
@@ -100,6 +115,14 @@
     .character-card:hover{transform:scale(1.03);border-color:#e74c3c}
     .character-card.selected{border-color:#f39c12;background:#333}
     .character-card.disabled{ filter:grayscale(1); opacity:0.55; cursor:not-allowed; }
+.character-card.disabled:hover{ transform:none; border-color:#555; }
+
+/* Coming soon (grey, not clickable) */
+.character-card.coming-soon{
+  background:#3a3a3a;
+  border-color:#777;
+}
+.character-card.coming-soon .menu-stats{color:#cfcfcf}
 
     /* Immagine personaggio più piccola per evitare sovrapposizioni */
     .character-card img{
@@ -277,7 +300,13 @@
         <div class="lock-badge" id="salsyLockBadge">LOCKED</div>
       </div>
 
-    
+<!-- Tempostorm card (coming soon - not playable) -->
+<div class="character-card disabled coming-soon" data-char="tempostorm" id="card-tempostorm" title="Coming soon..." aria-disabled="true">
+  <h3>TEMPOSTORM</h3>
+  <p>"🔋​"</p>
+  <div class="menu-stats"><em>coming soon...</em></div>
+</div>
+
     </div>
 
     <button class="btn" id="startBtn">INIZIA BATTAGLIA</button>
@@ -2627,6 +2656,7 @@ window.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;});
 document.querySelectorAll('.character-card').forEach(card=>{
   card.addEventListener('click',()=>{
     const char=card.getAttribute('data-char');
+    if(char==='tempostorm'){ return; }
     if(char==='voltryx' && !allThreeAbove50k()){
       // keep disabled
       updateVoltryxUnlockUI();
@@ -2678,6 +2708,7 @@ function populateMenuStatsAll(){
   updateMenuStatsDisplay('jeff');
   updateMenuStatsDisplay('voltryx');
 updateMenuStatsDisplay('kouvagia');
+  updateMenuStatsDisplay('salsy');
 }
 populateMenuStatsAll();
 updateMenuRecordsDisplay();
