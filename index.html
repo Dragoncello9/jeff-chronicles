@@ -300,11 +300,13 @@
         <div class="lock-badge" id="salsyLockBadge">LOCKED</div>
       </div>
 
-<!-- Tempostorm card (coming soon - not playable) -->
-<div class="character-card disabled coming-soon" data-char="tempostorm" id="card-tempostorm" title="Coming soon..." aria-disabled="true">
+<!-- Tempostorm card (locked until 85.000 score with ALL previous characters) -->
+<div class="character-card disabled" data-char="tempostorm" id="card-tempostorm" title="Sblocca facendo 85.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)">
   <h3>TEMPOSTORM</h3>
-  <p>"🔋​"</p>
-  <div class="menu-stats"><em>coming soon...</em></div>
+  <p>"🔋"</p>
+  <div class="menu-stats">HP: <span id="menu-hp-tempostorm">-</span> Danno: <span id="menu-dmg-tempostorm">-</span></div>
+  <div class="record-badge" id="record-tempostorm">Record: 0</div>
+  <div class="lock-badge" id="tempostormLockBadge">LOCKED</div>
 </div>
 
     </div>
@@ -312,7 +314,7 @@
     <button class="btn" id="startBtn">INIZIA BATTAGLIA</button>
 <!-- Pulsante immagine per aprire la guida -->
 <button id="guideImgBtn" class="img-btn" aria-label="Apri guida" title="Apri guida" type="button" style="display:inline-block;">
-  <img id="guideImg" src="https://i.postimg.cc/JztT9fJH/bea.png " alt="Guida" />
+  <img id="guideImg" src="https://i.postimg.cc/JztT9fJH/bea.png" alt="Guida" />
 </button>
     <p style="margin-top:12px;font-size:15px;color:#ddd">Controlli: WASD - Muovi | J - Attacco | K - Super Mossa | Spazio - Schivata</p>
   </div>
@@ -448,7 +450,22 @@
         <p><strong>Sblocco</strong>: 70.000 punti con tutti gli altri personaggi.</p>
       </div>
 
-      <h3>11) NEMICI E PERICOLI</h3>
+      
+<div id="guide-tempostorm-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🔋 TEMPOSTORM</h4>
+  <p><em>Questo personaggio si sblocca facendo <strong>85.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+
+<div id="guide-tempostorm" style="display:none;">
+  <h4>🔋 TEMPOSTORM</h4>
+  <p><strong>Ruolo</strong>: controllo di zona + sustain tramite Super.</p>
+  <p><strong>Statistiche</strong>: 300 HP, velocità leggermente superiore a Rooney.</p>
+  <p><strong>Attacco base</strong>: fasci di energia blu (laser). Infligge <strong>40</strong> danni al primo impatto e altri <strong>30</strong> se il nemico resta dentro il fascio dopo essere stato colpito.</p>
+  <p><strong>Super – Tempesta Centrale</strong>: raggruppa tutti i nemici esattamente al centro dell’arena, dimezza la loro vita e converte la somma della vita sottratta in una <strong>cura personale</strong> tramite un effetto speciale blu.</p>
+  <p><strong>Sblocco</strong>: 85.000 punti con tutti i personaggi precedenti.</p>
+</div>
+
+<h3>11) NEMICI E PERICOLI</h3>
       <p>Nemici melee, veloci, resistenti e a distanza. Nemici con poison. Nemici con laser che richiedono schivata precisa. Boss con attacchi speciali e grandi quantità di HP.</p>
 
       <h3>12) CONSIGLI FINALI</h3>
@@ -536,18 +553,20 @@ function pickRandomPickupType(){
 let projectiles=[];
 
 let lasers=[];
+let tempBeams=[]; // Tempostorm lasers (friendly beams)
 let keys={};
 let lastSecondTick=Date.now();
 let levelAdvanceLock=false;
 let shakeAmount=0;
 
-const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image()};
+const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image()};
 images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
 images.voltryx.src='https://i.postimg.cc/GhjK4WCy/Voltryxx.png';
 images.kouvagia.src='https://i.postimg.cc/gj1xjk0G/kouvagiaa-(1).png';
 images.salsy.src='https://i.ibb.co/20zSkjsB/salsy.png';
+images.tempostorm.src='https://i.postimg.cc/mkzj763m/tempostorm.png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
 imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
 imagesEvo.rooney.src='https://i.postimg.cc/x8Ck0fWs/rooneyevo.png';
@@ -584,7 +603,7 @@ const enemyImages={
   veleno:new Image(),oneyes:new Image(),boss4:new Image()
 };
 enemyImages.slime.src='https://i.postimg.cc/NFVhJNLC/pixelcut-export-(2).png';
-enemyImages.drone.src='https://i.postimg.cc/13x9HtxZ/image-(1).png ';
+enemyImages.drone.src='https://i.postimg.cc/13x9HtxZ/image-(1).png';
 enemyImages.boss1.src='https://i.postimg.cc/B6bmxMJt/boss1-(1).png';
 enemyImages.mech.src='https://i.postimg.cc/qqkys7cT/mech-(1).png';
 enemyImages.shadow.src='https://i.postimg.cc/tgWx86Dv/shadow-(1).png';
@@ -663,7 +682,18 @@ const characterStats={
     attackType:'salsySword',
     superCooldown:6000,
     superDuration:400
-  }
+  },
+  tempostorm:{
+  hp:310,
+  speed:6.9*0.75, // leggermente piu di Rooney
+  damage:45,      // hit iniziale (extra +30 se il nemico resta nel fascio)
+  range:640,
+  cooldown:620,
+  name:'Tempostorm',
+  attackType:'tempostormLaser',
+  superCooldown:12000,
+  superDuration:500
+}
 };
 
 const levelConfigs=[
@@ -690,18 +720,34 @@ const levelConfigs=[
 
 ];
 
-const RECORDS_KEY='pf_records_v17'; // bumped key to include salsy + new unlock rules // bumped key to include voltryx
+const RECORDS_KEY='pf_records_v18'; 
+// Backward compatibility: try older keys used by previous versions
+const LEGACY_RECORDS_KEYS = ['pf_records_v17','pf_records_v16','pf_records_v15','pf_records'];
+// bumped key to include tempostormnclude salsy + new unlock rules // bumped key to include voltryx
 let records=loadRecords();
 
 function loadRecords(){
+  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0};
   try{
+    // Primary key (current version)
     const r=localStorage.getItem(RECORDS_KEY);
     if(r){
       const obj=JSON.parse(r);
-      return Object.assign({jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0}, obj);
+      return Object.assign({}, base, obj);
+    }
+    // Migration: older versions may have used a different key
+    for(const k of (typeof LEGACY_RECORDS_KEYS!=='undefined'?LEGACY_RECORDS_KEYS:[])){
+      const old=localStorage.getItem(k);
+      if(old){
+        const obj=JSON.parse(old);
+        const merged=Object.assign({}, base, obj);
+        // persist into the current key so future loads are stable
+        try{localStorage.setItem(RECORDS_KEY, JSON.stringify(merged));}catch(e){}
+        return merged;
+      }
     }
   }catch(e){}
-  return {jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0};
+  return base;
 }
 function saveRecords(){
   try{localStorage.setItem(RECORDS_KEY,JSON.stringify(records))}catch(e){}
@@ -713,9 +759,11 @@ function updateMenuRecordsDisplay(){
   document.getElementById('record-voltryx').textContent=`Record: ${records.voltryx||0}`;
   document.getElementById('record-kouvagia').textContent=`Record: ${records.kouvagia||0}`;
   document.getElementById('record-salsy').textContent=`Record: ${records.salsy||0}`;
+  document.getElementById('record-tempostorm').textContent=`Record: ${records.tempostorm||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
+  updateTempostormUnlockUI();
   updateGuideUnlockUI();
 }
 function allThreeAbove50k(){
@@ -788,10 +836,40 @@ function updateSalsyUnlockUI(){
 }
 
 
+
+function allPrevAbove85k(){
+  return (records.jimmy||0) >= 85000 &&
+         (records.rooney||0) >= 85000 &&
+         (records.jeff||0) >= 85000 &&
+         (records.voltryx||0) >= 85000 &&
+         (records.kouvagia||0) >= 85000 &&
+         (records.salsy||0) >= 85000;
+}
+function updateTempostormUnlockUI(){
+  const card=document.getElementById('card-tempostorm');
+  const badge=document.getElementById('tempostormLockBadge');
+  if(!card||!badge) return;
+  if(allPrevAbove85k()){
+    card.classList.remove('disabled');
+    card.classList.remove('coming-soon');
+    badge.textContent='UNLOCKED';
+    badge.style.color='#2ecc71';
+    badge.style.borderColor='#2ecc71';
+    card.title='Tempostorm sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    badge.textContent='LOCKED';
+    badge.style.color='#f39c12';
+    badge.style.borderColor='#f39c12';
+    card.title='Sblocca facendo 85.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)';
+  }
+}
+
 function updateGuideUnlockUI(){
   const vUnlocked = allThreeAbove50k();
   const kUnlocked = voltryxAbove51k();
   const sUnlocked = allPrevAbove70k();
+  const tUnlocked = allPrevAbove85k();
 
   const vBox=document.getElementById('guide-voltryx');
   const vLock=document.getElementById('guide-voltryx-locked');
@@ -804,6 +882,10 @@ function updateGuideUnlockUI(){
   const sBox=document.getElementById('guide-salsy');
   const sLock=document.getElementById('guide-salsy-locked');
   if(sBox&&sLock){ sBox.style.display = sUnlocked ? 'block' : 'none'; sLock.style.display = sUnlocked ? 'none' : 'block'; }
+
+  const tBox=document.getElementById('guide-tempostorm');
+  const tLock=document.getElementById('guide-tempostorm-locked');
+  if(tBox&&tLock){ tBox.style.display = tUnlocked ? 'block' : 'none'; tLock.style.display = tUnlocked ? 'none' : 'block'; }
 }
 
 
@@ -1135,6 +1217,102 @@ function drawLasers(){
       ctx.beginPath(); ctx.moveTo(L.x,L.y); ctx.lineTo(x2,y2); ctx.stroke();
       ctx.globalAlpha = 1;
     }
+
+    ctx.restore();
+  });
+}
+
+
+function spawnTempBeam(opts){
+  // opts: {x1,y1,x2,y2,width,ttl,damage1,damageStay,friendly}
+  tempBeams.push({
+    x1:opts.x1,y1:opts.y1,x2:opts.x2,y2:opts.y2,
+    width:opts.width||18,
+    created:Date.now(),
+    ttl:opts.ttl||260,
+    damage1:opts.damage1||40,
+    damageStay:opts.damageStay||30,
+    hitMap:new Map() // enemy -> {firstHit, left, extraDone}
+  });
+}
+
+// distance from point to segment
+function _distPointToSeg(px,py,x1,y1,x2,y2){
+  const vx=x2-x1, vy=y2-y1;
+  const wx=px-x1, wy=py-y1;
+  const c1=wx*vx+wy*vy;
+  if(c1<=0) return Math.hypot(px-x1,py-y1);
+  const c2=vx*vx+vy*vy;
+  if(c2<=c1) return Math.hypot(px-x2,py-y2);
+  const b=c1/c2;
+  const bx=x1+b*vx, by=y1+b*vy;
+  return Math.hypot(px-bx,py-by);
+}
+
+function updateTempBeams(){
+  const now=Date.now();
+  for(let i=tempBeams.length-1;i>=0;i--){
+    const B=tempBeams[i];
+    const age=now-B.created;
+    if(age>B.ttl){ tempBeams.splice(i,1); continue; }
+
+    // collisions with enemies
+    enemies.forEach(e=>{
+      const ex=e.x+e.width/2, ey=e.y+e.height/2;
+      const dist=_distPointToSeg(ex,ey,B.x1,B.y1,B.x2,B.y2);
+      const inside = dist <= (B.width*0.55 + Math.max(e.width,e.height)*0.18);
+
+      const state = B.hitMap.get(e);
+      if(inside){
+        if(!state){
+          // first hit
+          const dmg = B.damage1;
+          const final = applyEnemyDamage(e, dmg);
+          showDamageNumber(e.x,e.y, final);
+          createParticles(e.x+e.width/2,e.y+e.height/2,'#4fc3f7',10,4);
+          B.hitMap.set(e,{firstHit:now,left:false,extraDone:false});
+        } else {
+          // check linger bonus only if stayed inside continuously
+          if(!state.extraDone && !state.left && (now - state.firstHit) >= 180){
+            const dmg2=B.damageStay;
+            const final2 = applyEnemyDamage(e, dmg2);
+            showDamageNumber(e.x,e.y, final2);
+            createParticles(e.x+e.width/2,e.y+e.height/2,'#81d4fa',12,4);
+            state.extraDone=true;
+          }
+        }
+      } else {
+        if(state && !state.extraDone){
+          state.left=true;
+        }
+      }
+    });
+  }
+}
+
+function drawTempBeams(){
+  tempBeams.forEach(B=>{
+    const x1=B.x1, y1=B.y1, x2=B.x2, y2=B.y2;
+    ctx.save();
+    ctx.lineCap='round';
+
+    // glow
+    ctx.globalAlpha=0.22;
+    ctx.strokeStyle='#00b0ff';
+    ctx.lineWidth=B.width*2.4;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+
+    // core
+    ctx.globalAlpha=0.85;
+    ctx.strokeStyle='#4fc3f7';
+    ctx.lineWidth=B.width;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+
+    // white highlight
+    ctx.globalAlpha=0.65;
+    ctx.strokeStyle='rgba(255,255,255,0.9)';
+    ctx.lineWidth=Math.max(2, B.width*0.22);
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
 
     ctx.restore();
   });
@@ -1636,8 +1814,13 @@ class Player{
       } else if(this.attackType==='kouvagia'){
         if(elapsed>=this.superDuration) this.endSuper();
 } else if(this.attackType==='hybrid'){
-        
+
         if(now - this.superStartTime >= this.superDuration){
+          this.endSuper();
+        }
+      } else if(this.attackType==='tempostormLaser'){
+        // Tempostorm SUPER is applied instantly in superAttack(); keep VFX only for superDuration.
+        if(elapsed>=this.superDuration){
           this.endSuper();
         }
       }
@@ -1929,6 +2112,31 @@ class Player{
         setTimeout(punch, 120);
       }
     }
+else if(this.attackType==='tempostormLaser'){
+  const assistTarget=this.findClosestEnemy(900);
+  const sx=this.x+this.width/2;
+  const sy=this.y+this.height/2;
+
+  let dx,dy,len;
+  if(assistTarget){
+    dx=(assistTarget.x+assistTarget.width/2)-sx;
+    dy=(assistTarget.y+assistTarget.height/2)-sy;
+  }else{
+    dx=this.facingRight?1:-1; dy=0;
+  }
+  len=Math.hypot(dx,dy)||1;
+  const ex=sx+(dx/len)*this.range;
+  const ey=sy+(dy/len)*this.range;
+
+  spawnTempBeam({
+    x1:sx,y1:sy,x2:ex,y2:ey,
+    width:18,ttl:260,
+    damage1:Math.round(40*this.attackBuffMultiplier),
+    damageStay:Math.round(30*this.attackBuffMultiplier)
+  });
+  createParticles(sx,sy,'#4fc3f7',14,4);
+}
+
 
     return true;
   }
@@ -2012,6 +2220,34 @@ else if(this.attackType==='hybrid'){
       createParticles(this.x+this.width/2,this.y+this.height/2,'#f39c12',26,6);
       shakeScreen();
     }
+
+else if(this.attackType==='tempostormLaser'){
+  const cx=canvas.width/2;
+  const cy=(canvas.height-50)/2;
+  let stolen=0;
+
+  enemies.forEach(e=>{
+    // group to exact center
+    e.x = cx - e.width/2;
+    e.y = cy - e.height/2;
+
+    const removed = Math.max(0, Math.floor(e.hp/2));
+    e.hp = Math.max(0, e.hp - removed);
+    stolen += removed;
+
+    if(removed>0){
+      showDamageNumber(e.x,e.y, removed);
+      createParticles(e.x+e.width/2,e.y+e.height/2,'#00b0ff',18,5);
+    }
+  });
+
+  if(stolen>0){
+    this.hp = Math.min(this.maxHP, this.hp + stolen);
+    createParticles(this.x+this.width/2,this.y+this.height/2,'#00b0ff',30,6);
+  }
+  createParticles(cx,cy,'#4fc3f7',60,7);
+  shakeScreen();
+}
 
     return true;
   }
@@ -2114,6 +2350,13 @@ else if(this.attackType==='hybrid'){
         ctx.arc(this.x+this.width/2,this.y+this.height/2,110,0,Math.PI*2);
         ctx.stroke();
       }
+      else if(this.attackType==='tempostormLaser'){
+        const sx=this.x+this.width/2, sy=this.y+this.height/2;
+        const tx = sx + (this.facingRight?1:-1)*this.range;
+        const ty = sy;
+        ctx.strokeStyle='rgba(79,195,247,0.75)';ctx.lineWidth=7;
+        ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(tx,ty);ctx.stroke();
+      }
       ctx.restore()
     }
 
@@ -2136,7 +2379,16 @@ else if(this.attackType==='hybrid'){
         ctx.save();ctx.strokeStyle='rgba(243,156,18,0.35)';ctx.lineWidth=8;
         ctx.beginPath();ctx.arc(this.x+this.width/2,this.y+this.height/2,140,0,Math.PI*2);ctx.stroke();ctx.restore()
       }
-      else if(this.attackType==='salsySword'){
+            else if(this.attackType==='tempostormLaser'){
+        ctx.save();
+        ctx.strokeStyle='rgba(0,176,255,0.45)';
+        ctx.lineWidth=10;
+        ctx.beginPath();
+        ctx.arc(canvas.width/2,(canvas.height-50)/2,180,0,Math.PI*2);
+        ctx.stroke();
+        ctx.restore();
+      }
+else if(this.attackType==='salsySword'){
         // Show 1-3 target reticles + launch lines during Salsy super
         ctx.save();
         ctx.strokeStyle='rgba(241,196,15,0.75)';
@@ -2574,7 +2826,7 @@ function updateBackgroundForLevel(level){
 function startGame(){
   currentLevel=1;score=0;timer=levelConfigs[0].time;
   player=new Player(selectedCharacter||'jimmy');
-  enemies=[];particles=[];projectiles=[];lasers=[];pickups=[];
+  enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];
   spawnEnemiesForLevel(currentLevel);
   updateBackgroundForLevel(currentLevel);
   document.getElementById('mainMenu').style.display='none';
@@ -2629,6 +2881,7 @@ return;
   updateParticles();
   updateProjectiles();
   updateLasers();
+  updateTempBeams();
   updateFuriaWaves();
   if(player) updatePickups(player);
 
@@ -2667,6 +2920,7 @@ return;
   if(player) player.draw();
   drawProjectiles();
   drawLasers();
+  drawTempBeams();
   drawFuriaWaves();
   drawParticles();
   drawPickups();
@@ -2731,7 +2985,10 @@ window.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;});
 document.querySelectorAll('.character-card').forEach(card=>{
   card.addEventListener('click',()=>{
     const char=card.getAttribute('data-char');
-    if(char==='tempostorm'){ return; }
+    if(char==='tempostorm' && !allPrevAbove85k()){
+      updateTempostormUnlockUI();
+      return;
+    }
     if(char==='voltryx' && !allThreeAbove50k()){
       // keep disabled
       updateVoltryxUnlockUI();
@@ -2757,7 +3014,10 @@ function updateMenuStatsDisplay(char){
   if(!s)return;
   document.getElementById(`menu-hp-${char}`).textContent=s.hp;
   document.getElementById(`menu-dmg-${char}`).textContent=
-    char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` : (char==='salsy' ? '33x2' : s.damage);
+    char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` :
+    (char==='salsy' ? '33x2' :
+     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : s.damage));
+
 }
 
 document.getElementById('startBtn').addEventListener('click',()=>{
@@ -2784,6 +3044,7 @@ function populateMenuStatsAll(){
   updateMenuStatsDisplay('voltryx');
 updateMenuStatsDisplay('kouvagia');
   updateMenuStatsDisplay('salsy');
+  updateMenuStatsDisplay('tempostorm');
 }
 populateMenuStatsAll();
 updateMenuRecordsDisplay();
