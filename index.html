@@ -503,6 +503,31 @@ let timer=45;
 let enemies=[];
 let particles=[];
 let pickups=[];
+
+// --- Pickup hitbox tuning ---
+// Bigger pickup hitbox (bonuses easier to collect), malus stays tighter.
+const BONUS_HIT_RADIUS = 26; // was ~18
+const MALUS_HIT_RADIUS = 18;
+
+// Lower malus probability (weighted pick)
+function pickRandomPickupType(){
+  const weighted = [
+    ['heal', 1],
+    ['atk', 1],
+    ['super', 1],
+    ['speed', 1],
+    ['shieldPickup', 1],
+    ['malus', 0.25], // nerfed
+  ];
+  let sum = 0;
+  for (const [,w] of weighted) sum += w;
+  let r = Math.random() * sum;
+  for (const [t,w] of weighted){
+    r -= w;
+    if (r <= 0) return t;
+  }
+  return 'heal';
+}
 let projectiles=[];
 
 let lasers=[];
@@ -1110,19 +1135,25 @@ function drawLasers(){
 
 function spawnPickup(x,y,type,value=0){
   // Small collectible pickup (compatible with updatePickups / drawPickups)
-  pickups.push({x,y,type,value,created:Date.now(),ttl:20000,radius:18,w:28,h:28});
+  const hitR = (type==='malus') ? MALUS_HIT_RADIUS : BONUS_HIT_RADIUS;
+  pickups.push({x,y,type,value,created:Date.now(),ttl:20000,radius:18,hitRadius:hitR,w:28,h:28});
 }
 function spawnPickupsForLevel(level){
-  pickups=[];
+  // IMPORTANT: do NOT clear existing pickups here.
+  // Bonus pickups remain on the field when the level ends.
   if(level<4) return;
+
   const count=1+Math.floor(Math.random()*2);
   for(let i=0;i<count;i++){
-    const types=['heal','atk','super','speed','shieldPickup','malus'];
     const isGold=Math.random()<GOLD_PROB;
-    const type=isGold?'gold':types[Math.floor(Math.random()*types.length)];
+    const type=isGold ? 'gold' : pickRandomPickupType();
+
     const x=60+Math.random()*(canvas.width-120);
     const y=60+Math.random()*(canvas.height-180);
-    pickups.push({type,x,y,radius:18,created:Date.now()});
+
+    const hitR = (type==='malus') ? MALUS_HIT_RADIUS : BONUS_HIT_RADIUS;
+    // keep visual size small (radius:18) but increase hitbox via hitRadius
+    pickups.push({type,x,y,radius:18,hitRadius:hitR,created:Date.now(),ttl:20000});
   }
 }
 function drawPickups(){
@@ -1159,7 +1190,8 @@ function updatePickups(playerRef){
   pickups=pickups.filter(p=>{
     if(Date.now()-p.created>p.ttl) return false;
     const dist=Math.hypot((p.x-playerRef.x),(p.y-playerRef.y));
-    if(dist<p.radius+Math.max(playerRef.width,playerRef.height)/2){
+    const pr = (p.hitRadius!=null) ? p.hitRadius : (p.radius!=null ? p.radius : 18);
+    if(dist<pr+Math.max(playerRef.width,playerRef.height)/2){
       applyPickupEffect(playerRef,p.type);
       return false;
     }
