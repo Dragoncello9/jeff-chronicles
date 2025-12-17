@@ -53,6 +53,30 @@
     .level-indicator{position:absolute;top:60px;left:50%;transform:translateX(-50%);font-size:18px;z-index:10}
     .super-cooldown{position:absolute;top:100px;left:18px;font-size:14px;color:#f39c12;z-index:10}
 
+    .evo-banner{
+      position:absolute;left:50%;top:45%;
+      transform:translate(-50%,-50%);
+      z-index:50;
+      padding:18px 24px;
+      border:4px solid #fff;
+      background:rgba(0,0,0,0.85);
+      font-family:'Press Start 2P', cursive;
+      text-align:center;
+      pointer-events:none;
+      box-shadow:0 0 28px rgba(255,255,255,0.35);
+      opacity:0;
+    }
+    .evo-banner.show{
+      display:block !important;
+      animation:evoPop 520ms ease forwards;
+    }
+    @keyframes evoPop{
+      0%{opacity:0;transform:translate(-50%,-50%) scale(0.85)}
+      25%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}
+      100%{opacity:0;transform:translate(-50%,-50%) scale(1.00)}
+    }
+
+
     .menu,.end-screen{
       position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
       background:rgba(0,0,0,0.9);padding:30px;border:4px solid #fff;
@@ -195,6 +219,10 @@
   <div class="level-indicator" id="levelDisplay" style="display:none;">Level 1</div>
   <div class="super-cooldown" id="superCooldown" style="display:none;">Super: Ready</div>
 
+  <div class="evo-banner" id="evoBanner" style="display:none;">
+    <div id="evoBannerText">EVOLUTO!</div>
+  </div>
+
   <div class="menu" id="mainMenu">
     <h1>⚔️ JEFF’S CHRONICLES⚔️</h1>
     <h2>Seleziona il tuo combattente</h2>
@@ -276,7 +304,6 @@
     <h2 id="guideTitle">Guida completa a Jeff’s Chronicles</h2>
     <div class="guide-body">
 
-      <h3>📘 GUIDA COMPLETA – JEFF’S CHRONICLES</h3>
 
       <h3>1) PANORAMICA GENERALE</h3>
       <p><strong>Jeff’s Chronicles</strong> è un arena-fighter a schermo fisso. Il giocatore sceglie un combattente e affronta ondate di nemici e boss all’interno di un’arena chiusa, cercando di ottenere il punteggio più alto possibile prima della fine del tempo.</p>
@@ -349,7 +376,7 @@
 
       <div id="guide-voltryx-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
         <h4>🦊 VOLTRYX </h4>
-        <p><em>Questo personaggio è bloccato. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
+        <p><em>Questo personaggio si sblocca facendo oltre 50.000 punti con Jimmy, Rooney e Jeff.. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
       </div>
       <div id="guide-voltryx" style="display:none;">
         <h4>🦊 VOLTRYX </h4>
@@ -362,7 +389,7 @@
 
       <div id="guide-kouvagia-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
         <h4>🦉 KOUVAGIA </h4>
-        <p><em>Questo personaggio è bloccato. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
+        <p><em>Questo personaggio si sblocca facendo 60.000 punti con Voltryx. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
       </div>
       <div id="guide-kouvagia" style="display:none;">
         <h4>🦉 KOUVAGIA </h4>
@@ -372,12 +399,12 @@
         <p><strong>Passiva – Cura su uccisione</strong>: ogni nemico ucciso a distanza ravvicinata cura Kouvagia.</p>
         <p><strong>Super</strong>: cura completa e genera un’onda che respinge i nemici.</p>
         <p><strong>Stile consigliato</strong>: usare spesso il dash e restare nel caos.</p>
-        <p><strong>Sblocco</strong>: 51.000 punti con Voltryx.</p>
+        <p><strong>Sblocco</strong>: 60.000 punti con Voltryx.</p>
       </div>
 
       <div id="guide-salsy-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
         <h4>⚜️ SALSY </h4>
-        <p><em>Questo personaggio è bloccato. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
+        <p><em>Questo personaggio si sblocca facendo 70.000 punti con tutti gli altri personaggi.. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
       </div>
       <div id="guide-salsy" style="display:none;">
         <h4>⚜️ SALSY </h4>
@@ -406,10 +433,7 @@
     </div>
   </div>
 </div>
-      <!-- resto della guida -->
-    </div>
-  </div>
-</div>
+      
 <script>
 const HP_MULT=1.40;
 const DAMAGE_MULT=0.85;
@@ -456,12 +480,16 @@ let levelAdvanceLock=false;
 let shakeAmount=0;
 
 const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image()};
-images.rooney.src='https://i.postimg.cc/d3C41cds/pixelcut-export.png';
-images.jimmy.src='https://i.postimg.cc/7LD8rXpW/pixelcut-export-(1).png';
-images.jeff.src='https://i.postimg.cc/26GB7cDQ/image.png';
-images.voltryx.src='https://i.postimg.cc/6Qhqq2Mv/Voltryx.png';
-images.kouvagia.src='https://i.postimg.cc/26DT9cQH/Kouvagia.png';
+images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
+images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
+images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
+images.voltryx.src='https://i.postimg.cc/GhjK4WCy/Voltryxx.png';
+images.kouvagia.src='https://i.postimg.cc/gj1xjk0G/kouvagiaa-(1).png';
 images.salsy.src='https://i.ibb.co/20zSkjsB/salsy.png';
+const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
+imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
+imagesEvo.rooney.src='https://i.postimg.cc/x8Ck0fWs/rooneyevo.png';
+imagesEvo.jeff.src='https://i.postimg.cc/FsYf8KbV/jeffevo.png';
 // --- Pickup images (keep pickup size small; same dimensions already used) ---
 const pickupImgs={
   heal: new Image(),
@@ -492,19 +520,19 @@ const enemyImages={
   veleno:new Image(),oneyes:new Image(),boss4:new Image()
 };
 enemyImages.slime.src='https://i.postimg.cc/NFVhJNLC/pixelcut-export-(2).png';
-enemyImages.drone.src='https://i.postimg.cc/13x9HtxZ/image-(1).png';
-enemyImages.boss1.src='https://i.postimg.cc/gj2Ycc5Z/boss1.png';
-enemyImages.mech.src='https://i.postimg.cc/zvyGSXkT/mech.png';
-enemyImages.shadow.src='https://i.postimg.cc/zGvYyP0s/shadow.png';
-enemyImages.boss2.src='https://i.postimg.cc/htLT7pv1/boss2.png';
-enemyImages.shooter.src='https://i.postimg.cc/ZnmCZhPN/shooter.png';
-enemyImages.attacker.src='https://i.postimg.cc/pdtNsXPz/attacker.png';
-enemyImages.boss3.src='https://i.postimg.cc/P5S3wXPJ/boss3.png';
+enemyImages.drone.src='https://i.postimg.cc/13x9HtxZ/image-(1).png ';
+enemyImages.boss1.src='https://i.postimg.cc/B6bmxMJt/boss1-(1).png';
+enemyImages.mech.src='https://i.postimg.cc/qqkys7cT/mech-(1).png';
+enemyImages.shadow.src='https://i.postimg.cc/tgWx86Dv/shadow-(1).png';
+enemyImages.boss2.src='https://i.postimg.cc/Bvpq8QnR/boss2-(1).png';
+enemyImages.shooter.src='https://i.postimg.cc/yNxVZC3D/shooter-(1).png';
+enemyImages.attacker.src='https://i.postimg.cc/sxVHMs1H/attacker.png';
+enemyImages.boss3.src='https://i.postimg.cc/xjzKWcTs/boss3-(1).png';
 
 
 enemyImages.veleno.src='https://i.postimg.cc/3xNWGRWY/veleno.png';
 enemyImages.oneyes.src='https://i.postimg.cc/g2xkJTBG/oneyes.png';
-enemyImages.boss4.src='https://i.postimg.cc/2n4Q7r0B/boss4.png';
+enemyImages.boss4.src='https://i.postimg.cc/Px6d8kgr/boss4.png';
 const characterStats={
   jimmy:{
     hp:255,
@@ -530,7 +558,7 @@ const characterStats={
   },
   jeff:{
     hp:270, 
-    speed:7*0.75,
+    speed:7.5*0.75,
     damage:Math.round(57*DAMAGE_MULT), // 38
     range:Math.round(320*JEFF_ATTACK_RANGE_MULT),
     cooldown:700,
@@ -542,13 +570,13 @@ const characterStats={
   voltryx:{
     hp:280, 
     speed:9*0.75,               
-    damage:Math.round(52*DAMAGE_MULT),
+    damage:Math.round(55*DAMAGE_MULT),
     range:Math.round(600), 
     cooldown:650,
     name:'Voltryx',
     attackType:'hybrid',
     superCooldown:9000,
-    superDuration:1700 
+    superDuration:1500 
   },
   kouvagia:{
     hp:310,
@@ -558,18 +586,18 @@ const characterStats={
     cooldown:760,
     name:'Kouvagia',
     attackType:'kouvagia',
-    superCooldown:14000,
-    superDuration:650
+    superCooldown:20000,
+    superDuration:600
   },
   salsy:{
     hp:270,
-    speed:7.9*0.75,  // leggermente più veloce di prima
+    speed:7.8*0.75,  // leggermente più veloce di prima
     damage:33,       // per colpo (x2)
     range:280,       // medio ravvicinata
     cooldown:770,
     name:'Salsy',
     attackType:'salsySword',
-    superCooldown:8000,
+    superCooldown:6000,
     superDuration:400
   }
 };
@@ -590,11 +618,11 @@ const levelConfigs=[
   {enemyType:'attacker',enemyHP:90,enemyDamage:17,enemySpeed:3.2*0.75,time:50,enemyCount:5},
   {enemyType:'attacker',enemyHP:99,enemyDamage:19,enemySpeed:3.4*0.75,time:50,enemyCount:6},
   {enemyType:'boss3',enemyHP:666,enemyDamage:33,enemySpeed:2.4*0.75,time:100,enemyCount:1}
-  ,{enemyType:'veleno',enemyHP:70,enemyDamage:15,enemySpeed:3.1*0.75,time:50,enemyCount:7} // Level 16
-  ,{enemyType:'veleno',enemyHP:80,enemyDamage:15,enemySpeed:3.3*0.75,time:50,enemyCount:9} // Level 17
-  ,{enemyType:'oneyes',enemyHP:65,enemyDamage:10,enemySpeed:2.8*0.75,time:55,enemyCount:6} // Level 18
-  ,{enemyType:'oneyes',enemyHP:75,enemyDamage:12,enemySpeed:3.0*0.75,time:55,enemyCount:7} // Level 19
-  ,{enemyType:'boss4',enemyHP:800,enemyDamage:35,enemySpeed:2.2*0.75,time:120,enemyCount:1} // Level 20
+  ,{enemyType:'veleno',enemyHP:60,enemyDamage:13,enemySpeed:3.1*0.75,time:50,enemyCount:7} // Level 16
+  ,{enemyType:'veleno',enemyHP:70,enemyDamage:15,enemySpeed:3.3*0.75,time:50,enemyCount:9} // Level 17
+  ,{enemyType:'oneyes',enemyHP:55,enemyDamage:8,enemySpeed:2.1*0.75,time:55,enemyCount:4} // Level 18
+  ,{enemyType:'oneyes',enemyHP:60,enemyDamage:9,enemySpeed:2.3*0.75,time:55,enemyCount:5} // Level 19
+  ,{enemyType:'boss4',enemyHP:999,enemyDamage:35,enemySpeed:2.2*0.75,time:180,enemyCount:1} // Level 20
 
 ];
 
@@ -650,7 +678,7 @@ function updateVoltryxUnlockUI(){
 
 
 function voltryxAbove51k(){
-  return (records.voltryx||0) >= 51000;
+  return (records.voltryx||0) >= 60000;
 }
 
 function updateKouvagiaUnlockUI(){
@@ -668,7 +696,7 @@ function updateKouvagiaUnlockUI(){
     badge.textContent='LOCKED';
     badge.style.color='#f39c12';
     badge.style.borderColor='#f39c12';
-    card.title='Sblocca facendo 51.000 punti con Voltryx';
+    card.title='Sblocca facendo 60.000 punti con Voltryx';
   }
 }
 
@@ -756,7 +784,13 @@ function markMult(enemy){
   return (enemy && enemy.salsyMarkUntil && Date.now() < enemy.salsyMarkUntil) ? 2 : 1;
 }
 function applyEnemyDamage(enemy, baseDmg){
-  const finalDmg = Math.max(0, Math.round(baseDmg * markMult(enemy)));
+  // Rooney EVO passive: first hit on a given enemy deals +15% damage (doesn't change stats)
+  let mult=1;
+  if(typeof player!=='undefined' && player && player.type==='rooney' && player.evolved && enemy && !enemy._rooneyFirstHit){
+    mult=1.15;
+    enemy._rooneyFirstHit=true;
+  }
+  const finalDmg = Math.max(0, Math.round(baseDmg * mult * markMult(enemy)));
   enemy.hp -= finalDmg;
   return finalDmg;
 }
@@ -765,7 +799,7 @@ function shakeScreen(){shakeAmount=8}
 
 // Extended projectile to support friendly, AoE, homing, pulse damage
 function spawnProjectile(opts){
-  // opts: {x,y,vx,vy,damage,ttl,color,radius,friendly,aoeRadius,aoeFullDamage,homing,speed,isVoltryxSuper,pulseInterval,lastPulse,targetRef}
+  // opts: {x,y,vx,vy,damage,ttl,color,radius,friendly,aoeRadius,aoeFullDamage,homing,speed,isVoltryxSuper,pulseInterval,lastPulse,targetRef,explodeOnExpire}
   const p={
     x:opts.x,y:opts.y,vx:opts.vx||0,vy:opts.vy||0,
     damage:opts.damage||10,created:Date.now(),
@@ -776,7 +810,8 @@ function spawnProjectile(opts){
     isVoltryxSuper:!!opts.isVoltryxSuper,
     pulseInterval:opts.pulseInterval||0,
     lastPulse:opts.lastPulse||0,
-  targetRef:opts.targetRef||null
+  targetRef:opts.targetRef||null,
+    explodeOnExpire:!!opts.explodeOnExpire
   };
   projectiles.push(p);
 }
@@ -897,7 +932,33 @@ function updateProjectiles(){
       }
     }
 
-    return (now-p.created)<p.ttl && aliveInBounds;
+    const aliveTime = (now-p.created)<p.ttl;
+    const alive = aliveTime && aliveInBounds;
+
+    // Optional AoE explosion when the projectile stops (ttl end / out of bounds)
+    if(!alive && p.explodeOnExpire && p.friendly && p.aoeRadius>0){
+      // apply AoE at last position
+      for(let j=enemies.length-1;j>=0;j--){
+        const ee=enemies[j];
+        const dx=(ee.x+ee.width/2)-p.x;
+        const dy=(ee.y+ee.height/2)-p.y;
+        const d=Math.hypot(dx,dy);
+        if(d<=p.aoeRadius){
+          const dmg=Math.round(p.damage);
+          const _dmg=dmg; const _final=applyEnemyDamage(ee,_dmg);
+          createParticles(ee.x,ee.y,'#ffb74d',8,4);
+          showDamageNumber(ee.x,ee.y, _final);
+          if(ee.hp<=0){
+            createParticles(ee.x,ee.y,'#fff176',30,6);
+            enemies.splice(j,1);
+            score+=100*currentLevel;
+          }
+        }
+      }
+      createParticles(p.x,p.y,'#ffa726',18,5);
+    }
+
+    return alive;
   });
 }
 
@@ -1016,7 +1077,8 @@ function drawLasers(){
 }
 
 function spawnPickup(x,y,type,value=0){
-  pickups.push({x,y,type,value,created:Date.now(),ttl:20000,w:28,h:28});
+  // Small collectible pickup (compatible with updatePickups / drawPickups)
+  pickups.push({x,y,type,value,created:Date.now(),ttl:20000,radius:18,w:28,h:28});
 }
 function spawnPickupsForLevel(level){
   pickups=[];
@@ -1112,7 +1174,7 @@ class Player{
     const s=characterStats[type];
     this.type=type;
     this.x=canvas.width/2;this.y=canvas.height/2;
-    this.width=80;this.height=90;
+    this.width=100;this.height=110;
     this.vx=0;this.vy=0;
     this.maxHP=s.hp;this.hp=s.hp;
     this.speed=s.speed;this._baseSpeed=s.speed;
@@ -1150,6 +1212,18 @@ class Player{
     this.poisonUntil=0;
     this.poisonTickLast=0;
     this.poisonTickDamage=1;
+
+    // --- Evolution (after Boss level 15) ---
+    this.evolved=false;
+    this._evoFxUntil=0;
+    this._jimmyNextGrappleCdMult=1;
+  }
+
+  evolve(){
+    if(this.evolved) return;
+    this.evolved=true;
+    this._evoFxUntil=Date.now()+650;
+    // passive is enabled by this.evolved flag, no stat changes
   }
 
   findClosestEnemy(radius=this.aimAssistRadius){
@@ -1192,28 +1266,38 @@ class Player{
     }
 
 
-    // Salsy passive: speed boost every 12s for 2s (slightly faster bursts)
+    // Salsy passive: speed boost every 12s for 2s (DOUBLES BASE SPEED ONLY)
     if(this.type==='salsy'){
-      if(!this._salsyBoostCooldown){ this._salsyBoostCooldown=12000; this._salsyBoostDuration=2000; this.lastSalsyBoost=now-this._salsyBoostCooldown; this.salsyBoostUntil=0; }
+      if(!this._salsyBoostCooldown){
+        this._salsyBoostCooldown = 12000;
+        this._salsyBoostDuration = 2000;
+        this.lastSalsyBoost = now - this._salsyBoostCooldown;
+        this.salsyBoostUntil = 0;
+      }
+
       if(!this.isDoingSuper && now - this.lastSalsyBoost >= this._salsyBoostCooldown){
         this.lastSalsyBoost = now;
         this.salsyBoostUntil = now + this._salsyBoostDuration;
-        // don't overwrite other speed buffs permanently; apply multiplicative while active
       }
+
       if(this.salsyBoostUntil && now < this.salsyBoostUntil){
-        // base speed plus temporary boost (stacking with pickup speed buff by multiplying current speed floor)
-        const base = this._baseSpeed;
-        // if pickup speed buff is active, this.speed is already > base; keep that and add a small extra
-        const current = Math.max(this.speed, base);
-        this.speed = current * 1.25;
-      }else if(this.salsyBoostUntil && now >= this.salsyBoostUntil){
+        // SOLO velocità base raddoppiata
+        this.speed = this._baseSpeed * 2;
+      }
+      else if(this.salsyBoostUntil && now >= this.salsyBoostUntil){
         this.salsyBoostUntil = 0;
-        // restore to pickup/buff or base
-        this.speed = (this.speedBuffUntil && now < this.speedBuffUntil) ? this.speed : this._baseSpeed;
+
+        // Ripristino corretto
+        if(this.speedBuffUntil && now < this.speedBuffUntil){
+          this.speed = this._baseSpeed * 1.5;
+        } else {
+          this.speed = this._baseSpeed;
+        }
       }
     }
 
     // Poison
+
     if(this.poisonUntil && now < this.poisonUntil){
       if(!this.poisonTickLast) this.poisonTickLast = now;
       if(now - this.poisonTickLast >= 1000){
@@ -1315,6 +1399,8 @@ class Player{
               createParticles(this.grappleTarget.x,this.grappleTarget.y,'#fff176',30,6);
               enemies.splice(idx,1);score+=100*currentLevel
             }
+            // Jimmy EVO passive: next grapple has -20% cooldown after a grappled target dies
+            if(this.type==='jimmy' && this.evolved){ this._jimmyNextGrappleCdMult=0.8; }
           }
           this.isGrappling=false;this.grappleTarget=null;this.vx=0;this.vy=0;
           this.grappleStartTime=0;
@@ -1331,20 +1417,44 @@ class Player{
         if(!this._superHitDone&&elapsed>=300){
           this._superHitDone=true;
           if(this.type==='rooney'){
-            const hitList=[];
-            enemies.forEach((enemy)=>{const dist=Math.hypot(enemy.x-this.x,enemy.y-this.y);if(dist<350)hitList.push(enemy)});
-            const n=hitList.length||1;
-            const baseRooney=200;
-            const multiplier = 0.75 + (4 - n)*0.25;
-            const perEnemy = Math.max(8, Math.round(baseRooney * SUPER_DAMAGE_MULT * multiplier * this.attackBuffMultiplier));
-            for(let i=hitList.length-1;i>=0;i--){
-              const enemy=hitList[i];
-              const _dmg=perEnemy; const _final=applyEnemyDamage(enemy,_dmg);
-              createParticles(enemy.x,enemy.y,'#f39c12',18,6);
-              showDamageNumber(enemy.x,enemy.y, _final);
-              if(enemy.hp<=0){
-                const idx=enemies.indexOf(enemy);
-                if(idx>-1){createParticles(enemy.x,enemy.y,'#fff176',30,6);enemies.splice(idx,1);score+=100*currentLevel}
+            // Rooney SUPER:
+            // - Colpisce TUTTI i nemici nel raggio.
+            // - Il danno totale si "spalma" (più nemici => meno danno a testa).
+            // - Più un nemico è vicino al centro, più prende danno.
+            // In condizioni ottimali (1 solo nemico super ravvicinato) infligge 220 danni.
+            const R=200;
+            const px=this.x+this.width/2, py=this.y+this.height/2;
+            const hits=[];
+            for(const enemy of enemies){
+              const ex=enemy.x+enemy.width/2, ey=enemy.y+enemy.height/2;
+              const dist=Math.hypot(ex-px, ey-py);
+              if(dist<=R){
+                // peso: 1 al centro, ~0 al bordo (con minimo per non azzerare del tutto)
+                const w=Math.max(0.05, 1 - (dist/R));
+                hits.push({enemy,w});
+              }
+            }
+            if(hits.length>0){
+              // Compensiamo SUPER_DAMAGE_MULT così che 1 bersaglio ravvicinato prenda 220 (senza buff)
+              const totalBase=Math.round(220 / SUPER_DAMAGE_MULT);
+              const sumW=hits.reduce((a,h)=>a+h.w,0) || 1;
+
+              for(const h of hits){
+                const share=h.w/sumW;
+                const raw=totalBase*share;
+                const dmg=Math.max(6, Math.round(raw * SUPER_DAMAGE_MULT * this.attackBuffMultiplier));
+                const _final=applyEnemyDamage(h.enemy, dmg);
+                createParticles(h.enemy.x,h.enemy.y,'#f39c12',18,6);
+                showDamageNumber(h.enemy.x,h.enemy.y, _final);
+              }
+
+              // rimuovi i morti (e assegna score) subito, come per le altre super
+              for(let i=enemies.length-1;i>=0;i--){
+                if(enemies[i].hp<=0){
+                  createParticles(enemies[i].x,enemies[i].y,'#fff176',30,6);
+                  enemies.splice(i,1);
+                  score+=100*currentLevel;
+                }
               }
             }
           } else {
@@ -1486,7 +1596,15 @@ class Player{
   attack(){
     const now=Date.now();
     if(now-this.lastAttack<this.cooldown||this.isDoingSuper)return false;
-    this.lastAttack=now;this.attacking=true;this.attackTime=now;
+    // Jimmy EVO passive: if unlocked, the next grapple gets -20% cooldown (only for that next grapple)
+    if(this.type==='jimmy' && this.evolved && this.attackType==='grapple' && this._jimmyNextGrappleCdMult && this._jimmyNextGrappleCdMult<1){
+      const mult=this._jimmyNextGrappleCdMult;
+      this.lastAttack = now - Math.round(this.cooldown*(1-mult));
+      this._jimmyNextGrappleCdMult=1;
+    } else {
+      this.lastAttack=now;
+    }
+    this.attacking=true;this.attackTime=now;
 
     if(this.type==='jimmy'&&!this.shieldBroken){this.shieldActive=true;}
 
@@ -1588,7 +1706,7 @@ class Player{
           while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
           while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
           if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.15){
-            const base=25*this.attackBuffMultiplier;
+            const base=33*this.attackBuffMultiplier;
             const dmg=applyEnemyDamage(enemy, base);
             createParticles(enemy.x,enemy.y,'#f1c40f',10,4);
             showDamageNumber(enemy.x,enemy.y,dmg);
@@ -1605,6 +1723,7 @@ class Player{
 
     } else if(this.attackType==='sword'){
       const attackAngle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.6;
+      let __jeffHitCount=0;
       enemies.forEach(enemy=>{
         const dx=enemy.x-this.x;const dy=enemy.y-this.y;const dist=Math.hypot(dx,dy);
         const angle=Math.atan2(dy,dx);
@@ -1623,6 +1742,12 @@ class Player{
           }
         }
       });
+      // Jeff EVO passive: if a single attack hits 2+ enemies, heal 1% max HP
+      if(this.type==='jeff' && this.evolved && __jeffHitCount>=2){
+        const heal = Math.max(1, Math.round(this.maxHP*0.01));
+        this.hp = Math.min(this.maxHP, this.hp + heal);
+        createParticles(this.x+this.width/2,this.y+this.height/2,'#2ecc71',10,4);
+      }
       if(assistTarget){
         const distAssist=Math.hypot((assistTarget.x-this.x),(assistTarget.y-this.y));
         if(distAssist<this.range+60){
@@ -1665,12 +1790,13 @@ class Player{
         const speed=9;
         const vx=(dx/len)*speed;
         const vy=(dy/len)*speed;
-        const baseAoeDmg = Math.round(50 * this.attackBuffMultiplier);
+        const baseAoeDmg = Math.round(45* this.attackBuffMultiplier);
         spawnProjectile({
           x:this.x+this.width/2, y:this.y+this.height/2,
           vx, vy, speed,
           damage:baseAoeDmg, ttl:2000, color:'#ffb74d',
-          radius:7, friendly:true, aoeRadius:60, aoeFullDamage:true, homing:false
+          radius:9, friendly:true, aoeRadius:110, aoeFullDamage:true, homing:false,
+          explodeOnExpire:true
         });
         createParticles(this.x+this.width/2,this.y+this.height/2,'#ffa726',8,3);
       } else {
@@ -1812,12 +1938,25 @@ else if(this.attackType==='hybrid'){
   }
 
   draw(){
-    if(images[this.type]&&images[this.type].complete){
+    const baseImg = images[this.type];
+    const evoImg = (this.evolved && imagesEvo && imagesEvo[this.type]) ? imagesEvo[this.type] : null;
+    const activeImg = (evoImg && evoImg.complete) ? evoImg : baseImg;
+
+    if(activeImg && activeImg.complete){
       ctx.save();
+      // evolution visual (brief glow + scale)
+      const evoT = (this._evoFxUntil && Date.now() < this._evoFxUntil) ? (1 - ((this._evoFxUntil - Date.now())/650)) : 1;
+      const evoScale = (this._evoFxUntil && Date.now() < this._evoFxUntil) ? (1 + 0.18*(1-evoT)) : 1;
+      const evoAlpha = (this._evoFxUntil && Date.now() < this._evoFxUntil) ? (0.75 + 0.25*Math.sin(Date.now()/45)) : 1;
+      ctx.globalAlpha = evoAlpha;
+      const cx=this.x+this.width/2, cy=this.y+this.height/2;
+      ctx.translate(cx,cy);
+      ctx.scale(evoScale,evoScale);
+      ctx.translate(-cx,-cy);
       if(!this.facingRight){
         ctx.scale(-1,1);
-        ctx.drawImage(images[this.type],-this.x-this.width,this.y,this.width,this.height)
-      }else ctx.drawImage(images[this.type],this.x,this.y,this.width,this.height);
+        ctx.drawImage(activeImg,-this.x-this.width,this.y,this.width,this.height)
+      }else ctx.drawImage(activeImg,this.x,this.y,this.width,this.height);
       ctx.restore()
     } else {
       ctx.fillStyle='#3498db';ctx.fillRect(this.x,this.y,this.width,this.height)
@@ -1867,7 +2006,7 @@ else if(this.attackType==='hybrid'){
       }else if(this.attackType==='hybrid'){
         ctx.strokeStyle='rgba(243,156,18,0.6)';ctx.lineWidth=6;
         ctx.beginPath();
-        ctx.arc(this.x+this.width/2,this.y+this.height/2,60,0,Math.PI*2);
+        ctx.arc(this.x+this.width/2,this.y+this.height/2,110,0,Math.PI*2);
         ctx.stroke();
       }
       ctx.restore()
@@ -1982,8 +2121,8 @@ class Enemy{
     this.type=type;
     this.x=Math.random()*(canvas.width-100)+50;
     this.y=Math.random()*(canvas.height-150)+50;
-    this.width=Math.round(40*1.2);
-    this.height=Math.round(40*1.2);
+    this.width=Math.round(56*1.2);
+    this.height=Math.round(56*1.2);
     this.vx=(Math.random()-0.5)*cfg.enemySpeed*mult;
     this.vy=(Math.random()-0.5)*cfg.enemySpeed*mult;
     this.maxHP=Math.round(cfg.enemyHP*(1+0.25*level));
@@ -2005,8 +2144,8 @@ class Enemy{
       this.preferRange=520;
     }
     if(this.type==='boss4'){
-      this.width=Math.round(78*1.2);
-      this.height=Math.round(78*1.2);
+      this.width=Math.round(225*1.2);
+      this.height=Math.round(230*1.2);
       this.attackCooldown=950;
       this.beamCooldown=12000;
       this.lastBeam=Date.now()-this.beamCooldown;
@@ -2056,7 +2195,7 @@ class Enemy{
           length:650,
           width:18,
           ttl:1000,
-          damage:18,
+          damage:15,
           kind:'oneyes',
           chargeMs:0
         });
@@ -2094,11 +2233,11 @@ class Enemy{
           x:cx, y:cy,
           angle,
           length:760,
-          width:28,
+          width:75,
           ttl:1000,
-          damage:50,
+          damage:70,
           kind:'photon',
-          chargeMs:750
+          chargeMs:500
         });
         // visual charge
         createParticles(cx,cy,'#f1c40f',40,6);
@@ -2240,8 +2379,8 @@ class BossEnemy extends Enemy{
     this.bulletTimer=0;
     this.attackCooldown=1800;
     this.lastAttack=0;
-    this.width=Math.round(120*1.2);
-    this.height=Math.round(120*1.2);
+    this.width=Math.round(200*1.2);
+    this.height=Math.round(200*1.2);
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
@@ -2392,20 +2531,23 @@ return;
       const dead=enemies.splice(i,1)[0];
       score+=100*currentLevel;
       createParticles(dead.x,dead.y,'#fff176',30,6);
-      if(Math.random()<0.25) spawnPickup(dead.x+20,dead.y+20,'heal',Math.round(dead.maxHP*0.25));
-      if(Math.random()<0.18) spawnPickup(dead.x+20,dead.y+20,'speed',0);
-      if(Math.random()<0.12) spawnPickup(dead.x+20,dead.y+20,'shieldPickup',0);
-      if(Math.random()<GOLD_PROB) spawnPickup(dead.x+20,dead.y+20,'gold',10);
     }
   }
 
   if(enemies.length===0){
     if(!levelAdvanceLock){
       levelAdvanceLock=true;
-      setTimeout(()=>{
-        if(gameState==='playing') nextLevel();
-        levelAdvanceLock=false;
-      }, 200);
+
+      // Evolution trigger: after defeating Boss at Level 15 (boss3), only Jimmy/Rooney/Jeff evolve permanently from Level 16 onward
+      const canEvolve = player && (player.type==='jimmy' || player.type==='rooney' || player.type==='jeff');
+      if(gameState==='playing' && currentLevel===15 && canEvolve && !player.evolved){
+        triggerEvolutionThenNextLevel(player.type);
+      } else {
+        setTimeout(()=>{
+          if(gameState==='playing') nextLevel();
+          levelAdvanceLock=false;
+        }, 200);
+      }
     }
   }
 
@@ -2439,6 +2581,35 @@ return;
   document.getElementById('superCooldown').textContent=`Super: ${superReady}`;
   if(player.attackBuffUntil) document.getElementById('atkBuffDisplay').textContent=Math.max(0,Math.ceil((player.attackBuffUntil-Date.now())/1000))+'s';
   else document.getElementById('atkBuffDisplay').textContent='0s';
+}
+
+
+function showEvoBanner(name){
+  const el=document.getElementById('evoBanner');
+  const txt=document.getElementById('evoBannerText');
+  if(!el||!txt) return;
+  txt.textContent = `${name.toUpperCase()} EVOLUTO!`;
+  el.classList.remove('show');
+  // force reflow to restart animation
+  void el.offsetWidth;
+  el.style.display='block';
+  el.classList.add('show');
+  setTimeout(()=>{ el.classList.remove('show'); el.style.display='none'; }, 980);
+}
+
+function triggerEvolutionThenNextLevel(charType){
+  if(!player) return;
+  // evolve + FX
+  player.evolve();
+  showEvoBanner(player.type);
+  createParticles(player.x+player.width/2, player.y+player.height/2, '#fff176', 50, 6);
+  shakeScreen();
+
+  // delay a bit so the player sees the evolution, then go to next level
+  setTimeout(()=>{
+    if(gameState==='playing') nextLevel();
+    levelAdvanceLock=false;
+  }, 620);
 }
 
 window.addEventListener('keydown',e=>{
@@ -2478,7 +2649,7 @@ function updateMenuStatsDisplay(char){
   if(!s)return;
   document.getElementById(`menu-hp-${char}`).textContent=s.hp;
   document.getElementById(`menu-dmg-${char}`).textContent=
-    char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` : (char==='salsy' ? '25x2' : s.damage);
+    char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` : (char==='salsy' ? '33x2' : s.damage);
 }
 
 document.getElementById('startBtn').addEventListener('click',()=>{
