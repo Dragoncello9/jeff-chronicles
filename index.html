@@ -357,7 +357,7 @@
       </div>
 
       <!-- Voltryx card (locked until all three records > 50000) -->
-      <div class="character-card disabled" data-char="voltryx" id="card-voltryx" title="Sblocca completando 50.000 punti con ogni personaggio">
+      <div class="character-card disabled" data-char="voltryx" id="card-voltryx" title="Sblocca completando 45.000 punti con ogni personaggio">
         <h3>VOLTRYX</h3>
         <p>"🦊"</p>
         <div class="menu-stats">HP: <span id="menu-hp-voltryx">-</span> Danno: <span id="menu-dmg-voltryx">-</span></div>
@@ -375,8 +375,8 @@
         <div class="lock-badge" id="kouvagiaLockBadge">LOCKED</div>
       </div>
 
-      <!-- Salsy card (locked until 70.000 score with Jimmy, Rooney, Jeff, Voltryx and Kouvagia) -->
-      <div class="character-card disabled" data-char="salsy" id="card-salsy" title="Sblocca facendo 70.000 punti con Jimmy, Rooney, Jeff, Voltryx e Kouvagia">
+      <!-- Salsy card (locked until 60.000 score with Jimmy, Rooney, Jeff, Voltryx and Kouvagia) -->
+      <div class="character-card disabled" data-char="salsy" id="card-salsy" title="Sblocca facendo 60.000 punti con Jimmy, Rooney, Jeff, Voltryx e Kouvagia">
         <h3>SALSY</h3>
         <p>"⚜️"</p>
         <div class="menu-stats">HP: <span id="menu-hp-salsy">-</span> Danno: <span id="menu-dmg-salsy">-</span></div>
@@ -384,8 +384,8 @@
         <div class="lock-badge" id="salsyLockBadge">LOCKED</div>
       </div>
 
-<!-- Tempostorm card (locked until 85.000 score with ALL previous characters) -->
-<div class="character-card disabled" data-char="tempostorm" id="card-tempostorm" title="Sblocca facendo 85.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)">
+<!-- Tempostorm card (locked until 70.000 score with ALL previous characters) -->
+<div class="character-card disabled" data-char="tempostorm" id="card-tempostorm" title="Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)">
   <h3>TEMPOSTORM</h3>
   <p>"🔋"</p>
   <div class="menu-stats">HP: <span id="menu-hp-tempostorm">-</span> Danno: <span id="menu-dmg-tempostorm">-</span></div>
@@ -758,13 +758,13 @@ const enemyGuideData={
   shooter:{ name:'SHOOTER', imgKey:'shooter', desc:'Attaccante a distanza. Schiva i proiettili con dash laterali e prova a eliminare prima gli shooter quando sono in gruppo.'},
   attacker:{ name:'ATTACKER', imgKey:'attacker', desc:'Nemico con ritorno aggressivo: entra, colpisce e riparte. Anticipa la traiettoria e non inseguirlo in linea retta.'},
   archer:{ name:'ARCHER', imgKey:'archer', desc:'Tiratore preciso. Se resti esposto ti colpisce: cambia spesso direzione e usa i momenti di ricarica per avvicinarti.'},
-  glacial:{ name:'GLACIAL', imgKey:'glacial', desc:'Nemico glaciale: Sono delle creature che vivono in ambienti glaciali e attaccano con un raggio gelido con danni che aumentano restano all'interno dell'area di attacco. Non farti chiudere: riposizionati in anticipo.'},
+  glacial:{ name:'GLACIAL', imgKey:'glacial', desc:'Nemico glaciale: tende a rallentare e rendere più pericoloso il controllo degli spazi. Non farti chiudere: riposizionati in anticipo.'},
   veleno:{ name:'VELENO', imgKey:'veleno', desc:'Applica Poison: subisci danni nel tempo. Priorità alta: eliminalo in fretta o gestisci i pickup cura.'},
-  oneyes:{ name:'ONE-EYE', imgKey:'oneyes', desc:'Nemico che mantiene distanza e ti punisce con un laser se lo insegui male. Avanza a scatti e usa dash per accorciare senza esporti.'},
+  oneyes:{ name:'ONE-EYE', imgKey:'oneyes', desc:'Nemico che mantiene distanza e ti punisce se lo insegui male. Avanza a scatti e usa dash per accorciare senza esporti.'},
   boss1:{ name:'BOSS I', imgKey:'boss1', desc:'Primo boss. Molti HP e pressione costante: sfrutta la super nel momento giusto e non prendere danni inutili.'},
   boss2:{ name:'BOSS II', imgKey:'boss2', desc:'Boss più aggressivo e resistente. Controlla il cooldown della super e cerca finestre sicure per colpire.'},
   boss3:{ name:'BOSS III', imgKey:'boss3', desc:'Boss avanzato: richiede gestione perfetta di dash e super. È lo spartiacque verso la fase finale.'},
-  boss4:{ name:'BOSS IV', imgKey:'boss4', desc:'Boss speciale con attacchi più potenti. Ha una super mossa propria ovvero un grande laggio laser che si attiva ogni 12 sec.'}
+  boss4:{ name:'BOSS IV', imgKey:'boss4', desc:'Boss speciale con attacchi più “telegraph” e colpi potenti. Leggi i segnali e schiva con precisione.'}
 };
 
 // Ordine consigliato nella lista
@@ -1010,7 +1010,7 @@ function updateVoltryxUnlockUI(){
   }else{
     card.classList.add('disabled');
     setLockBadgeState(badge, true);
-    card.title='Sblocca completando 45.000 punti con Jimmy, Rooney e Jeff';
+    card.title='Sblocca completando 50.000 punti con Jimmy, Rooney e Jeff';
   }
 }
 
