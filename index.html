@@ -217,6 +217,90 @@
 }
 .guide-body h3{color:#f39c12;margin-top:12px}
 .guide-body p, .guide-body ul{font-size:14px;line-height:1.45;color:#ddd}
+
+/* === Bestiario (nemici + boss) === */
+.enemy-guide-content{max-width:1020px;}
+.enemy-guide-body{margin-top:10px}
+.enemy-guide-wrap{
+  display:flex;gap:16px;align-items:stretch;
+  min-height:420px;
+}
+.enemy-guide-list{
+  width:260px;flex:0 0 260px;
+  border:2px solid rgba(255,255,255,0.18);
+  background:rgba(255,255,255,0.03);
+  padding:10px;overflow:auto;max-height:62vh;
+}
+.enemy-guide-list button{
+  width:100%;
+  background:rgba(0,0,0,0.35);
+  border:2px solid rgba(255,255,255,0.18);
+  color:#fff;
+  padding:10px 10px;
+  margin:0 0 10px 0;
+  cursor:pointer;
+  font-family:'Press Start 2P', cursive;
+  font-size:11px;
+  text-align:left;
+  display:flex;gap:10px;align-items:center;
+}
+.enemy-guide-list button:hover{border-color:#f39c12;transform:translateY(-1px)}
+.enemy-guide-list button.active{border-color:#e74c3c;background:rgba(231,76,60,0.12)}
+.enemy-guide-list .enemy-mini{
+  width:44px;height:44px;image-rendering:pixelated;
+  border:2px solid rgba(255,255,255,0.7);
+  border-radius:6px;flex:0 0 auto;background:#000;
+}
+.enemy-guide-detail{
+  flex:1;
+  border:2px solid rgba(255,255,255,0.18);
+  background:rgba(255,255,255,0.03);
+  padding:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.enemy-guide-detail-inner{
+  width:100%;
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+}
+.enemy-guide-detail-inner img{
+  width:240px;height:240px;object-fit:contain;
+  image-rendering:pixelated;
+  border:3px solid #fff;border-radius:10px;
+  background:rgba(0,0,0,0.35);
+  flex:0 0 auto;
+}
+.enemy-guide-detail-inner h3{
+  margin:0 0 10px 0;
+  color:#f39c12;
+  font-family:'Press Start 2P', cursive;
+  font-size:14px;
+  line-height:1.35;
+}
+.enemy-guide-detail-inner p{
+  margin:0;
+  font-size:15px;
+  color:#ddd;
+  line-height:1.55;
+  font-family:'VT323', monospace;
+}
+.enemy-guide-hint{
+  margin:14px 0 0 0;
+  font-size:13px;
+  color:#cfcfcf;
+  font-family:'VT323', monospace;
+}
+@media (max-width:900px){
+  .enemy-guide-wrap{flex-direction:column}
+  .enemy-guide-list{width:100%;flex:0 0 auto;max-height:30vh}
+  .enemy-guide-detail-inner{flex-direction:column;align-items:center}
+  .enemy-guide-detail-inner img{width:220px;height:220px}
+}
+
+
 .guide-body ul{margin-left:18px}
 @media (max-width:900px){
   .guide-modal-content{max-width:calc(100% - 20px);padding:14px}
@@ -315,6 +399,10 @@
 <!-- Pulsante immagine per aprire la guida -->
 <button id="guideImgBtn" class="img-btn" aria-label="Apri guida" title="Apri guida" type="button" style="display:inline-block;">
   <img id="guideImg" src="https://i.postimg.cc/JztT9fJH/bea.png" alt="Guida" />
+</button>
+<!-- Pulsante immagine per aprire il bestiario (nemici + boss) -->
+<button id="enemyGuideImgBtn" class="img-btn" aria-label="Apri bestiario" title="Bestiario (Nemici & Boss)" type="button" style="display:inline-block;">
+  <img id="enemyGuideImg" src="https://i.postimg.cc/NFVhJNLC/pixelcut-export-(2).png" alt="Bestiario" />
 </button>
     <p style="margin-top:12px;font-size:15px;color:#ddd">Controlli: WASD - Muovi | J - Attacco | K - Super Mossa | Spazio - Schivata</p>
   </div>
@@ -477,7 +565,7 @@
       </ul>
 
       
-<h3>✴️​ EVOLUZIONI </h3> 
+<h3>✴️ EVOLUZIONI </h3> 
 <p>rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei, ma un vero e proprio cambiamento nello stile di gioco del personaggio.</p> <p><strong>Quando avvengono</strong>: dopo aver superato un boss avanzato (oltre metà progressione), il personaggio entra nello stato <em>Evoluto</em>. L’evoluzione viene annunciata a schermo con un banner dedicato.</p> <p><strong>Filosofia delle evoluzioni</strong>: le evoluzioni <u>non aumentano direttamente HP, velocità o danno base</u>. Al contrario, sbloccano <strong>passive speciali</strong> che premiano l’uso intelligente delle meccaniche del personaggio. Questo mantiene il gioco bilanciato e strategico.</p> <h4>Effetti generali</h4> <ul> <li>L’evoluzione dura per il resto della partita.</li> <li>Ogni personaggio ottiene un <strong>vantaggio unico</strong>, coerente con il suo ruolo.</li> <li>Le evoluzioni premiano precisione, timing e gestione dei nemici.</li> </ul> <h4>⚙️ Evoluzioni attuali</h4> <p><strong>🔫 Jimmy – Cacciatore Evoluto</strong><br> Alla sua prima interazione offensiva con un nemico, Jimmy risulta più efficace. Questo lo rende devastante negli ingaggi iniziali e perfetto per eliminare rapidamente bersagli chiave.</p> <p><strong>🐱 Rooney – Impatto Brutale</strong><br> Il primo colpo inflitto a ogni nemico causa danni aumentati. Rooney diventa ancora più letale nei combattimenti ravvicinati e contro nemici con molti HP.</p> <p><strong>🗡️ Jeff – Controllo Totale</strong><br> L’evoluzione rafforza il suo ruolo di dominatore dell’arena, rendendolo estremamente affidabile nel mantenere pressione costante su gruppi di nemici.</p> <p><em>Nota:</em> i personaggi sbloccabili avanzati potrebbero ottenere evoluzioni dedicate in futuro.</p> <h4> Consigli strategici</h4> <ul> <li>Sfrutta l’evoluzione per cambiare approccio: da difensivo a aggressivo (o viceversa).</li> <li>Dopo l’evoluzione, eliminare i nemici velocemente diventa ancora più importante per massimizzare punteggio e controllo.</li> <li>Le evoluzioni non rendono invincibili: il posizionamento resta fondamentale.</li> </ul> <p><strong>Le evoluzioni sono il momento in cui Jeff’s Chronicles premia davvero la padronanza del personaggio.</strong></p>
 
 <h3>🏁 CONCLUSIONE</h3>
@@ -486,6 +574,27 @@
   </div>
 </div>
       
+
+<!-- Modale bestiario (nemici e boss) -->
+<div id="enemyGuideModal" class="guide-modal enemy-guide-modal" aria-hidden="true" role="dialog" aria-labelledby="enemyGuideTitle" style="display:none;">
+  <div class="guide-modal-content enemy-guide-content" role="document">
+    <button class="guide-close" id="enemyGuideClose" aria-label="Chiudi bestiario">✕</button>
+    <h2 id="enemyGuideTitle">Bestiario – Nemici & Boss</h2>
+    <div class="enemy-guide-body">
+      <div class="enemy-guide-wrap">
+        <div class="enemy-guide-list" id="enemyGuideList" aria-label="Lista nemici sbloccati"></div>
+        <div class="enemy-guide-detail" id="enemyGuideDetail" aria-live="polite">
+          <div class="enemy-guide-empty">
+            <h3 style="margin:0 0 8px 0;color:#f39c12;">Nessun nemico sbloccato</h3>
+            <p style="margin:0;color:#ddd;">Affronta un nemico o un boss almeno una volta per sbloccarlo qui.</p>
+          </div>
+        </div>
+      </div>
+      <p class="enemy-guide-hint">Nota: nel Bestiario compaiono solo i nemici/boss che hai già sfidato almeno una volta (vale per tutti i personaggi).</p>
+    </div>
+  </div>
+</div>
+
 <script>
 const HP_MULT=1.40;
 const DAMAGE_MULT=0.85;
@@ -501,13 +610,14 @@ const URL_DARK='https://i.postimg.cc/JhpWH3jJ/Copilot-20251209-232827.png';
 
 
 const URL_FINAL='https://i.postimg.cc/pTHFKHgz/Progetto-senza-titolo-(2).png';
+const URL_ICE='https://i.postimg.cc/K8pgVhTx/icebiome1.png';
 const canvas=document.getElementById('gameCanvas');
 const ctx=canvas.getContext('2d');
 
 const bgDefault=document.getElementById('bgDefault');
 const bgDark=document.getElementById('bgDark');
 const fadeOverlay=document.getElementById('fadeOverlay');
-let _bgTier=0; // 0=default,1=dark,2=final
+let _bgTier=0; // 0=default,1=dark,2=final,3=ice
 
 bgDefault.style.backgroundImage=`url('${URL_DEFAULT}')`;
 bgDark.style.backgroundImage=`url('${URL_DARK}')`;
@@ -600,7 +710,7 @@ function getPickupImage(type){
 const enemyImages={
   slime:new Image(),drone:new Image(),boss1:new Image(),mech:new Image(),
   shadow:new Image(),boss2:new Image(),shooter:new Image(),attacker:new Image(),boss3:new Image(),
-  veleno:new Image(),oneyes:new Image(),boss4:new Image()
+  veleno:new Image(),oneyes:new Image(),boss4:new Image(),archer:new Image(),glacial:new Image()
 };
 enemyImages.slime.src='https://i.postimg.cc/NFVhJNLC/pixelcut-export-(2).png';
 enemyImages.drone.src='https://i.postimg.cc/13x9HtxZ/image-(1).png';
@@ -616,6 +726,106 @@ enemyImages.boss3.src='https://i.postimg.cc/xjzKWcTs/boss3-(1).png';
 enemyImages.veleno.src='https://i.postimg.cc/3xNWGRWY/veleno.png';
 enemyImages.oneyes.src='https://i.postimg.cc/g2xkJTBG/oneyes.png';
 enemyImages.boss4.src='https://i.postimg.cc/Px6d8kgr/boss4.png';
+enemyImages.archer.src='https://i.postimg.cc/VLSg4gpV/archer.png';
+enemyImages.glacial.src='https://i.postimg.cc/W1LG8vMN/glacial.png';
+
+// ===== Bestiario (Nemici & Boss) - sblocco globale (tutti i personaggi) =====
+const ENEMY_SEEN_KEY='jeffsChronicles_enemySeen_v1';
+function loadEnemySeen(){
+  try{
+    const raw=localStorage.getItem(ENEMY_SEEN_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function saveEnemySeen(map){
+  try{ localStorage.setItem(ENEMY_SEEN_KEY, JSON.stringify(map||{})); }catch(e){}
+}
+let enemySeen = loadEnemySeen();
+function markEnemySeen(type){
+  if(!type) return;
+  if(!enemySeen[type]){
+    enemySeen[type]=true;
+    saveEnemySeen(enemySeen);
+  }
+}
+
+// Dati descrittivi (nome + descrizione + chiave immagine)
+const enemyGuideData={
+  slime:{ name:'SLIME', imgKey:'slime', desc:'Creatura base. Si muove lentamente e ti insegue: perfetta per imparare posizionamento e tempo del dash.'},
+  drone:{ name:'DRONE', imgKey:'drone', desc:'Nemico veloce e imprevedibile. Ti punisce se resti fermo: muoviti a zig-zag e non sprecare dash.'},
+  mech:{ name:'MECH', imgKey:'mech', desc:'Corazzato e resistente. Richiede pazienza: colpisci e riposizionati, specialmente se sei un personaggio melee.'},
+  shadow:{ name:'SHADOW', imgKey:'shadow', desc:'Molto rapido e aggressivo. Mantieni distanza di sicurezza e usa il dash per evitare contatti ravvicinati.'},
+  shooter:{ name:'SHOOTER', imgKey:'shooter', desc:'Attaccante a distanza. Schiva i proiettili con dash laterali e prova a eliminare prima gli shooter quando sono in gruppo.'},
+  attacker:{ name:'ATTACKER', imgKey:'attacker', desc:'Nemico con ritorno aggressivo: entra, colpisce e riparte. Anticipa la traiettoria e non inseguirlo in linea retta.'},
+  archer:{ name:'ARCHER', imgKey:'archer', desc:'Tiratore preciso. Se resti esposto ti colpisce: cambia spesso direzione e usa i momenti di ricarica per avvicinarti.'},
+  glacial:{ name:'GLACIAL', imgKey:'glacial', desc:'Nemico glaciale: tende a rallentare e rendere più pericoloso il controllo degli spazi. Non farti chiudere: riposizionati in anticipo.'},
+  veleno:{ name:'VELENO', imgKey:'veleno', desc:'Applica Poison: subisci danni nel tempo. Priorità alta: eliminalo in fretta o gestisci i pickup cura.'},
+  oneyes:{ name:'ONE-EYE', imgKey:'oneyes', desc:'Nemico che mantiene distanza e ti punisce se lo insegui male. Avanza a scatti e usa dash per accorciare senza esporti.'},
+  boss1:{ name:'BOSS I', imgKey:'boss1', desc:'Primo boss. Molti HP e pressione costante: sfrutta la super nel momento giusto e non prendere danni inutili.'},
+  boss2:{ name:'BOSS II', imgKey:'boss2', desc:'Boss più aggressivo e resistente. Controlla il cooldown della super e cerca finestre sicure per colpire.'},
+  boss3:{ name:'BOSS III', imgKey:'boss3', desc:'Boss avanzato: richiede gestione perfetta di dash e super. È lo spartiacque verso la fase finale.'},
+  boss4:{ name:'BOSS IV', imgKey:'boss4', desc:'Boss speciale con attacchi più “telegraph” e colpi potenti. Leggi i segnali e schiva con precisione.'}
+};
+
+// Ordine consigliato nella lista
+const enemyGuideOrder=['slime','drone','mech','shadow','shooter','attacker','archer','glacial','veleno','oneyes','boss1','boss2','boss3','boss4'];
+
+function buildEnemyGuideUI(){
+  const listEl=document.getElementById('enemyGuideList');
+  const detailEl=document.getElementById('enemyGuideDetail');
+  if(!listEl || !detailEl) return;
+
+  listEl.innerHTML='';
+  const unlocked = enemyGuideOrder.filter(k=>enemySeen && enemySeen[k] && enemyGuideData[k]);
+
+  // empty state
+  if(unlocked.length===0){
+    // keep existing empty panel text
+    detailEl.innerHTML = `<div class="enemy-guide-empty">
+      <h3 style="margin:0 0 8px 0;color:#f39c12;">Nessun nemico sbloccato</h3>
+      <p style="margin:0;color:#ddd;">Affronta un nemico o un boss almeno una volta per sbloccarlo qui.</p>
+    </div>`;
+    return;
+  }
+
+  function selectKey(key){
+    const data=enemyGuideData[key];
+    if(!data) return;
+
+    // active state
+    listEl.querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.dataset.key===key));
+
+    const img = enemyImages[data.imgKey];
+    const src = (img && img.src) ? img.src : '';
+    detailEl.innerHTML = `
+      <div class="enemy-guide-detail-inner">
+        <img src="${src}" alt="${data.name}">
+        <div>
+          <h3>${data.name}</h3>
+          <p>${data.desc}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  for(const key of unlocked){
+    const data=enemyGuideData[key];
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.dataset.key=key;
+
+    const img = enemyImages[data.imgKey];
+    const src = (img && img.src) ? img.src : '';
+
+    btn.innerHTML = `<img class="enemy-mini" src="${src}" alt="${data.name}"><span>${data.name}</span>`;
+    btn.addEventListener('click', ()=>selectKey(key));
+    listEl.appendChild(btn);
+  }
+
+  // default selection: first unlocked
+  selectKey(unlocked[0]);
+}
+
 const characterStats={
   jimmy:{
     hp:255,
@@ -717,6 +927,10 @@ const levelConfigs=[
   ,{enemyType:'oneyes',enemyHP:55,enemyDamage:8,enemySpeed:2.1*0.75,time:55,enemyCount:4} // Level 18
   ,{enemyType:'oneyes',enemyHP:60,enemyDamage:9,enemySpeed:2.3*0.75,time:55,enemyCount:5} // Level 19
   ,{enemyType:'boss4',enemyHP:999,enemyDamage:35,enemySpeed:2.2*0.75,time:180,enemyCount:1} // Level 20
+  ,{enemyType:'archer',enemyHP:78,enemyDamage:14,enemySpeed:2.6*0.75,time:55,enemyCount:4} // Level 21 (Ice)
+  ,{enemyType:'archer',enemyHP:86,enemyDamage:15,enemySpeed:2.8*0.75,time:55,enemyCount:5} // Level 22 (Ice)
+  ,{enemyType:'glacial',enemyHP:150,enemyDamage:22,enemySpeed:2.3*0.75,time:70,enemyCount:2} // Level 23 (Ice)
+  ,{enemyType:'glacial',enemyHP:165,enemyDamage:24,enemySpeed:2.4*0.75,time:75,enemyCount:3} // Level 24 (Ice)
 
 ];
 
@@ -769,20 +983,33 @@ function updateMenuRecordsDisplay(){
 function allThreeAbove50k(){
   return (records.jimmy||0)>50000 && (records.rooney||0)>50000 && (records.jeff||0)>50000;
 }
+
+function setLockBadgeState(badge, isLocked){
+  if(!badge) return;
+  if(isLocked){
+    badge.style.display = 'block';
+    badge.textContent = 'LOCKED';
+    badge.style.color = '#f39c12';
+    badge.style.borderColor = '#f39c12';
+  } else {
+    // When unlocked we want the card to look "normal": no extra UNLOCKED label.
+    badge.style.display = 'none';
+  }
+}
+
 function updateVoltryxUnlockUI(){
   const card=document.getElementById('card-voltryx');
   const badge=document.getElementById('voltryxLockBadge');
-  if(allThreeAbove50k()){
+  if(!card||!badge) return;
+
+  const unlocked = allThreeAbove50k();
+  if(unlocked){
     card.classList.remove('disabled');
-    badge.textContent='UNLOCKED';
-    badge.style.color='#2ecc71';
-    badge.style.borderColor='#2ecc71';
+    setLockBadgeState(badge, false);
     card.title='Voltryx sbloccata!';
   }else{
     card.classList.add('disabled');
-    badge.textContent='LOCKED';
-    badge.style.color='#f39c12';
-    badge.style.borderColor='#f39c12';
+    setLockBadgeState(badge, true);
     card.title='Sblocca completando 50.000 punti con Jimmy, Rooney e Jeff';
   }
 }
@@ -797,17 +1024,15 @@ function updateKouvagiaUnlockUI(){
   const card=document.getElementById('card-kouvagia');
   const badge=document.getElementById('kouvagiaLockBadge');
   if(!card||!badge) return;
-  if(voltryxAbove51k()){
+
+  const unlocked = voltryxAbove51k();
+  if(unlocked){
     card.classList.remove('disabled');
-    badge.textContent='UNLOCKED';
-    badge.style.color='#2ecc71';
-    badge.style.borderColor='#2ecc71';
+    setLockBadgeState(badge, false);
     card.title='Kouvagia sbloccato!';
   }else{
     card.classList.add('disabled');
-    badge.textContent='LOCKED';
-    badge.style.color='#f39c12';
-    badge.style.borderColor='#f39c12';
+    setLockBadgeState(badge, true);
     card.title='Sblocca facendo 60.000 punti con Voltryx';
   }
 }
@@ -820,17 +1045,15 @@ function updateSalsyUnlockUI(){
   const card=document.getElementById('card-salsy');
   const badge=document.getElementById('salsyLockBadge');
   if(!card||!badge) return;
-  if(allPrevAbove70k()){
+
+  const unlocked = allPrevAbove70k();
+  if(unlocked){
     card.classList.remove('disabled');
-    badge.textContent='UNLOCKED';
-    badge.style.color='#2ecc71';
-    badge.style.borderColor='#2ecc71';
+    setLockBadgeState(badge, false);
     card.title='Salsy sbloccata!';
   }else{
     card.classList.add('disabled');
-    badge.textContent='LOCKED';
-    badge.style.color='#f39c12';
-    badge.style.borderColor='#f39c12';
+    setLockBadgeState(badge, true);
     card.title='Sblocca facendo 70.000 punti con Jimmy, Rooney, Jeff, Voltryx e Kouvagia';
   }
 }
@@ -849,18 +1072,16 @@ function updateTempostormUnlockUI(){
   const card=document.getElementById('card-tempostorm');
   const badge=document.getElementById('tempostormLockBadge');
   if(!card||!badge) return;
-  if(allPrevAbove85k()){
+
+  const unlocked = allPrevAbove85k();
+  if(unlocked){
     card.classList.remove('disabled');
     card.classList.remove('coming-soon');
-    badge.textContent='UNLOCKED';
-    badge.style.color='#2ecc71';
-    badge.style.borderColor='#2ecc71';
+    setLockBadgeState(badge, false);
     card.title='Tempostorm sbloccato!';
   }else{
     card.classList.add('disabled');
-    badge.textContent='LOCKED';
-    badge.style.color='#f39c12';
-    badge.style.borderColor='#f39c12';
+    setLockBadgeState(badge, true);
     card.title='Sblocca facendo 85.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)';
   }
 }
@@ -937,6 +1158,7 @@ function applyEnemyDamage(enemy, baseDmg){
     enemy._rooneyFirstHit=true;
   }
   const finalDmg = Math.max(0, Math.round(baseDmg * mult * markMult(enemy)));
+  enemy._lastHitAt = Date.now();
   enemy.hp -= finalDmg;
   return finalDmg;
 }
@@ -957,7 +1179,12 @@ function spawnProjectile(opts){
     pulseInterval:opts.pulseInterval||0,
     lastPulse:opts.lastPulse||0,
   targetRef:opts.targetRef||null,
-    explodeOnExpire:!!opts.explodeOnExpire
+    explodeOnExpire:!!opts.explodeOnExpire,
+    shape:opts.shape||'circle',
+    w:opts.w||0,
+    h:opts.h||0,
+    angle:typeof opts.angle==='number'?opts.angle:null,
+    onHitPlayer:opts.onHitPlayer||null
   };
   projectiles.push(p);
 }
@@ -1073,6 +1300,7 @@ function updateProjectiles(){
     }else{
       // enemy projectiles hit player
       if(player && p.x>player.x && p.x<player.x+player.width && p.y>player.y && p.y<player.y+player.height){
+        if(typeof p.onHitPlayer==='function'){ try{ p.onHitPlayer(player); }catch(e){} }
         player.takeDamage(p.damage);
         return false;
       }
@@ -1110,12 +1338,30 @@ function updateProjectiles(){
 
 function drawProjectiles(){
   projectiles.forEach(p=>{
+    ctx.globalAlpha = p.isVoltryxSuper ? 0.8 : 1;
+
+    // Archer arrows (small elongated hits)
+    if(p.shape==='rect'){
+      const ang = (p.angle!==null && !Number.isNaN(p.angle)) ? p.angle : Math.atan2(p.vy||0, p.vx||0);
+      const w = p.w || 16;
+      const h = p.h || 4;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(ang);
+      ctx.fillStyle=p.color;
+      ctx.fillRect(-w/2, -h/2, w, h);
+      ctx.restore();
+      ctx.globalAlpha = 1;
+      return;
+    }
+
+    // Default circular bullets
     ctx.fillStyle=p.color;
     ctx.beginPath();
-    ctx.globalAlpha = p.isVoltryxSuper ? 0.8 : 1;
     ctx.arc(p.x,p.y,p.isVoltryxSuper ? 18 : p.radius,0,Math.PI*2);
     ctx.fill();
     ctx.globalAlpha = 1;
+
     if(p.isVoltryxSuper){
       // draw a soft aura
       ctx.strokeStyle='rgba(243,156,18,0.5)';
@@ -1126,6 +1372,7 @@ function drawProjectiles(){
     }
   });
 }
+
 
 // Laser hazards (OneEyes + Boss4)
 function spawnLaser(opts){
@@ -1448,6 +1695,9 @@ class Player{
     this.vx=0;this.vy=0;
     this.maxHP=s.hp;this.hp=s.hp;
     this.speed=s.speed;this._baseSpeed=s.speed;
+    // Archer slow (temporary): stacks up to -15% total
+    this._slowPct=0;
+    this._slowUntil=0;
     this.damage=s.damage;this.range=s.range;
     this.cooldown=s.cooldown;this.attackType=s.attackType;
     this.lastAttack=0;this.facingRight=true;
@@ -1514,6 +1764,7 @@ class Player{
       this.shieldBroken=false;this.shieldDurability=this.shieldMaxDurability
     }
     if(this.attackBuffUntil && now>this.attackBuffUntil){this.attackBuffMultiplier=1;this.attackBuffUntil=0}
+    if(this._slowUntil && now>this._slowUntil){ this._slowUntil=0; this._slowPct=0; }
     if(this.speedBuffUntil && now>this.speedBuffUntil){
       this.speed=this._baseSpeed;this.speedBuffUntil=0;this.isJetpacking=false;this.invulnerable=false
     }
@@ -1602,7 +1853,8 @@ class Player{
     if(moveX!==0&&moveY!==0){moveX*=0.707;moveY*=0.707}
 
     if(this.isDashing){
-      const dashSpeed=this.speed*(this._dashSpeedMult||3);
+      const speedNow=this.speed*(1-(this._slowPct||0));
+      const dashSpeed=speedNow*(this._dashSpeedMult||3);
       this.vx=(this.facingRight?1:-1)*dashSpeed;
       if(this.type==='kouvagia' && this._kouvagiaDashActive){this.vy=0;}
 
@@ -1657,8 +1909,9 @@ class Player{
 
       }
     } else if(!this.isGrappling){
-      this.vx=moveX*this.speed+this.vx*0.1;
-      this.vy=moveY*this.speed+this.vy*0.1;
+      const speedNow=this.speed*(1-(this._slowPct||0));
+      this.vx=moveX*speedNow+this.vx*0.1;
+            this.vy=moveY*speedNow+this.vy*0.1;
     }
 
     // Grapple chase
@@ -2685,6 +2938,204 @@ class ShooterEnemy extends Enemy{
   }
 }
 
+
+class ArcherEnemy extends Enemy{
+  constructor(type,level){
+    super(type,level);
+    this.shootCooldown=Math.max(650, 1250 - level*18);
+    this.lastShoot=0;
+    this.arrowSpeed=9.2 + level*0.10;
+    this.keepMin=520; // very far
+    this.keepMax=700;
+  }
+  update(player){
+    if(Date.now()<this.spawnFreezeUntil)return;
+    const now=Date.now();
+    const dx=(player.x+player.width/2)-(this.x+this.width/2);
+    const dy=(player.y+player.height/2)-(this.y+this.height/2);
+    const dist=Math.hypot(dx,dy)||1;
+
+    // Keep far distance
+    if(dist < this.keepMin){
+      const nx=dx/dist, ny=dy/dist;
+      this.vx = -nx*this.speed*1.05;
+      this.vy = -ny*this.speed*1.05;
+    } else if(dist > this.keepMax){
+      const nx=dx/dist, ny=dy/dist;
+      this.vx = nx*this.speed*0.95;
+      this.vy = ny*this.speed*0.95;
+    } else {
+      this.vx*=0.90; this.vy*=0.90;
+    }
+
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+
+    if(now-this.lastShoot>this.shootCooldown){
+      this.lastShoot=now;
+      const nx=dx/dist, ny=dy/dist;
+      const vx=nx*this.arrowSpeed;
+      const vy=ny*this.arrowSpeed;
+      spawnProjectile({
+        x:this.x+this.width/2,
+        y:this.y+this.height/2,
+        vx, vy,
+        damage:Math.max(8, Math.round(this.damage*0.85)),
+        ttl:3200,
+        color:'#e0e0e0',
+        radius:4,
+        shape:'rect',
+        w:18,
+        h:4,
+        angle:Math.atan2(vy,vx),
+        onHitPlayer:(pl)=>{ if(pl && typeof pl.applySlow==='function') pl.applySlow(0.10, 2500); }
+      });
+    }
+  }
+  draw(){
+    const img = enemyImages['archer'];
+    if(img && img.complete) ctx.drawImage(img,this.x,this.y,this.width,this.height);
+    else super.draw();
+    const hpPercent=this.hp/this.maxHP;
+    ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
+    ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
+    ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
+  }
+}
+
+class GlacialEnemy extends Enemy{
+  constructor(type,level){
+    super(type,level);
+    this.attackCooldown=Math.max(2100, 3400 - level*35);
+    this.lastAttack=0;
+    this.coneDuration=2000;
+    this.coneRange=430;
+    this.coneAngle=Math.PI/6; // 30° total
+    this.coneActiveUntil=0;
+    this.coneDir=0;
+    this._coneInsideMs=0;
+    this._coneLastCheck=0;
+    this._coneLastTick=0;
+    this._lastRegenAt=0;
+    this.keepMin=280;
+    this.keepMax=440;
+  }
+  update(player){
+    if(Date.now()<this.spawnFreezeUntil)return;
+    const now=Date.now();
+
+    // Regen: if not hit for 5s, heal 15 (can repeat every 5s)
+    const lastHit=this._lastHitAt||0;
+    if(now-lastHit>=5000 && now-(this._lastRegenAt||0)>=5000 && this.hp<this.maxHP){
+      this.hp=Math.min(this.maxHP, this.hp+15);
+      this._lastRegenAt=now;
+      createParticles(this.x+this.width/2,this.y+this.height/2,'#74b9ff',12,4);
+    }
+
+    const dx=(player.x+player.width/2)-(this.x+this.width/2);
+    const dy=(player.y+player.height/2)-(this.y+this.height/2);
+    const dist=Math.hypot(dx,dy)||1;
+
+    // Keep mid distance
+    if(dist < this.keepMin){
+      const nx=dx/dist, ny=dy/dist;
+      this.vx = -nx*this.speed*1.08;
+      this.vy = -ny*this.speed*1.08;
+    } else if(dist > this.keepMax){
+      const nx=dx/dist, ny=dy/dist;
+      this.vx = nx*this.speed*0.92;
+      this.vy = ny*this.speed*0.92;
+    } else {
+      this.vx*=0.92; this.vy*=0.92;
+    }
+
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+
+    // Start cone attack
+    if(now-this.lastAttack>this.attackCooldown){
+      this.lastAttack=now;
+      this.coneActiveUntil=now+this.coneDuration;
+      this.coneDir=Math.atan2(dy,dx);
+      this._coneInsideMs=0;
+      this._coneLastCheck=now;
+      this._coneLastTick=0;
+    }
+
+    // Cone damage while active
+    if(this.coneActiveUntil && now < this.coneActiveUntil){
+      const dt = now - (this._coneLastCheck || now);
+      this._coneLastCheck = now;
+
+      // check player inside cone
+      const px=player.x+player.width/2, py=player.y+player.height/2;
+      const ex=this.x+this.width/2, ey=this.y+this.height/2;
+      const vx=px-ex, vy=py-ey;
+      const pdist=Math.hypot(vx,vy)||1;
+      const ang=Math.atan2(vy,vx);
+      let diff=Math.abs(ang-this.coneDir);
+      if(diff>Math.PI) diff=2*Math.PI-diff;
+
+      const inside = (pdist<=this.coneRange) && (diff <= (this.coneAngle/2));
+
+      if(inside){
+        this._coneInsideMs += dt;
+        // damage ticks every 250ms, increasing while inside
+        if(!this._coneLastTick) this._coneLastTick = now;
+        if(now - this._coneLastTick >= 250){
+          this._coneLastTick = now;
+          const insideSec = this._coneInsideMs/1000;
+          const base = Math.max(3, Math.round(this.damage*0.20));
+          const ramp = Math.round(insideSec * 2.2); // gradual increase
+          const dmg = Math.min(22, base + ramp);
+          player.takeDamage(dmg);
+          createParticles(player.x,player.y,'#b2bec3',8,3);
+        }
+      } else {
+        this._coneInsideMs = 0;
+      }
+    }
+  }
+  draw(){
+    const img = enemyImages['glacial'];
+    if(img && img.complete) ctx.drawImage(img,this.x,this.y,this.width*1.5,this.height*1.5);
+    else super.draw();
+
+    // Cone visual
+    const now=Date.now();
+    if(this.coneActiveUntil && now < this.coneActiveUntil){
+      const cx=this.x+this.width/2, cy=this.y+this.height/2;
+      const a0=this.coneDir - this.coneAngle/2;
+      const a1=this.coneDir + this.coneAngle/2;
+      ctx.save();
+      ctx.globalAlpha=0.28;
+      ctx.fillStyle='rgba(180,220,255,0.9)';
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,this.coneRange,a0,a1,false);
+      ctx.closePath();
+      ctx.fill();
+      ctx.globalAlpha=0.12;
+      ctx.strokeStyle='rgba(180,220,255,0.9)';
+      ctx.lineWidth=4;
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,this.coneRange,a0,a1,false);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    const hpPercent=this.hp/this.maxHP;
+    ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
+    ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
+    ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
+  }
+}
+
+
 class AttackReturnEnemy extends Enemy{
   constructor(type,level){super(type,level);this.homeX=this.x;this.homeY=this.y;this.state='idle';this.attackRange=60;this.attackCooldown=2200;this.lastAttackTime=0;this.attackSpeed=this.speed*2.5}
   update(player){
@@ -2777,11 +3228,16 @@ function spawnEnemiesForLevel(level){
   enemies.length=0;
   const lvl = Math.max(1, Math.min(level, levelConfigs.length));
   const cfg=levelConfigs[lvl-1];
+  // Bestiario: segna il tipo di nemico/boss come già sfidato (sblocco globale)
+  markEnemySeen(cfg.enemyType);
+
   const count=cfg.enemyCount;
   for(let i=0;i<count;i++){
     let e;
     if(cfg.enemyType==='shooter') e=new ShooterEnemy(cfg.enemyType,lvl);
     else if(cfg.enemyType==='attacker') e=new AttackReturnEnemy(cfg.enemyType,lvl);
+    else if(cfg.enemyType==='archer') e=new ArcherEnemy(cfg.enemyType,lvl);
+    else if(cfg.enemyType==='glacial') e=new GlacialEnemy(cfg.enemyType,lvl);
     else if(cfg.enemyType==='boss1' || cfg.enemyType==='boss2' || cfg.enemyType==='boss3') e=new BossEnemy(cfg.enemyType,lvl);
     else e=new Enemy(cfg.enemyType,lvl);
     enemies.push(e);
@@ -2790,13 +3246,19 @@ function spawnEnemiesForLevel(level){
 }
 
 function updateBackgroundForLevel(level){
-  // Levels 1-6: default bg, Levels 7-15: dark bg, Levels 16-20: final bg
+  // Levels 1-6: default bg, Levels 7-15: dark bg, Levels 16-20: final bg, Levels 21+: ice bg
   let tier=0;
-  if(level>=16) tier=2;
+  if(level>=21) tier=3;
+  else if(level>=16) tier=2;
   else if(level>=7) tier=1;
 
   const applyTier=()=>{
-    if(tier===2){
+    if(tier===3){
+      bgDark.style.backgroundImage=`url('${URL_ICE}')`;
+      bgDefault.style.opacity='0';
+      bgDark.style.opacity='1';
+    }
+    else if(tier===2){
       bgDark.style.backgroundImage=`url('${URL_FINAL}')`;
       bgDefault.style.opacity='0';
       bgDark.style.opacity='1';
@@ -3082,6 +3544,46 @@ gameLoop();
   });
   const guideImg = document.getElementById('guideImg');
   if(guideImg) guideImg.addEventListener('dragstart', function(ev){ ev.preventDefault(); });
+})();
+
+// --- Bestiario: apertura/chiusura e gestione stato di gioco ---
+(function(){
+  const btn = document.getElementById('enemyGuideImgBtn');
+  const modal = document.getElementById('enemyGuideModal');
+  const close = document.getElementById('enemyGuideClose');
+  if(!btn || !modal || !close) return;
+
+  let gameStateBefore = undefined;
+
+  function show(){
+    // aggiorna sbloccati e costruisci UI
+    try{ enemySeen = loadEnemySeen(); }catch(e){}
+    buildEnemyGuideUI();
+
+    modal.style.display='flex';
+    modal.setAttribute('aria-hidden','false');
+    if(typeof gameState !== 'undefined') gameStateBefore = gameState;
+    gameState='menu';
+    close.focus();
+    window._enemyGuideOpen = true;
+  }
+  function hide(){
+    modal.style.display='none';
+    modal.setAttribute('aria-hidden','true');
+    if(typeof gameStateBefore !== 'undefined') gameState = gameStateBefore;
+    btn.focus();
+    window._enemyGuideOpen = false;
+  }
+
+  btn.addEventListener('click', function(e){ e.preventDefault(); show(); });
+  close.addEventListener('click', function(e){ e.preventDefault(); hide(); });
+  modal.addEventListener('click', function(e){ if(e.target === modal) hide(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal.style.display === 'flex') hide();
+  });
+
+  const img = document.getElementById('enemyGuideImg');
+  if(img) img.addEventListener('dragstart', function(ev){ ev.preventDefault(); });
 })();
 
 function spawnFuriaWaves(x,y){
