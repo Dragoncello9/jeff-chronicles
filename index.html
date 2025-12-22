@@ -333,7 +333,20 @@
 <div class="evo-banner" id="evoBanner" style="display:none;">
 <div id="evoBannerText">EVOLUTO!</div>
 </div>
-<div class="menu" id="mainMenu">
+<div class="menu" id="startScreen">
+  <h1>⚔️ JEFF’S CHRONICLES⚔️</h1>
+  <h2>Scegli la modalità</h2>
+  <p style="margin-top:10px;font-size:15px;color:#ddd;line-height:1.4;">
+    <strong>Difficile</strong>: gioco originale.<br>
+    <strong>Facile</strong>: cure tra i livelli (+25% ogni livello, <em>cura totale</em> ogni 5° livello) ma <em>punteggio dimezzato</em>.
+  </p>
+  <div class="start-row" style="margin-top:18px;flex-wrap:wrap;">
+    <button class="btn" id="modeHardBtn" type="button">MODALITÀ DIFFICILE</button>
+    <button class="btn" id="modeEasyBtn" type="button">MODALITÀ FACILE</button>
+  </div>
+</div>
+
+<div class="menu" id="mainMenu" style="display:none;">
 <h1>⚔️ JEFF’S CHRONICLES⚔️</h1>
 <h2>Seleziona il tuo combattente</h2>
 <div class="character-select">
@@ -624,7 +637,7 @@ bgDark.style.backgroundImage=`url('${URL_DARK}')`;
 bgDefault.style.backgroundSize=bgDark.style.backgroundSize='cover';
 bgDefault.style.backgroundPosition=bgDark.style.backgroundPosition='center';
 
-let gameState='menu';
+let gameState='start';
 let selectedCharacter=null;
 let player=null;
 let currentLevel=0;
@@ -633,6 +646,22 @@ let timer=45;
 let enemies=[];
 let particles=[];
 let pickups=[];
+let difficultyMode='hard'; // 'hard' | 'easy'
+let scoreMultiplier=1;     // easy => 0.5
+
+function setDifficulty(mode){
+  difficultyMode = (mode==='easy') ? 'easy' : 'hard';
+  scoreMultiplier = (difficultyMode==='easy') ? 0.5 : 1;
+}
+
+function applyScore(delta){
+  // In easy mode all score changes are halved (including penalties), and score never goes below 0.
+  const scaled = delta * scoreMultiplier;
+  // keep integers (same feeling as before)
+  const d = (scaled>=0) ? Math.floor(scaled) : Math.ceil(scaled);
+  score = Math.max(0, score + d);
+}
+
 
 // --- Pickup hitbox tuning ---
 // Bigger pickup hitbox (bonuses easier to collect), malus stays tighter.
@@ -690,7 +719,7 @@ function updateMagicZone(now){
         if(e.hp<=0){
           createParticles(e.x,e.y,'#fff176',30,6);
           enemies.splice(i,1);
-          score+=100*currentLevel;
+          applyScore(100*currentLevel);
         }
       }
     }
@@ -1382,7 +1411,7 @@ function updateProjectiles(){
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
               enemies.splice(i,1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
@@ -1412,7 +1441,7 @@ function updateProjectiles(){
                 if(ee.hp<=0){
                   createParticles(ee.x,ee.y,'#fff176',30,6);
                   enemies.splice(j,1);
-                  score+=100*currentLevel;
+                  applyScore(100*currentLevel);
                 }
               }
             }
@@ -1425,7 +1454,7 @@ function updateProjectiles(){
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
               enemies.splice(i,1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
@@ -1460,7 +1489,7 @@ function updateProjectiles(){
           if(ee.hp<=0){
             createParticles(ee.x,ee.y,'#fff176',30,6);
             enemies.splice(j,1);
-            score+=100*currentLevel;
+            applyScore(100*currentLevel);
           }
         }
       }
@@ -2026,7 +2055,7 @@ class Player{
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
                 enemies.splice(i,1);
-                score+=100*currentLevel;
+                applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
               }
             }
@@ -2052,7 +2081,7 @@ class Player{
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
                 enemies.splice(i,1);
-                score+=100*currentLevel;
+                applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
               }
             }
@@ -2112,7 +2141,7 @@ class Player{
                   if(e===this.grappleTarget) killedGrappleTarget=true;
                   createParticles(e.x,e.y,'#fff176',30,6);
                   enemies.splice(i,1);
-                  score+=100*currentLevel;
+                  applyScore(100*currentLevel);
                 }
               }
             }
@@ -2171,7 +2200,7 @@ class Player{
                 if(enemies[i].hp<=0){
                   createParticles(enemies[i].x,enemies[i].y,'#fff176',30,6);
                   enemies.splice(i,1);
-                  score+=100*currentLevel;
+                  applyScore(100*currentLevel);
                 }
               }
             }
@@ -2192,8 +2221,7 @@ class Player{
   }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   enemies.splice(idx,1);
-                  score+=100*currentLevel
-                }
+                  applyScore(100*currentLevel);}
               }
             });
           }
@@ -2238,7 +2266,7 @@ class Player{
                 if(target.hp<=0){
                   createParticles(target.x,target.y,'#fff176',30,6);
                   const idx=enemies.indexOf(target);
-                  if(idx>-1){enemies.splice(idx,1);score+=100*currentLevel}
+                  if(idx>-1){enemies.splice(idx,1);applyScore(100*currentLevel);}
                 }
 
                 // store direction and move through (no interaction/stop)
@@ -2273,8 +2301,7 @@ class Player{
   }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   enemies.splice(idx,1);
-                  score+=100*currentLevel
-                }
+                  applyScore(100*currentLevel);}
               }
             });
           }
@@ -2341,7 +2368,7 @@ class Player{
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
               enemies.splice(i,1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
@@ -2408,7 +2435,7 @@ class Player{
                 if(closestEnemy.hp<=0){
                   createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
                   const idxEnemy=enemies.indexOf(closestEnemy);
-                  if(idxEnemy>-1){enemies.splice(idxEnemy,1);score+=100*currentLevel}
+                  if(idxEnemy>-1){enemies.splice(idxEnemy,1);applyScore(100*currentLevel);}
                 }
               }
             };
@@ -2429,7 +2456,7 @@ class Player{
           if(closestEnemy.hp<=0){
             createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
             enemies.splice(enemies.indexOf(closestEnemy),1);
-            score+=100*currentLevel;
+            applyScore(100*currentLevel);
           }
         } else if(assistTarget){
           const distA=Math.hypot((assistTarget.x-this.x),(assistTarget.y-this.y));
@@ -2441,7 +2468,7 @@ class Player{
             if(assistTarget.hp<=0){
               createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
               enemies.splice(enemies.indexOf(assistTarget),1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
             }
           }
         }
@@ -2482,7 +2509,7 @@ class Player{
   }
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
               enemies.splice(enemies.indexOf(enemy),1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
             }
           }
         });
@@ -2510,8 +2537,7 @@ class Player{
   }
             createParticles(enemy.x,enemy.y,'#fff176',30,6);
             enemies.splice(enemies.indexOf(enemy),1);
-            score+=100*currentLevel
-          }
+            applyScore(100*currentLevel);}
         }
       });
       // Jeff EVO passive: if a single attack hits 2+ enemies, heal 1% max HP
@@ -2530,8 +2556,7 @@ class Player{
           if(assistTarget.hp<=0){
             createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
             enemies.splice(enemies.indexOf(assistTarget),1);
-            score+=100*currentLevel
-          }
+            applyScore(100*currentLevel);}
         }
       }
 
@@ -2588,7 +2613,7 @@ class Player{
             if(closest.hp<=0){
               createParticles(closest.x,closest.y,'#fff176',30,6);
               enemies.splice(enemies.indexOf(closest),1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
             }
           }
         };
@@ -2839,7 +2864,7 @@ else if(this.attackType==='tempostormLaser'){
     this.hp = Math.max(0, this.hp);
     this.damageTaken++;
     this.combo=0;
-    score=Math.max(0,score-50);
+    applyScore(-50);
     createParticles(this.x,this.y,'#c0392b',12,5);
     shakeScreen();
     if(this.hp<=0 && gameState==='playing') endGame(false);
@@ -3862,6 +3887,8 @@ function startGame(){
   spawnEnemiesForLevel(currentLevel);
   updateBackgroundForLevel(currentLevel);
   document.getElementById('mainMenu').style.display='none';
+  const ss=document.getElementById('startScreen');
+  if(ss) ss.style.display='none';
   document.getElementById('uiOverlay').style.display='block';
   document.getElementById('scoreDisplay').style.display='block';
   document.getElementById('timerDisplay').style.display='block';
@@ -3883,6 +3910,13 @@ function endGame(won){
 }
 
 function nextLevel(){
+
+// Easy mode sustain: after clearing a level, heal between levels
+const clearedLevel = currentLevel;
+if(difficultyMode==='easy' && player){
+  const healAmt = (clearedLevel % 5 === 0) ? (player.maxHP) : (player.maxHP * 0.25);
+  player.hp = Math.min(player.maxHP, (clearedLevel % 5 === 0) ? player.maxHP : (player.hp + healAmt));
+}
   if(currentLevel < levelConfigs.length){
     currentLevel++;
     spawnEnemiesForLevel(currentLevel);
@@ -3922,7 +3956,7 @@ return;
   for(let i=enemies.length-1;i>=0;i--){
     if(enemies[i].hp<=0){
       const dead=enemies.splice(i,1)[0];
-      score+=100*currentLevel;
+      applyScore(100*currentLevel);
       createParticles(dead.x,dead.y,'#fff176',30,6);
     }
   }
@@ -4055,6 +4089,29 @@ function updateMenuStatsDisplay(char){
      (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : s.damage)));
 
 }
+
+/* === Start screen: choose difficulty mode === */
+(function(){
+  const startScreen=document.getElementById('startScreen');
+  const mainMenu=document.getElementById('mainMenu');
+  const hardBtn=document.getElementById('modeHardBtn');
+  const easyBtn=document.getElementById('modeEasyBtn');
+  if(startScreen && mainMenu){
+    // default view
+    startScreen.style.display='block';
+    mainMenu.style.display='none';
+    gameState='start';
+  }
+  function goToMenu(mode){
+    setDifficulty(mode);
+    if(startScreen) startScreen.style.display='none';
+    if(mainMenu) mainMenu.style.display='block';
+    gameState='menu';
+    updateMenuRecordsDisplay();
+  }
+  if(hardBtn) hardBtn.addEventListener('click', ()=>goToMenu('hard'));
+  if(easyBtn) easyBtn.addEventListener('click', ()=>goToMenu('easy'));
+})();
 
 document.getElementById('startBtn').addEventListener('click',()=>{
   if(!selectedCharacter)selectedCharacter='jimmy';
@@ -4228,7 +4285,7 @@ function updateFuriaWaves(){
           if(e.hp<=0){
             createParticles(e.x,e.y,'#fff176',30,6);
             enemies.splice(i,1);
-            score+=100*currentLevel;
+            applyScore(100*currentLevel);
           }
         }
       }
