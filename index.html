@@ -90,29 +90,54 @@
     }
 
     .character-select{
-      display:flex;
-      gap:16px;
-      justify-content:center;
+      display:block;
       margin:18px 0;
-      flex-wrap:wrap;
-
-      /* NEW: scrollable character list (extra slots) */
-      max-height:360px;
+      max-height:420px;
       overflow-y:auto;
       overflow-x:hidden;
-      padding:8px 6px;
+      padding:6px;
+      box-sizing:border-box;
     }
+    .character-select::-webkit-scrollbar{width:10px}
+    .character-select::-webkit-scrollbar-thumb{background:#555;border:2px solid #111;border-radius:10px}
+    .character-select::-webkit-scrollbar-track{background:#111}
+
     .character-select::-webkit-scrollbar{width:10px}
     .character-select::-webkit-scrollbar-thumb{background:#555;border:2px solid #111;border-radius:10px}
     .character-select::-webkit-scrollbar-track{background:#111}
 
     /* Ridotte leggermente le card personaggio per evitare sovrapposizioni */
     .character-card{
-      background:#222;border:3px solid #555;padding:12px;
-      width:180px; /* ridotta da 200px a 180px */
-      cursor:pointer;transition:all .2s;position:relative;
-      display:flex;flex-direction:column;align-items:center;
+      background:#222;border:3px solid #555;padding:10px 12px;
+      width:100%;
+      cursor:pointer;transition:all .12s;position:relative;
+      display:flex;flex-direction:row;align-items:center;gap:12px;
+      min-height:64px;box-sizing:border-box;
     }
+    .character-card:hover{transform:translateY(-3px);border-color:#e74c3c;background:#222}
+    .character-card.selected{border-left:6px solid #f39c12;background:#2b2b2b}
+    .character-card.disabled{ filter:grayscale(1); opacity:0.55; cursor:not-allowed; transform:none; }
+    .character-card img{
+      width:56px;
+      height:56px;
+      display:block;
+      image-rendering:pixelated;
+      margin:0;
+      flex:0 0 auto;
+    }
+    .character-card h3{
+      flex:0 0 160px;
+      text-align:left;
+      margin:0;
+      font-size:16px;
+      color:#fff;
+    }
+    .character-card .menu-stats{font-size:13px;color:#ddd;margin-left:8px}
+    .record-badge{position:static;margin-left:12px;font-size:12px}
+    .lock-badge{position:absolute;right:10px;top:10px;font-size:12px;color:#f39c12;background:#000;padding:3px 6px;border:1px solid #f39c12}
+    /* nascondi i vecchi pulsanti interni delle card se presenti */
+    .character-card .select-btn{display:none!important}
+
     .character-card:hover{transform:scale(1.03);border-color:#e74c3c}
     .character-card.selected{border-color:#f39c12;background:#333}
     .character-card.disabled{ filter:grayscale(1); opacity:0.55; cursor:not-allowed; }
@@ -313,7 +338,159 @@
   .guide-modal-content{max-width:calc(100% - 20px);padding:14px}
   .guide-body p{font-size:13px}
 }
-  </style>
+  
+    /* menu stat numbers: only numbers, no labels */
+    .menu-stats{display:flex;gap:12px;align-items:center;justify-content:center;font-size:14px}
+    .menu-stats .stat{min-width:40px;text-align:center;font-weight:bold;color:#f1f1f1}
+    .menu-stats .spacer{width:8px}
+    
+
+.compact-selector{margin:16px 0}
+.char-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.char-grid button{
+  background:#111;
+  border:2px solid #555;
+  color:#fff;
+  font-family:'Press Start 2P', cursive;
+  font-size:10px;
+  padding:10px 6px;
+  cursor:pointer;
+}
+.char-grid button:hover{border-color:#f39c12}
+.char-grid button.empty{
+  background:#222;
+  border-style:dashed;
+  cursor:not-allowed;
+  color:#777;
+}
+
+
+/* ==== COMPACT CHARACTER SELECT PATCH ==== */
+.characterCard, .charCard, .character-card {
+  display:none !important; /* hide big cards */
+}
+
+.charBtn, .characterBtn, .selectCharBtn, .char-button {
+  padding:10px 14px;
+  margin:6px;
+  font-size:18px;
+  border-radius:12px;
+  border:3px solid #555;
+  background:#1e1e1e;
+  color:#fff;
+  cursor:pointer;
+}
+
+.charBtn.selected, .characterBtn.selected, .selectCharBtn.selected, .char-button.selected{
+  border-color:#ff9800 !important;
+  box-shadow:0 0 12px #ff9800;
+}
+
+/* collapse container */
+#charactersContainerCompact{
+  max-height:70vh;
+  overflow:auto;
+  padding:6px;
+}
+
+#moreCharsToggle{
+  width:100%;
+  margin-top:8px;
+  padding:10px;
+  border-radius:12px;
+  border:3px solid #ff9800;
+  background:#2c2c2c;
+  color:#ff9800;
+  font-size:18px;
+  cursor:pointer;
+}
+
+
+/* ==== STRONG SELECT GLOW ==== */
+.charBtn.selected, .characterBtn.selected, .selectCharBtn.selected, .char-button.selected{
+  border-color:#ff9800 !important;
+  box-shadow:
+    0 0 8px #ff9800,
+    0 0 16px #ff9800,
+    0 0 28px rgba(255,152,0,0.9),
+    inset 0 0 12px rgba(255,152,0,0.6);
+  background: linear-gradient(180deg,#2b1a00,#3a2200);
+  transform: scale(1.05);
+  transition: all 0.12s ease;
+}
+
+.charBtn:hover, .characterBtn:hover, .selectCharBtn:hover, .char-button:hover{
+  box-shadow: 0 0 10px rgba(255,152,0,0.6);
+}
+
+</style>
+
+<!-- Injected CSS: compact grid selected state -->
+<style id="injected-compact-select-style">
+.char-grid button.selected{
+  border-color:#ff9800 !important;
+  box-shadow:
+    0 0 8px #ff9800,
+    0 0 16px #ff9800,
+    0 0 28px rgba(255,152,0,0.9),
+    inset 0 0 12px rgba(255,152,0,0.35);
+  background: linear-gradient(180deg,#2b1a00,#3a2200);
+  color:#fff;
+  transform: scale(1.03);
+  transition: all 0.12s ease;
+}
+.char-grid button.selected:focus{
+  outline: 3px solid rgba(255,152,0,0.18);
+}
+</style>
+
+
+<!-- === LOCKED COMPACT BUTTON STYLE PATCH (added) === -->
+<style id="locked-compact-style">
+/* locked/disabled compact buttons */
+.char-grid button.locked{
+  background:#2a2a2a !important;
+  border-color:#444 !important;
+  color:#888 !important;
+  opacity:0.45;
+  cursor:not-allowed;
+  box-shadow:none !important;
+  transform:none !important;
+}
+
+/* no hover glow */
+.char-grid button.locked:hover{
+  border-color:#444 !important;
+  box-shadow:none !important;
+}
+
+/* prevent orange glow even if .selected accidentally added */
+.char-grid button.locked.selected{
+  border-color:#444 !important;
+  background:#2a2a2a !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+</style>
+
+
+<style>
+/* AUTO-SELECTED HIGHLIGHT */
+.char-grid button.selected, .character-card.selected {
+  outline: 3px solid transparent;
+  box-shadow: 0 0 0 3px rgba(255,165,0,0.15), 0 0 8px rgba(255,165,0,0.2);
+  background: linear-gradient(180deg, rgba(255,200,120,0.12), rgba(255,165,0,0.04));
+  border-color: #ff8c00;
+}
+.char-grid button.selected {
+  background-color: #fff7ef;
+}
+</style>
+
 </head>
 <body>
 <div id="bgDefault"></div>
@@ -321,15 +498,36 @@
 <div id="fadeOverlay"></div>
 <div id="gameContainer">
 <canvas height="700" id="gameCanvas" width="1200"></canvas>
+
+<div id="totalScoreDisplay" style="
+  position:absolute;
+  bottom:10px;
+  right:12px;
+  z-index:15;
+  font-size:12px;
+  opacity:0.85;
+  color:#f1c40f;
+  text-shadow:1px 1px 2px #000;
+  font-family:'Press Start 2P', cursive;
+  pointer-events:none;
+">
+PUNTEGGIO TOTALE: 0
+</div>
+
 <div class="ui-overlay" id="uiOverlay" style="display:none;">
 <div>HP: <span id="hpText">100</span></div>
 <div class="hp-bar"><div class="hp-fill" id="hpFill" style="width:100%"></div></div>
-<div style="margin-top:6px;">Buff Attacco: <span id="atkBuffDisplay">0s</span></div>
+<div id="superCooldown" style="margin-top:6px;font-size:12px;color:#fff;font-family:'Press Start 2P', cursive;;color:#ff9800;">Super: Ready</div>
+<div id="bonusTimers" style="margin-top:4px;font-size:11px;line-height:1.4;color:#fff;font-family:'Press Start 2P', cursive;display:none;"></div>
+
+
+
+
 </div>
 <div class="score" id="scoreDisplay" style="display:none;">Score: 0</div>
 <div class="timer" id="timerDisplay" style="display:none;">45</div>
 <div class="level-indicator" id="levelDisplay" style="display:none;">Level 1</div>
-<div class="super-cooldown" id="superCooldown" style="display:none;">Super: Ready</div>
+
 <div class="evo-banner" id="evoBanner" style="display:none;">
 <div id="evoBannerText">EVOLUTO!</div>
 </div>
@@ -349,30 +547,52 @@
 <div class="menu" id="mainMenu" style="display:none;">
 <h1>⚔️ JEFF’S CHRONICLES⚔️</h1>
 <h2>Seleziona il tuo combattente</h2>
+
+<div class="compact-selector">
+  <div class="char-grid"><button data-target="jimmy">JIMMY 🔫<br><small class="btn-record" id="btnrec-jimmy">R: 0</small></button>
+    <button data-target="rooney">ROONEY 🐱<br><small class="btn-record" id="btnrec-rooney">R: 0</small></button>
+    <button data-target="jeff">JEFF 🗡️<br><small class="btn-record" id="btnrec-jeff">R: 0</small></button>
+    <button data-target="voltryx">VOLTRYX 🦊<br><small class="btn-record" id="btnrec-voltryx">R: 0</small></button>
+    <button data-target="kouvagia">KOUVAGIA 🦉<br><small class="btn-record" id="btnrec-kouvagia">R: 0</small></button>
+    <button data-target="salsy">SALSY ⚜️<br><small class="btn-record" id="btnrec-salsy">R: 0</small></button>
+    <button data-target="tempostorm">TEMPOSTORM 🔋<br><small class="btn-record" id="btnrec-tempostorm">R: 0</small></button>
+    <button data-target="marz">MARZ 🪄<br><small class="btn-record" id="btnrec-marz">R: 0</small></button>
+    <button data-target="hecate">HÈCATE 🌘<br><small class="btn-record" id="btnrec-hecate">R: 0</small></button>
+    <button data-target="marcus">MARCUS 🎶<br><small class="btn-record" id="btnrec-marcus">R: 0</small></button>
+    <button class="empty" disabled>COMING SOON</button>
+    <button class="empty" disabled>COMING SOON</button>
+
+<button class="btn character-btn disabled" data-target="extra1" disabled>❓ Nuovo</button>
+<button class="btn character-btn disabled" data-target="extra2" disabled>❓ Nuovo</button>
+<button class="btn character-btn disabled" data-target="extra3" disabled>❓ Nuovo</button>
+<button class="btn character-btn disabled" data-target="extra4" disabled>❓ Nuovo</button>
+
+</div>
+</div>
 <div class="character-select">
 <div class="character-card" data-char="jimmy" id="card-jimmy">
 <h3>JIMMY</h3>
 <p>"🔫"</p>
-<div class="menu-stats">HP: <span id="menu-hp-jimmy">-</span> Danno: <span id="menu-dmg-jimmy">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-jimmy">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-jimmy">-</span></div>
 <div class="record-badge" id="record-jimmy">Record: 0</div>
 </div>
 <div class="character-card" data-char="rooney" id="card-rooney">
 <h3>ROONEY</h3>
 <p>"🐱"</p>
-<div class="menu-stats">HP: <span id="menu-hp-rooney">-</span> Danno: <span id="menu-dmg-rooney">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-rooney">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-rooney">-</span></div>
 <div class="record-badge" id="record-rooney">Record: 0</div>
 </div>
 <div class="character-card" data-char="jeff" id="card-jeff">
 <h3>JEFF</h3>
 <p>"🗡️"</p>
-<div class="menu-stats">HP: <span id="menu-hp-jeff">-</span> Danno: <span id="menu-dmg-jeff">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-jeff">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-jeff">-</span></div>
 <div class="record-badge" id="record-jeff">Record: 0</div>
 </div>
 <!-- Voltryx card (locked until all three records > 50000) -->
 <div class="character-card disabled" data-char="voltryx" id="card-voltryx" title="Sblocca completando 45.000 punti con ogni personaggio">
 <h3>VOLTRYX</h3>
 <p>"🦊"</p>
-<div class="menu-stats">HP: <span id="menu-hp-voltryx">-</span> Danno: <span id="menu-dmg-voltryx">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-voltryx">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-voltryx">-</span></div>
 <div class="record-badge" id="record-voltryx">Record: 0</div>
 <div class="lock-badge" id="voltryxLockBadge">LOCKED</div>
 </div>
@@ -380,7 +600,7 @@
 <div class="character-card disabled" data-char="kouvagia" id="card-kouvagia" title="Sblocca facendo 51.000 punti con Voltryx">
 <h3>KOUVAGIA</h3>
 <p>"🦉"</p>
-<div class="menu-stats">HP: <span id="menu-hp-kouvagia">-</span> Danno: <span id="menu-dmg-kouvagia">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-kouvagia">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-kouvagia">-</span></div>
 <div class="record-badge" id="record-kouvagia">Record: 0</div>
 <div class="lock-badge" id="kouvagiaLockBadge">LOCKED</div>
 </div>
@@ -388,7 +608,7 @@
 <div class="character-card disabled" data-char="salsy" id="card-salsy" title="Sblocca facendo 60.000 punti con Jimmy, Rooney, Jeff, Voltryx e Kouvagia">
 <h3>SALSY</h3>
 <p>"⚜️"</p>
-<div class="menu-stats">HP: <span id="menu-hp-salsy">-</span> Danno: <span id="menu-dmg-salsy">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-salsy">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-salsy">-</span></div>
 <div class="record-badge" id="record-salsy">Record: 0</div>
 <div class="lock-badge" id="salsyLockBadge">LOCKED</div>
 </div>
@@ -398,7 +618,7 @@
 <div class="character-card disabled" data-char="tempostorm" id="card-tempostorm" style="margin-right:8px;" title="Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)">
 <h3>TEMPOSTORM</h3>
 <p>"🔋"</p>
-<div class="menu-stats">HP: <span id="menu-hp-tempostorm">-</span> Danno: <span id="menu-dmg-tempostorm">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-tempostorm">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-tempostorm">-</span></div>
 <div class="record-badge" id="record-tempostorm">Record: 0</div>
 <div class="lock-badge" id="tempostormLockBadge">LOCKED</div>
 </div>
@@ -406,7 +626,7 @@
 <div class="character-card disabled" data-char="marz" id="card-marz" title="Sblocca facendo 80.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy e Tempostorm)">
 <h3>MARZ</h3>
 <p>"🪄"</p>
-<div class="menu-stats">HP: <span id="menu-hp-marz">-</span> Danno: <span id="menu-dmg-marz">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-marz">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-marz">-</span></div>
 <div class="record-badge" id="record-marz">Record: 0</div>
 <div class="lock-badge" id="marzLockBadge">LOCKED</div>
 </div>
@@ -414,13 +634,26 @@
 <div class="character-card disabled" data-char="hecate" id="card-hecate" title="Sblocca facendo 85.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy, Tempostorm e Marz)">
 <h3>HÈCATE</h3>
 <p>"🌘"</p>
-<div class="menu-stats">HP: <span id="menu-hp-hecate">-</span> Danno: <span id="menu-dmg-hecate">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-hecate">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-hecate">-</span></div>
 <div class="record-badge" id="record-hecate">Record: 0</div>
 <div class="lock-badge" id="hecateLockBadge">LOCKED</div>
 </div>
+
+
+
+<!-- Marcus card (locked until at least one record >= 70.000) -->
+<div class="character-card disabled" data-char="marcus" id="card-marcus" title="Sblocca facendo almeno 70.000 punti con QUALSIASI personaggio">
+<h3>MARCUS</h3>
+<p>"🎶"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-marcus">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-marcus">-</span></div>
+<div class="record-badge" id="record-marcus">Record: 0</div>
+<div class="lock-badge" id="marcusLockBadge">LOCKED</div>
+</div>
+
+</div>
 </div>
 <div class="start-row">
-<button class="btn mini-btn" id="extraCharsBtn" title="Altri personaggi" type="button">+</button>
+
 <button class="btn" id="startBtn">INIZIA BATTAGLIA</button>
 </div>
 <!-- Pulsante immagine per aprire la guida -->
@@ -731,6 +964,7 @@ function updateMagicZone(now){
         createParticles(ex,ey, magicZone.colors[(magicZone.colorIdx++)%magicZone.colors.length], 10, 4);
         if(e.hp<=0){
           createParticles(e.x,e.y,'#fff176',30,6);
+          dropGuaranteedGoldAtIndexIfNeeded(i);
           enemies.splice(i,1);
           applyScore(100*currentLevel);
         }
@@ -796,6 +1030,7 @@ images.salsy.src='https://i.ibb.co/20zSkjsB/salsy.png';
 images.tempostorm.src='https://i.postimg.cc/mkzj763m/tempostorm.png';
 images.marz.src='https://i.postimg.cc/j5WJZL5X/marz.png';
 images.hecate.src='https://i.postimg.cc/9QjRg424/hecate.png';
+images.marcus=new Image(); images.marcus.src='https://i.postimg.cc/MpKjhyKD/image.png';
 const wolfImg=new Image(); wolfImg.src='https://i.postimg.cc/4y9yBGFw/lupo.png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
 imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
@@ -950,7 +1185,7 @@ function buildEnemyGuideUI(){
 
 const characterStats={
   jimmy:{
-    hp:305,
+    hp:350,
     speed:8*0.75,
     damage:47,
     range:600,
@@ -961,7 +1196,7 @@ const characterStats={
     superDuration:3000
   },
   rooney:{
-    hp:410,
+    hp:450,
     speed:6*0.75,
     damage:Math.round(80*DAMAGE_MULT),
     range:150,
@@ -972,7 +1207,7 @@ const characterStats={
     superDuration:750
   },
   jeff:{
-    hp:330, 
+    hp:400, 
     speed:7.5*0.75,
     damage:Math.round(57*DAMAGE_MULT), // 38
     range:Math.round(320*JEFF_ATTACK_RANGE_MULT),
@@ -983,7 +1218,7 @@ const characterStats={
     superDuration:2800
   },
   voltryx:{
-    hp:340, 
+    hp:425, 
     speed:9*0.75,               
     damage:Math.round(55*DAMAGE_MULT),
     range:Math.round(600), 
@@ -994,7 +1229,7 @@ const characterStats={
     superDuration:1500 
   },
   kouvagia:{
-    hp:350,
+    hp:430,
     speed:7*0.75,
     damage:55,
     range:220,
@@ -1005,7 +1240,7 @@ const characterStats={
     superDuration:600
   },
   salsy:{
-    hp:330,
+    hp:410,
     speed:8*0.75,  // leggermente più veloce di prima
     damage:33,       // per colpo (x2)
     range:330,       // medio ravvicinata
@@ -1016,7 +1251,7 @@ const characterStats={
     superDuration:400
   },
   tempostorm:{
-  hp:360,
+  hp:440,
   speed:6.1*0.75, // leggermente piu di Rooney
   damage:40,      // hit iniziale (extra +30 se il nemico resta nel fascio)
   range:400,
@@ -1027,7 +1262,7 @@ const characterStats={
   superDuration:500
 },
   marz:{
-    hp:320,
+    hp:360,
     speed:6.5*0.75,
     damage:40,
     tripleDamage:[40,50,60],
@@ -1039,8 +1274,20 @@ const characterStats={
     superDuration:2200
   }
 
-  ,hecate:{
-    hp:325,
+  ,
+  marcus:{
+    hp:400,
+    speed:7,
+    damage:20,
+    range:720,
+    cooldown:650,
+    name:'Marcus',
+    attackType:'marcusStream',
+    superCooldown:25000,
+    superDuration:10000
+  },
+  hecate:{
+    hp:375,
     speed:9*0.75,
     damage:52,
     range:990,
@@ -1139,6 +1386,7 @@ function updateMenuRecordsDisplay(){
   document.getElementById('record-tempostorm').textContent=`Record: ${records.tempostorm||0}`;
   document.getElementById('record-marz').textContent=`Record: ${records.marz||0}`;
   document.getElementById('record-hecate').textContent=`Record: ${records.hecate||0}`;
+  document.getElementById('record-marcus').textContent=`Record: ${records.marcus||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
@@ -1444,7 +1692,7 @@ class Wolf{
         // kill credit: same as normal kill
         createParticles(target.x, target.y, '#fff176', 30, 6);
         const idx=enemies.indexOf(target);
-        if(idx>=0) enemies.splice(idx,1);
+        if(idx>=0){dropGuaranteedGoldAtIndexIfNeeded(idx);enemies.splice(idx,1);}
         applyScore(100*currentLevel);
       }
     }
@@ -1635,6 +1883,7 @@ function updateProjectiles(){
             showDamageNumber(e.x,e.y, _final);
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              dropGuaranteedGoldAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
@@ -1665,6 +1914,7 @@ function updateProjectiles(){
                 showDamageNumber(ee.x,ee.y, _final);
                 if(ee.hp<=0){
                   createParticles(ee.x,ee.y,'#fff176',30,6);
+                  dropGuaranteedGoldAtIndexIfNeeded(j);
                   enemies.splice(j,1);
                   applyScore(100*currentLevel);
                 }
@@ -1705,6 +1955,7 @@ function updateProjectiles(){
             }
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              dropGuaranteedGoldAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
@@ -1740,6 +1991,7 @@ function updateProjectiles(){
           showDamageNumber(ee.x,ee.y, _final);
           if(ee.hp<=0){
             createParticles(ee.x,ee.y,'#fff176',30,6);
+            dropGuaranteedGoldAtIndexIfNeeded(j);
             enemies.splice(j,1);
             applyScore(100*currentLevel);
           }
@@ -1767,7 +2019,49 @@ function drawProjectiles(){
       ctx.fillStyle=p.color;
       ctx.fillRect(-w/2, -h/2, w, h);
       ctx.restore();
+      
+    // Marcus wavy projectile visual (thick undulating line)
+    if(p.meta && p.meta.marcus){
+      const ang = Math.atan2(p.vy||0, p.vx||1);
+      const segs = 20;
+      const length = 120; // total length of the visible wave
+      const step = length / segs;
+      const amp = (p.meta && p.meta.amp) ? p.meta.amp : 14;
+      const freq = (p.meta && p.meta.freq) ? p.meta.freq : 0.9;
+      const phase = (p.meta && p.meta.phase) ? p.meta.phase : 0;
+      const nowT = Date.now();
+      const t2 = (nowT - (p.created||0)) / 1000;
+
+      const cx = p.x, cy = p.y;
+      const dxUnit = Math.cos(ang), dyUnit = Math.sin(ang);
+      const pxUnit = Math.cos(ang + Math.PI/2), pyUnit = Math.sin(ang + Math.PI/2);
+
+      ctx.save();
+      ctx.lineWidth = Math.max(6, (p.radius||8) * 2.2);
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = p.color || '#b19cff';
+      ctx.beginPath();
+      for(let i = -Math.floor(segs/2); i <= Math.floor(segs/2); i++){
+        const u = i * step;
+        const wobble = Math.sin((u * 0.06 * freq) + (t2 * freq) + phase);
+        const ox = pxUnit * wobble * amp;
+        const oy = pyUnit * wobble * amp;
+        const x = cx + dxUnit * u + ox;
+        const y = cy + dyUnit * u + oy;
+        if(i === -Math.floor(segs/2)) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+
+      ctx.globalAlpha = 0.14;
+      ctx.lineWidth = Math.max(10, (p.radius||8) * 3.0);
+      ctx.stroke();
       ctx.globalAlpha = 1;
+      ctx.restore();
+      return;
+    }
+
+    ctx.globalAlpha = 1;
       return;
     }
 
@@ -1985,6 +2279,19 @@ function spawnPickup(x,y,type,value=0){
   // Small collectible pickup (compatible with updatePickups / drawPickups)
   const hitR = (type==='malus') ? MALUS_HIT_RADIUS : BONUS_HIT_RADIUS;
   pickups.push({x,y,type,value,created:Date.now(),ttl:20000,radius:18,hitRadius:hitR,w:28,h:28});
+}
+
+// Guaranteed gold drop: on levels 5/10/15/20/25, the LAST enemy alive always drops a Gold bonus exactly where it dies.
+const GUARANTEED_GOLD_LEVELS = new Set([5,10,15,20,25]);
+function dropGuaranteedGoldAtIndexIfNeeded(enemyIndex){
+  if(!GUARANTEED_GOLD_LEVELS.has(currentLevel)) return;
+  // if we're about to remove an enemy and it's the last one on the field, enemies.length is 1 at this exact moment
+  if(enemies.length !== 1) return;
+  const e = enemies[enemyIndex];
+  if(!e) return;
+  const cx = e.x + (e.width||0)/2;
+  const cy = e.y + (e.height||0)/2;
+  spawnPickup(cx, cy, 'gold');
 }
 function spawnPickupsForLevel(level){
   // IMPORTANT: do NOT clear existing pickups here.
@@ -2306,6 +2613,7 @@ class Player{
               showDamageNumber(e.x,e.y, _final);
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
+                dropGuaranteedGoldAtIndexIfNeeded(i);
                 enemies.splice(i,1);
                 applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
@@ -2332,6 +2640,7 @@ class Player{
               showDamageNumber(e.x,e.y, _final);
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
+                dropGuaranteedGoldAtIndexIfNeeded(i);
                 enemies.splice(i,1);
                 applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
@@ -2392,6 +2701,7 @@ class Player{
                 if(e.hp<=0){
                   if(e===this.grappleTarget) killedGrappleTarget=true;
                   createParticles(e.x,e.y,'#fff176',30,6);
+                  dropGuaranteedGoldAtIndexIfNeeded(i);
                   enemies.splice(i,1);
                   applyScore(100*currentLevel);
                 }
@@ -2464,6 +2774,7 @@ class Player{
               for(let i=enemies.length-1;i>=0;i--){
                 if(enemies[i].hp<=0){
                   createParticles(enemies[i].x,enemies[i].y,'#fff176',30,6);
+                  dropGuaranteedGoldAtIndexIfNeeded(i);
                   enemies.splice(i,1);
                   applyScore(100*currentLevel);
                 }
@@ -2485,6 +2796,7 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
+                  dropGuaranteedGoldAtIndexIfNeeded(idx);
                   enemies.splice(idx,1);
                   applyScore(100*currentLevel);}
               }
@@ -2531,7 +2843,7 @@ class Player{
                 if(target.hp<=0){
                   createParticles(target.x,target.y,'#fff176',30,6);
                   const idx=enemies.indexOf(target);
-                  if(idx>-1){enemies.splice(idx,1);applyScore(100*currentLevel);}
+                  if(idx>-1){dropGuaranteedGoldAtIndexIfNeeded(idx);enemies.splice(idx,1);applyScore(100*currentLevel);}
                 }
 
                 // store direction and move through (no interaction/stop)
@@ -2565,6 +2877,7 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
+                  dropGuaranteedGoldAtIndexIfNeeded(idx);
                   enemies.splice(idx,1);
                   applyScore(100*currentLevel);}
               }
@@ -2637,6 +2950,7 @@ class Player{
             showDamageNumber(e.x,e.y, _final);
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              dropGuaranteedGoldAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
@@ -2705,7 +3019,7 @@ class Player{
                 if(closestEnemy.hp<=0){
                   createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
                   const idxEnemy=enemies.indexOf(closestEnemy);
-                  if(idxEnemy>-1){enemies.splice(idxEnemy,1);applyScore(100*currentLevel);}
+                  if(idxEnemy>-1){dropGuaranteedGoldAtIndexIfNeeded(idxEnemy);enemies.splice(idxEnemy,1);applyScore(100*currentLevel);}
                 }
               }
             };
@@ -2725,6 +3039,7 @@ class Player{
           showDamageNumber(closestEnemy.x,closestEnemy.y, _final);
           if(closestEnemy.hp<=0){
             createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
+            dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(closestEnemy));
             enemies.splice(enemies.indexOf(closestEnemy),1);
             applyScore(100*currentLevel);
           }
@@ -2737,6 +3052,7 @@ class Player{
             showDamageNumber(assistTarget.x,assistTarget.y, _final);
             if(assistTarget.hp<=0){
               createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
+              dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(assistTarget));
               enemies.splice(enemies.indexOf(assistTarget),1);
               applyScore(100*currentLevel);
             }
@@ -2778,6 +3094,7 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
+              dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(enemy));
               enemies.splice(enemies.indexOf(enemy),1);
               applyScore(100*currentLevel);
             }
@@ -2806,6 +3123,7 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
             createParticles(enemy.x,enemy.y,'#fff176',30,6);
+            dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(enemy));
             enemies.splice(enemies.indexOf(enemy),1);
             applyScore(100*currentLevel);}
         }
@@ -2825,6 +3143,7 @@ class Player{
           showDamageNumber(assistTarget.x,assistTarget.y, _final);
           if(assistTarget.hp<=0){
             createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
+            dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(assistTarget));
             enemies.splice(enemies.indexOf(assistTarget),1);
             applyScore(100*currentLevel);}
         }
@@ -2882,6 +3201,7 @@ class Player{
             showDamageNumber(closest.x,closest.y, _final);
             if(closest.hp<=0){
               createParticles(closest.x,closest.y,'#fff176',30,6);
+              dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(closest));
               enemies.splice(enemies.indexOf(closest),1);
               applyScore(100*currentLevel);
             }
@@ -3147,7 +3467,7 @@ else if(this.attackType==='tempostormLaser'){
         x:cx,
         y:cy,
         startsAt:now,
-        endsAt:now+10000,
+        endsAt:now+6500,
         durationMs:10000,
         startRadius:90,
         maxRadius:560,
@@ -4289,6 +4609,7 @@ return;
 
   for(let i=enemies.length-1;i>=0;i--){
     if(enemies[i].hp<=0){
+      dropGuaranteedGoldAtIndexIfNeeded(i);
       const dead=enemies.splice(i,1)[0];
       applyScore(100*currentLevel);
       createParticles(dead.x,dead.y,'#fff176',30,6);
@@ -4345,6 +4666,35 @@ return;
   document.getElementById('levelDisplay').textContent=`Level ${currentLevel}`;
   const superReady=(Date.now()-player.lastSuper>=player.superCooldown)?'Ready':Math.ceil((player.superCooldown-(Date.now()-player.lastSuper))/1000)+'s';
   document.getElementById('superCooldown').textContent=`Super: ${superReady}`;
+
+// ===== BONUS TIMER HUD (dentro interfaccia di gioco) =====
+const bonusBox=document.getElementById('bonusTimers');
+if(bonusBox){
+  const nowT=Date.now();
+  const rows=[];
+
+  const add=(label,until,color)=>{
+    if(until && until>nowT){
+      const t=Math.ceil((until-nowT)/1000);
+      rows.push('<span style="color:'+color+'">'+label+': '+t+'s</span>');
+    }
+  };
+
+  add('SCUDO', player.pickupShieldUntil, '#7fdfff');   // azzurro chiaro
+  add('SPEED', player.speedBuffUntil, '#3498db');      // blu
+  add('FURIA', player.furiaHealUntil, '#ff00ff');      // fucsia
+  add('ATK', player.attackBuffUntil, '#ff3b3b');       // rosso
+  add('POISON', player.poisonUntil, '#4b0082');        // viola scuro
+
+  if(rows.length){
+    bonusBox.style.display='block';
+    bonusBox.innerHTML=rows.join('<br>');
+  }else{
+    bonusBox.style.display='none';
+    bonusBox.innerHTML='';
+  }
+}
+// ===============================================
   if(player.attackBuffUntil) document.getElementById('atkBuffDisplay').textContent=Math.max(0,Math.ceil((player.attackBuffUntil-Date.now())/1000))+'s';
   else document.getElementById('atkBuffDisplay').textContent='0s';
 }
@@ -4627,6 +4977,7 @@ function updateFuriaWaves(){
           createParticles(e.x,e.y,'#ff4dff',14,5);
           if(e.hp<=0){
             createParticles(e.x,e.y,'#fff176',30,6);
+            dropGuaranteedGoldAtIndexIfNeeded(i);
             enemies.splice(i,1);
             applyScore(100*currentLevel);
           }
@@ -4678,6 +5029,40 @@ function drawFuriaWaves(){
   }
 }
 
+
+// --- MARCUS UNLOCK: at least one character record >= 70000 ---
+function updateMarcusUnlock(){
+  const badge=document.getElementById('marcusLockBadge');
+  const card=document.getElementById('card-marcus');
+  if(!badge||!card) return;
+
+  let maxRecord=0;
+  document.querySelectorAll('.record-badge').forEach(r=>{
+    const v=parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+    if(v>maxRecord) maxRecord=v;
+  });
+
+  if(maxRecord>=70000){
+    card.classList.remove('disabled');
+    if(badge) badge.style.display='none';
+  }
+}
+setInterval(updateMarcusUnlock,500);
+
+
+// --- Ensure MARCUS selection behaves like others ---
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.target;
+    const card = document.getElementById('card-'+target);
+    if(!card || card.classList.contains('disabled')) return;
+
+    document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedCharacter = target;
+  });
+});
+
 </script>
 </div>
 <script>
@@ -4703,7 +5088,633 @@ window.addEventListener('keyup', e => {
   const k = normalizeKey(e.key);
   keys[k] = false;
 });
+
+// --- MARCUS UNLOCK: at least one character record >= 70000 ---
+function updateMarcusUnlock(){
+  const badge=document.getElementById('marcusLockBadge');
+  const card=document.getElementById('card-marcus');
+  if(!badge||!card) return;
+
+  let maxRecord=0;
+  document.querySelectorAll('.record-badge').forEach(r=>{
+    const v=parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+    if(v>maxRecord) maxRecord=v;
+  });
+
+  if(maxRecord>=70000){
+    card.classList.remove('disabled');
+    if(badge) badge.style.display='none';
+  }
+}
+setInterval(updateMarcusUnlock,500);
+
+
+// --- Ensure MARCUS selection behaves like others ---
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.target;
+    const card = document.getElementById('card-'+target);
+    if(!card || card.classList.contains('disabled')) return;
+
+    document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedCharacter = target;
+  });
+});
+
+</script>
+
+
+<script>
+(function(){
+  try{ window.selectedCharacter = window.selectedCharacter || null; }catch(e){ window.selectedCharacter = null; }
+  function clearSelected(){ document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected')); }
+  document.querySelectorAll('.character-card').forEach(card=>{
+    card.addEventListener('click', function(e){
+      if(card.classList.contains('disabled')) return;
+      clearSelected();
+      card.classList.add('selected');
+      var ch = card.dataset && card.dataset.char ? card.dataset.char : null;
+      if(ch) window.selectedCharacter = ch;
+      var legacy = document.getElementById('card-' + ch);
+      if(legacy && legacy !== card){ legacy.classList.add('selected'); }
+    });
+  });
+  document.addEventListener('DOMContentLoaded', function(){
+    if(window.selectedCharacter){
+      var el = document.querySelector('.character-card[data-char="' + window.selectedCharacter + '"]');
+      if(el) el.classList.add('selected');
+    }
+  });
+})();
+
+// --- MARCUS UNLOCK: at least one character record >= 70000 ---
+function updateMarcusUnlock(){
+  const badge=document.getElementById('marcusLockBadge');
+  const card=document.getElementById('card-marcus');
+  if(!badge||!card) return;
+
+  let maxRecord=0;
+  document.querySelectorAll('.record-badge').forEach(r=>{
+    const v=parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+    if(v>maxRecord) maxRecord=v;
+  });
+
+  if(maxRecord>=70000){
+    card.classList.remove('disabled');
+    if(badge) badge.style.display='none';
+  }
+}
+setInterval(updateMarcusUnlock,500);
+
+
+// --- Ensure MARCUS selection behaves like others ---
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.target;
+    const card = document.getElementById('card-'+target);
+    if(!card || card.classList.contains('disabled')) return;
+
+    document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedCharacter = target;
+  });
+});
+
+</script>
+
+
+<script>
+document.querySelectorAll('.char-grid button[data-target]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const card=document.querySelector('#card-'+b.dataset.target);
+    if(card && !card.classList.contains('disabled')){
+      card.click();
+    }
+  });
+});
+
+// --- MARCUS UNLOCK: at least one character record >= 70000 ---
+function updateMarcusUnlock(){
+  const badge=document.getElementById('marcusLockBadge');
+  const card=document.getElementById('card-marcus');
+  if(!badge||!card) return;
+
+  let maxRecord=0;
+  document.querySelectorAll('.record-badge').forEach(r=>{
+    const v=parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+    if(v>maxRecord) maxRecord=v;
+  });
+
+  if(maxRecord>=70000){
+    card.classList.remove('disabled');
+    if(badge) badge.style.display='none';
+  }
+}
+setInterval(updateMarcusUnlock,500);
+
+
+// --- Ensure MARCUS selection behaves like others ---
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.target;
+    const card = document.getElementById('card-'+target);
+    if(!card || card.classList.contains('disabled')) return;
+
+    document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedCharacter = target;
+  });
+});
+
+</script>
+
+
+<div id="lockMessage" style="
+  position:fixed;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  background:rgba(0,0,0,0.9);
+  border:3px solid #f39c12;
+  padding:18px 22px;
+  font-family:'Press Start 2P', cursive;
+  font-size:12px;
+  color:#fff;
+  z-index:999;
+  display:none;
+  text-align:center;
+  box-shadow:0 0 25px rgba(0,0,0,0.8);
+">
+  <div id="lockText"></div>
+  <div style="margin-top:12px;">
+    <button id="lockCloseBtn" style="
+      background:#e74c3c;
+      border:none;
+      padding:8px 14px;
+      font-family:'Press Start 2P', cursive;
+      cursor:pointer;
+      color:#fff;
+      font-size:11px;
+    ">OK</button>
+  </div>
+</div>
+
+
+<!-- Auto-open / scroll fixes for extra characters (added by assistant) -->
+<script>
+(function(){
+  const extraCharsBtn=document.getElementById('extraCharsBtn');
+  const extraCharacterSelect=document.getElementById('extraCharacterSelect');
+  // Helper to ensure an element is visible (display:block) and scrolled into view
+  function openAndScrollTo(el){
+    if(!el) return;
+    if(window.getComputedStyle(el).display === 'none') el.style.display = 'block';
+    setTimeout(()=>{ try{ el.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'}); }catch(e){} },60);
+  }
+
+  if(extraCharsBtn && extraCharacterSelect){
+    extraCharsBtn.addEventListener('click', ()=>{
+      const isOpen = extraCharacterSelect.style.display === 'block';
+      extraCharacterSelect.style.display = isOpen ? 'none' : 'block';
+      if(!isOpen){
+        setTimeout(()=>{ try{ extraCharacterSelect.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'}); 
+          const first = extraCharacterSelect.querySelector('.character-card');
+          if(first) first.focus && first.focus(); }catch(e){} },80);
+      }
+    });
+
+    // When clicking compact selector buttons, if the target card lives inside the extraCharacterSelect,
+    // open that panel and scroll to it so selection is visible (handles Marcus/Hècate cases).
+    document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        try{
+          const target = btn.dataset.target;
+          const card = document.getElementById('card-'+target);
+          if(card && extraCharacterSelect && extraCharacterSelect.contains(card)){
+            // open and scroll to target card
+            extraCharacterSelect.style.display = 'block';
+            setTimeout(()=>{ try{ card.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'}); }catch(e){} },80);
+          }
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+
+
+<!-- ===== SAFE MARCUS PATCH (non-invasiva) ===== -->
+<script>
+(function(){
+
+// ------------------ GLOBAL ------------------
+window.marcusSuper = null;
+
+// ------------------ CHARACTER STATS ADD ------------------
+if(typeof characterStats!=='undefined' && !characterStats.marcus){
+  characterStats.marcus = {
+    hp:340,
+    speed:5.4,
+    damage:20,
+    range:720,
+    cooldown:650,
+    name:'Marcus',
+    attackType:'marcusStream',
+    superCooldown: 25000,
+    superDuration:10000
+  };
+}
+
+// ------------------ PROJECTILE PATCH ------------------
+const _updateProjectiles = updateProjectiles;
+updateProjectiles = function(){
+  _updateProjectiles();
+  const now = Date.now();
+  if(!window.projectiles) return;
+
+  for(const p of projectiles){
+    if(p.meta && p.meta.marcus){
+      const t = (now - p.created) / 1000;
+      const freq = (p.meta && p.meta.freq) ? p.meta.freq : 1.0;
+      const amp = (p.meta && p.meta.amp) ? p.meta.amp : 14;
+      const phase = (p.meta && p.meta.phase) ? p.meta.phase : 0;
+      const off = Math.sin(t * freq + phase) * amp;
+      const len = Math.hypot(p.vx, p.vy) || 1;
+      const perpX = -p.vy / len;
+      const perpY = p.vx / len;
+      p.x += perpX * off * 0.6;
+      p.y += perpY * off * 0.6;
+      p.x += p.vx * 0.06;
+      p.y += p.vy * 0.06;
+    }
+  }
+};
+
+// (Removed old heal-on-hit logic)
+
+
+
+// ------------------ PLAYER ATTACK PATCH ------------------
+const _playerAttack = Player.prototype.attack;
+Player.prototype.attack = function(){
+
+  if(this.type==='marcus'){
+
+    const now = Date.now();
+    if(!this._marcusLastShot) this._marcusLastShot = 0;
+
+    const cd = 900; // cooldown
+    if(now - this._marcusLastShot < cd) return false;
+    this._marcusLastShot = now;
+    // ---- HEAL ON ATTACK (1% current HP, integer, min 1) ----
+    const healAmount = Math.max(1, Math.floor(this.hp * 0.01));
+    this.hp = Math.min(this.maxHP, this.hp + healAmount);
+
+
+    const cx = this.x + this.width/2;
+    const cy = this.y + this.height/2;
+
+    // auto-aim
+    let target=null, best=999999;
+    for(const e of enemies){
+      const d=Math.hypot(e.x-cx,e.y-cy);
+      if(d<best){best=d;target=e;}
+    }
+
+    let baseAngle = target
+      ? Math.atan2((target.y+target.height/2)-cy,(target.x+target.width/2)-cx)
+      : (this.facingRight?0:Math.PI);
+
+    // TRUE STREAMS → ONE long projectile each
+    const spread=[-0.25,0,0.25];
+    const speed = 6;
+
+    for(const s of spread){
+
+      const ang=baseAngle+s;
+
+      spawnProjectile({
+        x:cx,
+        y:cy,
+        vx:Math.cos(ang)*speed,
+        vy:Math.sin(ang)*speed,
+        damage:20,
+        ttl:900,            // long life = looks like beam/flow
+        color:'#b19cff',
+        radius:10,          // thicker = stream feeling
+        friendly:true,
+        meta:{marcus:true, phase:Math.random()*Math.PI*2}, wave:true, amp:16, freq:1.0
+      });
+    }
+
+    return true;
+  }
+
+  return _playerAttack.call(this);
+};
+
+// ------------------ SUPER PATCH ------------------
+
+
+const _super = Player.prototype.superAttack;
+Player.prototype.superAttack = function(){
+  if(this.type==='marcus'){
+    const now=Date.now();
+    // enforce cooldown (25s) — fallback to 25000 if this.superCooldown is not set
+    const sc = (this.superCooldown!=null)?this.superCooldown:25000;
+    if(this.lastSuper && (now - this.lastSuper) < sc) return false;
+    this.lastSuper = now;
+    marcusSuper={endsAt:now+6500};
+    this.pickupShieldUntil=now+6500;
+    this.invulnerable=true;
+    return true;
+  }
+  return _super.call(this);
+};
+
+// ------------------ ENEMY CONFUSION ------------------
+const _enemyUpdate = Enemy.prototype.update;
+Enemy.prototype.update = function(playerRef){
+  if(marcusSuper && Date.now()<marcusSuper.endsAt){
+    this.vx=(Math.random()-0.5)*this.speed;
+    this.vy=(Math.random()-0.5)*this.speed;
+    this.x+=this.vx;
+    this.y+=this.vy;
+    return;
+  }
+  _enemyUpdate.call(this, playerRef);
+};
+
+})();
+
+/* ==== COMPACT CHARACTER SELECT LOGIC ==== */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const btns = document.querySelectorAll('.charBtn, .characterBtn, .selectCharBtn, .char-button');
+  btns.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      btns.forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected');
+    });
+  });
+});
+
+</script>
+
+<!-- Injected JS: compact grid selection behaviour -->
+<script id="injected-compact-select-script">
+document.addEventListener('DOMContentLoaded', function(){
+  const grid = document.querySelector('.char-grid');
+  if(!grid) return;
+  const gridButtons = Array.from(grid.querySelectorAll('button')).filter(b => !b.classList.contains('empty') && !b.disabled);
+  // Initialize: if any button has attribute data-selected="true", mark it selected
+  let initial = gridButtons.find(b => b.getAttribute('data-selected') === 'true');
+  if(!initial){
+    // Try to match window.selectedCharacter if available
+    try{
+      if(window.selectedCharacter){
+        initial = gridButtons.find(b => b.getAttribute('data-target') === window.selectedCharacter);
+      }
+    }catch(e){}
+  }
+  if(initial) {
+    gridButtons.forEach(b=>b.classList.remove('selected'));
+    initial.classList.add('selected');
+  }
+
+  gridButtons.forEach(btn=>{
+    btn.addEventListener('click', function(e){
+      // toggle selection: selecting one at a time
+      gridButtons.forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+
+      // update global variable if present
+      try{ window.selectedCharacter = btn.getAttribute('data-target'); }catch(e){}
+
+      // also sync with the larger character-card list (visual cue)
+      const target = btn.getAttribute('data-target');
+      if(target){
+        document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+        const card = document.querySelector('.character-card[data-char="'+target+'"]');
+        if(card) card.classList.add('selected');
+      }
+    });
+
+    // keyboard accessibility: allow selection with Enter or Space
+    btn.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        btn.click();
+      }
+    });
+  });
+});
+</script>
+
+
+<!-- === LOCKED COMPACT BUTTON LOGIC PATCH (added) === -->
+<script id="locked-compact-script">
+document.addEventListener('DOMContentLoaded', function(){
+
+  const gridButtons = document.querySelectorAll('.char-grid button[data-target]');
+
+  function syncLockedState(){
+    gridButtons.forEach(btn=>{
+      const id = btn.dataset.target;
+      const card = document.getElementById('card-'+id);
+      if(!card) return;
+
+      if(card.classList.contains('disabled')){
+        btn.classList.add('locked');
+        btn.classList.remove('selected');
+        btn.disabled = false; // still clickable to show lock message
+      }else{
+        btn.classList.remove('locked');
+      }
+    });
+  }
+
+  // initial sync
+  syncLockedState();
+
+  // re-check every 500ms (covers unlocks like Marcus)
+  setInterval(syncLockedState, 500);
+
+  // block selection glow for locked
+  gridButtons.forEach(btn=>{
+    btn.addEventListener('click', function(e){
+      if(btn.classList.contains('locked')){
+        btn.classList.remove('selected');
+        return; // do not allow orange selection
+      }
+    }, true);
+  });
+});
+</script>
+
+
+<!-- AUTO-START ON COMPACT SELECTION: selects character and starts battle when clicking the compact name+emoji button -->
+
+<script id="compact-selection-only">
+document.addEventListener('DOMContentLoaded', function(){
+  try{
+    const compactButtons = document.querySelectorAll('.char-grid button[data-target]');
+    compactButtons.forEach(btn=>{
+      btn.addEventListener('click', function(e){
+        try{
+          const id = btn.dataset.target;
+          if(!id) return;
+          const card = document.getElementById('card-' + id);
+          // Only allow selection if card exists and is not disabled/locked
+          if(card && !card.classList.contains('disabled')){
+            // set selection in global
+            window.selectedCharacter = id;
+            // visual: remove previous selected markers
+            document.querySelectorAll('.char-grid button').forEach(b=>b.classList.remove('selected'));
+            btn.classList.add('selected');
+            document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+            card.classList.add('selected');
+            // update displays if existing functions are available
+            if(typeof updateMenuRecordsDisplay === 'function') try{ updateMenuRecordsDisplay(); }catch(e){}
+            if(typeof updateMenuStatsDisplay === 'function') try{ updateMenuStatsDisplay(id); }catch(e){}
+            // do NOT start the game automatically; user must press INIZIA BATTAGLIA
+          } else {
+            // Optionally show a brief locked feedback if a function exists
+            if(typeof showLockedFeedback === 'function') try{ showLockedFeedback(id); }catch(e){}
+          }
+        }catch(err){}
+      });
+    });
+  }catch(e){}
+});
+</script>
+
+
+
+<script id="compact-record-sync">
+document.addEventListener('DOMContentLoaded', function(){
+  function syncCompactRecords(){
+    document.querySelectorAll('.record-badge').forEach(r=>{
+      const id = r.id.replace('record-','');
+      const btn = document.getElementById('btnrec-'+id);
+      if(btn){
+        const val = parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+        btn.textContent = 'R: ' + val;
+      }
+    });
+  }
+
+  // initial + periodic sync
+  syncCompactRecords();
+  setInterval(syncCompactRecords, 500);
+
+  // if existing update function exists, hook it
+  if(typeof updateMenuRecordsDisplay === 'function'){
+    const old = updateMenuRecordsDisplay;
+    window.updateMenuRecordsDisplay = function(){
+      old();
+      syncCompactRecords();
+    }
+  }
+});
+</script>
+
+
+<script id="total-score-sync">
+document.addEventListener('DOMContentLoaded', function(){
+
+  const totalEl = document.getElementById('totalScoreDisplay');
+
+  
+  function updateVisibility(){
+    if(typeof gameState !== 'undefined' && gameState === 'playing'){
+      totalEl.style.display = 'none';
+    }else{
+      totalEl.style.display = 'block';
+    }
+  }
+
+  function updateTotalScore(){
+    let total = 0;
+    document.querySelectorAll('.record-badge').forEach(r=>{
+      const v = parseInt(r.textContent.replace(/[^0-9]/g,'')) || 0;
+      total += v;
+    });
+    if(totalEl) totalEl.textContent = 'PUNTEGGIO TOTALE: ' + total;
+  }
+
+  updateTotalScore();
+  setInterval(()=>{updateTotalScore();updateVisibility();}, 300);
+
+  if(typeof updateMenuRecordsDisplay === 'function'){
+    const old = updateMenuRecordsDisplay;
+    window.updateMenuRecordsDisplay = function(){
+      old();
+      updateTotalScore();
+    }
+  }
+});
 </script>
 
 </body>
+
+<script>
+const unlockMessages = {
+  voltryx: "Personaggio BLOCCATO\nSblocca facendo 45.000 punti\ncon Jimmy, Rooney e Jeff",
+  kouvagia: "Personaggio BLOCCATO\nSblocca facendo 50.000 punti\ncon Voltryx",
+  salsy: "Personaggio BLOCCATO\nSblocca facendo 60.000 punti\ncon tutti i personaggi precedenti",
+  tempostorm: "Personaggio BLOCCATO\nSblocca facendo 70.000 punti\ncon tutti i personaggi precedenti",
+  marz: "Personaggio BLOCCATO\nSblocca facendo 80.000 punti\ncon tutti i personaggi precedenti",
+  hecate: "Personaggio BLOCCATO\nSblocca facendo 85.000 punti\ncon tutti i personaggi precedenti"
+};
+
+const lockBox = document.getElementById('lockMessage');
+const lockText = document.getElementById('lockText');
+document.getElementById('lockCloseBtn').onclick = ()=>lockBox.style.display='none';
+
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const id = btn.dataset.target;
+    const card = document.getElementById('card-'+id);
+    if(card && card.classList.contains('disabled')){
+      lockText.innerText = unlockMessages[id] || "Personaggio bloccato";
+      lockBox.style.display = 'block';
+    }
+  });
+});
+
+// --- MARCUS UNLOCK: at least one character record >= 70000 ---
+function updateMarcusUnlock(){
+  const badge=document.getElementById('marcusLockBadge');
+  const card=document.getElementById('card-marcus');
+  if(!badge||!card) return;
+
+  let maxRecord=0;
+  document.querySelectorAll('.record-badge').forEach(r=>{
+    const v=parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+    if(v>maxRecord) maxRecord=v;
+  });
+
+  if(maxRecord>=70000){
+    card.classList.remove('disabled');
+    if(badge) badge.style.display='none';
+  }
+}
+setInterval(updateMarcusUnlock,500);
+
+
+// --- Ensure MARCUS selection behaves like others ---
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.target;
+    const card = document.getElementById('card-'+target);
+    if(!card || card.classList.contains('disabled')) return;
+
+    document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedCharacter = target;
+  });
+});
+
+</script>
+
 </html>
