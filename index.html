@@ -560,8 +560,7 @@ PUNTEGGIO TOTALE: 0
     <button data-target="hecate">HÈCATE 🌘<br><small class="btn-record" id="btnrec-hecate">R: 0</small></button>
     <button data-target="marcus">MARCUS 🎶<br><small class="btn-record" id="btnrec-marcus">R: 0</small></button>
     <button data-target="lucien">LUCIEN 🗺️<br><small class="btn-record" id="btnrec-lucien">R: 0</small></button>
-    <button class="empty" disabled>COMING SOON</button>
-
+    <button data-target="pdor">PDOR ❤️‍🔥<br><small class="btn-record" id="btnrec-pdor">R: 0</small></button>
 <button class="btn character-btn disabled" data-target="extra1" disabled>❓ Nuovo</button>
 <button class="btn character-btn disabled" data-target="extra2" disabled>❓ Nuovo</button>
 <button class="btn character-btn disabled" data-target="extra3" disabled>❓ Nuovo</button>
@@ -655,6 +654,15 @@ PUNTEGGIO TOTALE: 0
 <h3>LUCIEN</h3>
 <p>"🗺️"</p>
 <div class="menu-stats"><span class="stat" id="menu-hp-lucien">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-lucien">-</span></div>
+
+<!-- Pdor card (locked until record Marcus >= 50.000 AND Lucien >= 50.000) -->
+<div class="character-card disabled" data-char="pdor" id="card-pdor" title="Sblocca facendo almeno 50.000 punti di record con Marcus e Lucien">
+<h3>PDOR</h3>
+<p>"❤️‍🔥"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-pdor">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-pdor">-</span></div>
+<div class="record-badge" id="record-pdor">Record: 0</div>
+<div class="lock-badge" id="pdorLockBadge">LOCKED</div>
+</div>
 <div class="record-badge" id="record-lucien">Record: 0</div>
 <div class="lock-badge" id="lucienLockBadge">LOCKED</div>
 </div>
@@ -1051,6 +1059,191 @@ function isPointInsideMagicZone(x,y){
   return Math.hypot(x-magicZone.x, y-magicZone.y) <= magicZone.radius;
 }
 
+
+// --- PDOR SUPER: 7 luminous orbiting rings (slow + damage) ---
+let pdorOrbs = null;
+function startPdorOrbs(owner, now){
+  const durationMs = 8000;
+  const count = 7;
+
+  pdorOrbs = {
+    ownerType: owner && owner.type,
+    startsAt: now,
+    endsAt: now + durationMs,
+    orbs: []
+  };
+
+  const margin = 70;
+  for(let i=0;i<count;i++){
+    const cx = margin + Math.random()*(canvas.width - margin*2);
+    const cy = margin + Math.random()*((canvas.height-50) - margin*2);
+    const orbitR = 26 + Math.random()*34;
+    const ang0 = Math.random()*Math.PI*2;
+    const angSpeed = (Math.random()<0.5?-1:1) * (0.036 + Math.random()*0.028); // rad/ms
+
+    pdorOrbs.orbs.push({
+      cx, cy,
+      orbitR,
+      ang: ang0,
+      angSpeed,
+      x: cx + Math.cos(ang0)*orbitR,
+      y: cy + Math.sin(ang0)*orbitR,
+      pulses: [],
+      lastEmit: now - Math.random()*160,
+      hitCd: new Map()
+    });
+  }
+
+  // visual burst
+  if(owner){
+    createParticles(owner.x+owner.width/2, owner.y+owner.height/2, '#ffffff', 36, 6);
+  }
+}
+
+function _applyEnemyTempSlow(enemy, factor, untilMs){
+  const now = Date.now();
+  const until = now + (untilMs||0);
+  // store current speed once (so we restore properly even if the enemy was already slowed by other effects)
+  if(enemy._pdorSlowUntil && now < enemy._pdorSlowUntil){
+    // extend only
+    enemy._pdorSlowUntil = Math.max(enemy._pdorSlowUntil, until);
+    return;
+  }
+  enemy._pdorSpeedBefore = enemy.speed;
+  enemy.speed = (enemy.speed||0) * (factor!=null?factor:0.5);
+  enemy._pdorSlowUntil = until;
+}
+
+function updatePdorOrbs(now){
+  if(!pdorOrbs) return;
+
+  if(now >= pdorOrbs.endsAt){
+    // restore any remaining pdor slow
+    for(const e of enemies){
+      if(e && e._pdorSlowUntil){
+        if(typeof e._pdorSpeedBefore === 'number') e.speed = e._pdorSpeedBefore;
+        e._pdorSpeedBefore = undefined;
+        e._pdorSlowUntil = 0;
+      }
+    }
+    pdorOrbs = null;
+    return;
+  }
+
+  // restore expired slow effects
+  for(const e of enemies){
+    if(e && e._pdorSlowUntil && now >= e._pdorSlowUntil){
+      if(typeof e._pdorSpeedBefore === 'number') e.speed = e._pdorSpeedBefore;
+      e._pdorSpeedBefore = undefined;
+      e._pdorSlowUntil = 0;
+    }
+  }
+
+  const ringThickness = 7;      // "molto ristrette"
+  const emitEvery = 180;        // ms
+  const pulseSpeed = 0.24;      // px/ms
+  const pulseMax = 56;          // px
+  const pulseMin = 10;          // px
+  const perTargetHitCd = 180;   // ms (per orb)
+
+  for(const orb of pdorOrbs.orbs){
+    orb.ang += orb.angSpeed;
+    orb.x = orb.cx + Math.cos(orb.ang)*orb.orbitR;
+    orb.y = orb.cy + Math.sin(orb.ang)*orb.orbitR;
+
+    // emit pulses
+    if(now - orb.lastEmit >= emitEvery){
+      orb.lastEmit = now;
+      orb.pulses.push({ r: pulseMin, born: now });
+    }
+
+    // advance pulses
+    for(let p=orb.pulses.length-1;p>=0;p--){
+      const pulse = orb.pulses[p];
+      pulse.r += pulseSpeed * (now - (pulse._lastNow||now));
+      pulse._lastNow = now;
+      if(pulse.r > pulseMax){
+        orb.pulses.splice(p,1);
+        continue;
+      }
+
+      // collision with enemies on the ring band
+      for(let i=enemies.length-1;i>=0;i--){
+        const e=enemies[i];
+        if(!e) continue;
+        const ex=e.x+e.width/2, ey=e.y+e.height/2;
+        const d=Math.hypot(ex-orb.x, ey-orb.y);
+        if(Math.abs(d - pulse.r) <= ringThickness){
+          const last = orb.hitCd.get(e) || 0;
+          if(now - last < perTargetHitCd) continue;
+          orb.hitCd.set(e, now);
+
+          const dmg = 27;
+          const _final = applyEnemyDamage(e, dmg);
+          showDamageNumber(e.x, e.y, _final);
+          createParticles(ex, ey, '#ffffff', 10, 4);
+
+          _applyEnemyTempSlow(e, 0.5, 1000);
+
+          if(e.hp<=0){
+            createParticles(e.x,e.y,'#fff176',30,6);
+            dropStellarBonusAtIndexIfNeeded(i);
+            enemies.splice(i,1);
+            applyScore(100*currentLevel);
+          }
+        }
+      }
+    }
+
+    // keep hit map small
+    if(orb.hitCd.size>90){
+      // prune old entries
+      for(const [k,t] of orb.hitCd.entries()){
+        if(!k || now-t>1500) orb.hitCd.delete(k);
+      }
+    }
+  }
+}
+
+function drawPdorOrbs(now){
+  if(!pdorOrbs) return;
+
+  ctx.save();
+  ctx.globalCompositeOperation='lighter';
+  ctx.shadowColor = 'rgba(255,255,255,0.9)';
+  ctx.shadowBlur = 25;
+
+
+  for(const orb of pdorOrbs.orbs){
+    // core glow
+    const pulse = 0.55 + 0.45*Math.sin((now+orb.cx)/120);
+    ctx.globalAlpha = 0.55 + 0.25*pulse;
+    const grad = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, 30);
+    grad.addColorStop(0, 'rgba(255,255,255,1)');
+    grad.addColorStop(0.4, 'rgba(255,255,255,0.8)');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = grad;
+
+    ctx.beginPath();
+    ctx.arc(orb.x, orb.y, 7 + 2*pulse, 0, Math.PI*2);
+    ctx.fill();
+
+    // pulses (thin circles)
+    for(const p of orb.pulses){
+      const a = 0.40 + 0.25*Math.sin((now - p.born)/90);
+      ctx.globalAlpha = a;
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+      ctx.beginPath();
+      ctx.arc(orb.x, orb.y, p.r, 0, Math.PI*2);
+      ctx.stroke();
+    }
+  }
+
+  ctx.restore();
+}
+
+
 let lasers=[];
 let tempBeams=[]; // Tempostorm lasers (friendly beams)
 let wolves=[]; // Hècate Super: lupi amichevoli
@@ -1059,7 +1252,7 @@ let lastSecondTick=Date.now();
 let levelAdvanceLock=false;
 let shakeAmount=0;
 
-const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image()};
+const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image(),pdor:new Image()};
 images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
@@ -1071,6 +1264,7 @@ images.marz.src='https://i.postimg.cc/j5WJZL5X/marz.png';
 images.hecate.src='https://i.postimg.cc/9QjRg424/hecate.png';
 images.marcus=new Image(); images.marcus.src='https://i.postimg.cc/MpKjhyKD/image.png';
 images.lucien=new Image(); images.lucien.src='https://i.postimg.cc/XvqZgdhz/Lucien-(1).png';
+images.pdor=new Image(); images.pdor.src='https://i.postimg.cc/dtHfLK21/pdor.png';
 const wolfImg=new Image(); wolfImg.src='https://i.postimg.cc/4y9yBGFw/lupo.png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
 imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
@@ -1340,6 +1534,18 @@ const characterStats={
     superDuration:450
   },
 
+  pdor:{
+    hp:420,
+    speed:7.4*0.75,
+    damage:50,
+    range:820,
+    cooldown:180,
+    name:'Pdor',
+    attackType:'pdorDart',
+    superCooldown:16000,
+    superDuration:1000
+  },
+
   hecate:{
     hp:375,
     speed:9*0.75,
@@ -1405,7 +1611,7 @@ let records=loadRecords();
 
 
 function loadRecords(){
-  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0};
+  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0,pdor:0};
   try{
     // Primary key (current version)
     const r=localStorage.getItem(RECORDS_KEY);
@@ -1442,6 +1648,7 @@ function updateMenuRecordsDisplay(){
   document.getElementById('record-hecate').textContent=`Record: ${records.hecate||0}`;
   document.getElementById('record-marcus').textContent=`Record: ${records.marcus||0}`;
   document.getElementById('record-lucien').textContent=`Record: ${records.lucien||0}`;
+  document.getElementById('record-pdor').textContent=`Record: ${records.pdor||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
@@ -1449,6 +1656,7 @@ function updateMenuRecordsDisplay(){
   updateMarzUnlockUI();
   updateHecateUnlockUI();
   updateLucienUnlockUI();
+  updatePdorUnlockUI();
   updateGuideUnlockUI();
 }
 function allThreeAbove50k(){
@@ -1638,6 +1846,26 @@ function updateLucienUnlockUI(){
     card.classList.add('disabled');
     setLockBadgeState(badge, true);
     card.title='Sblocca facendo un record con Marcus superiore a 25.000 punti';
+  }
+}
+
+function pdorUnlocked(){
+  return (records.marcus||0) >= 50000 && (records.lucien||0) >= 50000;
+}
+function updatePdorUnlockUI(){
+  const card=document.getElementById('card-pdor');
+  const badge=document.getElementById('pdorLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = pdorUnlocked();
+  if(unlocked){
+    card.classList.remove('disabled');
+    setLockBadgeState(badge, false);
+    card.title='Pdor sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo almeno 50.000 punti di record con Marcus e Lucien';
   }
 }
 
@@ -2056,6 +2284,44 @@ function updateProjectiles(){
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
+          if(p.meta && p.meta.pdorChain){
+            // Chain: jump to nearest enemy up to 5 hits, halving damage each jump.
+            if(!p.meta.hitRefs) p.meta.hitRefs = [];
+            p.meta.hitRefs.push(e);
+            p.meta.hitsLeft = (typeof p.meta.hitsLeft==='number'? p.meta.hitsLeft : 1) - 1;
+
+            if(p.meta.hitsLeft > 0){
+              let bestT=null, bestD=Infinity;
+              for(const t of enemies){
+                if(t===e) continue;
+                if(p.meta.hitRefs.includes(t)) continue;
+                const dx=(t.x+t.width/2)-p.x;
+                const dy=(t.y+t.height/2)-p.y;
+                const d=Math.hypot(dx,dy);
+                if(d<bestD){bestD=d;bestT=t;}
+              }
+              if(bestT){
+                const dx=(bestT.x+bestT.width/2)-p.x;
+                const dy=(bestT.y+bestT.height/2)-p.y;
+                const len=Math.hypot(dx,dy)||1;
+                const speed=9;
+                // halve damage on every jump (including the next hit)
+                p.damage = Math.max(1, Math.round(p.damage * 0.5));
+                p.vx=(dx/len)*speed;
+                p.vy=(dy/len)*speed;
+                p.speed=speed;
+                p.shape='rect';
+                p.w=35; p.h=10;
+                p.angle=Math.atan2(p.vy,p.vx);
+                // nudge forward to avoid re-hitting instantly
+                p.x += p.vx*0.35;
+                p.y += p.vy*0.35;
+                createParticles(p.x,p.y,'#ffffff',6,3);
+                return true; // keep projectile alive
+              }
+            }
+            return false; // no more targets
+          }
           return false; // projectile consumed
         }
       }
@@ -2112,7 +2378,52 @@ function drawProjectiles(){
       ctx.translate(p.x, p.y);
       ctx.rotate(ang);
       ctx.fillStyle=p.color;
-      ctx.fillRect(-w/2, -h/2, w, h);
+
+      // PDOR dart: tapered "crystal/teardrop" instead of a plain rectangle
+      if(p.meta && p.meta.pdorChain){
+        const L = w;               // length
+        const W = Math.max(6, h*1.6); // width (a bit thicker so the shape reads better)
+        ctx.beginPath();
+        // tip (front)
+        ctx.moveTo(L/2, 0);
+        // upper edge to rounded base
+        ctx.quadraticCurveTo(L*0.15,  W*0.75, -L/2,  W*0.35);
+        // round the base
+        ctx.quadraticCurveTo(-L/2 - W*0.25, 0, -L/2, -W*0.35);
+        // lower edge back to tip
+        ctx.quadraticCurveTo(L*0.15, -W*0.75, L/2, 0);
+        ctx.closePath();
+        ctx.fill();
+
+        // subtle inner highlight
+        ctx.globalAlpha = 0.25;
+        ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+        ctx.lineWidth = Math.max(1.5, W*0.12);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }else{
+        // Rooney punch-style homogeneous flared end
+        const L = w;
+        const W = h*1.2;
+
+        ctx.beginPath();
+        // main shaft
+        ctx.moveTo(-L/2, -W/2);
+        ctx.lineTo(L*0.15, -W/2);
+        ctx.lineTo(L*0.15, W/2);
+        ctx.lineTo(-L/2, W/2);
+        ctx.closePath();
+        ctx.fill();
+
+        // flared fist tip
+        ctx.beginPath();
+        ctx.moveTo(L*0.15, -W*0.9);
+        ctx.lineTo(L/2, -W*0.5);
+        ctx.lineTo(L/2, W*0.5);
+        ctx.lineTo(L*0.15, W*0.9);
+        ctx.closePath();
+        ctx.fill();
+      }
       ctx.restore();
       
     // Marcus wavy projectile visual (thick undulating line)
@@ -3713,6 +4024,9 @@ else if(this.attackType==='tempostormLaser'){
       const cx=this.x+this.width/2, cy=this.y+this.height/2;
       ctx.save();
       ctx.globalCompositeOperation='lighter';
+  ctx.shadowColor = 'rgba(255,255,255,0.9)';
+  ctx.shadowBlur = 25;
+
       ctx.globalAlpha = 0.45;
       ctx.fillStyle = 'rgba(255,255,255,0.6)';
       ctx.beginPath();
@@ -3742,10 +4056,38 @@ else if(this.attackType==='tempostormLaser'){
     if(this.attacking&&!this.isGrappling){
       ctx.save();
       if(this.attackType==='punch'){
-        ctx.strokeStyle='rgba(230,126,34,0.7)';ctx.lineWidth=8;ctx.beginPath();
-        const punchX=this.x+this.width/2+(this.facingRight?this.range:-this.range);
-        ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
-        ctx.lineTo(punchX,this.y+this.height/2);ctx.stroke()
+        const cx=this.x+this.width/2, cy=this.y+this.height/2;
+        const dir=this.facingRight?1:-1;
+        const punchX=cx + dir*this.range;
+
+        // Rooney: punch beam with a flared "fist" end (homogeneous)
+        if(this.type==='rooney'){
+          const shaftW = 18;         // thickness of the shaft
+          const fistW  = 34;         // thickness of the fist end
+          const fistL  = 34;         // length of the fist end
+          ctx.fillStyle='rgba(231,76,60,0.85)'; // solid-ish red punch
+          // shaft
+          ctx.beginPath();
+          ctx.rect(Math.min(cx,punchX), cy-shaftW/2, Math.abs(punchX-cx)-fistL, shaftW);
+          ctx.fill();
+          // fist end (flared)
+          const endStart = punchX - dir*fistL;
+          ctx.beginPath();
+          ctx.moveTo(endStart, cy - fistW*0.55);
+          ctx.lineTo(punchX,  cy - fistW*0.35);
+          ctx.lineTo(punchX,  cy + fistW*0.35);
+          ctx.lineTo(endStart, cy + fistW*0.55);
+          ctx.closePath();
+          ctx.fill();
+        }else{
+          // default punch telegraph
+          ctx.strokeStyle='rgba(230,126,34,0.7)';
+          ctx.lineWidth=8;
+          ctx.beginPath();
+          ctx.moveTo(cx,cy);
+          ctx.lineTo(punchX,cy);
+          ctx.stroke();
+        }
       }else if(this.attackType==='sword'){
         ctx.strokeStyle='rgba(155,89,182,0.6)';ctx.lineWidth=5;
         const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.2;
@@ -4792,6 +5134,7 @@ return;
   updateWolves();
   // Marz Super zone tick damage/expansion
   updateMagicZone(now);
+  updatePdorOrbs(now);
   updateParticles();
   updateProjectiles();
   updateLasers();
@@ -4833,6 +5176,7 @@ return;
 
   // draw Marz Super zone behind entities
   drawMagicZone(now);
+  drawPdorOrbs(now);
   enemies.forEach(e=>e.draw());
   drawWolves();
   if(player) player.draw();
@@ -4961,6 +5305,17 @@ document.querySelectorAll('.character-card').forEach(card=>{
       updateLucienUnlockUI();
       return;
     }
+    if(char==='pdor' && !pdorUnlocked()){
+      updatePdorUnlockUI();
+      // show lock message popup
+      const lockBox=document.getElementById('lockMessage');
+      const lockText=document.getElementById('lockText');
+      if(lockBox && lockText){
+        lockText.innerText = "Personaggio BLOCCATO\nsi sblocca facendo 50.000\ncon marcus e lucien";
+        lockBox.style.display='block';
+      }
+      return;
+    }
     document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
     card.classList.add('selected');
     selectedCharacter=char;
@@ -4975,7 +5330,7 @@ function updateMenuStatsDisplay(char){
   document.getElementById(`menu-dmg-${char}`).textContent=
     char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` :
     (char==='salsy' ? '33x2' :
-     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : (char==='hecate' ? 'Freccia: colpo forte + 3 frecce' : (char==='lucien' ? '15x4' : s.damage)))));
+     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : (char==='hecate' ? 'Freccia: colpo forte + 3 frecce' : (char==='lucien' ? '15x4' : (char==='pdor' ? 'Dardo: 50 (chain x5)' : s.damage))))));
 
 }
 
@@ -5555,6 +5910,53 @@ updateProjectiles = function(){
 const _playerAttack = Player.prototype.attack;
 Player.prototype.attack = function(){
 
+  if(this.type==='pdor'){
+    const now = Date.now();
+    if(!this._pdorLastShot) this._pdorLastShot = 0;
+    const cd = 420; // slower cadence between darts
+    if(now - this._pdorLastShot < cd) return false;
+    this._pdorLastShot = now;
+
+    const cx = this.x + this.width/2;
+    const cy = this.y + this.height/2;
+
+    // auto-aim to closest enemy
+    let target=null, best=999999;
+    for(const e of enemies){
+      const d=Math.hypot((e.x+e.width/2)-cx,(e.y+e.height/2)-cy);
+      if(d<best){best=d;target=e;}
+    }
+
+    let ang = target
+      ? Math.atan2((target.y+target.height/2)-cy,(target.x+target.width/2)-cx)
+      : (this.facingRight?0:Math.PI);
+
+    const speed = 9;
+    const vx = Math.cos(ang)*speed;
+    const vy = Math.sin(ang)*speed;
+
+    const baseDmg = Math.round((this.damage||50) * (this.attackBuffMultiplier||1));
+
+    spawnProjectile({
+      x:cx,
+      y:cy,
+      vx,vy,speed,
+      damage:baseDmg,
+      ttl:1600,
+      color:'#ffffff',
+      radius:10,
+      friendly:true,
+      shape:'rect',
+      w:35,
+      h:10,
+      angle:ang,
+      meta:{ pdorChain:true, hitsLeft:5, hitRefs:[] }
+    });
+    createParticles(cx,cy,'#ffffff',10,4);
+    return true;
+  }
+
+
   if(this.type==='marcus'){
 
     const now = Date.now();
@@ -5595,7 +5997,7 @@ Player.prototype.attack = function(){
         y:cy,
         vx:Math.cos(ang)*speed,
         vy:Math.sin(ang)*speed,
-        damage:20,
+        damage:Math.round(20*this.attackBuffMultiplier),
         ttl:900,            // long life = looks like beam/flow
         color:'#b19cff',
         radius:10,          // thicker = stream feeling
@@ -5615,6 +6017,19 @@ Player.prototype.attack = function(){
 
 const _super = Player.prototype.superAttack;
 Player.prototype.superAttack = function(){
+
+  if(this.type==='pdor'){
+    const now=Date.now();
+    const sc = (this.superCooldown!=null)?this.superCooldown:16000;
+    if(this.lastSuper && (now - this.lastSuper) < sc) return false;
+    this.lastSuper = now;
+
+    // Spawn 7 random luminous orbiting rings for 8 seconds.
+    startPdorOrbs(this, now);
+    shakeScreen();
+    return true;
+  }
+
   if(this.type==='marcus'){
     const now=Date.now();
     // enforce cooldown (25s) — fallback to 25000 if this.superCooldown is not set
@@ -5630,17 +6045,51 @@ Player.prototype.superAttack = function(){
 };
 
 // ------------------ ENEMY CONFUSION ------------------
-const _enemyUpdate = Enemy.prototype.update;
-Enemy.prototype.update = function(playerRef){
-  if(marcusSuper && Date.now()<marcusSuper.endsAt){
-    this.vx=(Math.random()-0.5)*this.speed;
-    this.vy=(Math.random()-0.5)*this.speed;
-    this.x+=this.vx;
-    this.y+=this.vy;
-    return;
+// Marcus Super should "stun/confuse" ALL enemies (including Shooter/Attacker/Boss classes that override update).
+// The old patch only wrapped Enemy.prototype.update, so subclasses with their own update() were immune.
+function _applyMarcusConfusion(enemy){
+  if(!(marcusSuper && Date.now() < marcusSuper.endsAt)) return false;
+
+  // Confusion: wander randomly, no attacks, no AI.
+  const s = enemy.speed || 2;
+  enemy.vx = (Math.random()-0.5) * s * 2.0;
+  enemy.vy = (Math.random()-0.5) * s * 2.0;
+  enemy.x += enemy.vx;
+  enemy.y += enemy.vy;
+
+  // clamp within arena
+  if(enemy.x < 0) enemy.x = 0;
+  if(enemy.x + enemy.width > canvas.width) enemy.x = canvas.width - enemy.width;
+  if(enemy.y < 0) enemy.y = 0;
+  if(enemy.y + enemy.height > canvas.height - 50) enemy.y = canvas.height - 50 - enemy.height;
+
+  return true;
+}
+
+(function patchAllEnemyUpdatesForMarcusSuper(){
+  const wrappers = [];
+  function wrap(proto){
+    if(!proto || typeof proto.update !== 'function') return;
+    const original = proto.update;
+    // avoid double-wrapping
+    if(original && original.__marcusWrapped) return;
+    const wrapped = function(playerRef){
+      if(_applyMarcusConfusion(this)) return;
+      return original.call(this, playerRef);
+    };
+    wrapped.__marcusWrapped = true;
+    proto.update = wrapped;
   }
-  _enemyUpdate.call(this, playerRef);
-};
+
+  // Base + all known subclasses in this file
+  wrap(Enemy && Enemy.prototype);
+  wrap(typeof ShooterEnemy!=='undefined' && ShooterEnemy.prototype);
+  wrap(typeof ArcherEnemy!=='undefined' && ArcherEnemy.prototype);
+  wrap(typeof GlacialEnemy!=='undefined' && GlacialEnemy.prototype);
+  wrap(typeof AttackReturnEnemy!=='undefined' && AttackReturnEnemy.prototype);
+  wrap(typeof BossEnemy!=='undefined' && BossEnemy.prototype);
+  wrap(typeof Boss5Enemy!=='undefined' && Boss5Enemy.prototype);
+})();
 
 })();
 
@@ -5862,7 +6311,8 @@ const unlockMessages = {
   tempostorm: "Personaggio BLOCCATO\nSblocca facendo 70.000 punti\ncon tutti i personaggi precedenti",
   marz: "Personaggio BLOCCATO\nSblocca facendo 80.000 punti\ncon tutti i personaggi precedenti",
   hecate: "Personaggio BLOCCATO\nSblocca facendo 85.000 punti\ncon tutti i personaggi precedenti",
-  lucien: "Personaggio BLOCCATO\nSblocca facendo un record con Marcus\nsuperiore a 25.000"
+  lucien: "Personaggio BLOCCATO\nSblocca facendo un record con Marcus\nsuperiore a 25.000",
+  pdor: "Personaggio BLOCCATO\nsi sblocca facendo 50.000\ncon marcus e lucien"
 };
 
 const lockBox = document.getElementById('lockMessage');
