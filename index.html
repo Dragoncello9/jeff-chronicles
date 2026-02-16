@@ -559,7 +559,7 @@ PUNTEGGIO TOTALE: 0
     <button data-target="marz">MARZ 🪄<br><small class="btn-record" id="btnrec-marz">R: 0</small></button>
     <button data-target="hecate">HÈCATE 🌘<br><small class="btn-record" id="btnrec-hecate">R: 0</small></button>
     <button data-target="marcus">MARCUS 🎶<br><small class="btn-record" id="btnrec-marcus">R: 0</small></button>
-    <button class="empty" disabled>COMING SOON</button>
+    <button data-target="lucien">LUCIEN 🗺️<br><small class="btn-record" id="btnrec-lucien">R: 0</small></button>
     <button class="empty" disabled>COMING SOON</button>
 
 <button class="btn character-btn disabled" data-target="extra1" disabled>❓ Nuovo</button>
@@ -650,9 +650,18 @@ PUNTEGGIO TOTALE: 0
 <div class="lock-badge" id="marcusLockBadge">LOCKED</div>
 </div>
 
+<!-- Lucien card (locked until record Marcus > 25.000) -->
+<div class="character-card disabled" data-char="lucien" id="card-lucien" title="Sblocca facendo più di 25.000 punti con Marcus">
+<h3>LUCIEN</h3>
+<p>"🗺️"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-lucien">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-lucien">-</span></div>
+<div class="record-badge" id="record-lucien">Record: 0</div>
+<div class="lock-badge" id="lucienLockBadge">LOCKED</div>
+</div>
+
 </div>
 </div>
-<div class="start-row">
+<div class=\"start-row\">
 
 <button class="btn" id="startBtn">INIZIA BATTAGLIA</button>
 </div>
@@ -717,6 +726,7 @@ PUNTEGGIO TOTALE: 0
 <li><strong>Super</strong>: ricarica immediatamente la super.</li>
 <li><strong>Speed</strong>: aumenta la velocità di movimento.</li>
 <li><strong>Shield</strong>: invulnerabilità temporanea.</li>
+<li><strong>StellarBonus</strong>: <strong>+100 HP</strong> e <strong>+25% velocità</strong> per <strong>3s</strong>. Inoltre il personaggio emana un <strong>bagliore bianco luminoso e trasparente</strong> per <strong>1s</strong>. <em>Rilasciato solo dai boss.</em></li>
 <li><strong>Gold</strong>: cura totale + grande aumento del danno + super pronta.</li>
 <li><strong>Malus</strong>: applica poison.</li>
 <li><strong>Furia</strong>: emana 3 grandi onde ad area (sempre più grandi) che infliggono <strong>20 danni</strong> ciascuna; inoltre cura <strong>+10 HP/s</strong> per <strong>10s</strong>.</li>
@@ -817,6 +827,35 @@ PUNTEGGIO TOTALE: 0
 <p><strong>Super – Richiamo Lunare</strong>: si cura di <strong>5 HP per ogni nemico presente</strong> nell’arena al momento dell’attivazione. Inoltre richiama tre lupi che attaccano i nemici con morsi letali il richiamo puo essere attivato piu volte ma in campo ci possono essere massimo 6 lupi</p>
 <p><strong>Sblocco</strong>: 85.000 punti con tutti i personaggi precedenti.</p>
 </div>
+
+<div id="guide-marcus-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🎶 MARCUS</h4>
+  <p><em>Questo personaggio si sblocca facendo almeno <strong>70.000 punti</strong> con <strong>qualsiasi</strong> personaggio. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+<div id="guide-marcus" style="display:none;">
+  <h4>🎶 MARCUS</h4>
+  <p><strong>Ruolo</strong>: supporto offensivo a media distanza + controllo con la Super.</p>
+  <p><strong>Statistiche</strong>: 400 HP, velocità 7.</p>
+  <p><strong>Attacco base – Banjo Notes</strong>: Marcus suona il banjo e lancia <strong>note musicali</strong> (proiettili ondulati) che infliggono danni a distanza. Ottimo per tenere i nemici lontani mentre ti riposizioni.</p>
+  <p><strong>Super – Danza Stordente</strong>: gli avversari vengono <strong>storditi/confusi</strong> e “ballano” perdendo controllo per alcuni secondi. In più Marcus ottiene uno <strong>scudo</strong> temporaneo.</p>
+  <p><strong>Stile consigliato</strong>: colpisci da media distanza e usa la Super per creare spazio nei momenti critici.</p>
+  <p><strong>Sblocco</strong>: 70.000 punti con qualsiasi personaggio.</p>
+</div>
+
+<div id="guide-lucien-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🗺️ LUCIEN</h4>
+  <p><em>Questo personaggio si sblocca facendo un record con <strong>Marcus</strong> superiore a <strong>25.000 punti</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+<div id="guide-lucien" style="display:none;">
+  <h4>🗺️ LUCIEN</h4>
+  <p><strong>Ruolo</strong>: ladro furtivo da burst ravvicinato + utilità tramite bonus.</p>
+  <p><strong>Statistiche</strong>: 380 HP, velocità leggermente superiore alla media (dash/scatto più reattivo).</p>
+  <p><strong>Attacco base – Lama Rapida</strong>: 4 colpi <strong>molto ravvicinati</strong> da <strong>15</strong> danni ciascuno (stile Salsy ma più “a raffica” e a distanza più corta).</p>
+  <p><strong>Super – Furto di Bonus</strong>: Lucien “ruba” <strong>5 bonus casuali</strong> e li rilascia attorno a sé: sono <strong>prendibili</strong> dal personaggio. La Super <strong>non</strong> può generare bonus che ricaricano la Super (quindi niente <strong>Gold</strong> e niente <strong>ricarica Super</strong>).</p>
+  <p><strong>Stile consigliato</strong>: entra rapido, scarica i 4 colpi e usa la Super per trasformare il fight in vantaggio di buff.</p>
+  <p><strong>Sblocco</strong>: record con Marcus &gt; 25.000.</p>
+</div>
+
 <h3>11) NEMICI E PERICOLI</h3>
 <p>Nemici melee, veloci, resistenti e a distanza. Nemici con poison. Nemici con laser che richiedono schivata precisa. Boss con attacchi speciali e grandi quantità di HP.</p>
 <h3>12) CONSIGLI FINALI</h3>
@@ -964,7 +1003,7 @@ function updateMagicZone(now){
         createParticles(ex,ey, magicZone.colors[(magicZone.colorIdx++)%magicZone.colors.length], 10, 4);
         if(e.hp<=0){
           createParticles(e.x,e.y,'#fff176',30,6);
-          dropGuaranteedGoldAtIndexIfNeeded(i);
+          dropStellarBonusAtIndexIfNeeded(i);
           enemies.splice(i,1);
           applyScore(100*currentLevel);
         }
@@ -1031,6 +1070,7 @@ images.tempostorm.src='https://i.postimg.cc/mkzj763m/tempostorm.png';
 images.marz.src='https://i.postimg.cc/j5WJZL5X/marz.png';
 images.hecate.src='https://i.postimg.cc/9QjRg424/hecate.png';
 images.marcus=new Image(); images.marcus.src='https://i.postimg.cc/MpKjhyKD/image.png';
+images.lucien=new Image(); images.lucien.src='https://i.postimg.cc/XvqZgdhz/Lucien-(1).png';
 const wolfImg=new Image(); wolfImg.src='https://i.postimg.cc/4y9yBGFw/lupo.png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
 imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
@@ -1044,6 +1084,7 @@ const pickupImgs={
   atk: new Image(),
   super: new Image(),
   gold: new Image(),
+  stellar: new Image(),
   malus: new Image(),
 };
 pickupImgs.heal.src='https://i.postimg.cc/c4jNccLC/heal.png';
@@ -1052,6 +1093,7 @@ pickupImgs.speed.src='https://i.postimg.cc/DzCV8QHb/speed.png';
 pickupImgs.atk.src='https://i.postimg.cc/cHjVcxsS/ATK.png';
 pickupImgs.super.src='https://i.postimg.cc/3rss4xSD/Super.png';
 pickupImgs.gold.src='https://i.postimg.cc/wjVZGc6h/gold.png';
+pickupImgs.stellar.src='https://i.postimg.cc/7hhNdJpp/bossbonus.png';
 pickupImgs.malus.src='https://i.postimg.cc/tT1cJKFm/malus.png';
 pickupImgs.furia = new Image(); pickupImgs.furia.src='https://i.postimg.cc/BvCsTjYD/furia.png';
 pickupImgs.ice = new Image(); pickupImgs.ice.src='https://i.postimg.cc/GmF1RB1k/ice.png';
@@ -1286,6 +1328,18 @@ const characterStats={
     superCooldown:25000,
     superDuration:10000
   },
+  lucien:{
+    hp:380,
+    speed:8.2*0.75, // leggermente sopra la media
+    damage:15,      // per colpo (x4)
+    range:220,      // molto ravvicinato
+    cooldown:700,
+    name:'Lucien',
+    attackType:'lucienBlade',
+    superCooldown:22000,
+    superDuration:450
+  },
+
   hecate:{
     hp:375,
     speed:9*0.75,
@@ -1351,7 +1405,7 @@ let records=loadRecords();
 
 
 function loadRecords(){
-  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0};
+  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0};
   try{
     // Primary key (current version)
     const r=localStorage.getItem(RECORDS_KEY);
@@ -1387,12 +1441,14 @@ function updateMenuRecordsDisplay(){
   document.getElementById('record-marz').textContent=`Record: ${records.marz||0}`;
   document.getElementById('record-hecate').textContent=`Record: ${records.hecate||0}`;
   document.getElementById('record-marcus').textContent=`Record: ${records.marcus||0}`;
+  document.getElementById('record-lucien').textContent=`Record: ${records.lucien||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
   updateTempostormUnlockUI();
   updateMarzUnlockUI();
   updateHecateUnlockUI();
+  updateLucienUnlockUI();
   updateGuideUnlockUI();
 }
 function allThreeAbove50k(){
@@ -1557,6 +1613,34 @@ function updateHecateUnlockUI(){
     card.title='Sblocca facendo 85.000 punti con tutti i personaggi precedenti';
   }
 }
+function marcusUnlockedAny(){
+  try{
+    const vals = Object.values(records||{}).map(v=>parseInt(v)||0);
+    return (vals.length? Math.max(...vals) : 0) >= 70000;
+  }catch(e){
+    return false;
+  }
+}
+function lucienUnlocked(){
+  return (records.marcus||0) > 25000;
+}
+function updateLucienUnlockUI(){
+  const card=document.getElementById('card-lucien');
+  const badge=document.getElementById('lucienLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = lucienUnlocked();
+  if(unlocked){
+    card.classList.remove('disabled');
+    setLockBadgeState(badge, false);
+    card.title='Lucien sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo un record con Marcus superiore a 25.000 punti';
+  }
+}
+
 function updateGuideUnlockUI(){
   const vUnlocked = allThreeAbove50k();
   const kUnlocked = voltryxAbove51k();
@@ -1564,6 +1648,8 @@ function updateGuideUnlockUI(){
   const tUnlocked = allPrevAbove85k();
   const mUnlocked = allPrevAboveMarz80k();
   const hUnlocked = allPrevAboveHecate85k();
+  const marcUnlocked = marcusUnlockedAny();
+  const lucUnlocked = lucienUnlocked();
 
   const vBox=document.getElementById('guide-voltryx');
   const vLock=document.getElementById('guide-voltryx-locked');
@@ -1588,6 +1674,15 @@ function updateGuideUnlockUI(){
   const hBox=document.getElementById('guide-hecate');
   const hLock=document.getElementById('guide-hecate-locked');
   if(hBox&&hLock){ hBox.style.display = hUnlocked ? 'block' : 'none'; hLock.style.display = hUnlocked ? 'none' : 'block'; }
+
+  const marcBox=document.getElementById('guide-marcus');
+  const marcLock=document.getElementById('guide-marcus-locked');
+  if(marcBox&&marcLock){ marcBox.style.display = marcUnlocked ? 'block' : 'none'; marcLock.style.display = marcUnlocked ? 'none' : 'block'; }
+
+  const lucBox=document.getElementById('guide-lucien');
+  const lucLock=document.getElementById('guide-lucien-locked');
+  if(lucBox&&lucLock){ lucBox.style.display = lucUnlocked ? 'block' : 'none'; lucLock.style.display = lucUnlocked ? 'none' : 'block'; }
+
 }
 
 
@@ -1692,7 +1787,7 @@ class Wolf{
         // kill credit: same as normal kill
         createParticles(target.x, target.y, '#fff176', 30, 6);
         const idx=enemies.indexOf(target);
-        if(idx>=0){dropGuaranteedGoldAtIndexIfNeeded(idx);enemies.splice(idx,1);}
+        if(idx>=0){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);}
         applyScore(100*currentLevel);
       }
     }
@@ -1883,7 +1978,7 @@ function updateProjectiles(){
             showDamageNumber(e.x,e.y, _final);
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
-              dropGuaranteedGoldAtIndexIfNeeded(i);
+              dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
@@ -1914,7 +2009,7 @@ function updateProjectiles(){
                 showDamageNumber(ee.x,ee.y, _final);
                 if(ee.hp<=0){
                   createParticles(ee.x,ee.y,'#fff176',30,6);
-                  dropGuaranteedGoldAtIndexIfNeeded(j);
+                  dropStellarBonusAtIndexIfNeeded(j);
                   enemies.splice(j,1);
                   applyScore(100*currentLevel);
                 }
@@ -1955,7 +2050,7 @@ function updateProjectiles(){
             }
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
-              dropGuaranteedGoldAtIndexIfNeeded(i);
+              dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
@@ -1991,7 +2086,7 @@ function updateProjectiles(){
           showDamageNumber(ee.x,ee.y, _final);
           if(ee.hp<=0){
             createParticles(ee.x,ee.y,'#fff176',30,6);
-            dropGuaranteedGoldAtIndexIfNeeded(j);
+            dropStellarBonusAtIndexIfNeeded(j);
             enemies.splice(j,1);
             applyScore(100*currentLevel);
           }
@@ -2281,17 +2376,17 @@ function spawnPickup(x,y,type,value=0){
   pickups.push({x,y,type,value,created:Date.now(),ttl:20000,radius:18,hitRadius:hitR,w:28,h:28});
 }
 
-// Guaranteed gold drop: on levels 5/10/15/20/25, the LAST enemy alive always drops a Gold bonus exactly where it dies.
-const GUARANTEED_GOLD_LEVELS = new Set([5,10,15,20,25]);
-function dropGuaranteedGoldAtIndexIfNeeded(enemyIndex){
-  if(!GUARANTEED_GOLD_LEVELS.has(currentLevel)) return;
+// Guaranteed StellarBonus drop: on levels 5/10/15/20/25, the LAST enemy alive always drops a StellarBonus exactly where it dies.
+const GUARANTEED_STELLAR_LEVELS = new Set([5,10,15,20,25]);
+function dropStellarBonusAtIndexIfNeeded(enemyIndex){
+  if(!GUARANTEED_STELLAR_LEVELS.has(currentLevel)) return;
   // if we're about to remove an enemy and it's the last one on the field, enemies.length is 1 at this exact moment
   if(enemies.length !== 1) return;
   const e = enemies[enemyIndex];
   if(!e) return;
   const cx = e.x + (e.width||0)/2;
   const cy = e.y + (e.height||0)/2;
-  spawnPickup(cx, cy, 'gold');
+  spawnPickup(cx, cy, 'stellar');
 }
 function spawnPickupsForLevel(level){
   // IMPORTANT: do NOT clear existing pickups here.
@@ -2331,6 +2426,7 @@ function drawPickups(){
       else if(p.type==='atk')ctx.fillStyle='#e74c3c';
       else if(p.type==='super')ctx.fillStyle='#f1c40f';
       else if(p.type==='gold')ctx.fillStyle='gold';
+      else if(p.type==='stellar')ctx.fillStyle='rgba(255,255,255,0.9)';
       else if(p.type==='speed')ctx.fillStyle='#3498db';
       else if(p.type==='shieldPickup')ctx.fillStyle='#7fdbff';
       else if(p.type==='malus')ctx.fillStyle='#8b0000';
@@ -2342,11 +2438,18 @@ function drawPickups(){
 }
 
 function updatePickups(playerRef){
-  pickups=pickups.filter(p=>{
+  // Use player CENTER for pickup collection checks.
+  // This fixes edge cases where (using top-left) some pickups became uncollectable near arena borders.
+  const pcx = playerRef.x + (playerRef.width||0)/2;
+  const pcy = playerRef.y + (playerRef.height||0)/2;
+
+  pickups = pickups.filter(p=>{
     if(Date.now()-p.created>p.ttl) return false;
-    const dist=Math.hypot((p.x-playerRef.x),(p.y-playerRef.y));
+
+    const dist = Math.hypot((p.x-pcx),(p.y-pcy));
     const pr = (p.hitRadius!=null) ? p.hitRadius : (p.radius!=null ? p.radius : 18);
-    if(dist<pr+Math.max(playerRef.width,playerRef.height)/2){
+
+    if(dist < pr + Math.max(playerRef.width,playerRef.height)/2){
       applyPickupEffect(playerRef,p.type);
       return false;
     }
@@ -2365,6 +2468,13 @@ function applyPickupEffect(playerRef,type){
   } else if(type==='super'){
     playerRef.lastSuper=Date.now()-playerRef.superCooldown-100;
     createParticles(playerRef.x,playerRef.y,'#f1c40f',20);
+    } else if(type==='stellar'){
+    // StellarBonus: +100 HP, +25% speed for 3s, white opaque glow for 3s
+    playerRef.hp = Math.min(playerRef.maxHP, playerRef.hp + 100);
+    playerRef.speed = playerRef._baseSpeed * 1.25;
+    playerRef.speedBuffUntil = Date.now() + 3000;
+    playerRef.stellarGlowUntil = Date.now() + 1000;
+    createParticles(playerRef.x, playerRef.y, '#ffffff', 36, 5);
   } else if(type==='gold'){
     playerRef.hp=playerRef.maxHP;
     playerRef.attackBuffMultiplier=2.0;
@@ -2464,6 +2574,8 @@ class Player{
     // --- Evolution (after Boss level 15) ---
     this.evolved=false;
     this._evoFxUntil=0;
+    // StellarBonus visual
+    this.stellarGlowUntil=0;
     this._jimmyNextGrappleCdMult=1;
   }
 
@@ -2613,7 +2725,7 @@ class Player{
               showDamageNumber(e.x,e.y, _final);
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
-                dropGuaranteedGoldAtIndexIfNeeded(i);
+                dropStellarBonusAtIndexIfNeeded(i);
                 enemies.splice(i,1);
                 applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
@@ -2640,7 +2752,7 @@ class Player{
               showDamageNumber(e.x,e.y, _final);
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
-                dropGuaranteedGoldAtIndexIfNeeded(i);
+                dropStellarBonusAtIndexIfNeeded(i);
                 enemies.splice(i,1);
                 applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
@@ -2701,7 +2813,7 @@ class Player{
                 if(e.hp<=0){
                   if(e===this.grappleTarget) killedGrappleTarget=true;
                   createParticles(e.x,e.y,'#fff176',30,6);
-                  dropGuaranteedGoldAtIndexIfNeeded(i);
+                  dropStellarBonusAtIndexIfNeeded(i);
                   enemies.splice(i,1);
                   applyScore(100*currentLevel);
                 }
@@ -2774,7 +2886,7 @@ class Player{
               for(let i=enemies.length-1;i>=0;i--){
                 if(enemies[i].hp<=0){
                   createParticles(enemies[i].x,enemies[i].y,'#fff176',30,6);
-                  dropGuaranteedGoldAtIndexIfNeeded(i);
+                  dropStellarBonusAtIndexIfNeeded(i);
                   enemies.splice(i,1);
                   applyScore(100*currentLevel);
                 }
@@ -2796,7 +2908,7 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
-                  dropGuaranteedGoldAtIndexIfNeeded(idx);
+                  dropStellarBonusAtIndexIfNeeded(idx);
                   enemies.splice(idx,1);
                   applyScore(100*currentLevel);}
               }
@@ -2843,7 +2955,7 @@ class Player{
                 if(target.hp<=0){
                   createParticles(target.x,target.y,'#fff176',30,6);
                   const idx=enemies.indexOf(target);
-                  if(idx>-1){dropGuaranteedGoldAtIndexIfNeeded(idx);enemies.splice(idx,1);applyScore(100*currentLevel);}
+                  if(idx>-1){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);applyScore(100*currentLevel);}
                 }
 
                 // store direction and move through (no interaction/stop)
@@ -2877,7 +2989,7 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
-                  dropGuaranteedGoldAtIndexIfNeeded(idx);
+                  dropStellarBonusAtIndexIfNeeded(idx);
                   enemies.splice(idx,1);
                   applyScore(100*currentLevel);}
               }
@@ -2887,6 +2999,9 @@ class Player{
 
       
       } else if(this.attackType==='salsySword'){
+        if(elapsed>=this.superDuration) this.endSuper();
+
+      } else if(this.attackType==='lucienBlade'){
         if(elapsed>=this.superDuration) this.endSuper();
 
       } else if(this.attackType==='kouvagia'){
@@ -2950,7 +3065,7 @@ class Player{
             showDamageNumber(e.x,e.y, _final);
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
-              dropGuaranteedGoldAtIndexIfNeeded(i);
+              dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
@@ -2958,7 +3073,7 @@ class Player{
           }
         }
       }
-      if(this.type==='jimmy' || this.type==='voltryx' || this.type==='kouvagia' || this.type==='hecate'){
+      if(this.type==='jimmy' || this.type==='voltryx' || this.type==='kouvagia' || this.type==='hecate' || this.type==='lucien'){
         this._dashSpeedMult=4;
         this._dashDuration=300;
         this.dashCooldown=90;
@@ -3019,7 +3134,7 @@ class Player{
                 if(closestEnemy.hp<=0){
                   createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
                   const idxEnemy=enemies.indexOf(closestEnemy);
-                  if(idxEnemy>-1){dropGuaranteedGoldAtIndexIfNeeded(idxEnemy);enemies.splice(idxEnemy,1);applyScore(100*currentLevel);}
+                  if(idxEnemy>-1){dropStellarBonusAtIndexIfNeeded(idxEnemy);enemies.splice(idxEnemy,1);applyScore(100*currentLevel);}
                 }
               }
             };
@@ -3039,7 +3154,7 @@ class Player{
           showDamageNumber(closestEnemy.x,closestEnemy.y, _final);
           if(closestEnemy.hp<=0){
             createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
-            dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(closestEnemy));
+            dropStellarBonusAtIndexIfNeeded(enemies.indexOf(closestEnemy));
             enemies.splice(enemies.indexOf(closestEnemy),1);
             applyScore(100*currentLevel);
           }
@@ -3052,7 +3167,7 @@ class Player{
             showDamageNumber(assistTarget.x,assistTarget.y, _final);
             if(assistTarget.hp<=0){
               createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
-              dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(assistTarget));
+              dropStellarBonusAtIndexIfNeeded(enemies.indexOf(assistTarget));
               enemies.splice(enemies.indexOf(assistTarget),1);
               applyScore(100*currentLevel);
             }
@@ -3094,7 +3209,7 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
-              dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(enemy));
+              dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
               enemies.splice(enemies.indexOf(enemy),1);
               applyScore(100*currentLevel);
             }
@@ -3103,6 +3218,38 @@ class Player{
       };
       doSwing();
       setTimeout(doSwing, 120);
+
+
+    } else if(this.attackType==='lucienBlade'){
+      // 4 colpi ravvicinati (15x4), stile simile a Salsy ma più vicino
+      const attackAngle=this.facingRight?0:Math.PI;
+      const arcWidth=Math.PI*1.05;
+      const doSwing = ()=>{
+        enemies.forEach(enemy=>{
+          const dx=enemy.x-this.x;const dy=enemy.y-this.y;const dist=Math.hypot(dx,dy);
+          const angle=Math.atan2(dy,dx);
+          let angleDiff=angle-attackAngle;
+          while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
+          while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
+
+          if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.10){
+            const base=15*this.attackBuffMultiplier;
+            const dmg=applyEnemyDamage(enemy, base);
+            createParticles(enemy.x,enemy.y,'#c8e6ff',8,4);
+            showDamageNumber(enemy.x,enemy.y,dmg);
+            if(enemy.hp<=0){
+              createParticles(enemy.x,enemy.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
+              enemies.splice(enemies.indexOf(enemy),1);
+              applyScore(100*currentLevel);
+            }
+          }
+        });
+      };
+      doSwing();
+      setTimeout(doSwing, 85);
+      setTimeout(doSwing, 170);
+      setTimeout(doSwing, 255);
 
     } else if(this.attackType==='sword'){
       const attackAngle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.6;
@@ -3123,7 +3270,7 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
             createParticles(enemy.x,enemy.y,'#fff176',30,6);
-            dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(enemy));
+            dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
             enemies.splice(enemies.indexOf(enemy),1);
             applyScore(100*currentLevel);}
         }
@@ -3143,7 +3290,7 @@ class Player{
           showDamageNumber(assistTarget.x,assistTarget.y, _final);
           if(assistTarget.hp<=0){
             createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
-            dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(assistTarget));
+            dropStellarBonusAtIndexIfNeeded(enemies.indexOf(assistTarget));
             enemies.splice(enemies.indexOf(assistTarget),1);
             applyScore(100*currentLevel);}
         }
@@ -3201,7 +3348,7 @@ class Player{
             showDamageNumber(closest.x,closest.y, _final);
             if(closest.hp<=0){
               createParticles(closest.x,closest.y,'#fff176',30,6);
-              dropGuaranteedGoldAtIndexIfNeeded(enemies.indexOf(closest));
+              dropStellarBonusAtIndexIfNeeded(enemies.indexOf(closest));
               enemies.splice(enemies.indexOf(closest),1);
               applyScore(100*currentLevel);
             }
@@ -3367,6 +3514,26 @@ else if(this.attackType==='magic'){
       });
       createParticles(this.x+this.width/2,this.y+this.height/2,'#f1c40f',26,6);
     }
+
+    else if(this.attackType==='lucienBlade'){
+      // Lucien SUPER: spawn 5 collectible bonuses around him (NO gold, NO super-recharge).
+      // Bonuses are real pickups collectable by the player.
+      const allowedTypes = ['heal','atk','speed','shieldPickup','furia','ice'];
+      const px = this.x + this.width/2;
+      const py = this.y + this.height/2;
+
+      for(let i=0;i<5;i++){
+        const a = Math.random()*Math.PI*2;
+        const r = 60 + Math.random()*25;
+        const t = allowedTypes[Math.floor(Math.random()*allowedTypes.length)];
+        const x = Math.max(40, Math.min(canvas.width-40, px + Math.cos(a)*r));
+        const y = Math.max(40, Math.min(canvas.height-90, py + Math.sin(a)*r));
+        spawnPickup(x, y, t);
+        createParticles(x, y, '#80cbc4', 18, 4);
+      }
+      createParticles(px, py, '#80cbc4', 30, 6);
+    }
+
 
     else if(this.attackType==='kouvagia'){
 
@@ -3541,6 +3708,19 @@ else if(this.attackType==='tempostormLaser'){
       ctx.fillStyle='#3498db';ctx.fillRect(this.x,this.y,this.width,this.height)
     }
 
+    // StellarBonus glow (luminous transparent, 1s – only light aura)
+    if(this.stellarGlowUntil && Date.now() < this.stellarGlowUntil){
+      const cx=this.x+this.width/2, cy=this.y+this.height/2;
+      ctx.save();
+      ctx.globalCompositeOperation='lighter';
+      ctx.globalAlpha = 0.45;
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.beginPath();
+      ctx.arc(cx, cy, Math.max(this.width,this.height)*0.65, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+
 
     // Salsy mark indicator
     if(this.salsyMarkUntil && Date.now() < this.salsyMarkUntil){
@@ -3575,6 +3755,18 @@ else if(this.attackType==='tempostormLaser'){
         const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.35;
         ctx.fillStyle='rgba(241,196,15,0.12)';
         ctx.strokeStyle='rgba(241,196,15,0.75)';
+        ctx.lineWidth=6;
+        ctx.beginPath();
+        ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
+        ctx.arc(this.x+this.width/2,this.y+this.height/2,this.range,angle-arcWidth/2,angle+arcWidth/2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      }else if(this.attackType==='lucienBlade'){
+        // Visual area: Lucien 4-hit close-range blade fan
+        const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.05;
+        ctx.fillStyle='rgba(200,230,255,0.13)';
+        ctx.strokeStyle='rgba(200,230,255,0.82)';
         ctx.lineWidth=6;
         ctx.beginPath();
         ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
@@ -4609,7 +4801,7 @@ return;
 
   for(let i=enemies.length-1;i>=0;i--){
     if(enemies[i].hp<=0){
-      dropGuaranteedGoldAtIndexIfNeeded(i);
+      dropStellarBonusAtIndexIfNeeded(i);
       const dead=enemies.splice(i,1)[0];
       applyScore(100*currentLevel);
       createParticles(dead.x,dead.y,'#fff176',30,6);
@@ -4765,6 +4957,10 @@ document.querySelectorAll('.character-card').forEach(card=>{
       updateHecateUnlockUI();
       return;
     }
+    if(char==='lucien' && !lucienUnlocked()){
+      updateLucienUnlockUI();
+      return;
+    }
     document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
     card.classList.add('selected');
     selectedCharacter=char;
@@ -4779,7 +4975,7 @@ function updateMenuStatsDisplay(char){
   document.getElementById(`menu-dmg-${char}`).textContent=
     char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` :
     (char==='salsy' ? '33x2' :
-     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : (char==='hecate' ? 'Freccia: colpo forte + 3 frecce' : s.damage))));
+     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : (char==='hecate' ? 'Freccia: colpo forte + 3 frecce' : (char==='lucien' ? '15x4' : s.damage)))));
 
 }
 
@@ -4977,7 +5173,7 @@ function updateFuriaWaves(){
           createParticles(e.x,e.y,'#ff4dff',14,5);
           if(e.hp<=0){
             createParticles(e.x,e.y,'#fff176',30,6);
-            dropGuaranteedGoldAtIndexIfNeeded(i);
+            dropStellarBonusAtIndexIfNeeded(i);
             enemies.splice(i,1);
             applyScore(100*currentLevel);
           }
@@ -5048,6 +5244,7 @@ function updateMarcusUnlock(){
   }
 }
 setInterval(updateMarcusUnlock,500);
+setInterval(updateLucienUnlockUI,500);
 
 
 // --- Ensure MARCUS selection behaves like others ---
@@ -5363,7 +5560,7 @@ Player.prototype.attack = function(){
     const now = Date.now();
     if(!this._marcusLastShot) this._marcusLastShot = 0;
 
-    const cd = 900; // cooldown
+    const cd = 250; // cooldown (faster attacks)
     if(now - this._marcusLastShot < cd) return false;
     this._marcusLastShot = now;
     // ---- HEAL ON ATTACK (1% current HP, integer, min 1) ----
@@ -5664,7 +5861,8 @@ const unlockMessages = {
   salsy: "Personaggio BLOCCATO\nSblocca facendo 60.000 punti\ncon tutti i personaggi precedenti",
   tempostorm: "Personaggio BLOCCATO\nSblocca facendo 70.000 punti\ncon tutti i personaggi precedenti",
   marz: "Personaggio BLOCCATO\nSblocca facendo 80.000 punti\ncon tutti i personaggi precedenti",
-  hecate: "Personaggio BLOCCATO\nSblocca facendo 85.000 punti\ncon tutti i personaggi precedenti"
+  hecate: "Personaggio BLOCCATO\nSblocca facendo 85.000 punti\ncon tutti i personaggi precedenti",
+  lucien: "Personaggio BLOCCATO\nSblocca facendo un record con Marcus\nsuperiore a 25.000"
 };
 
 const lockBox = document.getElementById('lockMessage');
@@ -5676,7 +5874,7 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
     const id = btn.dataset.target;
     const card = document.getElementById('card-'+id);
     if(card && card.classList.contains('disabled')){
-      lockText.innerText = unlockMessages[id] || "Personaggio bloccato";
+      lockText.innerText = unlockMessages[id] || "Personaggio BLOCCATO\nSblocca facendo un record di 70.000 con un personaggio";
       lockBox.style.display = 'block';
     }
   });
