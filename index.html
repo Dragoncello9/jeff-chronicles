@@ -427,6 +427,16 @@
   box-shadow: 0 0 10px rgba(255,152,0,0.6);
 }
 
+
+.ira-glow{
+  color:#7a0019;
+  border:2px solid #7a0019;
+  padding:4px 8px;
+  border-radius:6px;
+  box-shadow:0 0 10px rgba(122,0,25,0.8), 0 0 20px rgba(122,0,25,0.6);
+  font-weight:bold;
+}
+
 </style>
 
 <!-- Injected CSS: compact grid selected state -->
@@ -525,6 +535,7 @@ PUNTEGGIO TOTALE: 0
 
 </div>
 <div class="score" id="scoreDisplay" style="display:none;">Score: 0</div>
+<div class="score" id="killsDisplay" style="display:none; top:52px;">Kill: 0</div>
 <div class="timer" id="timerDisplay" style="display:none;">45</div>
 <div class="level-indicator" id="levelDisplay" style="display:none;">Level 1</div>
 
@@ -561,10 +572,11 @@ PUNTEGGIO TOTALE: 0
     <button data-target="marcus">MARCUS 🎶<br><small class="btn-record" id="btnrec-marcus">R: 0</small></button>
     <button data-target="lucien">LUCIEN 🗺️<br><small class="btn-record" id="btnrec-lucien">R: 0</small></button>
     <button data-target="pdor">PDOR ❤️‍🔥<br><small class="btn-record" id="btnrec-pdor">R: 0</small></button>
+<button data-target="bane">BANE 🪓<br><small class="btn-record" id="btnrec-bane">R: 0</small></button>
 <button class="btn character-btn disabled" data-target="extra1" disabled>❓ Nuovo</button>
 <button class="btn character-btn disabled" data-target="extra2" disabled>❓ Nuovo</button>
 <button class="btn character-btn disabled" data-target="extra3" disabled>❓ Nuovo</button>
-<button class="btn character-btn disabled" data-target="extra4" disabled>❓ Nuovo</button>
+
 
 </div>
 </div>
@@ -662,6 +674,14 @@ PUNTEGGIO TOTALE: 0
 <div class="menu-stats"><span class="stat" id="menu-hp-pdor">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-pdor">-</span></div>
 <div class="record-badge" id="record-pdor">Record: 0</div>
 <div class="lock-badge" id="pdorLockBadge">LOCKED</div>
+</div>
+<!-- Bane card (locked until record PDOR >= 50.000) -->
+<div class="character-card disabled" data-char="bane" id="card-bane" title="Sblocca facendo almeno 50.000 punti di record con PDOR">
+<h3>BANE</h3>
+<p>"🪓"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-bane">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-bane">-</span></div>
+<div class="record-badge" id="record-bane">Record: 0</div>
+<div class="lock-badge" id="baneLockBadge">LOCKED</div>
 </div>
 <div class="record-badge" id="record-lucien">Record: 0</div>
 <div class="lock-badge" id="lucienLockBadge">LOCKED</div>
@@ -906,10 +926,10 @@ const HP_MULT=1.40;
 const DAMAGE_MULT=0.85;
 const SUPER_DAMAGE_MULT=0.8;
 const JEFF_SUPER_RADIUS=Math.round(320*0.8);
-const GOLD_PROB=0.10;
+const GOLD_PROB=0.05;
 const JEFF_ATTACK_RANGE_MULT=0.8;
 const JIMMY_SUPER_ADDITIONAL_MULT=0.85;
-const JIMMY_BASE_ADDITIONAL_MULT=1.10;
+const JIMMY_BASE_ADDITIONAL_MULT=1.20;
 
 const URL_DEFAULT='https://i.postimg.cc/8CBFTKs4/Progetto-senza-titolo.png';
 const URL_DARK='https://i.postimg.cc/JhpWH3jJ/Copilot-20251209-232827.png';
@@ -935,6 +955,7 @@ let selectedCharacter=null;
 let player=null;
 let currentLevel=0;
 let score=0;
+let kills=0;
 let timer=45;
 let enemies=[];
 let particles=[];
@@ -953,6 +974,10 @@ function applyScore(delta){
   // keep integers (same feeling as before)
   const d = (scaled>=0) ? Math.floor(scaled) : Math.ceil(scaled);
   score = Math.max(0, score + d);
+}
+
+function addKill(n=1){
+  kills = Math.max(0, (kills||0) + (n||1));
 }
 
 
@@ -1014,7 +1039,7 @@ function updateMagicZone(now){
           dropStellarBonusAtIndexIfNeeded(i);
           enemies.splice(i,1);
           applyScore(100*currentLevel);
-        }
+        addKill(); }
       }
     }
 
@@ -1190,7 +1215,7 @@ function updatePdorOrbs(now){
             dropStellarBonusAtIndexIfNeeded(i);
             enemies.splice(i,1);
             applyScore(100*currentLevel);
-          }
+          addKill(); }
         }
       }
     }
@@ -1252,7 +1277,7 @@ let lastSecondTick=Date.now();
 let levelAdvanceLock=false;
 let shakeAmount=0;
 
-const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image(),pdor:new Image()};
+const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image(),pdor:new Image(),bane:new Image()};
 images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
@@ -1264,7 +1289,8 @@ images.marz.src='https://i.postimg.cc/j5WJZL5X/marz.png';
 images.hecate.src='https://i.postimg.cc/9QjRg424/hecate.png';
 images.marcus=new Image(); images.marcus.src='https://i.postimg.cc/MpKjhyKD/image.png';
 images.lucien=new Image(); images.lucien.src='https://i.postimg.cc/XvqZgdhz/Lucien-(1).png';
-images.pdor=new Image(); images.pdor.src='https://i.postimg.cc/dtHfLK21/pdor.png';
+images.pdor=new Image(); images.pdor.src='https://i.postimg.cc/y8nHcqnw/pdor24.png';
+images.bane=new Image(); images.bane.src='https://i.postimg.cc/Kjc7KMzX/bane.png';
 const wolfImg=new Image(); wolfImg.src='https://i.postimg.cc/4y9yBGFw/lupo.png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
 imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
@@ -1546,6 +1572,19 @@ const characterStats={
     superDuration:1000
   },
 
+
+  bane:{
+    hp:440,
+    speed:6.3*0.75, // leggermente più veloce di Tempostorm, ma sempre media-bassa
+    damage:75,
+    range:230,      // raggio medio-basso
+    cooldown:650,   // swing ascia
+    name:'Bane',
+    attackType:'axeattack',
+    superCooldown:60000,
+    superDuration:10000
+  },
+
   hecate:{
     hp:375,
     speed:9*0.75,
@@ -1611,7 +1650,7 @@ let records=loadRecords();
 
 
 function loadRecords(){
-  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0,pdor:0};
+  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0,pdor:0,bane:0};
   try{
     // Primary key (current version)
     const r=localStorage.getItem(RECORDS_KEY);
@@ -1649,6 +1688,7 @@ function updateMenuRecordsDisplay(){
   document.getElementById('record-marcus').textContent=`Record: ${records.marcus||0}`;
   document.getElementById('record-lucien').textContent=`Record: ${records.lucien||0}`;
   document.getElementById('record-pdor').textContent=`Record: ${records.pdor||0}`;
+  document.getElementById('record-bane').textContent=`Record: ${records.bane||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
@@ -1657,6 +1697,7 @@ function updateMenuRecordsDisplay(){
   updateHecateUnlockUI();
   updateLucienUnlockUI();
   updatePdorUnlockUI();
+  updateBaneUnlockUI();
   updateGuideUnlockUI();
 }
 function allThreeAbove50k(){
@@ -1869,6 +1910,26 @@ function updatePdorUnlockUI(){
   }
 }
 
+function baneUnlocked(){
+  return (records.pdor||0) >= 50000;
+}
+function updateBaneUnlockUI(){
+  const card=document.getElementById('card-bane');
+  const badge=document.getElementById('baneLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = baneUnlocked();
+  if(unlocked){
+    card.classList.remove('disabled');
+    setLockBadgeState(badge, false);
+    card.title='Bane sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo almeno 50.000 punti di record con PDOR';
+  }
+}
+
 function updateGuideUnlockUI(){
   const vUnlocked = allThreeAbove50k();
   const kUnlocked = voltryxAbove51k();
@@ -1940,6 +2001,61 @@ function drawParticles(){
   });
   ctx.globalAlpha=1
 }
+
+// --- IRA kill FX (Bane SUPER) ---
+let iraFxBursts = []; // radial glows on kill
+let iraScreenFlash = 0; // frames
+
+function createIraKillFX(x,y){
+  // Big red burst + sparks
+  createParticles(x,y,'#ff1b3a',70,5);
+  createParticles(x,y,'#7a0019',45,6);
+  createParticles(x,y,'#ff6b6b',35,4);
+  // Expanding glow rings
+  for(let k=0;k<3;k++){
+    iraFxBursts.push({
+      x, y,
+      r: 18 + k*10,
+      vr: 6 + k*1.5,
+      life: 18 + k*6,
+      maxLife: 18 + k*6
+    });
+  }
+  // Small screen flash
+  iraScreenFlash = Math.max(iraScreenFlash, 14);
+}
+
+function updateIraFX(){
+  iraFxBursts = iraFxBursts.filter(b=>{
+    b.r += b.vr;
+    b.life--;
+    return b.life>0;
+  });
+  if(iraScreenFlash>0) iraScreenFlash--;
+}
+
+function drawIraFX(){
+  // Draw glow rings behind particles
+  iraFxBursts.forEach(b=>{
+    const t = b.life / b.maxLife; // 1 -> 0
+    ctx.save();
+    ctx.globalAlpha = 0.55 * t;
+    ctx.strokeStyle = '#7a0019';
+    ctx.lineWidth = 6 * t + 1;
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.globalAlpha = 0.25 * t;
+    ctx.strokeStyle = '#ff1b3a';
+    ctx.lineWidth = 10 * t + 2;
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r*1.12, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.restore();
+  });
+}
+
+
 function showDamageNumber(x,y,dmg){
   const div=document.createElement('div');
   div.className='damage-number';
@@ -1986,6 +2102,7 @@ class Wolf{
   }
   update(){
     const now=Date.now();
+    this._updateBaneSuperState(now);
     const target=this._nearestEnemy();
     if(!target) return;
 
@@ -2017,7 +2134,7 @@ class Wolf{
         const idx=enemies.indexOf(target);
         if(idx>=0){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);}
         applyScore(100*currentLevel);
-      }
+      addKill(); }
     }
   }
   draw(){
@@ -2209,7 +2326,7 @@ function updateProjectiles(){
               dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
-                if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
+                addKill(); if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
         }
@@ -2240,7 +2357,7 @@ function updateProjectiles(){
                   dropStellarBonusAtIndexIfNeeded(j);
                   enemies.splice(j,1);
                   applyScore(100*currentLevel);
-                }
+                addKill(); }
               }
             }
           }else{
@@ -2281,7 +2398,7 @@ function updateProjectiles(){
               dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
-                if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
+                addKill(); if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
           if(p.meta && p.meta.pdorChain){
@@ -2355,7 +2472,7 @@ function updateProjectiles(){
             dropStellarBonusAtIndexIfNeeded(j);
             enemies.splice(j,1);
             applyScore(100*currentLevel);
-          }
+          addKill(); }
         }
       }
       createParticles(p.x,p.y,'#ffa726',18,5);
@@ -2844,6 +2961,12 @@ class Player{
     this._slowUntil=0;
     this.damage=s.damage;this.range=s.range;
     this.cooldown=s.cooldown;this.attackType=s.attackType;
+    this._baseCooldown=s.cooldown;
+    // Bane SUPER state
+    this.baneSuperUntil=0;
+    this.baneSuperAttackMult=1;
+    this._baneSuperAppliedCooldown=false;
+
     this.lastAttack=0;this.facingRight=true;
     this.dashCooldown=0;this.attacking=false;this.attackTime=0;
     this.combo=0;this.damageTaken=0;this.isDashing=false;this.dashTime=0;
@@ -2899,7 +3022,7 @@ class Player{
 
 
   // Rallentamento temporaneo (usato da alcuni nemici/boss)
-  // pct: 0.10 = -10% velocità. durationMs in millisecondi.
+  // pct: 0.20 = -10% velocità. durationMs in millisecondi.
   applySlow(pct, durationMs){
     const now=Date.now();
     const p=Math.max(0, Math.min(0.60, pct||0)); // cap 60% (Boss5 usa 50%)
@@ -2929,6 +3052,20 @@ class Player{
     if(this.speedBuffUntil && now>this.speedBuffUntil){
       this.speed=this._baseSpeed;this.speedBuffUntil=0;this.isJetpacking=false;this.invulnerable=false
     }
+
+    // Bane SUPER speed boost handling (independent from pickups)
+    if(this.type==='bane'){
+      if(this.baneSuperSpeedUntil && now < this.baneSuperSpeedUntil){
+        this.speed = Math.max(this.speed, this._baseSpeed * 1.25);
+      } else if(this.baneSuperSpeedUntil && now >= this.baneSuperSpeedUntil){
+        this.baneSuperSpeedUntil = 0;
+        // if no other speed buff is active, restore base speed
+        if(!(this.speedBuffUntil && now < this.speedBuffUntil)){
+          this.speed = this._baseSpeed;
+        }
+      }
+    }
+
     if(this.pickupShieldUntil && now>this.pickupShieldUntil){this.pickupShieldUntil=0;this.invulnerable=false}
 
     // Furia heal-over-time (+10 HP/s for 10s)
@@ -3030,7 +3167,7 @@ class Player{
             const e=enemies[i];
             const dist=Math.hypot((e.x+e.width/2)-(this.x+this.width/2),(e.y+e.height/2)-(this.y+this.height/2));
             if(dist<110){
-              const dmg=Math.round(40*this.attackBuffMultiplier);
+              const dmg=Math.round(40*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
               const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
               createParticles(e.x,e.y,'#e84393',10,5);
               showDamageNumber(e.x,e.y, _final);
@@ -3039,6 +3176,7 @@ class Player{
                 dropStellarBonusAtIndexIfNeeded(i);
                 enemies.splice(i,1);
                 applyScore(100*currentLevel);
+                addKill(); this._baneSuperOnKill();
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
               }
             }
@@ -3057,7 +3195,7 @@ class Player{
             const e=enemies[i];
             const dist=Math.hypot((e.x+e.width/2)-(this.x+this.width/2),(e.y+e.height/2)-(this.y+this.height/2));
             if(dist<165){
-              const dmg=Math.round(65*this.attackBuffMultiplier);
+              const dmg=Math.round(65*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
               const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
               createParticles(e.x,e.y,'#fd79a8',16,5);
               showDamageNumber(e.x,e.y, _final);
@@ -3066,6 +3204,7 @@ class Player{
                 dropStellarBonusAtIndexIfNeeded(i);
                 enemies.splice(i,1);
                 applyScore(100*currentLevel);
+                addKill(); this._baneSuperOnKill();
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
               }
             }
@@ -3103,7 +3242,7 @@ class Player{
           const arcWidth=Math.PI*(120/180);
           const radius=90;
 
-          const baseDmg=Math.round(this.damage*0.65*this.attackBuffMultiplier);
+          const baseDmg=Math.round(this.damage*0.65*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
 
           let killedGrappleTarget=false;
 
@@ -3127,6 +3266,7 @@ class Player{
                   dropStellarBonusAtIndexIfNeeded(i);
                   enemies.splice(i,1);
                   applyScore(100*currentLevel);
+                addKill(); this._baneSuperOnKill();
                 }
               }
             }
@@ -3163,7 +3303,7 @@ class Player{
               const dx=ex-px, dy=ey-py;
               if(Math.abs(dx)<=half && Math.abs(dy)<=half){
                 const dist=Math.hypot(dx,dy);
-                const w=Math.max(0.10, 1 - (dist/maxDist)); // minimo 10% al bordo
+                const w=Math.max(0.20, 1 - (dist/maxDist)); // minimo 10% al bordo
                 hits.push({enemy,w, dist});
               }
             }
@@ -3200,6 +3340,7 @@ class Player{
                   dropStellarBonusAtIndexIfNeeded(i);
                   enemies.splice(i,1);
                   applyScore(100*currentLevel);
+                addKill(); this._baneSuperOnKill();
                 }
               }
             }
@@ -3210,7 +3351,7 @@ class Player{
                 const base=(this.type==='jimmy')?300:140;
                 const mult=(this.type==='jimmy')?(SUPER_DAMAGE_MULT*JIMMY_SUPER_ADDITIONAL_MULT):SUPER_DAMAGE_MULT;
                 let extra=1;if(this.type==='rooney'&&dist<150)extra=1.5;
-                const dmg=Math.round(base*mult*extra*this.attackBuffMultiplier);
+                const dmg=Math.round(base*mult*extra*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
                 const _dmg=dmg; const _final=applyEnemyDamage(enemy,_dmg);
                 createParticles(enemy.x,enemy.y,'#f39c12',30,6);
                 showDamageNumber(enemy.x,enemy.y, _final);
@@ -3219,9 +3360,14 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
+                  // IRA kill special FX (Bane SUPER)
+                  if(player && player.type==='bane' && Date.now() < player.baneSuperUntil){
+                    createIraKillFX(enemy.x, enemy.y);
+                  }
                   dropStellarBonusAtIndexIfNeeded(idx);
                   enemies.splice(idx,1);
-                  applyScore(100*currentLevel);}
+                  applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
               }
             });
           }
@@ -3259,14 +3405,15 @@ class Player{
                 // hit once, then keep moving forward briefly (pass-through)
                 const base=120;
                 const mult=(this.type==='jimmy')?(SUPER_DAMAGE_MULT*JIMMY_SUPER_ADDITIONAL_MULT):SUPER_DAMAGE_MULT;
-                const dmg=Math.round(base*mult*this.attackBuffMultiplier*(this.type==='jimmy'?2.0:1));
+                const dmg=Math.round(base*mult*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)*(this.type==='jimmy'?2.0:1));
                 const _final=applyEnemyDamage(target, dmg);
                 createParticles(target.x,target.y,'#e74c3c',15,6);
                 showDamageNumber(target.x,target.y, _final);
                 if(target.hp<=0){
                   createParticles(target.x,target.y,'#fff176',30,6);
                   const idx=enemies.indexOf(target);
-                  if(idx>-1){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);applyScore(100*currentLevel);}
+                  if(idx>-1){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
                 }
 
                 // store direction and move through (no interaction/stop)
@@ -3302,7 +3449,8 @@ class Player{
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   dropStellarBonusAtIndexIfNeeded(idx);
                   enemies.splice(idx,1);
-                  applyScore(100*currentLevel);}
+                  applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
               }
             });
           }
@@ -3312,7 +3460,46 @@ class Player{
       } else if(this.attackType==='salsySword'){
         if(elapsed>=this.superDuration) this.endSuper();
 
-      } else if(this.attackType==='lucienBlade'){
+      
+    } else if(this.attackType==='axeattack'){
+      // BANE axe wide swing: 270° fan, hits max 2 enemies
+      const attackAngle = this.facingRight ? 0 : Math.PI;
+      const arcWidth = Math.PI * 1.5; // 270 degrees
+      let hits = 0;
+      // sort enemies by distance (closer hit first)
+      const sorted = enemies.slice().sort((a,b)=>{
+        const da=Math.hypot(a.x-this.x,a.y-this.y);
+        const db=Math.hypot(b.x-this.x,b.y-this.y);
+        return da-db;
+      });
+      sorted.forEach(enemy=>{
+        if(hits>=2) return;
+        const dx=enemy.x-this.x;
+        const dy=enemy.y-this.y;
+        const dist=Math.hypot(dx,dy);
+        const angle=Math.atan2(dy,dx);
+        let angleDiff=angle-attackAngle;
+        while(angleDiff>Math.PI) angleDiff-=Math.PI*2;
+        while(angleDiff<-Math.PI) angleDiff+=Math.PI*2;
+        if(dist < this.range && Math.abs(angleDiff) < arcWidth/2){
+          const superMult = (this.type==='bane' && this.baneSuperUntil && now < this.baneSuperUntil) ? (this.baneSuperAttackMult||1) : 1;
+          const base = this.damage * this.attackBuffMultiplier * superMult;
+          const dmg = applyEnemyDamage(enemy, base);
+          createParticles(enemy.x,enemy.y,'#c0392b',14,6);
+          showDamageNumber(enemy.x,enemy.y,dmg);
+          hits++;
+          if(enemy.hp<=0){
+            createParticles(enemy.x,enemy.y,'#fff176',30,6);
+            dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
+            enemies.splice(enemies.indexOf(enemy),1);
+            applyScore(100*currentLevel);
+          addKill(); this._baneSuperOnKill();
+                }
+        }
+      });
+
+
+    } else if(this.attackType==='lucienBlade'){
         if(elapsed>=this.superDuration) this.endSuper();
 
       } else if(this.attackType==='kouvagia'){
@@ -3379,6 +3566,7 @@ class Player{
               dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
+                addKill(); this._baneSuperOnKill();
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
@@ -3445,7 +3633,8 @@ class Player{
                 if(closestEnemy.hp<=0){
                   createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
                   const idxEnemy=enemies.indexOf(closestEnemy);
-                  if(idxEnemy>-1){dropStellarBonusAtIndexIfNeeded(idxEnemy);enemies.splice(idxEnemy,1);applyScore(100*currentLevel);}
+                  if(idxEnemy>-1){dropStellarBonusAtIndexIfNeeded(idxEnemy);enemies.splice(idxEnemy,1);applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
                 }
               }
             };
@@ -3459,7 +3648,7 @@ class Player{
           if(dist<closestDist&&Math.abs(dy)<220){closestDist=dist;closestEnemy=enemy}
         });
         if(closestEnemy){
-          const dmg=Math.round(this.damage*this.attackBuffMultiplier);
+          const dmg=Math.round(this.damage*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
           const _dmg=dmg; const _final=applyEnemyDamage(closestEnemy,_dmg);
           createParticles(closestEnemy.x,closestEnemy.y,'#e67e22',12,5);
           showDamageNumber(closestEnemy.x,closestEnemy.y, _final);
@@ -3468,11 +3657,12 @@ class Player{
             dropStellarBonusAtIndexIfNeeded(enemies.indexOf(closestEnemy));
             enemies.splice(enemies.indexOf(closestEnemy),1);
             applyScore(100*currentLevel);
-          }
+          addKill(); this._baneSuperOnKill();
+                }
         } else if(assistTarget){
           const distA=Math.hypot((assistTarget.x-this.x),(assistTarget.y-this.y));
           if(distA<this.range+120){
-            const dmg=Math.round(this.damage*0.9*this.attackBuffMultiplier);
+            const dmg=Math.round(this.damage*0.9*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
             const _dmg=dmg; const _final=applyEnemyDamage(assistTarget,_dmg);
             createParticles(assistTarget.x,assistTarget.y,'#e67e22',12,5);
             showDamageNumber(assistTarget.x,assistTarget.y, _final);
@@ -3481,7 +3671,8 @@ class Player{
               dropStellarBonusAtIndexIfNeeded(enemies.indexOf(assistTarget));
               enemies.splice(enemies.indexOf(assistTarget),1);
               applyScore(100*currentLevel);
-            }
+            addKill(); this._baneSuperOnKill();
+                }
           }
         }
       }
@@ -3511,7 +3702,7 @@ class Player{
           while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
           while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
           if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.15){
-            const base=37*this.attackBuffMultiplier;
+            const base=37*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
             const dmg=applyEnemyDamage(enemy, base);
             createParticles(enemy.x,enemy.y,'#f1c40f',10,4);
             showDamageNumber(enemy.x,enemy.y,dmg);
@@ -3523,12 +3714,52 @@ class Player{
               dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
               enemies.splice(enemies.indexOf(enemy),1);
               applyScore(100*currentLevel);
-            }
+            addKill(); this._baneSuperOnKill();
+                }
           }
         });
       };
       doSwing();
       setTimeout(doSwing, 120);
+
+
+    
+    } else if(this.attackType==='axeattack'){
+      // BANE axe wide swing: 270° fan, hits max 2 enemies
+      const attackAngle = this.facingRight ? 0 : Math.PI;
+      const arcWidth = Math.PI * 1.5; // 270 degrees
+      let hits = 0;
+      // sort enemies by distance (closer hit first)
+      const sorted = enemies.slice().sort((a,b)=>{
+        const da=Math.hypot(a.x-this.x,a.y-this.y);
+        const db=Math.hypot(b.x-this.x,b.y-this.y);
+        return da-db;
+      });
+      sorted.forEach(enemy=>{
+        if(hits>=2) return;
+        const dx=enemy.x-this.x;
+        const dy=enemy.y-this.y;
+        const dist=Math.hypot(dx,dy);
+        const angle=Math.atan2(dy,dx);
+        let angleDiff=angle-attackAngle;
+        while(angleDiff>Math.PI) angleDiff-=Math.PI*2;
+        while(angleDiff<-Math.PI) angleDiff+=Math.PI*2;
+        if(dist < this.range && Math.abs(angleDiff) < arcWidth/2){
+          const superMult = (this.type==='bane' && this.baneSuperUntil && now < this.baneSuperUntil) ? (this.baneSuperAttackMult||1) : 1;
+          const base = this.damage * this.attackBuffMultiplier * superMult;
+          const dmg = applyEnemyDamage(enemy, base);
+          createParticles(enemy.x,enemy.y,'#c0392b',14,6);
+          showDamageNumber(enemy.x,enemy.y,dmg);
+          hits++;
+          if(enemy.hp<=0){
+            createParticles(enemy.x,enemy.y,'#fff176',30,6);
+            dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
+            enemies.splice(enemies.indexOf(enemy),1);
+            applyScore(100*currentLevel);
+          addKill(); this._baneSuperOnKill();
+                }
+        }
+      });
 
 
     } else if(this.attackType==='lucienBlade'){
@@ -3543,8 +3774,8 @@ class Player{
           while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
           while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
 
-          if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.10){
-            const base=15*this.attackBuffMultiplier;
+          if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.20){
+            const base=15*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
             const dmg=applyEnemyDamage(enemy, base);
             createParticles(enemy.x,enemy.y,'#c8e6ff',8,4);
             showDamageNumber(enemy.x,enemy.y,dmg);
@@ -3553,7 +3784,8 @@ class Player{
               dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
               enemies.splice(enemies.indexOf(enemy),1);
               applyScore(100*currentLevel);
-            }
+            addKill(); this._baneSuperOnKill();
+                }
           }
         });
       };
@@ -3572,7 +3804,7 @@ class Player{
         while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
         while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
         if(dist<this.range&&Math.abs(angleDiff)<arcWidth/2+0.2){
-          const dmg=Math.round(this.damage*this.attackBuffMultiplier);
+          const dmg=Math.round(this.damage*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
           const _dmg=dmg; const _final=applyEnemyDamage(enemy,_dmg);
           createParticles(enemy.x,enemy.y,'#9b59b6',10,4);
           showDamageNumber(enemy.x,enemy.y, _final);
@@ -3583,7 +3815,8 @@ class Player{
             createParticles(enemy.x,enemy.y,'#fff176',30,6);
             dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
             enemies.splice(enemies.indexOf(enemy),1);
-            applyScore(100*currentLevel);}
+            applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
         }
       });
       // Jeff EVO passive: if a single attack hits 2+ enemies, heal 1% max HP
@@ -3595,7 +3828,7 @@ class Player{
       if(assistTarget){
         const distAssist=Math.hypot((assistTarget.x-this.x),(assistTarget.y-this.y));
         if(distAssist<this.range+60){
-          const dmg=Math.round(this.damage*0.7*this.attackBuffMultiplier);
+          const dmg=Math.round(this.damage*0.7*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
           const _dmg=dmg; const _final=applyEnemyDamage(assistTarget,_dmg);
           createParticles(assistTarget.x,assistTarget.y,'#9b59b6',10,4);
           showDamageNumber(assistTarget.x,assistTarget.y, _final);
@@ -3603,7 +3836,8 @@ class Player{
             createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
             dropStellarBonusAtIndexIfNeeded(enemies.indexOf(assistTarget));
             enemies.splice(enemies.indexOf(assistTarget),1);
-            applyScore(100*currentLevel);}
+            applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
         }
       }
 
@@ -3653,7 +3887,7 @@ class Player{
             if(d<best && Math.abs(e.y-this.y)<220){best=d;closest=e}
           });
           if(closest){
-            const dmg=Math.round(perPunchBase*this.attackBuffMultiplier);
+            const dmg=Math.round(perPunchBase*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
             const _dmg=dmg; const _final=applyEnemyDamage(closest,_dmg);
             createParticles(closest.x,closest.y,'#e67e22',12,5);
             showDamageNumber(closest.x,closest.y, _final);
@@ -3662,7 +3896,8 @@ class Player{
               dropStellarBonusAtIndexIfNeeded(enemies.indexOf(closest));
               enemies.splice(enemies.indexOf(closest),1);
               applyScore(100*currentLevel);
-            }
+            addKill(); this._baneSuperOnKill();
+                }
           }
         };
         punch();
@@ -3689,7 +3924,7 @@ else if(this.attackType==='hecateBow'){
   const vx=(dx/len)*speed;
   const vy=(dy/len)*speed;
 
-  const mainDmg = Math.round(this.damage*1.25*this.attackBuffMultiplier);
+  const mainDmg = Math.round(this.damage*1.25*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
   const splitDmg = Math.round(mainDmg * 0.5); // frecce minori: metà del danno della freccia principale
 
   spawnProjectile({
@@ -3727,8 +3962,8 @@ else if(this.attackType==='tempostormLaser'){
   spawnTempBeam({
     x1:sx,y1:sy,x2:ex,y2:ey,
     width:18,ttl:260,
-    damage1:Math.round(40*this.attackBuffMultiplier),
-    damageStay:Math.round(30*this.attackBuffMultiplier)
+    damage1:Math.round(40*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
+    damageStay:Math.round(30*this.attackBuffMultiplier*(this.baneSuperAttackMult||1))
   });
   createParticles(sx,sy,'#4fc3f7',14,4);
 }
@@ -3764,7 +3999,7 @@ else if(this.attackType==='magic'){
     spawnProjectile({
       x:sx,y:sy,
       vx,vy,speed,
-      damage:Math.round(damages[i]*this.attackBuffMultiplier),
+      damage:Math.round(damages[i]*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
       ttl:520,
       color:colors[i%colors.length],
       radius:7,
@@ -3785,6 +4020,46 @@ else if(this.attackType==='magic'){
 
   superAttack(){
     const now=Date.now();
+
+    // Bane SUPER:
+// - +25% movement speed for 10s
+// - base attack cooldown reduced by 75% (cooldown * 0.25) for the whole SUPER
+// - during SUPER, base attack gets an extra buff based on current Kill count at activation:
+//   0–25  => +25% (x1.25)
+//   26–50 => +50% (x1.50)
+//   51–75 => +75% (x1.75)
+//   76+   => +100% (x2.00)
+//   (this multiplier is independent from pickup/bonus buffs)
+// - cooldown 60s
+    if(this.type==='bane'){
+      const sc = (this.superCooldown!=null)?this.superCooldown:60000;
+      if(now - this.lastSuper < sc) return false;
+
+      this.lastSuper = now;
+
+      const dur = (this.superDuration!=null)?this.superDuration:10000;
+      this.baneSuperUntil = now + dur;
+
+      // speed boost (do not downgrade other speed buffs)
+      this.speed = Math.max(this.speed, this._baseSpeed * 1.25);
+
+      // cooldown reduction for base attack (only during SUPER; restore previous cooldown after SUPER ends)
+      if(typeof this.cooldown === 'number'){
+        this._preBaneSuperCooldown = this.cooldown;
+        this.cooldown = this.cooldown * 0.25;
+        this._baneSuperAppliedCooldown = true;
+      }
+
+      // attack multiplier for SUPER (independent from pickup/bonus buffs)
+      const k = (typeof kills==='number') ? kills : 0;
+      if(k<=25) this.baneSuperAttackMult = 1.25;
+      else if(k<=50) this.baneSuperAttackMult = 1.50;
+      else if(k<=75) this.baneSuperAttackMult = 1.75;
+      else this.baneSuperAttackMult = 2.00;
+
+      return true;
+    }
+
     if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
     this.lastSuper=now;this.isDoingSuper=true;this.superStartTime=now;this._HitDone=false;
 
@@ -3951,7 +4226,7 @@ else if(this.attackType==='tempostormLaser'){
         maxRadius:560,
         radius:90,
         tickMs:180,
-        damagePerTick:Math.round(16*this.attackBuffMultiplier),
+        damagePerTick:Math.round(16*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
         lastTick:0,
         colors:['#ff00ff','#00e5ff','#fff176','#7c4dff','#18ffff'],
         colorIdx:0
@@ -3989,9 +4264,37 @@ else if(this.attackType==='tempostormLaser'){
     this.damageTaken++;
     this.combo=0;
     applyScore(-50);
-    createParticles(this.x,this.y,'#c0392b',12,5);
+    this._baneSuperOnKill();
+                createParticles(this.x,this.y,'#c0392b',12,5);
     shakeScreen();
     if(this.hp<=0 && gameState==='playing') endGame(false);
+  }
+
+  _baneSuperOnKill(){
+    // Kept for compatibility: Bane SUPER attack buff is now decided at activation
+    // based on current Kill count (see superAttack()).
+    return;
+  }
+
+  _updateBaneSuperState(now){
+    if(this.type!=='bane') return;
+    if(this.baneSuperUntil && now >= this.baneSuperUntil){
+      this.baneSuperUntil = 0;
+      // restore attack cooldown (what it was before SUPER), without removing other buffs
+      if(typeof this._preBaneSuperCooldown === 'number'){
+        this.cooldown = this._preBaneSuperCooldown;
+      } else if(this._baseCooldown!=null){
+        this.cooldown = this._baseCooldown;
+      }
+      this._preBaneSuperCooldown = undefined;
+      this._baneSuperAppliedCooldown = false;
+      // restore speed only if SUPER was the active boost (avoid downgrading other buffs)
+      const superSpeed = this._baseSpeed * 1.25;
+      if(this.speed <= superSpeed + 0.0001){
+        this.speed = this._baseSpeed;
+      }
+      this.baneSuperAttackMult = 1;
+    }
   }
 
   draw(){
@@ -4104,6 +4407,18 @@ else if(this.attackType==='tempostormLaser'){
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
+      }else if(this.attackType==='axeattack'){
+        // Visual area: Bane axe swing (270°)
+        const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.5;
+        ctx.fillStyle='rgba(231,76,60,0.20)';
+        ctx.strokeStyle='rgba(231,76,60,0.85)';
+        ctx.lineWidth=7;
+        ctx.beginPath();
+        ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
+        ctx.arc(this.x+this.width/2,this.y+this.height/2,this.range,angle-arcWidth/2,angle+arcWidth/2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
       }else if(this.attackType==='lucienBlade'){
         // Visual area: Lucien 4-hit close-range blade fan
         const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.05;
@@ -4164,7 +4479,7 @@ else if(this.attackType==='salsySword'){
         // Show 1-3 target reticles + launch lines during Salsy super
         ctx.save();
         ctx.strokeStyle='rgba(241,196,15,0.75)';
-        ctx.fillStyle='rgba(241,196,15,0.10)';
+        ctx.fillStyle='rgba(241,196,15,0.20)';
         ctx.lineWidth=5;
         const px=this.x+this.width/2, py=this.y+this.height/2;
         const list=(this.superTargets||[]).slice(0,3);
@@ -4256,7 +4571,7 @@ class Enemy{
     this.vy=(Math.random()-0.5)*cfg.enemySpeed*mult;
     this.maxHP=Math.round(cfg.enemyHP*(1+0.25*level));
     this.hp=this.maxHP;
-    const baseDamage=Math.round(cfg.enemyDamage*(1+0.10*level));
+    const baseDamage=Math.round(cfg.enemyDamage*(1+0.20*level));
     this.damage=(level>=7)?Math.round(baseDamage*0.8):baseDamage;
     this.speed=cfg.enemySpeed*mult;
     if(level===8)this.speed*=0.925;
@@ -4465,7 +4780,7 @@ class ArcherEnemy extends Enemy{
     super(type,level);
     this.shootCooldown=Math.max(650, 1250 - level*18);
     this.lastShoot=0;
-    this.arrowSpeed=9.2 + level*0.10;
+    this.arrowSpeed=9.2 + level*0.20;
     this.keepMin=520; // very far
     this.keepMax=700;
   }
@@ -4511,7 +4826,7 @@ class ArcherEnemy extends Enemy{
         w:18,
         h:4,
         angle:Math.atan2(vy,vx),
-        onHitPlayer:(pl)=>{ if(pl && typeof pl.applySlow==='function') pl.applySlow(0.10, 2500); }
+        onHitPlayer:(pl)=>{ if(pl && typeof pl.applySlow==='function') pl.applySlow(0.20, 2500); }
       });
     }
   }
@@ -5068,7 +5383,7 @@ function updateBackgroundForLevel(level){
 }
 
 function startGame(){
-  currentLevel=1;score=0;timer=levelConfigs[0].time;
+  currentLevel=1;score=0;kills=0;timer=levelConfigs[0].time;
   player=new Player(selectedCharacter||'jimmy');
   enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];wolves=[];
   spawnEnemiesForLevel(currentLevel);
@@ -5078,6 +5393,7 @@ function startGame(){
   if(ss) ss.style.display='none';
   document.getElementById('uiOverlay').style.display='block';
   document.getElementById('scoreDisplay').style.display='block';
+  document.getElementById('killsDisplay').style.display='block';
   document.getElementById('timerDisplay').style.display='block';
   document.getElementById('levelDisplay').style.display='block';
   document.getElementById('superCooldown').style.display='block';
@@ -5088,6 +5404,7 @@ function endGame(won){
   if(gameState!=='playing') return;
   gameState='ended';
   document.getElementById('endScreen').style.display='block';
+  const kd=document.getElementById('killsDisplay'); if(kd) kd.style.display='none';
   document.getElementById('endTitle').textContent=won?'VICTORY':'GAME OVER';
   document.getElementById('endMessage').textContent=`Score Finale: ${score}`;
   document.getElementById('endSub').textContent=`Hai raggiunto il Livello ${currentLevel}`;
@@ -5136,6 +5453,7 @@ return;
   updateMagicZone(now);
   updatePdorOrbs(now);
   updateParticles();
+  updateIraFX();
   updateProjectiles();
   updateLasers();
   updateTempBeams();
@@ -5147,7 +5465,7 @@ return;
       dropStellarBonusAtIndexIfNeeded(i);
       const dead=enemies.splice(i,1)[0];
       applyScore(100*currentLevel);
-      createParticles(dead.x,dead.y,'#fff176',30,6);
+      addKill(); createParticles(dead.x,dead.y,'#fff176',30,6);
     }
   }
 
@@ -5184,10 +5502,20 @@ return;
   drawLasers();
   drawTempBeams();
   drawFuriaWaves();
+  drawIraFX();
   drawParticles();
   drawPickups();
 
   ctx.restore();
+
+  // IRA screen tint flash
+  if(iraScreenFlash>0){
+    ctx.save();
+    ctx.globalAlpha = Math.min(0.35, iraScreenFlash/40);
+    ctx.fillStyle = '#7a0019';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
+  }
 
   if(player){
     document.getElementById('hpText').textContent=Math.max(0,Math.round(player.hp));
@@ -5198,6 +5526,7 @@ return;
   }
 
   document.getElementById('scoreDisplay').textContent=`Score: ${score}`;
+  const kEl=document.getElementById('killsDisplay'); if(kEl) kEl.textContent=`Kill: ${kills}`;
   document.getElementById('timerDisplay').textContent=timer;
   document.getElementById('levelDisplay').textContent=`Level ${currentLevel}`;
   const superReady=(Date.now()-player.lastSuper>=player.superCooldown)?'Ready':Math.ceil((player.superCooldown-(Date.now()-player.lastSuper))/1000)+'s';
@@ -5218,6 +5547,7 @@ if(bonusBox){
 
   add('SCUDO', player.pickupShieldUntil, '#7fdfff');   // azzurro chiaro
   add('SPEED', player.speedBuffUntil, '#3498db');      // blu
+  add('<span class="ira-glow">IRA</span>', player.baneSuperUntil, '#ff9800'); // arancione (Bane)
   add('FURIA', player.furiaHealUntil, '#ff00ff');      // fucsia
   add('ATK', player.attackBuffUntil, '#ff3b3b');       // rosso
   add('POISON', player.poisonUntil, '#4b0082');        // viola scuro
@@ -5316,6 +5646,19 @@ document.querySelectorAll('.character-card').forEach(card=>{
       }
       return;
     }
+
+    if(char==='bane' && !baneUnlocked()){
+      updateBaneUnlockUI();
+      // show lock message popup
+      const lockBox=document.getElementById('lockMessage');
+      const lockText=document.getElementById('lockText');
+      if(lockBox && lockText){
+        lockText.innerText = "Personaggio BLOCCATO\nSblocca facendo 50.000\ncon PDOR";
+        lockBox.style.display='block';
+      }
+      return;
+    }
+
     document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
     card.classList.add('selected');
     selectedCharacter=char;
@@ -5330,7 +5673,7 @@ function updateMenuStatsDisplay(char){
   document.getElementById(`menu-dmg-${char}`).textContent=
     char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` :
     (char==='salsy' ? '33x2' :
-     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : (char==='hecate' ? 'Freccia: colpo forte + 3 frecce' : (char==='lucien' ? '15x4' : (char==='pdor' ? 'Dardo: 50 (chain x5)' : s.damage))))));
+     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : (char==='hecate' ? 'Freccia: colpo forte + 3 frecce' : (char==='lucien' ? '15x4' : (char==='pdor' ? 'Dardo: 50 (chain x5)' : (char==='bane' ? '—' : s.damage)))))));
 
 }
 
@@ -5378,6 +5721,7 @@ document.getElementById('restartBtn').addEventListener('click',()=>{
   startGame();
 });
 document.getElementById('menuBtn').addEventListener('click',()=>{
+  const kd=document.getElementById('killsDisplay'); if(kd) kd.style.display='none';
   document.getElementById('endScreen').style.display='none';
   document.getElementById('mainMenu').style.display='block';
   gameState='menu';
@@ -5531,7 +5875,7 @@ function updateFuriaWaves(){
             dropStellarBonusAtIndexIfNeeded(i);
             enemies.splice(i,1);
             applyScore(100*currentLevel);
-          }
+          addKill(); }
         }
       }
     }
@@ -5997,7 +6341,7 @@ Player.prototype.attack = function(){
         y:cy,
         vx:Math.cos(ang)*speed,
         vy:Math.sin(ang)*speed,
-        damage:Math.round(20*this.attackBuffMultiplier),
+        damage:Math.round(20*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
         ttl:900,            // long life = looks like beam/flow
         color:'#b19cff',
         radius:10,          // thicker = stream feeling
@@ -6312,7 +6656,8 @@ const unlockMessages = {
   marz: "Personaggio BLOCCATO\nSblocca facendo 80.000 punti\ncon tutti i personaggi precedenti",
   hecate: "Personaggio BLOCCATO\nSblocca facendo 85.000 punti\ncon tutti i personaggi precedenti",
   lucien: "Personaggio BLOCCATO\nSblocca facendo un record con Marcus\nsuperiore a 25.000",
-  pdor: "Personaggio BLOCCATO\nsi sblocca facendo 50.000\ncon marcus e lucien"
+  pdor: "Personaggio BLOCCATO\nsi sblocca facendo 50.000\ncon marcus e lucien",
+  bane: "Personaggio BLOCCATO\nSblocca facendo 50.000\ncon PDOR"
 };
 
 const lockBox = document.getElementById('lockMessage');
