@@ -573,7 +573,7 @@ PUNTEGGIO TOTALE: 0
     <button data-target="lucien">LUCIEN 🗺️<br><small class="btn-record" id="btnrec-lucien">R: 0</small></button>
     <button data-target="pdor">PDOR ❤️‍🔥<br><small class="btn-record" id="btnrec-pdor">R: 0</small></button>
 <button data-target="bane">BANE 🪓<br><small class="btn-record" id="btnrec-bane">R: 0</small></button>
-<button class="btn character-btn disabled" data-target="extra1" disabled>❓ Nuovo</button>
+<button data-target="hendel">HENDEL 🪨<br><small class="btn-record" id="btnrec-hendel">R: 0</small></button>
 <button class="btn character-btn disabled" data-target="extra2" disabled>❓ Nuovo</button>
 <button class="btn character-btn disabled" data-target="extra3" disabled>❓ Nuovo</button>
 
@@ -626,7 +626,7 @@ PUNTEGGIO TOTALE: 0
 <!-- Altri personaggi (aperti con +) -->
 <div class="character-select extra-characters" id="extraCharacterSelect" style="display:none;">
 <!-- Tempostorm card (moved here as FIRST extra character) -->
-<div class="character-card disabled" data-char="tempostorm" id="card-tempostorm" style="margin-right:8px;" title="Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)">
+<div class="character-card disabled" data-char="tempostorm" id="card-tempostorm" style="margin-right:8px;" title="Sblocca facendo 65.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)">
 <h3>TEMPOSTORM</h3>
 <p>"🔋"</p>
 <div class="menu-stats"><span class="stat" id="menu-hp-tempostorm">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-tempostorm">-</span></div>
@@ -634,15 +634,15 @@ PUNTEGGIO TOTALE: 0
 <div class="lock-badge" id="tempostormLockBadge">LOCKED</div>
 </div>
 <!-- Marz card (SECOND, to the right) -->
-<div class="character-card disabled" data-char="marz" id="card-marz" title="Sblocca facendo 80.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy e Tempostorm)">
+<div class="character-card disabled" data-char="marz" id="card-marz" title="Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy e Tempostorm)">
 <h3>MARZ</h3>
 <p>"🪄"</p>
 <div class="menu-stats"><span class="stat" id="menu-hp-marz">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-marz">-</span></div>
 <div class="record-badge" id="record-marz">Record: 0</div>
 <div class="lock-badge" id="marzLockBadge">LOCKED</div>
 </div>
-<!-- Hècate card (locked until 85.000 score with all previous characters) -->
-<div class="character-card disabled" data-char="hecate" id="card-hecate" title="Sblocca facendo 85.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy, Tempostorm e Marz)">
+<!-- Hècate card (locked until 75.000 score with all previous characters) -->
+<div class="character-card disabled" data-char="hecate" id="card-hecate" title="Sblocca facendo 75.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy, Tempostorm e Marz)">
 <h3>HÈCATE</h3>
 <p>"🌘"</p>
 <div class="menu-stats"><span class="stat" id="menu-hp-hecate">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-hecate">-</span></div>
@@ -693,6 +693,15 @@ PUNTEGGIO TOTALE: 0
 
 <button class="btn" id="startBtn">INIZIA BATTAGLIA</button>
 </div>
+<!-- Hendel card (locked until record Bane >= 50.000) -->
+<div class="character-card disabled" data-char="hendel" id="card-hendel" title="Sblocca facendo almeno 50.000 punti di record con Bane">
+<h3>HENDEL</h3>
+<p>"🪨"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-hendel">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-hendel">-</span></div>
+<div class="record-badge" id="record-hendel">Record: 0</div>
+<div class="lock-badge" id="hendelLockBadge">LOCKED</div>
+</div>
+
 <!-- Pulsante immagine per aprire la guida -->
 <button aria-label="Apri guida" class="img-btn" id="guideImgBtn" style="display:inline-block;" title="Apri guida" type="button">
 <img alt="Guida" id="guideImg" src="https://i.postimg.cc/JztT9fJH/bea.png"/>
@@ -832,7 +841,7 @@ PUNTEGGIO TOTALE: 0
 </div>
 <div id="guide-marz-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
 <h4>🪄 MARZ</h4>
-<p><em>Questo personaggio si sblocca facendo <strong>80.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy e Tempostorm). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+<p><em>Questo personaggio si sblocca facendo <strong>70.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy e Tempostorm). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
 </div>
 <div id="guide-marz" style="display:none;">
 <h4>🪄 MARZ</h4>
@@ -840,12 +849,12 @@ PUNTEGGIO TOTALE: 0
 <p><strong>Statistiche</strong>: 320 HP, velocità 7.2.</p>
 <p><strong>Attacco base</strong>: spara <strong>tre fasci magici</strong> (corti) con danni diversi: <strong>40</strong>, <strong>50</strong>, <strong>60</strong>. Se ci sono almeno 3 nemici, colpisce fino a 3 bersagli differenti; se i nemici sono meno, i fasci si concentrano sugli stessi bersagli disponibili.</p>
 <p><strong>Super – Sigillo Arcano</strong>: crea esattamentte al centro della mappa un <strong>cerchi arcano </strong> che si espande molto lentamente causando molti danni ai nemici presenti all'interno inoltre Marz all'interno dell'area del sigillo ottiene <strong>un aumento del 50% della velocità</strong> finche la super resta attiva quindi per <strong>10 secondi</strong>.</p>
-<p><strong>Sblocco</strong>: 80.000 punti con tutti i personaggi precedenti.</p>
+<p><strong>Sblocco</strong>: 70.000 punti con tutti i personaggi precedenti.</p>
 </div>
 
 <div id="guide-hecate-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
 <h4>🌘 HÈCATE</h4>
-<p><em>Questo personaggio si sblocca facendo <strong>85.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy, Tempostorm e Marz). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+<p><em>Questo personaggio si sblocca facendo <strong>75.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy, Tempostorm e Marz). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
 </div>
 <div id="guide-hecate" style="display:none;">
 <h4>🌘 HÈCATE</h4>
@@ -853,8 +862,21 @@ PUNTEGGIO TOTALE: 0
 <p><strong>Statistiche</strong>: 325 HP, dash identico a Voltryx.</p>
 <p><strong>Attacco base</strong>: scocca una <strong>freccia a lunghissima distanza</strong> che infligge il danno maggiore al <strong>primo nemico colpito</strong>. Nel punto d’impatto la freccia si <strong>divide istantaneamente</strong> (effetto visivo) in <strong>tre frecce</strong> che cercano e colpiscono <strong>altri nemici</strong> (non quello già colpito).</p>
 <p><strong>Super – Richiamo Lunare</strong>: si cura di <strong>5 HP per ogni nemico presente</strong> nell’arena al momento dell’attivazione. Inoltre richiama tre lupi che attaccano i nemici con morsi letali il richiamo puo essere attivato piu volte ma in campo ci possono essere massimo 6 lupi</p>
-<p><strong>Sblocco</strong>: 85.000 punti con tutti i personaggi precedenti.</p>
+<p><strong>Sblocco</strong>: 75.000 punti con tutti i personaggi precedenti.</p>
 </div>
+
+
+<div id="guide-pdor-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🪄 PDOR</h4>
+  <p><em>Questo personaggio si sblocca facendo almeno <strong>50.000 punti</strong> di record con <strong>Marcus</strong> e <strong>Lucien</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+
+
+<div id="guide-bane-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🪓 BANE</h4>
+  <p><em>Questo personaggio si sblocca facendo almeno <strong>50.000 punti</strong> di record con <strong>Pdor</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+
 
 <div id="guide-marcus-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
   <h4>🎶 MARCUS</h4>
@@ -882,6 +904,39 @@ PUNTEGGIO TOTALE: 0
   <p><strong>Super – Furto di Bonus</strong>: Lucien “ruba” <strong>5 bonus casuali</strong> e li rilascia attorno a sé: sono <strong>prendibili</strong> dal personaggio. La Super <strong>non</strong> può generare bonus che ricaricano la Super (quindi niente <strong>Gold</strong> e niente <strong>ricarica Super</strong>).</p>
   <p><strong>Stile consigliato</strong>: entra rapido, scarica i 4 colpi e usa la Super per trasformare il fight in vantaggio di buff.</p>
   <p><strong>Sblocco</strong>: record con Marcus &gt; 25.000.</p>
+</div>
+<div id="guide-pdor" style="display:none;">
+  <h4>🪄 PDOR</h4>
+  <p><strong>Ruolo</strong>: mago a distanza con controllo e “chain” sui bersagli.</p>
+  <p><strong>Background</strong>: Pdor è un <strong>tiefling stregone</strong> che canalizza la propria magia per colpire da lontano.</p>
+  <p><strong>Attacco base – Dardo Arcano</strong>: lancia un dardo magico <strong>auto-mirato</strong> verso il nemico più vicino. Il dardo può <strong>rimbalzare/agganciarsi</strong> fino a <strong>5 bersagli</strong> diversi: a ogni salto il <strong>danno si dimezza</strong>. Ottimo per ripulire ondate e punire gruppi.</p>
+  <p><strong>Super – Luci danzanti</strong>: per circa <strong>8 secondi</strong> compaiono <strong>7 sfere luminose</strong> in posizioni casuali dell’arena. Ogni sfera emette pulsazioni ad anello: chi viene toccato dall’anello subisce danno e viene <strong>rallentato</strong> per breve tempo. Perfetta per controllare spazio, spezzare l’inseguimento e fare DPS costante se “chiudi” i nemici nelle zone.</p>
+  <p><strong>Sblocco</strong>: record ≥ 50.000 con Marcus e Lucien.</p>
+</div>
+<div id="guide-bane" style="display:none;">
+  <h4>🪓 BANE</h4>
+  <p><strong>Ruolo</strong>: melee da ondate, danni pesanti e pressione ravvicinata.</p>
+  <p><strong>Background</strong>: Bane è un <strong>barbaro</strong> armato di <strong>ascia bipenne</strong>, costruito per spaccare gruppi a corto raggio.</p>
+  <p><strong>Attacco base – Fendente d’Ascia</strong>: un colpo ampio a ventaglio (quasi a 270° davanti a te) che può colpire fino a <strong>2 nemici</strong> per swing. È ideale per eliminare rapidamente i minion e tenere pulita la zona vicino al personaggio.</p>
+  <p><strong>Super – IRA</strong>: entra in uno stato di furia per <strong>10 secondi</strong>. Durante IRA ottieni <strong>+25% velocità</strong> e l’attacco base diventa molto più rapido (cooldown ridotto). Inoltre l’attacco base riceve un <strong>moltiplicatore danni</strong> in base alle kill che hai al momento dell’attivazione, rendendo IRA devastante nelle fasi avanzate. Alla fine di IRA il ritmo dell’attacco torna verso il valore base (con l’attuale impostazione post-IRA).</p>
+  <p><strong>Sblocco</strong>: record ≥ 50.000 con Pdor.</p>
+</div>
+
+
+<div id="guide-hendel-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🪨 HENDEL</h4>
+  <p><em>Questo personaggio si sblocca facendo almeno <strong>50.000 punti</strong> di record con <strong>Bane</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+
+<div id="guide-hendel" style="display:none;">
+  <h4>🪨 HENDEL</h4>
+  <p><strong>Ruolo</strong>: bruiser difensivo da controllo ravvicinato (punisce chi prova a ingaggiarti).</p>
+  <p><strong>Statistiche</strong>: alta resistenza e presenza in mischia.</p>
+  <p><strong>Attacco base (J) – Martello Rotante</strong>: Hendel esegue uno swing a “martello” con area composta da <strong>manico vicino</strong> e <strong>testa lontana</strong>. Durante l’attacco l’hitbox ruota in <strong>senso orario</strong> per circa <strong>75°</strong> e può colpire <strong>un solo avversario</strong> per swing. Infligge <strong>120 danni</strong> e applica <strong>stordimento per 0,5s</strong> al bersaglio colpito.</p>
+  <p><strong>Passiva – Ritorsione di Pietra</strong>: ogni nemico che colpisce Hendel viene <strong>respinto lontano</strong> (knockback aumentato) e subisce <strong>30 danni</strong>. È perfetta per spezzare assalti melee e punire anche i ranged quando riesci a farli “sporcare” su di te.</p>
+  <p><strong>Super – Stone Perimeter Crush</strong>: richiama un perimetro di pietra che si <strong>chiude progressivamente</strong> sull’arena, danneggiando i nemici e comprimendoli verso il centro. Ottima per ripulire ondate, controllare boss e forzare posizionamenti sfavorevoli.</p>
+  <p><strong>Stile consigliato</strong>: gioca “frontline”. Entra nel gruppo, prendi un hit con la passiva per creare spazio, poi chiudi con J sul bersaglio più pericoloso.</p>
+  <p><strong>Sblocco</strong>: record ≥ 50.000 con Bane.</p>
 </div>
 
 <h3>11) NEMICI E PERICOLI</h3>
@@ -933,6 +988,110 @@ const JIMMY_BASE_ADDITIONAL_MULT=1.20;
 
 const URL_DEFAULT='https://i.postimg.cc/8CBFTKs4/Progetto-senza-titolo.png';
 const URL_DARK='https://i.postimg.cc/JhpWH3jJ/Copilot-20251209-232827.png';
+
+// --- Hendel SUPER: Stone Perimeter Crush ---
+let hendelCrush = null;
+function startHendelCrush(duration=3000){
+  hendelCrush = { start: Date.now(), duration, last: Date.now(), exploded:false };
+}
+function _hendelCrushBounds(){
+  const now=Date.now();
+  if(!hendelCrush) return null;
+  const t=Math.max(0, Math.min(1, (now-hendelCrush.start)/hendelCrush.duration));
+  const insetMax = Math.max(0, Math.min(canvas.width, canvas.height)/2 - 40);
+  const inset = insetMax * t;
+  return {t, left: inset, top: inset, right: canvas.width - inset, bottom: canvas.height - inset};
+}
+function updateHendelCrush(){
+  if(!hendelCrush) return;
+  const now=Date.now();
+  const dt=Math.min(0.05, Math.max(0, (now-hendelCrush.last)/1000));
+  hendelCrush.last = now;
+  const b=_hendelCrushBounds();
+  if(!b) return;
+
+  // DoT while shrinking: 20 DPS to enemies; walls push enemies toward center
+  if(enemies && enemies.length){
+    for(let i=enemies.length-1;i>=0;i--){
+      const e=enemies[i];
+      const cx=e.x+e.width/2, cy=e.y+e.height/2;
+      let pushed=false;
+      if(cx < b.left){ e.x += (b.left - cx); pushed=true; }
+      else if(cx > b.right){ e.x -= (cx - b.right); pushed=true; }
+      if(cy < b.top){ e.y += (b.top - cy); pushed=true; }
+      else if(cy > b.bottom){ e.y -= (cy - b.bottom); pushed=true; }
+
+      // clamp
+      e.x = Math.max(0, Math.min(canvas.width - e.width, e.x));
+      e.y = Math.max(0, Math.min(canvas.height - e.height, e.y));
+
+      // 20 damage per second during convergence
+      const dmg = 20 * dt;
+      if(dmg>0){
+        applyEnemyDamage(e, dmg);
+        if(pushed){
+          createParticles(cx,cy,'#8b5a2b',2,2);
+        }
+        if(e.hp<=0){
+          createParticles(e.x,e.y,'#fff176',22,6);
+          dropStellarBonusAtIndexIfNeeded(i);
+          enemies.splice(i,1);
+          applyScore(100*currentLevel);
+          addKill();
+          if(player && player._baneSuperOnKill) player._baneSuperOnKill();
+        }
+      }
+    }
+  }
+
+  // Final explosion at center
+  if(b.t>=1 && !hendelCrush.exploded){
+    hendelCrush.exploded=true;
+    const cx=canvas.width/2, cy=canvas.height/2;
+    createParticles(cx,cy,'#8b5a2b',160,8);
+    createParticles(cx,cy,'#9e9e9e',160,8);
+    shakeScreen();
+
+    if(enemies && enemies.length){
+      for(let i=enemies.length-1;i>=0;i--){
+        const e=enemies[i];
+        const final=applyEnemyDamage(e, 240);
+        showDamageNumber(e.x,e.y,Math.round(final));
+        createParticles(e.x+e.width/2,e.y+e.height/2,'#8b5a2b',26,6);
+        createParticles(e.x+e.width/2,e.y+e.height/2,'#9e9e9e',18,6);
+        if(e.hp<=0){
+          createParticles(e.x,e.y,'#fff176',26,6);
+          dropStellarBonusAtIndexIfNeeded(i);
+          enemies.splice(i,1);
+          applyScore(100*currentLevel);
+          addKill();
+          if(player && player._baneSuperOnKill) player._baneSuperOnKill();
+        }
+      }
+    }
+  }
+
+  // cleanup shortly after explosion
+  if(b.t>=1 && hendelCrush.exploded && (now-hendelCrush.start) > (hendelCrush.duration+350)){
+    hendelCrush=null;
+  }
+}
+function drawHendelCrush(){
+  if(!hendelCrush) return;
+  const b=_hendelCrushBounds();
+  if(!b) return;
+  const w=b.right-b.left, h=b.bottom-b.top;
+  ctx.save();
+  ctx.globalAlpha=0.9;
+  ctx.lineWidth=6;
+  ctx.strokeStyle='rgba(139,90,43,0.95)';
+  ctx.strokeRect(b.left,b.top,w,h);
+  ctx.globalAlpha=0.12;
+  ctx.fillStyle='rgba(139,90,43,0.35)';
+  ctx.fillRect(b.left,b.top,w,h);
+  ctx.restore();
+}
+
 
 
 const URL_FINAL='https://i.postimg.cc/pTHFKHgz/Progetto-senza-titolo-(2).png';
@@ -1051,7 +1210,7 @@ function updateMagicZone(now){
 function drawMagicZone(now){
   if(!magicZone) return;
   const t = Math.max(0, Math.min(1, (now - magicZone.startsAt) / magicZone.durationMs));
-  const pulse = 0.5 + 0.5*Math.sin(now/120);
+  const pulse = 0.5 + 0.5*Math.sin(now/240);
 
   ctx.save();
   ctx.globalAlpha = 0.18 + 0.18*(1-t);
@@ -1241,7 +1400,7 @@ function drawPdorOrbs(now){
 
   for(const orb of pdorOrbs.orbs){
     // core glow
-    const pulse = 0.55 + 0.45*Math.sin((now+orb.cx)/120);
+    const pulse = 0.55 + 0.45*Math.sin((now+orb.cx)/240);
     ctx.globalAlpha = 0.55 + 0.25*pulse;
     const grad = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, 30);
     grad.addColorStop(0, 'rgba(255,255,255,1)');
@@ -1277,7 +1436,7 @@ let lastSecondTick=Date.now();
 let levelAdvanceLock=false;
 let shakeAmount=0;
 
-const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image(),pdor:new Image(),bane:new Image()};
+const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image(),pdor:new Image(),bane:new Image(),hendel:new Image()};
 images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
@@ -1291,6 +1450,7 @@ images.marcus=new Image(); images.marcus.src='https://i.postimg.cc/MpKjhyKD/imag
 images.lucien=new Image(); images.lucien.src='https://i.postimg.cc/XvqZgdhz/Lucien-(1).png';
 images.pdor=new Image(); images.pdor.src='https://i.postimg.cc/y8nHcqnw/pdor24.png';
 images.bane=new Image(); images.bane.src='https://i.postimg.cc/Kjc7KMzX/bane.png';
+images.hendel.src='https://i.postimg.cc/g2G7LYjr/hendel.png';
 const wolfImg=new Image(); wolfImg.src='https://i.postimg.cc/4y9yBGFw/lupo.png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
 imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
@@ -1541,11 +1701,11 @@ const characterStats={
     hp:400,
     speed:7,
     damage:20,
-    range:720,
-    cooldown:650,
+    range:650,
+    cooldown:900,
     name:'Marcus',
     attackType:'marcusStream',
-    superCooldown:25000,
+    superCooldown:27000,
     superDuration:10000
   },
   lucien:{
@@ -1556,7 +1716,7 @@ const characterStats={
     cooldown:700,
     name:'Lucien',
     attackType:'lucienBlade',
-    superCooldown:22000,
+    superCooldown:21000,
     superDuration:450
   },
 
@@ -1583,6 +1743,18 @@ const characterStats={
     attackType:'axeattack',
     superCooldown:60000,
     superDuration:10000
+  },
+
+  hendel:{
+    hp:430,
+    speed:6.0*0.75, // la più bassa (o tra le più basse) del gioco
+    damage:100,
+    range:160,
+    cooldown:1100, // attacco base molto lento
+    name:'Hendel',
+    attackType:'hammerattack',
+    superCooldown:30000,
+    superDuration:3000
   },
 
   hecate:{
@@ -1650,7 +1822,7 @@ let records=loadRecords();
 
 
 function loadRecords(){
-  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0,pdor:0,bane:0};
+  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0,pdor:0,bane:0,hendel:0};
   try{
     // Primary key (current version)
     const r=localStorage.getItem(RECORDS_KEY);
@@ -1689,6 +1861,7 @@ function updateMenuRecordsDisplay(){
   document.getElementById('record-lucien').textContent=`Record: ${records.lucien||0}`;
   document.getElementById('record-pdor').textContent=`Record: ${records.pdor||0}`;
   document.getElementById('record-bane').textContent=`Record: ${records.bane||0}`;
+  const rh=document.getElementById('record-hendel'); if(rh) rh.textContent=`Record: ${records.hendel||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
@@ -1698,6 +1871,7 @@ function updateMenuRecordsDisplay(){
   updateLucienUnlockUI();
   updatePdorUnlockUI();
   updateBaneUnlockUI();
+  updateHendelUnlockUI();
   updateGuideUnlockUI();
 }
 function allThreeAbove50k(){
@@ -1781,12 +1955,12 @@ function updateSalsyUnlockUI(){
 
 
 function allPrevAbove85k(){
-  return (records.jimmy||0) >= 70000 &&
-         (records.rooney||0) >= 70000 &&
-         (records.jeff||0) >= 70000 &&
-         (records.voltryx||0) >= 70000 &&
-         (records.kouvagia||0) >= 70000 &&
-         (records.salsy||0) >= 70000;
+  return (records.jimmy||0) >= 65000 &&
+         (records.rooney||0) >= 65000 &&
+         (records.jeff||0) >= 65000 &&
+         (records.voltryx||0) >= 65000 &&
+         (records.kouvagia||0) >= 65000 &&
+         (records.salsy||0) >= 65000;
 }
 function updateTempostormUnlockUI(){
   const card=document.getElementById('card-tempostorm');
@@ -1802,20 +1976,20 @@ function updateTempostormUnlockUI(){
   }else{
     card.classList.add('disabled');
     setLockBadgeState(badge, true);
-    card.title='Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)';
+    card.title='Sblocca facendo 65.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)';
   }
 }
 
 
 
 function allPrevAboveMarz80k(){
-  return (records.jimmy||0) >= 80000 &&
-         (records.rooney||0) >= 80000 &&
-         (records.jeff||0) >= 80000 &&
-         (records.voltryx||0) >= 80000 &&
-         (records.kouvagia||0) >= 80000 &&
-         (records.salsy||0) >= 80000 &&
-         (records.tempostorm||0) >= 80000 ;
+  return (records.jimmy||0) >= 70000 &&
+         (records.rooney||0) >= 70000 &&
+         (records.jeff||0) >= 70000 &&
+         (records.voltryx||0) >= 70000 &&
+         (records.kouvagia||0) >= 70000 &&
+         (records.salsy||0) >= 70000 &&
+         (records.tempostorm||0) >= 70000 ;
 }
 function updateMarzUnlockUI(){
   const card=document.getElementById('card-marz');
@@ -1830,20 +2004,20 @@ function updateMarzUnlockUI(){
   }else{
     card.classList.add('disabled');
     setLockBadgeState(badge, true);
-    card.title='Sblocca facendo 80.000 punti con tutti i personaggi precedenti';
+    card.title='Sblocca facendo 70.000 punti con tutti i personaggi precedenti';
   }
 }
 
 
 function allPrevAboveHecate85k(){
-  return (records.jimmy||0) >= 85000 &&
-         (records.rooney||0) >= 85000 &&
-         (records.jeff||0) >= 85000 &&
-         (records.voltryx||0) >= 85000 &&
-         (records.kouvagia||0) >= 85000 &&
-         (records.salsy||0) >= 85000 &&
-         (records.tempostorm||0) >= 85000 &&
-         (records.marz||0) >= 85000;
+  return (records.jimmy||0) >= 75000 &&
+         (records.rooney||0) >= 75000 &&
+         (records.jeff||0) >= 75000 &&
+         (records.voltryx||0) >= 75000 &&
+         (records.kouvagia||0) >= 75000 &&
+         (records.salsy||0) >= 75000 &&
+         (records.tempostorm||0) >= 75000 &&
+         (records.marz||0) >= 75000;
 }
 function updateHecateUnlockUI(){
   const card=document.getElementById('card-hecate');
@@ -1859,7 +2033,7 @@ function updateHecateUnlockUI(){
   }else{
     card.classList.add('disabled');
     setLockBadgeState(badge, true);
-    card.title='Sblocca facendo 85.000 punti con tutti i personaggi precedenti';
+    card.title='Sblocca facendo 75.000 punti con tutti i personaggi precedenti';
   }
 }
 function marcusUnlockedAny(){
@@ -1913,6 +2087,27 @@ function updatePdorUnlockUI(){
 function baneUnlocked(){
   return (records.pdor||0) >= 50000;
 }
+
+function hendelUnlocked(){
+  return (records.bane||0) >= 50000;
+}
+
+function updateHendelUnlockUI(){
+  const card=document.getElementById('card-hendel');
+  const badge=document.getElementById('hendelLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = hendelUnlocked();
+  if(unlocked){
+    card.classList.remove('disabled');
+    setLockBadgeState(badge, false);
+    card.title='Hendel sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo 50.000 punti con Bane';
+  }
+}
 function updateBaneUnlockUI(){
   const card=document.getElementById('card-bane');
   const badge=document.getElementById('baneLockBadge');
@@ -1939,6 +2134,8 @@ function updateGuideUnlockUI(){
   const hUnlocked = allPrevAboveHecate85k();
   const marcUnlocked = marcusUnlockedAny();
   const lucUnlocked = lucienUnlocked();
+  const pUnlocked = pdorUnlocked();
+  const bUnlocked = baneUnlocked();
 
   const vBox=document.getElementById('guide-voltryx');
   const vLock=document.getElementById('guide-voltryx-locked');
@@ -1963,6 +2160,19 @@ function updateGuideUnlockUI(){
   const hBox=document.getElementById('guide-hecate');
   const hLock=document.getElementById('guide-hecate-locked');
   if(hBox&&hLock){ hBox.style.display = hUnlocked ? 'block' : 'none'; hLock.style.display = hUnlocked ? 'none' : 'block'; }
+
+  const pBox=document.getElementById('guide-pdor');
+  const pLock=document.getElementById('guide-pdor-locked');
+  if(pBox&&pLock){ pBox.style.display = pUnlocked ? 'block' : 'none'; pLock.style.display = pUnlocked ? 'none' : 'block'; }
+
+  const bBox=document.getElementById('guide-bane');
+  const hendBox=document.getElementById('guide-hendel');
+  const hendLock=document.getElementById('guide-hendel-locked');
+  const bLock=document.getElementById('guide-bane-locked');
+  if(bBox&&bLock){ bBox.style.display = bUnlocked ? 'block' : 'none'; bLock.style.display = bUnlocked ? 'none' : 'block'; }
+
+  const hendUnlocked = hendelUnlocked();
+  if(hendBox&&hendLock){ hendBox.style.display = hendUnlocked ? 'block' : 'none'; hendLock.style.display = hendUnlocked ? 'none' : 'block'; }
 
   const marcBox=document.getElementById('guide-marcus');
   const marcLock=document.getElementById('guide-marcus-locked');
@@ -2084,10 +2294,46 @@ class Wolf{
     this.invulnerable=false;
     this.shieldActive=false;
   }
-  takeDamage(d){
+  takeDamage(d, attacker){
     if(this.hp<=0) return;
     this.hp -= d;
     createParticles(this.x+this.width/2, this.y+this.height/2, '#90caf9', 14, 4);
+
+    // Hendel passive: every enemy that hits him is knocked back and takes 40 damage
+    if(this.type==='hendel' && attacker && typeof attacker.hp==='number'){
+      const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+      const ecx=attacker.x+attacker.width/2, ecy=attacker.y+attacker.height/2;
+      let dx=ecx-pcx, dy=ecy-pcy;
+      const len=Math.hypot(dx,dy)||1;
+      dx/=len; dy/=len;
+
+      // knockback away from Hendel
+      const kb=140;
+      attacker.x += dx*kb;
+      attacker.y += dy*kb;
+      attacker.x = Math.max(0, Math.min(canvas.width - attacker.width, attacker.x));
+      attacker.y = Math.max(0, Math.min(canvas.height - attacker.height, attacker.y));
+
+      // damage
+      const ret=40;
+      attacker.hp -= ret;
+      showDamageNumber(attacker.x, attacker.y, ret);
+      createParticles(attacker.x+attacker.width/2, attacker.y+attacker.height/2, '#8b5a2b', 10, 4);
+      createParticles(attacker.x+attacker.width/2, attacker.y+attacker.height/2, '#9e9e9e', 6, 4);
+
+      // kill handling
+      if(attacker.hp<=0 && enemies){
+        const idx=enemies.indexOf(attacker);
+        if(idx!==-1){
+          createParticles(attacker.x,attacker.y,'#fff176',28,6);
+          dropStellarBonusAtIndexIfNeeded(idx);
+          enemies.splice(idx,1);
+          applyScore(100*currentLevel);
+          addKill();
+          if(this._baneSuperOnKill) this._baneSuperOnKill();
+        }
+      }
+    }
   }
   _nearestEnemy(){
     if(!enemies || enemies.length===0) return null;
@@ -2248,6 +2494,7 @@ function spawnProjectile(opts){
     h:opts.h||0,
     angle:typeof opts.angle==='number'?opts.angle:null,
     onHitPlayer:opts.onHitPlayer||null,
+    source:opts.source||opts.owner||null,
     meta:opts.meta||null,
     excludeRef:opts.excludeRef||null
   };
@@ -2446,7 +2693,7 @@ function updateProjectiles(){
       // enemy projectiles hit player
       if(player && p.x>player.x && p.x<player.x+player.width && p.y>player.y && p.y<player.y+player.height){
         if(typeof p.onHitPlayer==='function'){ try{ p.onHitPlayer(player); }catch(e){} }
-        player.takeDamage(p.damage);
+        player.takeDamage(p.damage, p.source || null);
         return false;
       }
     }
@@ -2615,6 +2862,7 @@ function spawnLaser(opts){
     created:Date.now(),ttl:opts.ttl||1000,damage:opts.damage||15,
     kind:opts.kind||'laser', chargeMs:opts.chargeMs||0, chargedAt:Date.now()+ (opts.chargeMs||0),
     hitCooldown:220, lastHit:0,
+    owner:opts.owner||opts.source||null,
     hitOnce:false
   });
 }
@@ -2652,12 +2900,12 @@ function updateLasers(){
         if(L.kind==='oneyes'){
           if(!L.hitOnce){
             L.hitOnce=true;
-            player.takeDamage(L.damage);
+            player.takeDamage(L.damage, L.owner || null);
           }
         } else {
           if(now - L.lastHit >= L.hitCooldown){
             L.lastHit = now;
-            player.takeDamage(L.damage);
+            player.takeDamage(L.damage, L.owner || null);
           }
         }
       }
@@ -2826,7 +3074,7 @@ function spawnPickupsForLevel(level){
     const isGold=Math.random()<GOLD_PROB;
     const type=isGold ? 'gold' : pickRandomPickupType();
 
-    const x=60+Math.random()*(canvas.width-120);
+    const x=60+Math.random()*(canvas.width-240);
     const y=60+Math.random()*(canvas.height-180);
 
     const hitR = (type==='malus') ? MALUS_HIT_RADIUS : BONUS_HIT_RADIUS;
@@ -2966,8 +3214,8 @@ class Player{
     this.baneSuperUntil=0;
     this.baneSuperAttackMult=1;
     this._baneSuperAppliedCooldown=false;
-
     this.lastAttack=0;this.facingRight=true;
+    this.aimX=1;this.aimY=0; // ultima direzione di mira/movimento
     this.dashCooldown=0;this.attacking=false;this.attackTime=0;
     this.combo=0;this.damageTaken=0;this.isDashing=false;this.dashTime=0;
     this.superCooldown=s.superCooldown;this.superDuration=s.superDuration;
@@ -3052,7 +3300,6 @@ class Player{
     if(this.speedBuffUntil && now>this.speedBuffUntil){
       this.speed=this._baseSpeed;this.speedBuffUntil=0;this.isJetpacking=false;this.invulnerable=false
     }
-
     // Bane SUPER speed boost handling (independent from pickups)
     if(this.type==='bane'){
       if(this.baneSuperSpeedUntil && now < this.baneSuperSpeedUntil){
@@ -3149,6 +3396,13 @@ class Player{
       if(keys['s'])moveY=1
     }
     if(moveX!==0&&moveY!==0){moveX*=0.707;moveY*=0.707}
+
+    // aggiorna direzione di mira (per attacchi in tutte le direzioni)
+    if(moveX!==0 || moveY!==0){
+      const len=Math.hypot(moveX,moveY)||1;
+      this.aimX=moveX/len;
+      this.aimY=moveY/len;
+    }
 
     // Marz super bonus: +50% speed while inside the magic zone
     const marzZoneMult = (this.type==='marz' && isPointInsideMagicZone(this.x+this.width/2, this.y+this.height/2)) ? 1.5 : 1;
@@ -3526,8 +3780,78 @@ class Player{
         }
       }
     }
+    // handle Hendel hammer sweep (clockwise 75°)
+    if(this.type==='hendel' && this._hammerSwing){
+      const H=this._hammerSwing;
+      const now2=Date.now();
+      const t=Math.max(0, Math.min(1, (now2 - H.start)/H.duration));
+
+      // end
+      if(t>=1){ this._hammerSwing=null; }
+      else if(enemies && enemies.length){
+        // clockwise: from baseAng + arc/2 down to baseAng - arc/2
+        const angStart = H.baseAng + H.arc/2;
+        const angEnd   = H.baseAng - H.arc/2;
+        const ang = angStart + (angEnd - angStart) * t;
+
+        const cx=this.x+this.width/2;
+        const cy=this.y+this.height/2;
+
+        const cos=Math.cos(ang), sin=Math.sin(ang);
+        // rotate world->local by -ang: x' = dx*cos + dy*sin, y' = -dx*sin + dy*cos
+        // NOTE: this swing can hit ONLY ONE opponent total
+        for(let i=enemies.length-1;i>=0;i--){
+          if(H.hitDone) break;
+          const e=enemies[i];
+          if(H.hitSet && H.hitSet.has(e)) continue;
+
+          const ex=e.x+e.width/2;
+          const ey=e.y+e.height/2;
+          const dx=ex-cx, dy=ey-cy;
+
+          const lx = dx*cos + dy*sin;
+          const ly = -dx*sin + dy*cos;
+
+          const inHandle =
+            (lx >= H.handleStart && lx <= (H.handleStart + H.handleLen) &&
+             Math.abs(ly) <= (H.handleW/2));
+
+          const hs = H.headSize;
+          const hx0 = H.headOffset - hs/2;
+          const hx1 = H.headOffset + hs/2;
+          const inHead =
+            (lx >= hx0 && lx <= hx1 &&
+             Math.abs(ly) <= (hs/2));
+
+          if(inHandle || inHead){
+            if(H.hitSet) H.hitSet.add(e);
+
+            // Only one enemy per swing
+            H.hitDone = true;
+
+            // Stun for 0.5s
+            e.stunnedUntil = Date.now() + 500;
+
+            const dmgBase = 120 * (this.attackBuffMultiplier||1) * (this.baneSuperAttackMult||1);
+            const final = applyEnemyDamage(e, dmgBase);
+
+            showDamageNumber(e.x, e.y, final);
+            createParticles(ex, ey, '#ff8c1a', 18, 5);
+
+            if(e.hp<=0){
+              createParticles(e.x,e.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(i);
+              enemies.splice(i,1);
+              applyScore(100*currentLevel);
+              addKill(); if(this._baneSuperOnKill) this._baneSuperOnKill();
+            }
+          }
+        }
+      }
+    }
 
     // integrate velocity
+
     this.x+=this.vx;this.y+=this.vy;
     if(!keys['a']&&!keys['d']&&!this.isDashing&&!this.isGrappling)this.vx*=0.86;
     if(!keys['w']&&!keys['s']&&!this.isGrappling)this.vy*=0.86;
@@ -3638,7 +3962,7 @@ class Player{
                 }
               }
             };
-          })(i), i*120);
+          })(i), i*240);
         }
       } else {
         let closestEnemy=null;let closestDist=this.range;
@@ -3661,7 +3985,7 @@ class Player{
                 }
         } else if(assistTarget){
           const distA=Math.hypot((assistTarget.x-this.x),(assistTarget.y-this.y));
-          if(distA<this.range+120){
+          if(distA<this.range+240){
             const dmg=Math.round(this.damage*0.9*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
             const _dmg=dmg; const _final=applyEnemyDamage(assistTarget,_dmg);
             createParticles(assistTarget.x,assistTarget.y,'#e67e22',12,5);
@@ -3720,7 +4044,7 @@ class Player{
         });
       };
       doSwing();
-      setTimeout(doSwing, 120);
+      setTimeout(doSwing, 240);
 
 
     
@@ -3901,7 +4225,7 @@ class Player{
           }
         };
         punch();
-        setTimeout(punch, 120);
+        setTimeout(punch, 240);
       }
     }
 
@@ -4031,6 +4355,19 @@ else if(this.attackType==='magic'){
 //   76+   => +100% (x2.00)
 //   (this multiplier is independent from pickup/bonus buffs)
 // - cooldown 60s
+    if(this.type==='hendel'){
+      const sc = (this.superCooldown!=null)?this.superCooldown:35000;
+      if(now - this.lastSuper < sc) return false;
+      this.lastSuper = now;
+      
+      this.invulnerable = true;
+      this.pickupShieldUntil = now + 3000;
+      startHendelCrush(3000);
+      createParticles(this.x+this.width/2,this.y+this.height/2,'#9e9e9e',28,6);
+      shakeScreen();
+      return true;
+    }
+
     if(this.type==='bane'){
       const sc = (this.superCooldown!=null)?this.superCooldown:60000;
       if(now - this.lastSuper < sc) return false;
@@ -4043,11 +4380,36 @@ else if(this.attackType==='magic'){
       // speed boost (do not downgrade other speed buffs)
       this.speed = Math.max(this.speed, this._baseSpeed * 1.25);
 
-      // cooldown reduction for base attack (only during SUPER; restore previous cooldown after SUPER ends)
+      // cooldown reduction for base attack (only during SUPER)
       if(typeof this.cooldown === 'number'){
+        // remember current cooldown (may include other effects)
         this._preBaneSuperCooldown = this.cooldown;
-        this.cooldown = this.cooldown * 0.25;
+
+        // SUPER: faster base attack
+        this.cooldown = this._baseCooldown * 0.25;
         this._baneSuperAppliedCooldown = true;
+
+        // When SUPER ends (after `dur`), apply fatigue: +75% time between hits
+        // Use a timeout so it triggers even if a frame/update is skipped.
+        const expectedEnd = this.baneSuperUntil;
+        setTimeout(()=>{
+          // still the same player instance and the same SUPER window ended
+          if(this.type!=='bane') return;
+          if(this.baneSuperUntil && this.baneSuperUntil===expectedEnd && Date.now()>=expectedEnd){
+            this.baneSuperUntil = 0;
+            if(this._baseCooldown!=null){
+              this.cooldown = this._baseCooldown * 0.95;
+            }
+            this._preBaneSuperCooldown = undefined;
+            this._baneSuperAppliedCooldown = false;
+
+            // restore speed only if SUPER was the active boost (avoid downgrading other buffs)
+            const superSpeed = this._baseSpeed * 1.25;
+            if(this.speed <= superSpeed + 0.0001){
+              this.speed = this._baseSpeed;
+            }
+          }
+        }, dur + 20);
       }
 
       // attack multiplier for SUPER (independent from pickup/bonus buffs)
@@ -4151,7 +4513,7 @@ else if(this.attackType==='magic'){
     }
 else if(this.attackType==='hybrid'){
      
-      const dmgPerPulse = Math.round(100 * this.attackBuffMultiplier);
+      const dmgPerPulse = Math.round(120 * this.attackBuffMultiplier);
       spawnProjectile({
         x:this.x+this.width/2,y:this.y+this.height/2,
         vx:(this.facingRight?1:-1)*4,vy:0,speed:6,
@@ -4250,7 +4612,8 @@ else if(this.attackType==='tempostormLaser'){
     if(this.type==='jimmy')this.shieldActive=false
   }
 
-  takeDamage(damage){
+
+  takeDamage(damage, attacker){
     if(this.invulnerable||(this.pickupShieldUntil&&Date.now()<this.pickupShieldUntil))return;
     if(this.shieldActive&&!this.shieldBroken){
       this.shieldDurability-=1;
@@ -4258,6 +4621,8 @@ else if(this.attackType==='tempostormLaser'){
       if(this.shieldDurability<=0){this.shieldBroken=true;this.shieldBrokenTime=Date.now();this.shieldActive=false}
       return;
     }
+
+    // apply damage to Hendel (or any player)
     this.hp-=damage;
     if(!isFinite(this.hp)) this.hp = 0;
     this.hp = Math.max(0, this.hp);
@@ -4265,10 +4630,48 @@ else if(this.attackType==='tempostormLaser'){
     this.combo=0;
     applyScore(-50);
     this._baneSuperOnKill();
-                createParticles(this.x,this.y,'#c0392b',12,5);
+    createParticles(this.x,this.y,'#c0392b',12,5);
     shakeScreen();
+
+    // Hendel retaliation: any enemy that hits Hendel is knocked back and takes 30 damage
+    if(this.type==='hendel' && attacker && typeof attacker.hp==='number' && attacker.hp>0){
+      const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+      const ecx=attacker.x+attacker.width/2, ecy=attacker.y+attacker.height/2;
+      let dx=ecx-pcx, dy=ecy-pcy;
+      const len=Math.hypot(dx,dy)||1;
+      dx/=len; dy/=len;
+
+      // knockback away from Hendel (a bit of distance)
+      const kb=140;
+      attacker.x += dx*kb;
+      attacker.y += dy*kb;
+      attacker.x = Math.max(0, Math.min(canvas.width - attacker.width, attacker.x));
+      attacker.y = Math.max(0, Math.min(canvas.height - attacker.height, attacker.y));
+
+      // retaliation damage
+      const ret=30;
+      attacker.hp -= ret;
+      showDamageNumber(attacker.x, attacker.y, ret);
+      createParticles(attacker.x+attacker.width/2, attacker.y+attacker.height/2, '#8b5a2b', 10, 4);
+      createParticles(attacker.x+attacker.width/2, attacker.y+attacker.height/2, '#9e9e9e', 6, 4);
+
+      // kill handling (if retaliation finishes the enemy)
+      if(attacker.hp<=0 && enemies){
+        const idx=enemies.indexOf(attacker);
+        if(idx!==-1){
+          createParticles(attacker.x,attacker.y,'#fff176',28,6);
+          dropStellarBonusAtIndexIfNeeded(idx);
+          enemies.splice(idx,1);
+          applyScore(100*currentLevel);
+          addKill();
+          if(this._baneSuperOnKill) this._baneSuperOnKill();
+        }
+      }
+    }
+
     if(this.hp<=0 && gameState==='playing') endGame(false);
   }
+
 
   _baneSuperOnKill(){
     // Kept for compatibility: Bane SUPER attack buff is now decided at activation
@@ -4280,11 +4683,9 @@ else if(this.attackType==='tempostormLaser'){
     if(this.type!=='bane') return;
     if(this.baneSuperUntil && now >= this.baneSuperUntil){
       this.baneSuperUntil = 0;
-      // restore attack cooldown (what it was before SUPER), without removing other buffs
-      if(typeof this._preBaneSuperCooldown === 'number'){
-        this.cooldown = this._preBaneSuperCooldown;
-      } else if(this._baseCooldown!=null){
-        this.cooldown = this._baseCooldown;
+      // quando la SUPER finisce (dopo la sua durata), l'attacco base diventa più lento: +75% tempo tra i colpi
+      if(this._baseCooldown!=null){
+        this.cooldown = this._baseCooldown * 0.95;
       }
       this._preBaneSuperCooldown = undefined;
       this._baneSuperAppliedCooldown = false;
@@ -4318,6 +4719,47 @@ else if(this.attackType==='tempostormLaser'){
         ctx.drawImage(activeImg,-this.x-this.width,this.y,this.width,this.height)
       }else ctx.drawImage(activeImg,this.x,this.y,this.width,this.height);
       ctx.restore()
+    // Hendel hammer VFX (brown handle near Hendel, orange head far)
+    if(this.type==='hendel' && this._hammerSwing){
+      const H=this._hammerSwing;
+      const now=Date.now();
+      const t=Math.max(0, Math.min(1, (now - H.start)/H.duration));
+
+      const angStart = H.baseAng + H.arc/2;
+      const angEnd   = H.baseAng - H.arc/2;
+      const ang = angStart + (angEnd - angStart) * t;
+
+      const cx=this.x+this.width/2;
+      const cy=this.y+this.height/2;
+
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.rotate(ang);
+
+      // handle (brown) — closer
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = '#b07a56';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.rect(H.handleStart, -H.handleW/2, H.handleLen, H.handleW);
+      ctx.fill();
+      ctx.stroke();
+
+      // head (orange) — farther
+      ctx.globalAlpha = 0.60;
+      ctx.fillStyle = '#ff7f1f';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 7;
+      const hs = H.headSize;
+      ctx.beginPath();
+      ctx.rect(H.headOffset - hs/2, -hs/2, hs, hs);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
     } else {
       ctx.fillStyle='#3498db';ctx.fillRect(this.x,this.y,this.width,this.height)
     }
@@ -4599,6 +5041,11 @@ class Enemy{
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    // Global stun (e.g., Hendel hammer): freeze AI/movement briefly
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
     const now=Date.now();
 
@@ -4635,6 +5082,7 @@ class Enemy{
       if(dist>220 && (now-this.lastAttack)>this.attackCooldown){
         const angle=Math.atan2(dy,dx);
         spawnLaser({
+          owner:this,
           x:cx, y:cy,
           angle,
           length:650,
@@ -4663,7 +5111,7 @@ class Enemy{
 
       // melee hit
       if(dist<70 && (now-this.lastAttack)>this.attackCooldown && !player.isDashing){
-        player.takeDamage(this.damage);
+        player.takeDamage(this.damage, this);
         this.lastAttack=now;
         createParticles(player.x,player.y,'#e17055',14,4);
       }
@@ -4675,6 +5123,7 @@ class Enemy{
         const angle=Math.atan2(dy,dx);
         // charge + beam
         spawnLaser({
+          owner:this,
           x:cx, y:cy,
           angle,
           length:760,
@@ -4699,7 +5148,7 @@ class Enemy{
       // melee attack
       if(dist<60 && (now-this.lastAttack)>this.attackCooldown && !player.isDashing){
         if(this.type==='veleno'){
-          player.takeDamage(15);
+          player.takeDamage(15, this);
           // apply poison only if not already poisoned (non-stackable)
           if(!player.poisonUntil || now >= player.poisonUntil){
             player.poisonUntil = now + (this.poisonDuration||6000);
@@ -4711,7 +5160,7 @@ class Enemy{
             createParticles(player.x,player.y,'#00b894',10,3);
           }
         } else {
-          player.takeDamage(this.damage);
+          player.takeDamage(this.damage, this);
         }
         this.lastAttack=now;
       }
@@ -4742,6 +5191,10 @@ class ShooterEnemy extends Enemy{
   constructor(type,level){super(type,level);this.shootCooldown=Math.max(600,1800-level*40);this.lastShoot=0;this.bulletSpeed=5+level*0.15}
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
     const dx=(player.x+player.width/2)-(this.x+this.width/2);
     const dy=(player.y+player.height/2)-(this.y+this.height/2);
@@ -4759,7 +5212,7 @@ class ShooterEnemy extends Enemy{
       spawnProjectile({
         x:this.x+this.width/2,y:this.y+this.height/2,
         vx,vy,damage:Math.max(1,Math.round(this.damage*0.6)),ttl:4000,
-        color:'#ffd54f',radius:6,friendly:false
+        color:'#ffd54f',radius:6,friendly:false,source:this
       })
     }
   }
@@ -4786,6 +5239,10 @@ class ArcherEnemy extends Enemy{
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
     const now=Date.now();
     const dx=(player.x+player.width/2)-(this.x+this.width/2);
@@ -4818,6 +5275,8 @@ class ArcherEnemy extends Enemy{
         x:this.x+this.width/2,
         y:this.y+this.height/2,
         vx, vy,
+        friendly:false,
+        source:this,
         damage:Math.max(8, Math.round(this.damage*0.85)),
         ttl:3200,
         color:'#e0e0e0',
@@ -4860,6 +5319,10 @@ class GlacialEnemy extends Enemy{
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
     const now=Date.now();
 
@@ -4928,7 +5391,7 @@ class GlacialEnemy extends Enemy{
           const base = Math.max(3, Math.round(this.damage*0.20));
           const ramp = Math.round(insideSec * 2.2); // gradual increase
           const dmg = Math.min(22, base + ramp);
-          player.takeDamage(dmg);
+          player.takeDamage(dmg, this);
           createParticles(player.x,player.y,'#b2bec3',8,3);
         }
       } else {
@@ -4978,6 +5441,10 @@ class AttackReturnEnemy extends Enemy{
   constructor(type,level){super(type,level);this.homeX=this.x;this.homeY=this.y;this.state='idle';this.attackRange=60;this.attackCooldown=2200;this.lastAttackTime=0;this.attackSpeed=this.speed*2.5}
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
     const dx=(player.x+player.width/2)-(this.x+this.width/2);
     const dy=(player.y+player.height/2)-(this.y+this.height/2);
@@ -4990,7 +5457,7 @@ class AttackReturnEnemy extends Enemy{
     else if(this.state==='attack'){
       const nx=dx/(distToPlayer||1);const ny=dy/(distToPlayer||1);
       this.vx=nx*this.attackSpeed;this.vy=ny*this.attackSpeed;
-      if(distToPlayer<this.attackRange){player.takeDamage(this.damage);this.lastAttackTime=Date.now();this.state='returning'}
+      if(distToPlayer<this.attackRange){player.takeDamage(this.damage, this);this.lastAttackTime=Date.now();this.state='returning'}
     }
     else if(this.state==='returning'){
       const hx=this.homeX-this.x;const hy=this.homeY-this.y;const distHome=Math.hypot(hx,hy);
@@ -5031,6 +5498,10 @@ class BossEnemy extends Enemy{
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
     const dx=player.x-this.x;const dy=player.y-this.y;const dist=Math.hypot(dx,dy);
     const attackRange=60;
@@ -5040,7 +5511,7 @@ class BossEnemy extends Enemy{
     } else {
       this.vx*=0.9;this.vy*=0.9;
       if(Date.now()-this.lastAttack>this.attackCooldown&&!player.isDashing){
-        player.takeDamage(this.damage);
+        player.takeDamage(this.damage, this);
         this.lastAttack=Date.now();
       }
     }
@@ -5161,7 +5632,7 @@ class Boss5Enemy extends Enemy{
   applySwingDamage(player, now){
     // tick damage durante lo sweep, senza colpire mentre il player è in dash
     if(player.isDashing) return;
-    if(this.lastSwingTick && (now-this.lastSwingTick)<120) return;
+    if(this.lastSwingTick && (now-this.lastSwingTick)<240) return;
 
     const cx=this.x+this.width/2, cy=this.y+this.height/2;
     const px=player.x+player.width/2, py=player.y+player.height/2;
@@ -5201,12 +5672,16 @@ class Boss5Enemy extends Enemy{
 
     if(inside){
       this.lastSwingTick=now;
-      player.takeDamage(18);
+      player.takeDamage(18, this);
     }
   }
 
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
 
     const now=Date.now();
@@ -5262,7 +5737,7 @@ class Boss5Enemy extends Enemy{
     if(dist<55 && !player.isDashing && !this.swingActive){
       if(!this._lastTouch) this._lastTouch=0;
       if(now-this._lastTouch>900){
-        player.takeDamage(14);
+        player.takeDamage(14, this);
         this._lastTouch=now;
       }
     }
@@ -5447,6 +5922,7 @@ return;
   }
 
   if(player) player.update();
+    updateHendelCrush();
   enemies.forEach(e=>{e.update(player)});
   updateWolves();
   // Marz Super zone tick damage/expansion
@@ -5504,7 +5980,8 @@ return;
   drawFuriaWaves();
   drawIraFX();
   drawParticles();
-  drawPickups();
+  drawHendelCrush();
+    drawPickups();
 
   ctx.restore();
 
@@ -5656,7 +6133,19 @@ document.querySelectorAll('.character-card').forEach(card=>{
         lockText.innerText = "Personaggio BLOCCATO\nSblocca facendo 50.000\ncon PDOR";
         lockBox.style.display='block';
       }
+      
+    if(char==='hendel' && !hendelUnlocked()){
+      updateHendelUnlockUI();
+      // show lock message popup
+      const lockBox=document.getElementById('lockMessage');
+      const lockText=document.getElementById('lockText');
+      if(lockBox && lockText){
+        lockText.innerText = "personaggio bloccato  si sblocca facendo 50.000 con Bane";
+        lockBox.style.display='block';
+      }
       return;
+    }
+return;
     }
 
     document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
@@ -5733,10 +6222,16 @@ function populateMenuStatsAll(){
   updateMenuStatsDisplay('rooney');
   updateMenuStatsDisplay('jeff');
   updateMenuStatsDisplay('voltryx');
-updateMenuStatsDisplay('kouvagia');
+  updateMenuStatsDisplay('kouvagia');
   updateMenuStatsDisplay('salsy');
   updateMenuStatsDisplay('tempostorm');
   updateMenuStatsDisplay('marz');
+  updateMenuStatsDisplay('hecate');
+  updateMenuStatsDisplay('marcus');
+  updateMenuStatsDisplay('lucien');
+  updateMenuStatsDisplay('pdor');
+  updateMenuStatsDisplay('bane');
+  updateMenuStatsDisplay('hendel');
 }
 populateMenuStatsAll();
 updateMenuRecordsDisplay();
@@ -6352,8 +6847,57 @@ Player.prototype.attack = function(){
 
     return true;
   }
+    
+  if(this.type==='hendel'){
+    const now=Date.now();
+    if(now - this.lastAttack < this.cooldown || this.isDoingSuper) return false;
+    this.lastAttack = now;
+    this.attacking=true; this.attackTime=now;
 
-  return _playerAttack.call(this);
+    // auto-aim verso il nemico più vicino (se presente)
+    if(enemies && enemies.length){
+      const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+      let best=null, bestD=Infinity;
+      for(const e of enemies){
+        const ecx=e.x+e.width/2, ecy=e.y+e.height/2;
+        const d=(ecx-pcx)*(ecx-pcx) + (ecy-pcy)*(ecy-pcy);
+        if(d<bestD){bestD=d; best=e;}
+      }
+      if(best){
+        const ecx=best.x+best.width/2, ecy=best.y+best.height/2;
+        let dx=ecx-pcx, dy=ecy-pcy;
+        const len=Math.hypot(dx,dy)||1;
+        dx/=len; dy/=len;
+        this.aimX=dx; this.aimY=dy;
+        this.facingRight = dx>=0;
+      }
+    }
+
+    // NEW BASE ATTACK (J): hammer sweep clockwise 75° — damage 100 on hit
+    const baseAng = Math.atan2(this.aimY||0, this.aimX||1);
+    const arc = 75 * Math.PI / 180;
+
+    this._hammerSwing = {
+      start: now,
+      duration: 260,
+      baseAng,
+      arc,
+      // geometry (in local space: +x = forward)
+      handleStart: 22,
+      handleLen: 118,
+      handleW: 30,
+      headOffset: 196,
+      headSize: 120,
+      hitSet: new WeakSet(),
+      hitDone: false
+    };
+
+    const cx=this.x+this.width/2, cy=this.y+this.height/2;
+    createParticles(cx,cy,'#bdbdbd',14,5);
+    shakeScreen();
+    return true;
+  }
+return _playerAttack.call(this);
 };
 
 // ------------------ SUPER PATCH ------------------
@@ -6652,9 +7196,9 @@ const unlockMessages = {
   voltryx: "Personaggio BLOCCATO\nSblocca facendo 45.000 punti\ncon Jimmy, Rooney e Jeff",
   kouvagia: "Personaggio BLOCCATO\nSblocca facendo 50.000 punti\ncon Voltryx",
   salsy: "Personaggio BLOCCATO\nSblocca facendo 60.000 punti\ncon tutti i personaggi precedenti",
-  tempostorm: "Personaggio BLOCCATO\nSblocca facendo 70.000 punti\ncon tutti i personaggi precedenti",
-  marz: "Personaggio BLOCCATO\nSblocca facendo 80.000 punti\ncon tutti i personaggi precedenti",
-  hecate: "Personaggio BLOCCATO\nSblocca facendo 85.000 punti\ncon tutti i personaggi precedenti",
+  tempostorm: "Personaggio BLOCCATO\nSblocca facendo 65.000 punti\ncon tutti i personaggi precedenti",
+  marz: "Personaggio BLOCCATO\nSblocca facendo 70.000 punti\ncon tutti i personaggi precedenti",
+  hecate: "Personaggio BLOCCATO\nSblocca facendo 75.000 punti\ncon tutti i personaggi precedenti",
   lucien: "Personaggio BLOCCATO\nSblocca facendo un record con Marcus\nsuperiore a 25.000",
   pdor: "Personaggio BLOCCATO\nsi sblocca facendo 50.000\ncon marcus e lucien",
   bane: "Personaggio BLOCCATO\nSblocca facendo 50.000\ncon PDOR"
