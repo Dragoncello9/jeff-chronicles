@@ -437,6 +437,140 @@
   font-weight:bold;
 }
 
+
+/* === Account Level UI === */
+#accountLevelBtn{
+  position:fixed;
+  left:14px;
+  bottom:14px;
+  z-index:9999;
+  padding:12px 14px 10px 14px;
+  border-radius:16px;
+  border:2px solid rgba(255,255,255,0.35);
+  background:linear-gradient(180deg, rgba(80,20,140,0.95), rgba(20,10,40,0.92));
+  color:#fff;
+  cursor:pointer;
+  font-weight:900;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  font-family: "Orbitron","Rajdhani","Trebuchet MS","Segoe UI",sans-serif;
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,0.35) inset,
+    0 8px 24px rgba(0,0,0,0.55),
+    0 0 20px rgba(155,89,182,0.45);
+  text-shadow:
+    0 2px 0 rgba(0,0,0,0.55),
+    0 0 10px rgba(241,196,15,0.35);
+  user-select:none;
+}
+#accountLevelBtn:hover{
+  transform:translateY(-1px);
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,0.35) inset,
+    0 10px 28px rgba(0,0,0,0.58),
+    0 0 26px rgba(241,196,15,0.30),
+    0 0 22px rgba(155,89,182,0.55);
+}
+#accountLevelBtn:active{
+  transform:translateY(1px) scale(0.99);
+}
+#accountLevelBtn::after{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:14px;
+  pointer-events:none;
+  background:linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
+  mix-blend-mode:screen;
+  opacity:0.75;
+}
+#accountLevelBtn .sub{
+  display:block;
+  font-weight:700;
+  font-size:12px;
+  opacity:0.9;
+  margin-top:3px;
+  letter-spacing:0.5px;
+}
+@keyframes accPulse{
+  0%{ filter:brightness(1); }
+  50%{ filter:brightness(1.08); }
+  100%{ filter:brightness(1); }
+}
+#accountLevelBtn{
+  animation:accPulse 2.2s ease-in-out infinite;
+}
+#accountModal{
+  position:fixed; inset:0;
+  display:none;
+  z-index:10000;
+  background:rgba(0,0,0,0.72);
+  align-items:center;
+  justify-content:center;
+}
+#accountModal .panel{
+  width:min(720px, 92vw);
+  max-height:min(80vh, 760px);
+  overflow:auto;
+  background:rgba(20,20,20,0.92);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 0 30px rgba(0,0,0,0.45);
+}
+#accountModal h3{margin:0 0 10px 0}
+#accountModal .row{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:10px 0}
+#accountModal .barWrap{
+  width:100%;
+  height:18px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(255,255,255,0.08);
+  overflow:hidden;
+}
+#accountModal .barFill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, rgba(46,204,113,0.95), rgba(241,196,15,0.95));
+}
+#accountModal .mission{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(255,255,255,0.06);
+  margin:8px 0;
+}
+#accountModal .mission .meta{opacity:0.9;font-size:14px}
+#accountModal .mission .prog{opacity:0.75;font-size:12px;margin-top:4px}
+#accountModal .claimBtn{
+  padding:8px 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+  cursor:not-allowed;
+  opacity:0.55;
+  font-weight:700;
+}
+#accountModal .claimBtn.ready{
+  background:rgba(46,204,113,0.28);
+  border-color:rgba(46,204,113,0.75);
+  cursor:pointer;
+  opacity:1;
+}
+#accountModal .closeBtn{
+  padding:8px 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+  cursor:pointer;
+}
+
 </style>
 
 <!-- Injected CSS: compact grid selected state -->
@@ -507,7 +641,7 @@
 <div id="bgDark"></div>
 <div id="fadeOverlay"></div>
 <div id="gameContainer">
-<canvas height="700" id="gameCanvas" width="1200"></canvas>
+<canvas height="780" id="gameCanvas" width="1320"></canvas>
 
 <div id="totalScoreDisplay" style="
   position:absolute;
@@ -574,6 +708,7 @@ PUNTEGGIO TOTALE: 0
     <button data-target="pdor">PDOR ❤️‍🔥<br><small class="btn-record" id="btnrec-pdor">R: 0</small></button>
 <button data-target="bane">BANE 🪓<br><small class="btn-record" id="btnrec-bane">R: 0</small></button>
 <button data-target="hendel">HENDEL 🪨<br><small class="btn-record" id="btnrec-hendel">R: 0</small></button>
+<button data-target="kaerith">KAERITH 🐉<br><small class="btn-record" id="btnrec-kaerith">R: 0</small></button>
 <button class="btn character-btn disabled" data-target="extra2" disabled>❓ Nuovo</button>
 <button class="btn character-btn disabled" data-target="extra3" disabled>❓ Nuovo</button>
 
@@ -700,6 +835,16 @@ PUNTEGGIO TOTALE: 0
 <div class="menu-stats"><span class="stat" id="menu-hp-hendel">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-hendel">-</span></div>
 <div class="record-badge" id="record-hendel">Record: 0</div>
 <div class="lock-badge" id="hendelLockBadge">LOCKED</div>
+
+<!-- Kaerith card (locked until record Hendel >= 40.000) -->
+<div class="character-card disabled" data-char="kaerith" id="card-kaerith" title="Sblocca facendo 40.000 punti con Hendel">
+<h3>KAERITH 🐉</h3>
+<p>"🐉"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-kaerith">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-kaerith">-</span></div>
+<div class="record-badge" id="record-kaerith">Record: 0</div>
+<div class="lock-badge" id="kaerithLockBadge">LOCKED</div>
+</div>
+
 </div>
 
 <!-- Pulsante immagine per aprire la guida -->
@@ -717,6 +862,7 @@ PUNTEGGIO TOTALE: 0
 <div class="end-screen" id="endScreen" style="display:none;">
 <h1 id="endTitle">GAME OVER</h1>
 <p id="endMessage">Score Finale: 0</p>
+<p id="endKills">Kill: 0</p>
 <p id="endSub">Hai raggiunto il Livello 1</p>
 <p id="recordMessage">Record Personaggio: 0</p>
 <button class="btn" id="restartBtn">RIPROVA</button>
@@ -861,7 +1007,7 @@ PUNTEGGIO TOTALE: 0
 <p><strong>Ruolo</strong>: tiratrice a lunga distanza + sustain tramite Super.</p>
 <p><strong>Statistiche</strong>: 325 HP, dash identico a Voltryx.</p>
 <p><strong>Attacco base</strong>: scocca una <strong>freccia a lunghissima distanza</strong> che infligge il danno maggiore al <strong>primo nemico colpito</strong>. Nel punto d’impatto la freccia si <strong>divide istantaneamente</strong> (effetto visivo) in <strong>tre frecce</strong> che cercano e colpiscono <strong>altri nemici</strong> (non quello già colpito).</p>
-<p><strong>Super – Richiamo Lunare</strong>: si cura di <strong>5 HP per ogni nemico presente</strong> nell’arena al momento dell’attivazione. Inoltre richiama tre lupi che attaccano i nemici con morsi letali il richiamo puo essere attivato piu volte ma in campo ci possono essere massimo 6 lupi</p>
+<p><strong>Super – Richiamo Lunare</strong>: si cura di <strong>5 HP per ogni nemico presente</strong> nell’arena al momento dell’attivazione. Inoltre richiama tre lupi che attaccano i nemici con morsi letali il richiamo puo essere attivato piu volte ma in campo ci possono essere massimo 3 lupi</p>
 <p><strong>Sblocco</strong>: 75.000 punti con tutti i personaggi precedenti.</p>
 </div>
 
@@ -937,6 +1083,20 @@ PUNTEGGIO TOTALE: 0
   <p><strong>Super – Stone Perimeter Crush</strong>: richiama un perimetro di pietra che si <strong>chiude progressivamente</strong> sull’arena, danneggiando i nemici e comprimendoli verso il centro. Ottima per ripulire ondate, controllare boss e forzare posizionamenti sfavorevoli.</p>
   <p><strong>Stile consigliato</strong>: gioca “frontline”. Entra nel gruppo, prendi un hit con la passiva per creare spazio, poi chiudi con J sul bersaglio più pericoloso.</p>
   <p><strong>Sblocco</strong>: record ≥ 50.000 con Bane.</p>
+
+<div id="guide-kaerith-locked" style="display:block;padding:12px;border-radius:10px;border:1px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);margin-top:10px;">
+  <h4>🐉 KAERITH</h4>
+  <p><em>Questo personaggio si sblocca facendo almeno <strong>40.000 punti</strong> di record con <strong>Hendel</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+
+<div id="guide-kaerith" style="display:none;">
+  <h4>🐉 KAERITH</h4>
+  <p><strong>Specie</strong>: dragonide (dragonide da battaglia, controlla il campo con fiammate).</p>
+  <p><strong>Statistiche</strong>: <strong>410 HP</strong> (molto resistente), mobilità media.</p>
+  <p><strong>Attacco base (J) – Fiammata Continua</strong>: Kaerith sprigiona una <strong>fiammata</strong> in cono davanti a sé (stile i nemici dei livelli 23–24). Finché la fiammata è attiva, il danno è a <strong>tick ripetuti</strong> e <strong>aumenta progressivamente</strong> durante la stessa emissione: i primi istanti bruciano meno, poi la fiammata “carica” e diventa più devastante.</p>
+  <p><strong>Super (K) – Inferno Totale</strong>: infuoca l’intero campo per <strong>9s</strong> con un overlay visivo di fiamme. Durante questo tempo tutti i nemici ottengono lo status <strong>Infuocato</strong>: ogni secondo subiscono danno progressivo che parte da <strong>5</strong> e sale fino a un massimo di <strong>25</strong> (cap). <strong>Ricarica: 21s</strong>.</p>
+</div>
+
 </div>
 
 <h3>11) NEMICI E PERICOLI</h3>
@@ -1055,7 +1215,7 @@ function updateHendelCrush(){
     if(enemies && enemies.length){
       for(let i=enemies.length-1;i>=0;i--){
         const e=enemies[i];
-        const final=applyEnemyDamage(e, 240);
+        const final=applyEnemyDamage(e, 330);
         showDamageNumber(e.x,e.y,Math.round(final));
         createParticles(e.x+e.width/2,e.y+e.height/2,'#8b5a2b',26,6);
         createParticles(e.x+e.width/2,e.y+e.height/2,'#9e9e9e',18,6);
@@ -1084,7 +1244,7 @@ function drawHendelCrush(){
   ctx.save();
   ctx.globalAlpha=0.9;
   ctx.lineWidth=6;
-  ctx.strokeStyle='rgba(139,90,43,0.95)';
+  ctx.strokeStyle='rgba(139,61,43,0.95)';
   ctx.strokeRect(b.left,b.top,w,h);
   ctx.globalAlpha=0.12;
   ctx.fillStyle='rgba(139,90,43,0.35)';
@@ -1098,6 +1258,26 @@ const URL_FINAL='https://i.postimg.cc/pTHFKHgz/Progetto-senza-titolo-(2).png';
 const URL_ICE='https://i.postimg.cc/K8pgVhTx/icebiome1.png';
 const canvas=document.getElementById('gameCanvas');
 const ctx=canvas.getContext('2d');
+
+
+function getPlayBounds(){
+  // Limiti reali del campo giocabile (non per forza identici al canvas).
+  // Rispetta il margine HUD in basso e, se attivo, lo shrink di Hendel Crush.
+  const bottomLimit = canvas.height-30;
+  let b = {left:0, top:0, right:canvas.width, bottom:bottomLimit};
+
+  // Hendel Crush restringe l'arena: usiamo i suoi bounds se presenti
+  try{
+    if(typeof _hendelCrushBounds==='function'){
+      const hb=_hendelCrushBounds();
+      if(hb && typeof hb.left==='number'){
+        b = {left:hb.left, top:hb.top, right:hb.right, bottom:Math.min(hb.bottom, bottomLimit)};
+      }
+    }
+  }catch(e){}
+
+  return b;
+}
 
 const bgDefault=document.getElementById('bgDefault');
 const bgDark=document.getElementById('bgDark');
@@ -1137,6 +1317,7 @@ function applyScore(delta){
 
 function addKill(n=1){
   kills = Math.max(0, (kills||0) + (n||1));
+  try{ addAccountKill(selectedCharacter, n||1); }catch(e){}
 }
 
 
@@ -1260,7 +1441,7 @@ function startPdorOrbs(owner, now){
   const margin = 70;
   for(let i=0;i<count;i++){
     const cx = margin + Math.random()*(canvas.width - margin*2);
-    const cy = margin + Math.random()*((canvas.height-50) - margin*2);
+    const cy = margin + Math.random()*((canvas.height-30) - margin*2);
     const orbitR = 26 + Math.random()*34;
     const ang0 = Math.random()*Math.PI*2;
     const angSpeed = (Math.random()<0.5?-1:1) * (0.036 + Math.random()*0.028); // rad/ms
@@ -1436,7 +1617,7 @@ let lastSecondTick=Date.now();
 let levelAdvanceLock=false;
 let shakeAmount=0;
 
-const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image(),pdor:new Image(),bane:new Image(),hendel:new Image()};
+const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image(),pdor:new Image(),bane:new Image(),hendel:new Image(),kaerith:new Image()};
 images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
@@ -1451,6 +1632,7 @@ images.lucien=new Image(); images.lucien.src='https://i.postimg.cc/XvqZgdhz/Luci
 images.pdor=new Image(); images.pdor.src='https://i.postimg.cc/y8nHcqnw/pdor24.png';
 images.bane=new Image(); images.bane.src='https://i.postimg.cc/Kjc7KMzX/bane.png';
 images.hendel.src='https://i.postimg.cc/g2G7LYjr/hendel.png';
+images.kaerith.src='https://i.postimg.cc/pLBZRcHy/Kaerith.png';
 const wolfImg=new Image(); wolfImg.src='https://i.postimg.cc/4y9yBGFw/lupo.png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
 imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
@@ -1748,13 +1930,25 @@ const characterStats={
   hendel:{
     hp:430,
     speed:6.0*0.75, // la più bassa (o tra le più basse) del gioco
-    damage:100,
+    damage:120,
     range:160,
     cooldown:1100, // attacco base molto lento
     name:'Hendel',
     attackType:'hammerattack',
     superCooldown:30000,
     superDuration:3000
+  },
+
+  kaerith:{
+    hp:410,
+    speed:8.3*0.75,
+    damage:0,
+    range:300,
+    cooldown:1000, // fiammata continua
+    name:'Kaerith 🐉',
+    attackType:'kaerithFlame',
+    superCooldown:21000,
+    superDuration:6000
   },
 
   hecate:{
@@ -1799,7 +1993,173 @@ const levelConfigs=[
   ,{enemyType:'boss5',enemyHP:800,enemyDamage:32,enemySpeed:2.2*0.75,time:200,enemyCount:1} // Level 25 (Boss V)
 ];
 
-const RECORDS_KEY='pf_records_v19'; 
+const RECORDS_KEY='pf_records_v19';
+
+/* === Account Level System (v1) === */
+const ACCOUNT_KEY = "pf_account_v1";
+
+function defaultAccount(){
+  return {
+    level: 1,
+    xp: 0,
+    kills: { jimmy:0, rooney:0, jeff:0 },
+    claimed: { m_jimmy:false, m_rooney:false, m_jeff:false }
+  };
+}
+
+let account = null;
+
+function loadAccount(){
+  try{
+    const raw = localStorage.getItem(ACCOUNT_KEY);
+    if(!raw){ account = defaultAccount(); return; }
+    const obj = JSON.parse(raw);
+    account = Object.assign(defaultAccount(), obj||{});
+    account.kills = Object.assign(defaultAccount().kills, account.kills||{});
+    account.claimed = Object.assign(defaultAccount().claimed, account.claimed||{});
+  }catch(e){
+    account = defaultAccount();
+  }
+}
+
+function saveAccount(){
+  try{ localStorage.setItem(ACCOUNT_KEY, JSON.stringify(account||defaultAccount())); }catch(e){}
+}
+
+function xpNeededForLevel(lv){
+  return 1000 + (Math.max(1,lv)-1)*250;
+}
+
+function addAccountXp(amount){
+  if(!account) loadAccount();
+  account.xp = Math.max(0, (account.xp||0) + Math.max(0, amount||0));
+  while(account.xp >= xpNeededForLevel(account.level)){
+    account.xp -= xpNeededForLevel(account.level);
+    account.level += 1;
+  }
+  saveAccount();
+  updateAccountUI();
+}
+
+function addAccountKill(charKey, n=1){
+  if(!account) loadAccount();
+  if(!charKey) return;
+  if(!account.kills) account.kills = {};
+  if(typeof account.kills[charKey] !== 'number') account.kills[charKey] = 0;
+  account.kills[charKey] += Math.max(0, n||1);
+  saveAccount();
+  try{ const modal=document.getElementById('accountModal'); if(modal && modal.style.display==='flex'){ updateAccountUI(); } }catch(e){}
+}
+
+function getMissions(){
+  return [
+    { id:'m_jimmy', label:"Fai 1000 kill con Jimmy", char:'jimmy', goal:1000, xp:350 },
+    { id:'m_rooney', label:"Fai 1000 kill con Rooney", char:'rooney', goal:1000, xp:350 },
+    { id:'m_jeff', label:"Fai 1000 kill con Jeff", char:'jeff', goal:1000, xp:350 },
+  ];
+}
+
+function updateAccountUI(){
+  if(!account) loadAccount();
+  const btn = document.getElementById('accountLevelBtn');
+  const lvEl = document.getElementById('accountLevelValue');
+  const xpText = document.getElementById('accountXpText');
+
+  const level = account.level||1;
+  const need = xpNeededForLevel(level);
+  const xp = account.xp||0;
+
+  if(lvEl) lvEl.textContent = String(level);
+  if(xpText) xpText.textContent = `${xp}/${need} XP`;
+
+  const shouldShow = (startScreen && startScreen.style.display!=='none') || (mainMenuScreen && mainMenuScreen.style.display!=='none');
+  if(btn) btn.style.display = shouldShow ? 'block' : 'none';
+
+  const lh=document.getElementById('accLevelHeader');
+  const xh=document.getElementById('accXpHeader');
+  const bar=document.getElementById('accXpBar');
+  if(lh) lh.textContent=String(level);
+  if(xh) xh.textContent = `${xp}/${need} XP`;
+  if(bar){
+    const pct = Math.max(0, Math.min(1, need? (xp/need) : 0));
+    bar.style.width = `${Math.round(pct*100)}%`;
+  }
+
+  const list=document.getElementById('missionsList');
+  if(list){
+    const missions=getMissions();
+    list.innerHTML='';
+    for(const m of missions){
+      const k = (account.kills && typeof account.kills[m.char]==='number') ? account.kills[m.char] : 0;
+      const done = k >= m.goal;
+      const claimed = !!(account.claimed && account.claimed[m.id]);
+      const wrap=document.createElement('div');
+      wrap.className='mission';
+
+      const left=document.createElement('div');
+      left.className='meta';
+      left.innerHTML = `<div><strong>${m.label}</strong> <span style="opacity:0.75;">(+${m.xp} XP)</span></div>
+                        <div class="prog">${Math.min(k,m.goal)}/${m.goal} kill</div>`;
+
+      const btn=document.createElement('button');
+      btn.className='claimBtn';
+      btn.textContent = claimed ? 'Riscattato' : 'Riscatta';
+      if(done && !claimed){
+        btn.classList.add('ready');
+        btn.disabled=false;
+      }else{
+        btn.disabled=true;
+      }
+      if(claimed){
+        btn.style.opacity='0.65';
+        btn.style.cursor='default';
+        btn.style.background='rgba(46,204,113,0.18)';
+        btn.style.borderColor='rgba(46,204,113,0.35)';
+      }
+
+      btn.addEventListener('click', ()=>{
+        if(!account) loadAccount();
+        const kk = (account.kills && typeof account.kills[m.char]==='number') ? account.kills[m.char] : 0;
+        if(kk < m.goal) return;
+        if(account.claimed && account.claimed[m.id]) return;
+        account.claimed[m.id]=true;
+        saveAccount();
+        addAccountXp(m.xp);
+        updateAccountUI();
+      });
+
+      wrap.appendChild(left);
+      wrap.appendChild(btn);
+      list.appendChild(wrap);
+    }
+  }
+}
+
+function openAccountModal(){
+  const modal=document.getElementById('accountModal');
+  if(modal){
+    modal.style.display='flex';
+    updateAccountUI();
+  }
+}
+function closeAccountModal(){
+  const modal=document.getElementById('accountModal');
+  if(modal) modal.style.display='none';
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  loadAccount();
+  const btn=document.getElementById('accountLevelBtn');
+  const close=document.getElementById('closeAccountModal');
+  const modal=document.getElementById('accountModal');
+
+  if(btn) btn.addEventListener('click', openAccountModal);
+  if(close) close.addEventListener('click', closeAccountModal);
+  if(modal) modal.addEventListener('click', (e)=>{ if(e.target===modal) closeAccountModal(); });
+
+  updateAccountUI();
+});
+ 
 // Backward compatibility: try older keys used by previous versions
 const LEGACY_RECORDS_KEYS = ['pf_records_v18','pf_records_v17','pf_records_v16','pf_records_v15','pf_records'];
 // bumped key to include tempostormnclude salsy + new unlock rules // bumped key to include voltryx
@@ -1822,7 +2182,7 @@ let records=loadRecords();
 
 
 function loadRecords(){
-  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0,pdor:0,bane:0,hendel:0};
+  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0,pdor:0,bane:0,hendel:0,kaerith:0};
   try{
     // Primary key (current version)
     const r=localStorage.getItem(RECORDS_KEY);
@@ -1862,6 +2222,8 @@ function updateMenuRecordsDisplay(){
   document.getElementById('record-pdor').textContent=`Record: ${records.pdor||0}`;
   document.getElementById('record-bane').textContent=`Record: ${records.bane||0}`;
   const rh=document.getElementById('record-hendel'); if(rh) rh.textContent=`Record: ${records.hendel||0}`;
+  const rk=document.getElementById('record-kaerith'); if(rk) rk.textContent=`Record: ${records.kaerith||0}`;
+  const brk=document.getElementById('btnrec-kaerith'); if(brk) brk.textContent=`R: ${records.kaerith||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
@@ -1872,6 +2234,7 @@ function updateMenuRecordsDisplay(){
   updatePdorUnlockUI();
   updateBaneUnlockUI();
   updateHendelUnlockUI();
+  updateKaerithUnlockUI();
   updateGuideUnlockUI();
 }
 function allThreeAbove50k(){
@@ -2108,6 +2471,29 @@ function updateHendelUnlockUI(){
     card.title='Sblocca facendo 50.000 punti con Bane';
   }
 }
+
+
+function kaerithUnlocked(){
+  return (records.hendel||0) >= 40000;
+}
+
+function updateKaerithUnlockUI(){
+  const card=document.getElementById('card-kaerith');
+  const badge=document.getElementById('kaerithLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = kaerithUnlocked();
+  if(unlocked){
+    card.classList.remove('disabled');
+    setLockBadgeState(badge, false);
+    card.title='Kaerith sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo 40.000 punti con Hendel';
+  }
+}
+
 function updateBaneUnlockUI(){
   const card=document.getElementById('card-bane');
   const badge=document.getElementById('baneLockBadge');
@@ -2136,6 +2522,7 @@ function updateGuideUnlockUI(){
   const lucUnlocked = lucienUnlocked();
   const pUnlocked = pdorUnlocked();
   const bUnlocked = baneUnlocked();
+  const kaeUnlocked = kaerithUnlocked();
 
   const vBox=document.getElementById('guide-voltryx');
   const vLock=document.getElementById('guide-voltryx-locked');
@@ -2173,6 +2560,11 @@ function updateGuideUnlockUI(){
 
   const hendUnlocked = hendelUnlocked();
   if(hendBox&&hendLock){ hendBox.style.display = hendUnlocked ? 'block' : 'none'; hendLock.style.display = hendUnlocked ? 'none' : 'block'; }
+
+  const kaeBox=document.getElementById('guide-kaerith');
+  const kaeLock=document.getElementById('guide-kaerith-locked');
+  if(kaeBox&&kaeLock){ kaeBox.style.display = kaeUnlocked ? 'block' : 'none'; kaeLock.style.display = kaeUnlocked ? 'none' : 'block'; }
+
 
   const marcBox=document.getElementById('guide-marcus');
   const marcLock=document.getElementById('guide-marcus-locked');
@@ -2278,14 +2670,14 @@ function showDamageNumber(x,y,dmg){
 }
 
 // ===== Lupi amichevoli (HÈCATE SUPER) =====
-const WOLF_MAX = 6;
+const WOLF_MAX = 3;
 class Wolf{
   constructor(x,y){
     this.x=x; this.y=y;
     this.width=72; this.height=72;
-    this.maxHP=90; this.hp=90;
+    this.maxHP=51; this.hp=51;
     this.speed=3.5; // movimento rapido ma non OP
-    this.damage=30;
+    this.damage=16;
     this.range=70; // morso ravvicinato
     this.cooldown=700;
     this.lastAttack=0;
@@ -2296,6 +2688,9 @@ class Wolf{
   }
   takeDamage(d, attacker){
     if(this.hp<=0) return;
+
+    // Kaerith SUPER: 25% damage reduction while active
+
     this.hp -= d;
     createParticles(this.x+this.width/2, this.y+this.height/2, '#90caf9', 14, 4);
 
@@ -2348,8 +2743,7 @@ class Wolf{
   }
   update(){
     const now=Date.now();
-    this._updateBaneSuperState(now);
-    const target=this._nearestEnemy();
+const target=this._nearestEnemy();
     if(!target) return;
 
     const cx=this.x+this.width/2, cy=this.y+this.height/2;
@@ -2436,6 +2830,8 @@ function drawWolves(){
 // I nemici attaccano i lupi se più vicini del player
 function getPreferredTarget(enemy, playerObj){
   try{
+    // Boss sempre focalizzati sul player (evita "zone sicure" quando i lupi attirano l'aggro)
+    if(enemy && typeof enemy.type==='string' && enemy.type.startsWith('boss')) return playerObj;
     if(!wolves || wolves.length===0) return playerObj;
     if(!enemy || !playerObj) return playerObj;
 
@@ -2475,6 +2871,14 @@ function applyEnemyDamage(enemy, baseDmg){
 function shakeScreen(){shakeAmount=8}
 
 // Extended projectile to support friendly, AoE, homing, pulse damage
+
+
+function aabbDist2(ax,ay,aw,ah,bx,by,bw,bh){
+  // distanza minima tra due rettangoli (0 se overlap)
+  const dx = (ax+aw < bx) ? (bx - (ax+aw)) : (bx+bw < ax) ? (ax - (bx+bw)) : 0;
+  const dy = (ay+ah < by) ? (by - (ay+ah)) : (by+bh < ay) ? (ay - (by+bh)) : 0;
+  return dx*dx + dy*dy;
+}
 function spawnProjectile(opts){
   // opts: {x,y,vx,vy,damage,ttl,color,radius,friendly,aoeRadius,aoeFullDamage,homing,speed,isVoltryxSuper,pulseInterval,lastPulse,targetRef,explodeOnExpire}
   const p={
@@ -2696,6 +3100,19 @@ function updateProjectiles(){
         player.takeDamage(p.damage, p.source || null);
         return false;
       }
+
+      // enemy projectiles can hit wolves (Hècate summon)
+      if(wolves && wolves.length){
+        for(const w of wolves){
+          if(!w || w.hp<=0) continue;
+          if(p.x>w.x && p.x<w.x+w.width && p.y>w.y && p.y<w.y+w.height){
+            // apply damage to wolf
+            w.hp -= Math.max(1, Math.round(p.damage));
+            createParticles(w.x+w.width/2, w.y+w.height/2, '#90caf9', 10, 4);
+            return false;
+          }
+        }
+      }
     }
 
     const aliveTime = (now-p.created)<p.ttl;
@@ -2863,6 +3280,7 @@ function spawnLaser(opts){
     kind:opts.kind||'laser', chargeMs:opts.chargeMs||0, chargedAt:Date.now()+ (opts.chargeMs||0),
     hitCooldown:220, lastHit:0,
     owner:opts.owner||opts.source||null,
+    trackPlayer: !!opts.trackPlayer,
     hitOnce:false
   });
 }
@@ -2870,6 +3288,15 @@ function spawnLaser(opts){
 function updateLasers(){
   const now=Date.now();
   lasers = lasers.filter(L=>{
+    // Aimbot 360° per boss: laser che segue il player durante la durata
+    if(L.trackPlayer && player){
+      const ocx = (L.owner? (L.owner.x + L.owner.width/2) : L.x);
+      const ocy = (L.owner? (L.owner.y + L.owner.height/2) : L.y);
+      const pcx = player.x + player.width/2;
+      const pcy = player.y + player.height/2;
+      L.x = ocx; L.y = ocy;
+      L.angle = Math.atan2(pcy-ocy, pcx-ocx);
+    }
     const alive = (now - L.created) < (L.ttl + (L.chargeMs||0));
     if(!alive) return false;
 
@@ -3404,6 +3831,27 @@ class Player{
       this.aimY=moveY/len;
     }
 
+    // Kaerith (J) - Attacco continuo a ventaglio stretto (30°) con danno progressivo per bersaglio
+    if(this.type==='kaerith'){
+      if(keys['j'] && !this.isDoingSuper){
+        if(!this._kaerithFlame){
+          this._kaerithFlame={
+            start: now,
+            lastPulse: 0,
+            pulseMs: 90,
+            range: 294,                 // molto lungo
+            angle: Math.PI/6,           // 30°
+            dir:(()=>{  if(typeof enemies!=='undefined' && enemies && enemies.length){    const pcx=this.x+this.width/2, pcy=this.y+this.height/2;    let best=null, bestD=1e18;    for(const e of enemies){      const ex=e.x+e.width/2, ey=e.y+e.height/2;      const d=(ex-pcx)*(ex-pcx)+(ey-pcy)*(ey-pcy);      if(d<bestD){bestD=d; best={x:ex,y:ey};}    }    if(best) return Math.atan2(best.y-pcy, best.x-pcx);  }  return Math.atan2(this.aimY||0, this.aimX||1);})()
+          };
+        } else {
+          this._kaerithFlame.dir = (()=>{  if(typeof enemies!=='undefined' && enemies && enemies.length){    const pcx=this.x+this.width/2, pcy=this.y+this.height/2;    let best=null, bestD=1e18;    for(const e of enemies){      const ex=e.x+e.width/2, ey=e.y+e.height/2;      const d=(ex-pcx)*(ex-pcx)+(ey-pcy)*(ey-pcy);      if(d<bestD){bestD=d; best={x:ex,y:ey};}    }    if(best) return Math.atan2(best.y-pcy, best.x-pcx);  }  return Math.atan2(this.aimY||0, this.aimX||1);})();
+        }
+      } else {
+        this._kaerithFlame=null;
+      }
+    }
+
+
     // Marz super bonus: +50% speed while inside the magic zone
     const marzZoneMult = (this.type==='marz' && isPointInsideMagicZone(this.x+this.width/2, this.y+this.height/2)) ? 1.5 : 1;
 
@@ -3780,7 +4228,110 @@ class Player{
         }
       }
     }
-    // handle Hendel hammer sweep (clockwise 75°)
+    
+
+    // handle Kaerith continuous fan attack (per-target progressive damage, max 90)
+    if(this.type==='kaerith' && this._kaerithFlame){
+      const F=this._kaerithFlame;
+      const now2=Date.now();
+
+      if(!F.lastPulse) F.lastPulse = now2;
+      if(now2 - F.lastPulse >= F.pulseMs){
+        F.lastPulse = now2;
+
+        const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+        // Aim-assist: orienta il ventaglio verso il nemico più vicino (se presente)
+        if(enemies && enemies.length){
+          let best=null, bestD=1e18;
+          for(const e of enemies){
+            const ex=e.x+e.width/2, ey=e.y+e.height/2;
+            const d=(ex-pcx)*(ex-pcx)+(ey-pcy)*(ey-pcy);
+            if(d<bestD){bestD=d; best={x:ex,y:ey};}
+          }
+          if(best){ F.dir=Math.atan2(best.y-pcy, best.x-pcx); }
+        }
+        const dir=F.dir;
+        const arc=F.angle;
+        const r=F.range;
+
+        // Track per-enemy "time inside cone" (reset quickly if leaves)
+        for(let i=enemies.length-1;i>=0;i--){
+          const e=enemies[i];
+          const ex=e.x+e.width/2, ey=e.y+e.height/2;
+          const dx=ex-pcx, dy=ey-pcy;
+          const dist=Math.hypot(dx,dy);
+
+          let inside=false;
+          if(dist<=r){
+            const ang=Math.atan2(dy,dx);
+            let diff=ang-dir;
+            while(diff>Math.PI) diff-=Math.PI*2;
+            while(diff<-Math.PI) diff+=Math.PI*2;
+            if(Math.abs(diff)<=arc/2) inside=true;
+          }
+
+          if(inside){
+            // start/continue inside timer
+            if(!e._kaerithInsideSince || (e._kaerithLastInside && (now2 - e._kaerithLastInside)>220)){
+              e._kaerithInsideSince = now2;
+            }
+            e._kaerithLastInside = now2;
+
+            const insideSec = Math.max(0, (now2 - e._kaerithInsideSince)/1000);
+
+            // Progressive damage: starts low, ramps up while the SAME enemy stays inside, caps at 90
+            const base = 12;
+            const slope = 20; // reaches cap ~4s
+            const dmg = Math.min(90, Math.round(base + insideSec * slope));
+
+            const final = applyEnemyDamage(e, dmg * (this.attackBuffMultiplier||1) * (this.baneSuperAttackMult||1));
+            showDamageNumber(e.x, e.y, final);
+            createParticles(ex, ey, '#ff3d00', 6, 3);
+
+            if(e.hp<=0){
+              createParticles(e.x,e.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(i);
+              enemies.splice(i,1);
+              applyScore(100*currentLevel);
+              addKill(); if(this._baneSuperOnKill) this._baneSuperOnKill();
+            }
+          } else {
+            // reset if outside for a short moment
+            if(e._kaerithLastInside && (now2 - e._kaerithLastInside)>260){
+              e._kaerithLastInside=0;
+              e._kaerithInsideSince=0;
+            }
+          }
+        }
+      }
+    }
+// === Kaerith SUPER DoT: Infuocato (progressivo 5 -> 25) ===
+if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerithFireUntil){
+  const nowF = Date.now();
+  if(!this._kaerithFireLastTick) this._kaerithFireLastTick = nowF;
+  if(nowF - this._kaerithFireLastTick >= 1000){
+    this._kaerithFireLastTick = nowF;
+
+    const elapsedSec = Math.floor((nowF - (this._kaerithFireStart||nowF))/1000);
+    // progressione: 5 al secondo 0, fino a 25 entro 8s (cap 25)
+    const prog = Math.min(19, Math.round(4 + (elapsedSec * (15/8))));
+    const dmg = Math.max(0, prog);
+
+    if(typeof enemies!=='undefined' && enemies && enemies.length){
+      for(const e of enemies){
+        if(e && typeof e.hp==='number' && e.hp>0){
+          e.hp -= dmg;
+          // piccolo feedback visivo (brace/ember)
+          createParticles(e.x+e.width/2, e.y+e.height/2, '#ff6d00', 6, 3);
+        }
+      }
+    }
+  }
+}
+
+
+
+// handle Hendel hammer sweep (clockwise 75°)
     if(this.type==='hendel' && this._hammerSwing){
       const H=this._hammerSwing;
       const now2=Date.now();
@@ -3857,10 +4408,19 @@ class Player{
     if(!keys['w']&&!keys['s']&&!this.isGrappling)this.vy*=0.86;
 
     const margin=10;
-    if(this.x<margin)this.x=margin;
-    if(this.x+this.width>canvas.width-margin)this.x=canvas.width-this.width-margin;
-    if(this.y<margin)this.y=margin;
-    if(this.y+this.height>canvas.height-50-margin)this.y=canvas.height-50-this.height-margin;
+    const push=10;
+    let hitWall=false;
+    const B=getPlayBounds();
+
+    const left=B.left+margin, right=B.right-margin;
+    const top=B.top+margin, bottom=B.bottom-margin;
+
+    if(this.x<left){ this.x=left+push; hitWall=true; }
+    if(this.x+this.width>right){ this.x=right-this.width-push; hitWall=true; }
+    if(this.y<top){ this.y=top+push; hitWall=true; }
+    if(this.y+this.height>bottom){ this.y=bottom-this.height-push; hitWall=true; }
+
+    if(hitWall){ createParticles(this.x+this.width/2,this.y+this.height/2,'#90caf9',6,3); }
 
     if(this.dashCooldown>0)this.dashCooldown--;
 
@@ -4356,7 +4916,7 @@ else if(this.attackType==='magic'){
 //   (this multiplier is independent from pickup/bonus buffs)
 // - cooldown 60s
     if(this.type==='hendel'){
-      const sc = (this.superCooldown!=null)?this.superCooldown:35000;
+      const sc = (this.superCooldown!=null)?this.superCooldown:24000;
       if(now - this.lastSuper < sc) return false;
       this.lastSuper = now;
       
@@ -4365,6 +4925,23 @@ else if(this.attackType==='magic'){
       startHendelCrush(3000);
       createParticles(this.x+this.width/2,this.y+this.height/2,'#9e9e9e',28,6);
       shakeScreen();
+      return true;
+    }
+
+
+    if(this.type==='kaerith'){
+      const sc = (this.superCooldown!=null)?this.superCooldown:21000;
+      if(now - this.lastSuper < sc) return false;
+      this.lastSuper = now;
+
+      // === NEW SUPER: Inferno Totale (9s) ===
+      this._kaerithFireStart = now;
+      this._kaerithFireUntil = now + 9000;
+      this._kaerithFireLastTick = 0;
+
+      // burst FX iniziale
+      createParticles(this.x+this.width/2,this.y+this.height/2,'#ff3d00',34,6);
+      shakeScreen(7);
       return true;
     }
 
@@ -4422,7 +4999,36 @@ else if(this.attackType==='magic'){
       return true;
     }
 
-    if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
+    
+// --- FIX: HÈCATE SUPER (ensure it always triggers correctly) ---
+// In some later refactors the generic cooldown / isDoingSuper flow can block Hècate.
+// We handle her super explicitly here, mirroring the old working behavior.
+if(this.type==='hecate'){
+  const sc = (this.superCooldown!=null)?this.superCooldown:22000;
+  if(now - this.lastSuper < sc || this.isDoingSuper) return false;
+
+  this.lastSuper = now;
+  this.isDoingSuper = true;
+  this.superStartTime = now;
+  this._superHitDone = false;
+
+  // Heal: 5 HP per enemy on field
+  const heal = Math.max(0, (typeof enemies!=='undefined' && enemies)? enemies.length : 0) * 5;
+  if(heal>0){
+    this.hp = Math.min(this.maxHP, this.hp + heal);
+    createParticles(this.x+this.width/2,this.y+this.height/2,'#c5cae9',28,6);
+  } else {
+    createParticles(this.x+this.width/2,this.y+this.height/2,'#c5cae9',16,5);
+  }
+
+  // Spawn 3 wolves (max 3)
+  spawnWolvesNearPlayer(this, 3);
+
+  shakeScreen();
+  return true;
+}
+
+if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
     this.lastSuper=now;this.isDoingSuper=true;this.superStartTime=now;this._HitDone=false;
 
     if(this.type==='jimmy'){this.invulnerable=true;this.shieldActive=true}
@@ -4527,7 +5133,7 @@ else if(this.attackType==='hybrid'){
 
 else if(this.attackType==='tempostormLaser'){
   const cx=canvas.width/2;
-  const cy=(canvas.height-50)/2;
+  const cy=(canvas.height-30)/2;
   let stolen=0;
 
   enemies.forEach(e=>{
@@ -4576,7 +5182,7 @@ else if(this.attackType==='tempostormLaser'){
       // - Deals heavy periodic damage to enemies inside
       // - If Marz stays inside, he gains +50% movement speed
       const cx=canvas.width/2;
-      const cy=(canvas.height-50)/2;
+      const cy=(canvas.height-30)/2;
 
       magicZone = {
         x:cx,
@@ -4760,6 +5366,36 @@ else if(this.attackType==='tempostormLaser'){
       ctx.restore();
     }
 
+
+
+    // Kaerith VFX (fan stretto e lungo)
+    if(this.type==='kaerith' && this._kaerithFlame){
+      const F=this._kaerithFlame;
+      const now=Date.now();
+      const t=Math.max(0, Math.min(1, (now - F.start)/160)); // fade-in veloce
+      const cx=this.x+this.width/2, cy=this.y+this.height/2;
+      const a0=F.dir - F.angle/2;
+      const a1=F.dir + F.angle/2;
+
+      ctx.save();
+      ctx.globalAlpha = 0.16 + 0.26*t;
+      ctx.fillStyle='rgba(255,120,0,0.95)';
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,F.range,a0,a1,false);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.globalAlpha = 0.10 + 0.18*t;
+      ctx.strokeStyle='rgba(255,60,0,0.95)';
+      ctx.lineWidth=4;
+      ctx.beginPath();
+      ctx.arc(cx,cy,F.range,a0,a1,false);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+
     } else {
       ctx.fillStyle='#3498db';ctx.fillRect(this.x,this.y,this.width,this.height)
     }
@@ -4913,7 +5549,7 @@ else if(this.attackType==='tempostormLaser'){
         ctx.strokeStyle='rgba(0,176,255,0.45)';
         ctx.lineWidth=10;
         ctx.beginPath();
-        ctx.arc(canvas.width/2,(canvas.height-50)/2,180,0,Math.PI*2);
+        ctx.arc(canvas.width/2,(canvas.height-30)/2,180,0,Math.PI*2);
         ctx.stroke();
         ctx.restore();
       }
@@ -5110,7 +5746,8 @@ class Enemy{
       }
 
       // melee hit
-      if(dist<70 && (now-this.lastAttack)>this.attackCooldown && !player.isDashing){
+      const hitRangeBoss4 = 70 + Math.max(this.width,this.height)*0.35;
+      if( (aabbDist2(this.x,this.y,this.width,this.height, player.x,player.y,player.width,player.height) <= hitRangeBoss4*hitRangeBoss4) && (now-this.lastAttack)>this.attackCooldown && !player.isDashing){
         player.takeDamage(this.damage, this);
         this.lastAttack=now;
         createParticles(player.x,player.y,'#e17055',14,4);
@@ -5131,7 +5768,8 @@ class Enemy{
           ttl:1000,
           damage:70,
           kind:'photon',
-          chargeMs:500
+          chargeMs:500,
+          trackPlayer:true
         });
         // visual charge
         createParticles(cx,cy,'#f1c40f',40,6);
@@ -5167,10 +5805,11 @@ class Enemy{
     }
 
     this.x+=this.vx;this.y+=this.vy;
+    // boundaries
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
   }
-draw(){
+  draw(){
     const imgKey = (this.type==='boss' || this.type==='boss1') ? 'boss1' : this.type;
     const img = enemyImages[imgKey];
     if(img && img.complete){
@@ -5204,7 +5843,7 @@ class ShooterEnemy extends Enemy{
     else{this.vx*=0.9;this.vy*=0.9}
     this.x+=this.vx;this.y+=this.vy;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
     if(Date.now()-this.lastShoot>this.shootCooldown){
       this.lastShoot=Date.now();
       const len=Math.hypot(dx,dy)||1;
@@ -5264,7 +5903,7 @@ class ArcherEnemy extends Enemy{
 
     this.x+=this.vx; this.y+=this.vy;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
 
     if(now-this.lastShoot>this.shootCooldown){
       this.lastShoot=now;
@@ -5353,7 +5992,7 @@ class GlacialEnemy extends Enemy{
 
     this.x+=this.vx; this.y+=this.vy;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
 
     // Start cone attack
     if(now-this.lastAttack>this.attackCooldown){
@@ -5468,7 +6107,7 @@ class AttackReturnEnemy extends Enemy{
     }
     this.x+=this.vx;this.y+=this.vy;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
   }
   draw(){
     const img = enemyImages['attacker'];
@@ -5503,21 +6142,30 @@ class BossEnemy extends Enemy{
       return;
     }
     player = getPreferredTarget(this, player);
-    const dx=player.x-this.x;const dy=player.y-this.y;const dist=Math.hypot(dx,dy);
+    const cx=this.x+this.width/2, cy=this.y+this.height/2;
+    const px=player.x+player.width/2, py=player.y+player.height/2;
+    const dx=px-cx; const dy=py-cy; const dist=Math.hypot(dx,dy);
     const attackRange=60;
+    const hitRange = attackRange + Math.max(this.width,this.height)*0.35;
+    // Range effettivo: include dimensioni del nemico per evitare "zone sicure" ai bordi (clamp)
     if(dist>attackRange){
       const nx=dx/(dist||1);const ny=dy/(dist||1);
       this.vx=nx*this.speed;this.vy=ny*this.speed;
     } else {
+
       this.vx*=0.9;this.vy*=0.9;
-      if(Date.now()-this.lastAttack>this.attackCooldown&&!player.isDashing){
-        player.takeDamage(this.damage, this);
-        this.lastAttack=Date.now();
+            if(Date.now()-this.lastAttack>this.attackCooldown&&!player.isDashing){
+        // Se siamo clamped contro un bordo, potremmo non arrivare mai a dist<=attackRange puro.
+        // Usiamo hitRange per consentire il colpo quando siamo realisticamente "a contatto".
+        if( (aabbDist2(this.x,this.y,this.width,this.height, player.x,player.y,player.width,player.height) <= hitRange*hitRange) ){
+          player.takeDamage(this.damage, this);
+          this.lastAttack=Date.now();
+        }
       }
     }
     this.x+=this.vx;this.y+=this.vy;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
     if(Date.now()-this.lastSuper>this.superCooldown){
       this.lastSuper=Date.now();this.superActive=true;this.superStart=Date.now()
     }
@@ -5734,7 +6382,8 @@ class Boss5Enemy extends Enemy{
     }
 
     // contatto ravvicinato (solo se non in dash) - leggero
-    if(dist<55 && !player.isDashing && !this.swingActive){
+    const hitRangeTouch = 55 + Math.max(this.width,this.height)*0.25;
+    if( (aabbDist2(this.x,this.y,this.width,this.height, player.x,player.y,player.width,player.height) <= hitRangeTouch*hitRangeTouch) && !player.isDashing && !this.swingActive){
       if(!this._lastTouch) this._lastTouch=0;
       if(now-this._lastTouch>900){
         player.takeDamage(14, this);
@@ -5882,6 +6531,7 @@ function endGame(won){
   const kd=document.getElementById('killsDisplay'); if(kd) kd.style.display='none';
   document.getElementById('endTitle').textContent=won?'VICTORY':'GAME OVER';
   document.getElementById('endMessage').textContent=`Score Finale: ${score}`;
+  try{ const ek=document.getElementById('endKills'); if(ek) ek.textContent=`Kill: ${kills||0}`; }catch(e){}
   document.getElementById('endSub').textContent=`Hai raggiunto il Livello ${currentLevel}`;
   const rec=records[selectedCharacter]||0;
   if(score>rec){records[selectedCharacter]=score;saveRecords();}
@@ -5906,6 +6556,37 @@ if(difficultyMode==='easy' && player){
   }
 }
 
+
+function drawKaerithFireOverlay(now){
+  if(!player || player.type!=='kaerith' || !player._kaerithFireUntil || now>=player._kaerithFireUntil) return;
+
+  // overlay fiamme: flicker + embers
+  const t = 1 - Math.max(0, Math.min(1, (player._kaerithFireUntil - now)/9000));
+  ctx.save();
+  ctx.globalAlpha = 0.18 + 0.10*Math.sin(now/70);
+  ctx.fillStyle = '#ff3d00';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // “lingue” di fuoco stilizzate (righe verticali random)
+  ctx.globalAlpha = 0.10 + 0.06*Math.sin(now/55);
+  for(let i=0;i<22;i++){
+    const x = (Math.random()*canvas.width)|0;
+    const h = 120 + Math.random()*260;
+    const w = 14 + Math.random()*26;
+    const y = canvas.height - h;
+    ctx.fillRect(x,y,w,h);
+  }
+
+  // embers
+  ctx.globalAlpha = 0.22;
+  ctx.fillStyle = '#ffd180';
+  for(let i=0;i<28;i++){
+    const x = (Math.random()*canvas.width)|0;
+    const y = (Math.random()*canvas.height)|0;
+    ctx.fillRect(x,y,2,2);
+  }
+  ctx.restore();
+}
 function gameLoop(){
   requestAnimationFrame(gameLoop);
   if(gameState!=='playing')return;
@@ -5967,6 +6648,8 @@ return;
     const sx=(Math.random()-0.5)*shakeAmount;const sy=(Math.random()-0.5)*shakeAmount;
     ctx.save();ctx.translate(sx,sy);shakeAmount*=0.9
   } else ctx.save();
+
+    drawKaerithFireOverlay(now);
 
   // draw Marz Super zone behind entities
   drawMagicZone(now);
@@ -6074,7 +6757,7 @@ function triggerEvolutionThenNextLevel(charType){
 window.addEventListener('keydown',e=>{
   const k=e.key.toLowerCase();
   keys[k]=true;
-  if(k==='j'&&gameState==='playing'){player.attack()}
+  if(k==='j'&&gameState==='playing'){ if(player && player.type!=='kaerith'){ player.attack(); } }
   if(k==='k'&&gameState==='playing'){player.superAttack()}
   if(k===' '&&gameState==='playing'){player.dodge()}
 });
@@ -6140,7 +6823,7 @@ document.querySelectorAll('.character-card').forEach(card=>{
       const lockBox=document.getElementById('lockMessage');
       const lockText=document.getElementById('lockText');
       if(lockBox && lockText){
-        lockText.innerText = "personaggio bloccato  si sblocca facendo 50.000 con Bane";
+        lockText.innerText = "personaggio BLOCCATO  si sblocca facendo 50.000 con Bane";
         lockBox.style.display='block';
       }
       return;
@@ -6175,6 +6858,7 @@ function updateMenuStatsDisplay(char){
   if(startScreen && mainMenu){
     // default view
     startScreen.style.display='block';
+  try{ updateAccountUI(); }catch(e){}
     mainMenu.style.display='none';
     gameState='start';
   }
@@ -7189,6 +7873,37 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+
+<!-- === Account Level Button + Modal === -->
+<button id="accountLevelBtn" style="display:none;">
+  LV <span id="accountLevelValue">1</span>
+  <span class="sub"><span id="accountXpText">0/1000 XP</span></span>
+</button>
+
+<div id="accountModal">
+  <div class="panel">
+    <div class="row">
+      <h3>🏅 Livello Account: <span id="accLevelHeader">1</span></h3>
+      <button class="closeBtn" id="closeAccountModal">Chiudi</button>
+    </div>
+
+    <div class="row" style="flex-direction:column;align-items:flex-start;">
+      <div style="width:100%;display:flex;justify-content:space-between;gap:10px;align-items:center;">
+        <div style="opacity:0.9;">Progresso al prossimo livello</div>
+        <div style="opacity:0.85;font-weight:700;" id="accXpHeader">0/1000 XP</div>
+      </div>
+      <div class="barWrap"><div class="barFill" id="accXpBar"></div></div>
+    </div>
+
+    <h4 style="margin:14px 0 6px 0;">📜 Missioni</h4>
+    <div id="missionsList"></div>
+
+    <div style="opacity:0.7;font-size:12px;margin-top:10px;">
+      Le missioni danno XP. Quando una missione è completata, il tasto <strong>Riscatta</strong> diventa verde e cliccabile.
+    </div>
+  </div>
+</div>
+
 </body>
 
 <script>
@@ -7201,7 +7916,9 @@ const unlockMessages = {
   hecate: "Personaggio BLOCCATO\nSblocca facendo 75.000 punti\ncon tutti i personaggi precedenti",
   lucien: "Personaggio BLOCCATO\nSblocca facendo un record con Marcus\nsuperiore a 25.000",
   pdor: "Personaggio BLOCCATO\nsi sblocca facendo 50.000\ncon marcus e lucien",
-  bane: "Personaggio BLOCCATO\nSblocca facendo 50.000\ncon PDOR"
+  bane: "Personaggio BLOCCATO\nSblocca facendo 50.000\ncon PDOR",
+  hendel: "personaggio BLOCCATO  si sblocca facendo 50.000 con Bane",
+  kaerith: "Personaggio BLOCCATO\nsi sblocca facendo 40.000 con Hendel"
 };
 
 const lockBox = document.getElementById('lockMessage');
