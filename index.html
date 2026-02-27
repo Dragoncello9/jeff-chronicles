@@ -3883,7 +3883,7 @@ const missionsSorted = (() => {
     const title=document.createElement("div");
     title.className="m-title";
     const isBaseMission = (m && m.char && !m.type && ['jimmy','rooney','jeff'].includes(m.char));
-    const badge = isBaseMission ? "<span class='mission-base'>BASE</span>" : (m.difficulty==='easy') ? "<span class='mission-easy'>FACILE</span>" : (m.difficulty==='mid') ? "<span class='mission-mid'>INTERMEDIA</span>" : (m.difficulty==='hard') ? "<span class='mission-hard'>COMPLICATA</span>" : (m.difficulty==='mythic') ? "<span class='mission-mythic'>MITICA</span>" : "";
+    const badge = isBaseMission ? "<span class='mission-base'>BASE</span>" : (m.difficulty==='easy') ? "<span class='mission-easy'>SEMPLICE</span>" : (m.difficulty==='mid') ? "<span class='mission-mid'>INTERMEDIA</span>" : (m.difficulty==='hard') ? "<span class='mission-hard'>COMPLICATA</span>" : (m.difficulty==='mythic') ? "<span class='mission-mythic'>MITICA</span>" : "";
     if(m.char && !m.type){
       title.innerHTML = `Fai ${m.target} kill con ${charLabel(m.char)} ${badge}`;
     } else {
