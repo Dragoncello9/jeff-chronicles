@@ -2427,15 +2427,30 @@ const ctx=canvas.getContext('2d');
 
 function getPlayBounds(){
   // Limiti reali del campo giocabile (non per forza identici al canvas).
-  // Rispetta il margine HUD in basso e, se attivo, lo shrink di Hendel Crush.
+  // Rispetta il margine HUD in basso e restringe leggermente l'arena così che i nemici
+  // non finiscano sui bordi (e non "spariscano" ai lati).
   const bottomLimit = canvas.height-30;
-  let b = {left:0, top:0, right:canvas.width, bottom:bottomLimit};
 
-  // Hendel Crush: NON restringere l'arena del player (evita che Hendel venga trascinato al centro)
+  // Restringimento leggero del campo (tweakabile)
+  const insetX = 26;
+  const insetY = 20;
+
+  let b = {left: insetX, top: insetY, right: canvas.width - insetX, bottom: bottomLimit - insetY};
+
+  // Hendel Crush: NON restringere ulteriormente l'arena del player (evita che Hendel venga trascinato al centro).
   // La spinta verso il centro e il DoT sono già applicati ai nemici in updateHendelCrush().
-
   return b;
 }
+
+function clampToPlayBounds(ent, extra=0){
+  if(!ent) return;
+  const B = getPlayBounds();
+  const left = B.left + extra, top = B.top + extra;
+  const right = B.right - extra, bottom = B.bottom - extra;
+  ent.x = Math.max(left, Math.min(right - (ent.width||0), ent.x));
+  ent.y = Math.max(top,  Math.min(bottom - (ent.height||0), ent.y));
+}
+
 
 const bgDefault=document.getElementById('bgDefault');
 const bgDark=document.getElementById('bgDark');
@@ -2494,6 +2509,7 @@ function setDifficulty(mode){
     const ld=document.getElementById('levelDisplay'); if(ld) ld.style.display='none';
     const sc=document.getElementById('superCooldown'); if(sc) sc.style.display='none';
     enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];wolves=[];
+  ancientColumn=null; ancientSealSlowUntil=0; ancientSealWarUntil=0;
     player=null;
     // ripristina HUD frammenti d'etere (menu)
     const etherUI=document.getElementById('etherHud');
@@ -2550,8 +2566,8 @@ const BONUS_HIT_RADIUS = 26; // was ~18
 const MALUS_HIT_RADIUS = 18;
 
 // Lower malus probability (weighted pick)
-function pickRandomPickupType(){
-  const weighted = [
+// Single source of truth for normal pickup/bonus types (drops + Lucien SUPER)
+const PICKUP_WEIGHTED = [
     ['heal', 1],
     ['atk', 1],
     ['super', 1],
@@ -2559,8 +2575,12 @@ function pickRandomPickupType(){
     ['shieldPickup', 1],
     ['furia', 1],
     ['ice', 1],
+    ['ira', 1],
+    ['arcoAntico', 0.6],
     ['malus', 0.25], // nerfed
   ];
+function pickRandomPickupType(){
+  const weighted = PICKUP_WEIGHTED;
   let sum = 0;
   for (const [,w] of weighted) sum += w;
   let r = Math.random() * sum;
@@ -2591,52 +2611,72 @@ function spawnBossRing(opts){
 
 function updateBossRings(now){
   if(!player) return;
+
   bossRings = bossRings.filter(r=>{
     const t=(now-r.created)/(r.ttl||900);
     if(t>=1) return false;
 
     const cx=r.x, cy=r.y;
-    const px=player.x+player.width/2;
-    const py=player.y+player.height/2;
-    const dist=Math.hypot(px-cx, py-cy);
     const radius=(r.maxR||300)*t;
     const band=16;
 
-    // damage once when wave reaches player
-    if(!r.hit && dist <= radius+band){
-      r.hit=true;
-      player.takeDamage(r.damage, r.owner||null);
+    // Utility: damage a target once when wave reaches it
+    function hitTargetOnce(key, target){
+      if(!target) return;
+      if(r[key]) return;
+      const tx=target.x+target.width/2;
+      const ty=target.y+target.height/2;
+      const dist=Math.hypot(tx-cx, ty-cy);
+      if(dist <= radius+band){
+        r[key]=true;
+        // Prefer takeDamage when available (player + Arco Antico both have it)
+        if(target && typeof target.takeDamage==='function') target.takeDamage(r.damage, r.owner||null);
+        else if(target && typeof target.hp==='number') target.hp -= (r.damage||0);
+        createParticles(target.x, target.y, '#f1c40f', 18, 4);
 
-      // pull towards center (instant + short acceleration)
-      const dx=cx-px, dy=cy-py;
-      const d=Math.hypot(dx,dy)||1;
-      const nx=dx/d, ny=dy/d;
-      player.vx += nx*(r.pull||3);
-      player.vy += ny*(r.pull||3);
-      createParticles(player.x,player.y,'#f1c40f',18,4);
+        // Pull effect applies only to the real player (not wolves/colonna)
+        if(target === player){
+          const dx=cx-tx, dy=cy-ty;
+          const d=Math.hypot(dx,dy)||1;
+          const nx=dx/d, ny=dy/d;
+          player.vx += nx*(r.pull||3);
+          player.vy += ny*(r.pull||3);
 
-      // EXTRA: small positional pull on hit (Lv 20 Boss ring)
-      try{
-        if((typeof currentLevel!=='undefined' && currentLevel===20) && (r.owner && r.owner.type==='boss20')){
-          const nudge = 34; // "un po"
-          player.x += nx*nudge;
-          player.y += ny*nudge;
-          // clamp into arena
-          if(player.x<0) player.x=0;
-          if(player.y<0) player.y=0;
-          if(player.x+player.width>canvas.width) player.x=canvas.width-player.width;
-          if(player.y+player.height>canvas.height-30) player.y=canvas.height-30-player.height;
+          // EXTRA: small positional pull on hit (Lv 20 Boss ring)
+          try{
+            if((typeof currentLevel!=='undefined' && currentLevel===20) && (r.owner && r.owner.type==='boss20')){
+              const nudge = 34; // "un po"
+              player.x += nx*nudge;
+              player.y += ny*nudge;
+              // clamp into arena
+              if(player.x<0) player.x=0;
+              if(player.y<0) player.y=0;
+              if(player.x+player.width>canvas.width) player.x=canvas.width-player.width;
+              if(player.y+player.height>canvas.height-30) player.y=canvas.height-30-player.height;
+            }
+          }catch(e){}
         }
-      }catch(e){}
+      }
     }
 
-    // mild continuous pull while inside wave reach
-    if(dist <= radius+60){
-      const dx=cx-px, dy=cy-py;
-      const d=Math.hypot(dx,dy)||1;
-      player.vx += (dx/d)*0.12;
-      player.vy += (dy/d)*0.12;
+    // Hit player + (optional) Arco Antico
+    hitTargetOnce('hitPlayer', player);
+    if(typeof ancientColumn!=='undefined' && ancientColumn && ancientColumn.hp>0 && now < (ancientColumn.endsAt||0)){
+      hitTargetOnce('hitColumn', ancientColumn);
     }
+
+    // mild continuous pull while inside wave reach (player only)
+    try{
+      const px=player.x+player.width/2;
+      const py=player.y+player.height/2;
+      const distP=Math.hypot(px-cx, py-cy);
+      if(distP <= radius+60){
+        const dx=cx-px, dy=cy-py;
+        const d=Math.hypot(dx,dy)||1;
+        player.vx += (dx/d)*0.12;
+        player.vy += (dy/d)*0.12;
+      }
+    }catch(e){}
 
     return true;
   });
@@ -2970,6 +3010,7 @@ const pickupImgs={
   gold: new Image(),
   stellar: new Image(),
   malus: new Image(),
+  ira: new Image(),
 };
 pickupImgs.heal.src='https://i.postimg.cc/c4jNccLC/heal.png';
 pickupImgs.shield.src='https://i.postimg.cc/9XnS3QHh/shield.png';
@@ -2977,10 +3018,14 @@ pickupImgs.speed.src='https://i.postimg.cc/DzCV8QHb/speed.png';
 pickupImgs.atk.src='https://i.postimg.cc/cHjVcxsS/ATK.png';
 pickupImgs.super.src='https://i.postimg.cc/3rss4xSD/Super.png';
 pickupImgs.gold.src='https://i.postimg.cc/wjVZGc6h/gold.png';
-pickupImgs.stellar.src='https://i.postimg.cc/7hhNdJpp/bossbonus.png';
+pickupImgs.stellar.src='https://i.postimg.cc/85XW9S0V/stellarbonus.png';
 pickupImgs.malus.src='https://i.postimg.cc/tT1cJKFm/malus.png';
+pickupImgs.ira.src='https://i.postimg.cc/xT3j1R9T/IRAA.png';
 pickupImgs.furia = new Image(); pickupImgs.furia.src='https://i.postimg.cc/BvCsTjYD/furia.png';
 pickupImgs.ice = new Image(); pickupImgs.ice.src='https://i.postimg.cc/GmF1RB1k/ice.png';
+
+// --- Arco Antico pickup + colonna ---
+pickupImgs.arcoAntico = new Image(); pickupImgs.arcoAntico.src='https://i.postimg.cc/g0nG4b80/ARCOANTICO.png';
 
 function getPickupImage(type){
   // internal type names
@@ -3303,32 +3348,31 @@ const characterStats={
 
 
 const levelConfigs=[
-  {enemyType:'slime',enemyHP:45,enemyDamage:9,enemySpeed:2*0.75,time:45,enemyCount:4},
-  {enemyType:'slime',enemyHP:50,enemyDamage:10,enemySpeed:2*0.75,time:45,enemyCount:9 },
-  {enemyType:'drone',enemyHP:40,enemyDamage:11,enemySpeed:3*0.75,time:40,enemyCount:6},
-  {enemyType:'drone',enemyHP:40,enemyDamage:12,enemySpeed:3*0.75,time:40,enemyCount:7},
-  {enemyType:'boss1',enemyHP:150,enemyDamage:20,enemySpeed:2.8*0.75,time:60,enemyCount:1},
-  {enemyType:'mech',enemyHP:60,enemyDamage:16,enemySpeed:2.5*0.75,time:35,enemyCount:7},
-  {enemyType:'shadow',enemyHP:50,enemyDamage:17,enemySpeed:4*0.75,time:30,enemyCount:6},
-  {enemyType:'shadow',enemyHP:52,enemyDamage:18,enemySpeed:4 *0.75,time:30,enemyCount:6},
-  {enemyType:'mech',enemyHP:65,enemyDamage:16,enemySpeed:2.5*0.75,time:35,enemyCount:8},
-  {enemyType:'boss2',enemyHP:300,enemyDamage:27,enemySpeed:3*0.75,time:60,enemyCount:1},
-  {enemyType:'shooter',enemyHP:45,enemyDamage:20,enemySpeed:2.5*0.75,time:45,enemyCount:5},
-  {enemyType:'shooter',enemyHP:45,enemyDamage:21,enemySpeed:2.7*0.75,time:45,enemyCount:7},
-  {enemyType:'attacker',enemyHP:90,enemyDamage:17,enemySpeed:3.2*0.75,time:50,enemyCount:5},
-  {enemyType:'attacker',enemyHP:99,enemyDamage:19,enemySpeed:3.4*0.75,time:60,enemyCount:6},
-  {enemyType:'boss3',enemyHP:666,enemyDamage:33,enemySpeed:2.4*0.75,time:100,enemyCount:1}
-  ,{enemyType:'veleno',enemyHP:60,enemyDamage:13,enemySpeed:2.8*0.75,time:50,enemyCount:7} // Level 16
-  ,{enemyType:'veleno',enemyHP:70,enemyDamage:15,enemySpeed:2.9*0.75,time:50,enemyCount:9} // Level 17
-  ,{enemyType:'oneyes',enemyHP:55,enemyDamage:8,enemySpeed:2.1*0.75,time:55,enemyCount:4} // Level 18
-  ,{enemyType:'oneyes',enemyHP:60,enemyDamage:9,enemySpeed:2.3*0.75,time:55,enemyCount:5} // Level 19
-  ,{enemyType:'boss4',enemyHP:900,enemyDamage:30,enemySpeed:4.2,time:180,enemyCount:1} // Level 20
-  ,{enemyType:'archer',enemyHP:78,enemyDamage:14,enemySpeed:2.3*0.75,time:65,enemyCount:4} // Level 21 (Ice)
-  ,{enemyType:'archer',enemyHP:86,enemyDamage:15,enemySpeed:2.4*0.75,time:65,enemyCount:5} // Level 22 (Ice)
-  ,{enemyType:'glacial',enemyHP:150,enemyDamage:22,enemySpeed:2.3*0.75,time:70,enemyCount:2} // Level 23 (Ice)
-  ,{enemyType:'glacial',enemyHP:165,enemyDamage:24,enemySpeed:2.4*0.75,time:80,enemyCount:3} // Level 24 (Ice)
-
-  ,{enemyType:'boss5',enemyHP:800,enemyDamage:32,enemySpeed:2.2*0.75,time:200,enemyCount:1} // Level 25 (Boss V)
+  {enemyType:'slime',enemyHP:60,enemyDamage:12,enemySpeed:1.85,time:45,enemyCount:4}, // Level 1
+  {enemyType:'slime',enemyHP:75,enemyDamage:14,enemySpeed:1.95,time:45,enemyCount:9}, // Level 2
+  {enemyType:'drone',enemyHP:80,enemyDamage:18,enemySpeed:3.3,time:40,enemyCount:6}, // Level 3
+  {enemyType:'drone',enemyHP:90,enemyDamage:22,enemySpeed:3.6,time:40,enemyCount:7}, // Level 4
+  {enemyType:'boss1',enemyHP:450,enemyDamage:40,enemySpeed:4.0,time:60,enemyCount:1}, // Level 5
+  {enemyType:'mech',enemyHP:150,enemyDamage:35,enemySpeed:3.5,time:35,enemyCount:7}, // Level 6
+  {enemyType:'shadow',enemyHP:130,enemyDamage:33,enemySpeed:6.15,time:30,enemyCount:6}, // Level 7
+  {enemyType:'shadow',enemyHP:150,enemyDamage:38,enemySpeed:6.5,time:30,enemyCount:6}, // Level 8
+  {enemyType:'mech',enemyHP:200,enemyDamage:38,enemySpeed:4.5,time:35,enemyCount:8}, // Level 9
+  {enemyType:'boss2',enemyHP:1000,enemyDamage:70,enemySpeed:5.9,time:60,enemyCount:1}, // Level 10
+  {enemyType:'shooter',enemyHP:150,enemyDamage:31,enemySpeed:4.75,time:45,enemyCount:5}, // Level 11
+  {enemyType:'shooter',enemyHP:175,enemyDamage:34,enemySpeed:5.0,time:45,enemyCount:7}, // Level 12
+  {enemyType:'attacker',enemyHP:325,enemyDamage:45,enemySpeed:7.08,time:50,enemyCount:5}, // Level 13
+  {enemyType:'attacker',enemyHP:350,enemyDamage:50,enemySpeed:7.91,time:60,enemyCount:6}, // Level 14
+  {enemyType:'boss3',enemyHP:2200,enemyDamage:104,enemySpeed:5.85,time:100,enemyCount:1}, // Level 15
+  {enemyType:'veleno',enemyHP:300,enemyDamage:15,enemySpeed:6.8,time:50,enemyCount:7}, // Level 16
+  {enemyType:'veleno',enemyHP:350,enemyDamage:15,enemySpeed:7.0,time:50,enemyCount:9}, // Level 17
+  {enemyType:'oneyes',enemyHP:350,enemyDamage:27,enemySpeed:5.85,time:55,enemyCount:4}, // Level 18
+  {enemyType:'oneyes',enemyHP:400,enemyDamage:27,enemySpeed:6.0,time:55,enemyCount:5}, // Level 19
+  {enemyType:'boss4',enemyHP:2500,enemyDamage:30,enemySpeed:5.0,time:180,enemyCount:1}, // Level 20
+  {enemyType:'archer',enemyHP:400,enemyDamage:45,enemySpeed:5.75,time:65,enemyCount:4}, // Level 21
+  {enemyType:'archer',enemyHP:450,enemyDamage:55,enemySpeed:6.0,time:65,enemyCount:5}, // Level 22
+  {enemyType:'glacial',enemyHP:1000,enemyDamage:22,enemySpeed:7.68,time:70,enemyCount:2}, // Level 23
+  {enemyType:'glacial',enemyHP:1155,enemyDamage:22,enemySpeed:8.28,time:80,enemyCount:3}, // Level 24
+  {enemyType:'boss5',enemyHP:2500,enemyDamage:20,enemySpeed:4.5,time:200,enemyCount:1} // Level 25
 ];
 
 const RECORDS_KEY='pf_records_v19';
@@ -4889,26 +4933,333 @@ function drawWolves(){
   for(const w of wolves) w.draw();
 }
 
+
+
+// ===================== ARCO ANTICO (COLONNA) =====================
+let ancientColumn = null;            // {x,y,width,height,hp,maxHP,endsAt,nextSealAt,auraRadius,touched,takeDamage()}
+let ancientSealSlowUntil = 0;        // Sigillo del Tempo: slow all enemies 80%
+let ancientSealWarUntil = 0;         // Sigillo della Guerra: enemies take double damage
+
+function getAncientWarMult(now){
+  return (ancientSealWarUntil && now < ancientSealWarUntil) ? 2 : 1;
+}
+
+function activateArcoAntico(playerRef){
+  const now = Date.now();
+  // reset any previous Arco Antico effects
+  ancientSealSlowUntil = 0;
+  ancientSealWarUntil = 0;
+  if(playerRef){ playerRef.ancientLifeUntil = 0; playerRef.ancientLifeLastTick = 0; }
+  const size = Math.min(canvas.width, canvas.height) * 0.55;
+  const w = Math.max(220, Math.min(420, size));
+  const h = w;
+  const x = canvas.width/2 - w/2;
+  const y = Math.max(20, (canvas.height-60)/2 - h/2);
+
+  ancientColumn = {
+    x, y, width:w, height:h,
+    maxHP:480, hp:480,
+    created: now,
+    endsAt: now + 12000,
+    nextSealAt: now + 3000,
+    auraRadius: Math.max(220, w*0.72),
+    touched: false,
+    lastSeal: null,
+    lastSealFxUntil: 0,
+    isDashing:false,
+
+    takeDamage: function(dmg, src){
+      const d = Math.max(1, Math.round(dmg||1));
+      this.touched = true;
+      this.hp -= d;
+      createParticles(this.x+this.width/2, this.y+this.height/2, '#c0c0c0', 10, 4);
+
+      if(this.hp <= 0){
+        this.hp = 0;
+        const cx = this.x+this.width/2, cy = this.y+this.height/2;
+        const R = Math.max(180, (this.auraRadius||240)*0.8);
+        const explosionDmg = Math.round(180 + (currentLevel||1)*8);
+
+        for(let i=enemies.length-1;i>=0;i--){
+          const e=enemies[i];
+          const ex=e.x+e.width/2, ey=e.y+e.height/2;
+          const dist=Math.hypot(ex-cx, ey-cy);
+          if(dist<=R){
+            const dealt = applyEnemyDamage(e, explosionDmg);
+            if(dealt>0) showDamageNumber(e.x,e.y,dealt);
+            createParticles(e.x,e.y,'#ffcc80',16,5);
+            if(e.hp<=0){
+              createParticles(e.x,e.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(i);
+              enemies.splice(i,1);
+              applyScore(100*currentLevel);
+              addKill();
+            }
+          }
+        }
+        createParticles(cx,cy,'#ffd54f',80,7);
+        shakeScreen();
+
+        // clear effects immediately
+        ancientSealSlowUntil = 0;
+        ancientSealWarUntil = 0;
+        try{ if(typeof player!=='undefined' && player) player.ancientLifeUntil = 0; }catch(e){}
+
+        ancientColumn = null;
+      }
+    }
+  };
+
+  createParticles(ancientColumn.x+ancientColumn.width/2, ancientColumn.y+ancientColumn.height/2, '#c0c0c0', 60, 6);
+}
+
+function updateArcoAntico(now, playerRef){
+  if(!ancientColumn) return;
+
+  // Expire at 12s
+  if(now >= ancientColumn.endsAt){
+    if(ancientColumn.hp>0 && !ancientColumn.touched && playerRef){
+      // “Benedizione Antica” permanente: +5% danno fino a fine partita (stackabile)
+      if(playerRef._baseDamage==null) playerRef._baseDamage = playerRef.damage;
+      playerRef.ancientBlessingStacks = (playerRef.ancientBlessingStacks||0) + 1;
+      playerRef.damage = playerRef._baseDamage * (1 + 0.05*(playerRef.ancientBlessingStacks||0));
+      createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, '#fff176', 40, 6);
+    }
+
+    // end effects
+    ancientSealSlowUntil = 0;
+    ancientSealWarUntil = 0;
+    if(playerRef) playerRef.ancientLifeUntil = 0;
+    ancientColumn = null;
+    return;
+  }
+
+  // Every 3s trigger one seal for 3s
+  if(now >= (ancientColumn.nextSealAt||0)){
+    ancientColumn.nextSealAt = now + 3000;
+
+    const cx = ancientColumn.x+ancientColumn.width/2;
+    const cy = ancientColumn.y+ancientColumn.height/2;
+
+    const r = Math.floor(Math.random()*3);
+    if(r===0){
+      // Sigillo del Tempo → rallenta tutti i nemici del 80%
+      ancientSealSlowUntil = now + 3000;
+      ancientColumn.lastSeal = 'tempo';
+      ancientColumn.lastSealFxStart = now;
+      ancientColumn.lastSealFxUntil = now + 1400;
+      ancientColumn.lastSealFlashUntil = now + 260;
+      createParticles(cx,cy,'#4fc3f7',70,6);
+    }else if(r===1){
+      // Sigillo della Guerra → danni doppi ai nemici
+      ancientSealWarUntil = now + 3000;
+      ancientColumn.lastSeal = 'guerra';
+      ancientColumn.lastSealFxStart = now;
+      ancientColumn.lastSealFxUntil = now + 1400;
+      ancientColumn.lastSealFlashUntil = now + 260;
+      createParticles(cx,cy,'#ff5252',70,6);
+    }else{
+      // Sigillo della Vita → rigenera 15 hp al secondo
+      if(playerRef){
+        playerRef.ancientLifeUntil = now + 3000;
+        playerRef.ancientLifeLastTick = now;
+      }
+      ancientColumn.lastSeal = 'vita';
+      ancientColumn.lastSealFxStart = now;
+      ancientColumn.lastSealFxUntil = now + 1400;
+      ancientColumn.lastSealFlashUntil = now + 260;
+      createParticles(cx,cy,'#2ecc71',70,6);
+    }
+  }
+}
+
+function drawArcoAntico(now){
+  if(!ancientColumn) return;
+
+  const img = pickupImgs.arcoAntico;
+  const x=ancientColumn.x, y=ancientColumn.y, w=ancientColumn.width, h=ancientColumn.height;
+  const cx=x+w/2, cy=y+h/2;
+
+  // Which seal is currently active (drives aura color)
+  let activeSeal = null;
+  if(ancientSealSlowUntil && now < ancientSealSlowUntil) activeSeal = 'tempo';
+  else if(ancientSealWarUntil && now < ancientSealWarUntil) activeSeal = 'guerra';
+  else {
+    try{
+      if(typeof player!=='undefined' && player && player.ancientLifeUntil && now < player.ancientLifeUntil) activeSeal = 'vita';
+    }catch(e){}
+  }
+  if(!activeSeal) activeSeal = ancientColumn.lastSeal;
+
+  const sealCol = (activeSeal==='tempo') ? 'rgba(79,195,247,' :
+                  (activeSeal==='guerra') ? 'rgba(255,82,82,' :
+                  (activeSeal==='vita') ? 'rgba(46,204,113,' :
+                  'rgba(192,192,192,';
+
+  // Seal change animation intensity
+  let fx = 0;
+  if(ancientColumn.lastSeal && now < (ancientColumn.lastSealFxUntil||0)){
+    const st = (ancientColumn.lastSealFxStart||now);
+    const dur = Math.max(1, (ancientColumn.lastSealFxUntil||0) - st);
+    const t = Math.max(0, Math.min(1, (now - st) / dur));
+    fx = 1 - t; // 1 -> 0
+  }
+
+  // Aura (always visible) — color changes with active seal
+  ctx.save();
+  ctx.shadowColor = '#000000';
+  ctx.shadowBlur = 18;
+
+  // fill
+  ctx.globalAlpha = 0.14 + 0.10*fx;
+  ctx.fillStyle = sealCol + '0.85)';
+  ctx.beginPath();
+  ctx.arc(cx, cy, ancientColumn.auraRadius, 0, Math.PI*2);
+  ctx.fill();
+
+  // edge
+  ctx.globalAlpha = 0.45 + 0.25*fx;
+  ctx.strokeStyle = sealCol + '0.95)';
+  ctx.lineWidth = 5 + 4*fx;
+  ctx.beginPath();
+  ctx.arc(cx, cy, ancientColumn.auraRadius, 0, Math.PI*2);
+  ctx.stroke();
+
+  // subtle inner rings (readability)
+  ctx.globalAlpha = 0.12 + 0.10*fx;
+  ctx.lineWidth = 2;
+  for(let i=1;i<=2;i++){
+    ctx.beginPath();
+    ctx.arc(cx, cy, ancientColumn.auraRadius*(i/3), 0, Math.PI*2);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // Central image (opaque-ish) with a short flash on seal swap
+  let imgAlpha = 0.38;
+  if(ancientColumn.lastSealFlashUntil && now < ancientColumn.lastSealFlashUntil){
+    const st = (ancientColumn.lastSealFxStart||now);
+    const dur = Math.max(1, (ancientColumn.lastSealFlashUntil||0) - st);
+    const t = Math.max(0, Math.min(1, (now - st) / dur));
+    imgAlpha = 0.62 - 0.22*t;
+  }
+  ctx.save();
+  ctx.globalAlpha = imgAlpha;
+  if(img && img.complete && img.naturalWidth>0){
+    ctx.drawImage(img, x, y, w, h);
+  }else{
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = 'rgba(220,220,220,0.55)';
+    ctx.fillRect(x,y,w,h);
+  }
+  ctx.restore();
+
+  // HP bar
+  const hpPct = Math.max(0, Math.min(1, ancientColumn.hp / ancientColumn.maxHP));
+  ctx.save();
+  ctx.globalAlpha = 0.90;
+  const barW = w*0.62, barH=10;
+  ctx.fillStyle='rgba(0,0,0,0.55)';
+  ctx.fillRect(cx-barW/2, y-22, barW, barH);
+  ctx.fillStyle= hpPct>0.5 ? '#2ecc71' : hpPct>0.25 ? '#f39c12' : '#e74c3c';
+  ctx.fillRect(cx-barW/2, y-22, barW*hpPct, barH);
+
+  // Stronger seal-swap animation
+  if(ancientColumn.lastSeal && now < (ancientColumn.lastSealFxUntil||0)){
+    const col = (ancientColumn.lastSeal==='tempo') ? 'rgba(79,195,247,0.95)' :
+                (ancientColumn.lastSeal==='guerra') ? 'rgba(255,82,82,0.95)' :
+                'rgba(46,204,113,0.95)';
+    const st = (ancientColumn.lastSealFxStart||now);
+    const dur = Math.max(1, (ancientColumn.lastSealFxUntil||0) - st);
+    const t = Math.max(0, Math.min(1, (now - st) / dur));
+
+    ctx.save();
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25;
+    ctx.strokeStyle = col;
+
+    // 3 expanding rings
+    for(let k=0;k<3;k++){
+      const tt = Math.max(0, Math.min(1, (t + k*0.10)));
+      const rr = Math.max(w*0.16, w*0.16 + tt*(ancientColumn.auraRadius*0.55));
+      ctx.globalAlpha = (0.85 - k*0.18) * (1 - t);
+      ctx.lineWidth = Math.max(3, (10 - k*2) * (1.0 + 0.6*(1-t)));
+      ctx.beginPath();
+      ctx.arc(cx, cy, rr, 0, Math.PI*2);
+      ctx.stroke();
+    }
+
+    // starburst (quick, readable)
+    ctx.globalAlpha = 0.45*(1-t);
+    ctx.lineWidth = 2.5;
+    const spikes = 12;
+    const r1 = Math.max(40, w*0.20);
+    const r2 = r1 + 28 + 22*(1-t);
+    for(let i=0;i<spikes;i++){
+      const a = (i/spikes)*Math.PI*2 + t*1.2;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a)*r1, cy + Math.sin(a)*r1);
+      ctx.lineTo(cx + Math.cos(a)*r2, cy + Math.sin(a)*r2);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  ctx.restore();
+}
+
+function getArcoAnticoMoveSlowFactor(enemy, now){
+  let f = 1;
+
+  // Aura slow around the column
+  if(ancientColumn){
+    const cx=ancientColumn.x+ancientColumn.width/2;
+    const cy=ancientColumn.y+ancientColumn.height/2;
+    const ex=enemy.x+enemy.width/2;
+    const ey=enemy.y+enemy.height/2;
+    const d=Math.hypot(ex-cx, ey-cy);
+    if(d <= (ancientColumn.auraRadius||0)) f *= 0.8; // -20%
+  }
+
+  // Time seal slow
+  if(ancientSealSlowUntil && now < ancientSealSlowUntil) f *= 0.2; // -80%
+
+  return f;
+}
+// ================================================================
+
+
 // I nemici attaccano i lupi se più vicini del player
 function getPreferredTarget(enemy, playerObj){
   try{
-    // Boss sempre focalizzati sul player (evita "zone sicure" quando i lupi attirano l'aggro)
-    if(enemy && typeof enemy.type==='string' && enemy.type.startsWith('boss')) return playerObj;
-    if(!wolves || wolves.length===0) return playerObj;
     if(!enemy || !playerObj) return playerObj;
 
-    const ex=enemy.x+enemy.width/2, ey=enemy.y+enemy.height/2;
-    const px=playerObj.x+playerObj.width/2, py=playerObj.y+playerObj.height/2;
-    const dp=Math.hypot(px-ex, py-ey);
+    const ex = enemy.x + enemy.width/2;
+    const ey = enemy.y + enemy.height/2;
+    const now = Date.now();
 
-    let best=null, bestD=1e9;
-    for(const w of wolves){
-      if(!w || w.hp<=0) continue;
-      const wx=w.x+w.width/2, wy=w.y+w.height/2;
-      const d=Math.hypot(wx-ex, wy-ey);
-      if(d<bestD){ bestD=d; best=w; }
+    // Candidate targets: player + (optional) Arco Antico + (optional) wolves
+    const candidates = [];
+    candidates.push(playerObj);
+
+    if(ancientColumn && now < (ancientColumn.endsAt||0) && ancientColumn.hp>0){
+      candidates.push(ancientColumn);
     }
-    return (best && bestD < dp) ? best : playerObj;
+
+    if(typeof wolves!=='undefined' && wolves && wolves.length){
+      for(const w of wolves){
+        if(w && w.hp>0) candidates.push(w);
+      }
+    }
+
+    let best = playerObj;
+    let bestD = 1e18;
+    for(const t of candidates){
+      const tx = t.x + t.width/2;
+      const ty = t.y + t.height/2;
+      const d = Math.hypot(tx - ex, ty - ey);
+      if(d < bestD){ bestD = d; best = t; }
+    }
+    return best;
   }catch(e){
     return playerObj;
   }
@@ -4924,7 +5275,7 @@ function applyEnemyDamage(enemy, baseDmg){
     mult=1.5; // EVO: Rooney first hit +50% damage
     enemy._rooneyFirstHit=true;
   }
-  const finalDmg = Math.max(0, Math.round(baseDmg * mult * markMult(enemy)));
+  const finalDmg = Math.max(0, Math.round(baseDmg * mult * markMult(enemy) * getAncientWarMult(Date.now())));
   enemy._lastHitAt = Date.now();
   enemy.hp -= finalDmg;
   try{ accountOnDamageDealt(finalDmg); }catch(e){}
@@ -4966,6 +5317,27 @@ function spawnProjectile(opts){
     excludeRef:opts.excludeRef||null
   };
   projectiles.push(p);
+}
+
+function projectileHitsAABB(p, rx, ry, rw, rh){
+  if(!p) return false;
+  const cx = p.x, cy = p.y;
+
+  // Effective hit radius:
+  // - circles: p.radius
+  // - rect projectiles: bounding circle of (w,h)
+  let r = Math.max(0, p.radius||0);
+  if(p.shape==='rect'){
+    const hw = (p.w||0)*0.5;
+    const hh = (p.h||0)*0.5;
+    r = Math.max(r, Math.hypot(hw, hh));
+  }
+
+  const closestX = (cx < rx) ? rx : (cx > rx+rw) ? (rx+rw) : cx;
+  const closestY = (cy < ry) ? ry : (cy > ry+rh) ? (ry+rh) : cy;
+  const dx = cx - closestX;
+  const dy = cy - closestY;
+  return (dx*dx + dy*dy) <= (r*r + 0.0001);
 }
 
 function updateProjectiles(){
@@ -5158,17 +5530,30 @@ function updateProjectiles(){
       }
     }else{
       // enemy projectiles hit player
-      if(player && p.x>player.x && p.x<player.x+player.width && p.y>player.y && p.y<player.y+player.height){
-        if(typeof p.onHitPlayer==='function'){ try{ p.onHitPlayer(player); }catch(e){} }
-        player.takeDamage(p.damage, p.source || null);
+      if(player && projectileHitsAABB(p, player.x, player.y, player.width, player.height)){
+        // During invulnerability/shields, ignore projectile side-effects (slow, etc.) but still consume the projectile.
+        const inv = !!(player.invulnerable || (player.pickupShieldUntil && Date.now()<player.pickupShieldUntil));
+        if(!inv){
+          if(typeof p.onHitPlayer==='function'){ try{ p.onHitPlayer(player); }catch(e){} }
+          player.takeDamage(p.damage, p.source || null);
+        }
         return false;
       }
 
+
+
+      // enemy projectiles can hit Arco Antico (colonna)
+      if(ancientColumn && ancientColumn.hp>0){
+        if(projectileHitsAABB(p, ancientColumn.x, ancientColumn.y, ancientColumn.width, ancientColumn.height)){
+          try{ ancientColumn.takeDamage(p.damage, p.source||null); }catch(e){}
+          return false;
+        }
+      }
       // enemy projectiles can hit wolves (Hècate summon)
       if(wolves && wolves.length){
         for(const w of wolves){
           if(!w || w.hp<=0) continue;
-          if(p.x>w.x && p.x<w.x+w.width && p.y>w.y && p.y<w.y+w.height){
+          if(projectileHitsAABB(p, w.x, w.y, w.width, w.height)){
             // apply damage to wolf
             w.hp -= Math.max(1, Math.round(p.damage));
             createParticles(w.x+w.width/2, w.y+w.height/2, '#90caf9', 10, 4);
@@ -5352,22 +5737,66 @@ ctx.fill();
 
 // Laser hazards (OneEyes)
 function spawnLaser(opts){
-  // opts: {x,y,angle,length,width,ttl,damage,kind,chargeMs,chargedAt}
+  // opts: {x,y,angle,length,width,ttl,damage,kind,chargeMs,chargedAt,growSpeed,anchorToOwner}
+  const now = Date.now();
+  const maxLen = opts.length || 520;
+  const growSpeed = opts.growSpeed || 0; // px/sec (se 0, il laser è istantaneo)
+  const initialLen = growSpeed ? 0 : maxLen;
+
   lasers.push({
-    x:opts.x,y:opts.y,angle:opts.angle||0,length:opts.length||520,width:opts.width||14,
-    created:Date.now(),ttl:opts.ttl||1000,damage:opts.damage||15,
-    kind:opts.kind||'laser', chargeMs:opts.chargeMs||0, chargedAt:Date.now()+ (opts.chargeMs||0),
-    hitCooldown:220, lastHit:0,
+    x:opts.x, y:opts.y,
+    angle:opts.angle||0,
+    length:initialLen,
+    maxLength:maxLen,
+    growSpeed:growSpeed,
+    width:opts.width||14,
+    created:now,
+    ttl:opts.ttl||1000,
+    damage:opts.damage||15,
+    kind:opts.kind||'laser',
+    chargeMs:opts.chargeMs||0,
+    chargedAt: now + (opts.chargeMs||0),
+    hitCooldown:220,
+    lastHit:0,
     owner:opts.owner||opts.source||null,
+    // Se true, il laser resta agganciato al centro del nemico durante carica/attivo
+    anchorToOwner: (opts.anchorToOwner===undefined ? true : !!opts.anchorToOwner),
+    // Se true, aggiorna anche l'angolo verso il player durante la durata
     trackPlayer: !!opts.trackPlayer,
-    hitOnce:false
+    hitOnce:false,
+    lastUpdate: now
   });
+}
+
+function segmentIntersectsRect(x1,y1,x2,y2,rx,ry,rw,rh){
+  // Segment vs axis-aligned rectangle (Liang–Barsky). Returns true if intersects.
+  const dx = x2 - x1, dy = y2 - y1;
+  let t0 = 0, t1 = 1;
+  const p = [-dx, dx, -dy, dy];
+  const q = [x1 - rx, (rx+rw) - x1, y1 - ry, (ry+rh) - y1];
+
+  for(let i=0;i<4;i++){
+    const pi = p[i], qi = q[i];
+    if(pi === 0){
+      if(qi < 0) return false; // parallel outside
+    }else{
+      const r = qi / pi;
+      if(pi < 0){
+        if(r > t1) return false;
+        if(r > t0) t0 = r;
+      }else{
+        if(r < t0) return false;
+        if(r < t1) t1 = r;
+      }
+    }
+  }
+  return true;
 }
 
 function updateLasers(){
   const now=Date.now();
   lasers = lasers.filter(L=>{
-    // Aimbot 360° per boss: laser che segue il player durante la durata
+    // Anchor/Tracking
     if(L.trackPlayer && player){
       const ocx = (L.owner? (L.owner.x + L.owner.width/2) : L.x);
       const ocy = (L.owner? (L.owner.y + L.owner.height/2) : L.y);
@@ -5375,43 +5804,91 @@ function updateLasers(){
       const pcy = player.y + player.height/2;
       L.x = ocx; L.y = ocy;
       L.angle = Math.atan2(pcy-ocy, pcx-ocx);
+    } else if(L.owner && L.anchorToOwner){
+      // mantiene l'origine sul nemico che l'ha sparato
+      L.x = L.owner.x + L.owner.width/2;
+      L.y = L.owner.y + L.owner.height/2;
     }
+
     const alive = (now - L.created) < (L.ttl + (L.chargeMs||0));
     if(!alive) return false;
 
-    // During charge: no damage
+    // delta time per crescita progressiva
+    const dt = Math.max(0, now - (L.lastUpdate || now));
+    L.lastUpdate = now;
+
+    // Durante charge: niente danno (ma possiamo comunque mostrare la linea)
     const active = now >= L.chargedAt;
 
-    if(active && player){
-      // Collision: distance from player center to laser segment
-      const px = player.x + player.width/2;
-      const py = player.y + player.height/2;
+    // Crescita progressiva del fascio (laser schivabile)
+    if(active){
+      if(L.growSpeed && L.maxLength!=null){
+        const grow = (L.growSpeed * (dt/1000));
+        L.length = Math.min(L.maxLength, (L.length||0) + grow);
+      } else if(L.maxLength!=null){
+        L.length = L.maxLength;
+      }
+    } else {
+      if(L.growSpeed) L.length = 0;
+    }
 
+    if(active){
       const x2 = L.x + Math.cos(L.angle)*L.length;
       const y2 = L.y + Math.sin(L.angle)*L.length;
 
-      // projection
-      const vx = x2 - L.x, vy = y2 - L.y;
-      const wx = px - L.x, wy = py - L.y;
-      const c1 = wx*vx + wy*vy;
-      const c2 = vx*vx + vy*vy;
-      let t = c2 ? (c1 / c2) : 0;
-      t = Math.max(0, Math.min(1, t));
-      const cx = L.x + t*vx;
-      const cy = L.y + t*vy;
-      const dist = Math.hypot(px - cx, py - cy);
+      // Collision: laser can damage Arco Antico (capsule vs rectangle via expanded AABB)
+      if(ancientColumn && ancientColumn.hp>0){
+        const r = (L.width||14)/2;
+        const hitCol = segmentIntersectsRect(
+          L.x, L.y, x2, y2,
+          ancientColumn.x - r, ancientColumn.y - r,
+          ancientColumn.width + 2*r, ancientColumn.height + 2*r
+        );
 
-      if(dist <= (L.width/2 + Math.max(player.width, player.height)*0.20)){
-        // OneEyes: il danno può essere preso una sola volta per raggio
-        if(L.kind==='oneyes'){
-          if(!L.hitOnce){
-            L.hitOnce=true;
-            player.takeDamage(L.damage, L.owner || null);
+        if(hitCol){
+          if(L.kind==='oneyes'){
+            if(!L.colHitOnce){
+              L.colHitOnce = true;
+              try{ ancientColumn.takeDamage(L.damage, L.owner || null); }catch(e){}
+            }
+          }else{
+            if(!L.lastHitCol) L.lastHitCol = 0;
+            if(now - L.lastHitCol >= (L.hitCooldown||220)){
+              L.lastHitCol = now;
+              try{ ancientColumn.takeDamage(L.damage, L.owner || null); }catch(e){}
+            }
           }
-        } else {
-          if(now - L.lastHit >= L.hitCooldown){
-            L.lastHit = now;
-            player.takeDamage(L.damage, L.owner || null);
+        }
+      }
+
+      // Collision: distanza dal centro player al segmento del laser (lunghezza corrente)
+      if(player){
+        const px = player.x + player.width/2;
+        const py = player.y + player.height/2;
+
+        // projection
+        const vx = x2 - L.x, vy = y2 - L.y;
+        const wx = px - L.x, wy = py - L.y;
+        const c1 = wx*vx + wy*vy;
+        const c2 = vx*vx + vy*vy;
+        let t = c2 ? (c1 / c2) : 0;
+        t = Math.max(0, Math.min(1, t));
+        const cx = L.x + t*vx;
+        const cy = L.y + t*vy;
+        const dist = Math.hypot(px - cx, py - cy);
+
+        if(dist <= (L.width/2 + Math.max(player.width, player.height)*0.20)){
+          // OneEyes: il danno può essere preso una sola volta per raggio
+          if(L.kind==='oneyes'){
+            if(!L.hitOnce){
+              L.hitOnce=true;
+              player.takeDamage(L.damage, L.owner || null);
+            }
+          } else {
+            if(now - L.lastHit >= L.hitCooldown){
+              L.lastHit = now;
+              player.takeDamage(L.damage, L.owner || null);
+            }
           }
         }
       }
@@ -5425,30 +5902,56 @@ function drawLasers(){
   const now=Date.now();
   lasers.forEach(L=>{
     const active = now >= L.chargedAt;
-    const x2 = L.x + Math.cos(L.angle)*L.length;
-    const y2 = L.y + Math.sin(L.angle)*L.length;
+    const previewLen = (L.maxLength!=null ? L.maxLength : L.length);
+    const drawLen = active ? (L.length!=null ? L.length : previewLen) : previewLen;
+
+    const x2 = L.x + Math.cos(L.angle)*drawLen;
+    const y2 = L.y + Math.sin(L.angle)*drawLen;
 
     ctx.save();
     ctx.lineCap='round';
 
     if(!active){
-      // charge preview
-      ctx.globalAlpha = 0.55;
-      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,255,255,0.7)';
-      ctx.lineWidth = Math.max(6, L.width*0.5);
-      ctx.beginPath(); ctx.moveTo(L.x,L.y); ctx.lineTo(x2,y2); ctx.stroke();
+      // charge preview (linea tratteggiata)
+      ctx.globalAlpha = 0.60;
+      ctx.shadowColor = '#000000';
+      ctx.shadowBlur = 25;
+      ctx.strokeStyle = 'rgba(255,255,255,0.75)';
+      ctx.lineWidth = Math.max(6, L.width*0.55);
+      ctx.setLineDash([12,10]);
+      ctx.beginPath();
+      ctx.moveTo(L.x,L.y);
+      ctx.lineTo(x2,y2);
+      ctx.stroke();
+      ctx.setLineDash([]);
       ctx.globalAlpha = 1;
     } else {
-      // active beam
-      ctx.globalAlpha = (L.kind==='photon') ? 0.92 : 0.75;
-      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = (L.kind==='photon') ? 'rgba(243,156,18,0.9)' : 'rgba(52,152,219,0.9)';
+      // active beam (cresce man mano)
+      ctx.globalAlpha = (L.kind==='photon') ? 0.92 : 0.78;
+      ctx.shadowColor = '#000000';
+      ctx.shadowBlur = 25;
+      ctx.strokeStyle = (L.kind==='photon') ? 'rgba(243,156,18,0.9)' : 'rgba(52,152,219,0.92)';
       ctx.lineWidth = L.width;
-      ctx.beginPath(); ctx.moveTo(L.x,L.y); ctx.lineTo(x2,y2); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(L.x,L.y);
+      ctx.lineTo(x2,y2);
+      ctx.stroke();
 
       // glow
-      ctx.globalAlpha = 0.28;
-      ctx.lineWidth = L.width*1.9;
-      ctx.beginPath(); ctx.moveTo(L.x,L.y); ctx.lineTo(x2,y2); ctx.stroke();
+      ctx.globalAlpha = 0.30;
+      ctx.lineWidth = L.width*2.0;
+      ctx.beginPath();
+      ctx.moveTo(L.x,L.y);
+      ctx.lineTo(x2,y2);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // tip highlight (testa del laser)
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = 'rgba(255,255,255,0.65)';
+      ctx.beginPath();
+      ctx.arc(x2,y2, Math.max(6, L.width*0.40), 0, Math.PI*2);
+      ctx.fill();
       ctx.globalAlpha = 1;
     }
 
@@ -5575,7 +6078,12 @@ function spawnPickupsForLevel(level){
   // Bonus pickups remain on the field when the level ends.
   if(level<4) return;
 
-  const count=1+Math.floor(Math.random()*2);
+  let count=1+Math.floor(Math.random()*2);
+
+  // Hard: -1/3 pickups spawn (i.e. keep 2/3)
+  if(difficultyMode==='hard'){
+    count = Math.max(0, Math.round(count * (2/3)));
+  }
   for(let i=0;i<count;i++){
     const isGold=Math.random()<GOLD_PROB;
     const type=isGold ? 'gold' : pickRandomPickupType();
@@ -5588,6 +6096,14 @@ function spawnPickupsForLevel(level){
     pickups.push({type,x,y,radius:18,hitRadius:hitR,created:Date.now(),ttl:20000});
   }
 }
+
+// Render scale per pickup (some icons have extra transparent padding and would look smaller)
+const PICKUP_RENDER_SCALE = {
+  stellar: 1.35,
+  ira: 1.35,
+  arcoAntico: 1.35
+};
+
 function drawPickups(){
   pickups.forEach(p=>{
     const img = getPickupImage(p.type);
@@ -5597,8 +6113,9 @@ function drawPickups(){
     // - fallback to 28px
     const w = (p.w!=null)?p.w: (p.radius!=null)?(p.radius*2):28;
     const h = (p.h!=null)?p.h: (p.radius!=null)?(p.radius*2):28;
-    const dw = w*2;
-    const dh = h*2;
+    const scale = PICKUP_RENDER_SCALE[p.type] || 1;
+    const dw = w*2*scale;
+    const dh = h*2*scale;
 
     if(img && img.complete && img.naturalWidth>0){
       ctx.drawImage(img, p.x - dw/2, p.y - dh/2, dw, dh);
@@ -5611,6 +6128,8 @@ function drawPickups(){
       else if(p.type==='stellar')ctx.fillStyle='rgba(255,255,255,0.9)';
       else if(p.type==='speed')ctx.fillStyle='#3498db';
       else if(p.type==='shieldPickup')ctx.fillStyle='#7fdbff';
+      else if(p.type==='ira')ctx.fillStyle='#ff6f00';
+      else if(p.type==='arcoAntico')ctx.fillStyle='#c0c0c0';
       else if(p.type==='malus')ctx.fillStyle='#8b0000';
       ctx.beginPath();
       ctx.arc(p.x,p.y,(p.radius!=null)?p.radius:Math.min(w,h)/2,0,Math.PI*2);
@@ -5679,6 +6198,23 @@ function applyPickupEffect(playerRef,type){
     playerRef.speed=playerRef._baseSpeed*1.5;
     playerRef.speedBuffUntil=Date.now()+7000;
     createParticles(playerRef.x,playerRef.y,'#3498db',20);
+  } else if(type==='ira'){
+    // IRA: 6s — -75% cooldown colpo (cooldown * 0.25) +25% speed
+    const now=Date.now();
+    playerRef.iraUntil = now + 6000;
+
+    // speed: do not downgrade other buffs (keep the max)
+    playerRef.speed = Math.max(playerRef.speed, playerRef._baseSpeed * 1.25);
+
+    // cooldown: keep the fastest between current and IRA effect
+    if(typeof playerRef.cooldown === 'number' && playerRef._baseCooldown!=null){
+      if(typeof playerRef._iraPrevCooldown!=='number'){
+        playerRef._iraPrevCooldown = playerRef.cooldown;
+      }
+      playerRef.cooldown = Math.min(playerRef.cooldown, playerRef._baseCooldown * 0.25);
+    }
+
+    createParticles(playerRef.x+playerRef.width/2,playerRef.y+playerRef.height/2,'#ff6f00',28,5);
   } else if(type==='shieldPickup'){
     playerRef.pickupShieldUntil=Date.now()+6000;
     playerRef.invulnerable=true;
@@ -5704,6 +6240,11 @@ function applyPickupEffect(playerRef,type){
       e.iceLastTick = Date.now();
     });
     createParticles(playerRef.x,playerRef.y,'#000000',40);
+  } else if(type==='arcoAntico'){
+    // Arco Antico: crea una colonna al centro (60 HP) per 12s.
+    // Aura: -20% velocità ai nemici vicini; ogni 3s attiva un Sigillo.
+    activateArcoAntico(playerRef);
+    createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, '#c0c0c0', 24, 5);
   } else if(type==='malus'){
     playerRef.poisonUntil=Date.now()+10000;
     playerRef.poisonTickLast=Date.now();
@@ -5724,7 +6265,9 @@ class Player{
     // Archer slow (temporary): stacks up to -15% total
     this._slowPct=0;
     this._slowUntil=0;
-    this.damage=s.damage;this.range=s.range;
+    this.damage=s.damage;this._baseDamage=s.damage;this.ancientBlessingStacks=0;
+    this.ancientLifeUntil=0;this.ancientLifeLastTick=0;
+    this.range=s.range;
     this.cooldown=s.cooldown;this.attackType=s.attackType;
     this._baseCooldown=s.cooldown;
     // Bane SUPER state
@@ -5748,6 +6291,8 @@ class Player{
     this._superHitDone=false;this._superPhase=0;
     this.shieldActive=false;this.shieldDurability=4;this.shieldMaxDurability=4;this.shieldBroken=false;this.shieldBrokenTime=0;this.shieldRegenMs=6000;
     this.attackBuffMultiplier=1;this.attackBuffUntil=0;this.speedBuffUntil=0;this.pickupShieldUntil=0;this.invulnerable=false;
+    // IRA pickup (temporary): -75% base attack cooldown +25% speed (6s)
+    this.iraUntil=0;this._iraPrevCooldown=undefined;
     this._dashSpeedMult=3;
     this._dashDuration=200;
 
@@ -5859,6 +6404,22 @@ class Player{
       this.furiaHealUntil = 0;
     }
 
+
+
+    // Arco Antico: Sigillo della Vita (+15 HP/s for 3s)
+    if(this.ancientLifeUntil && now < this.ancientLifeUntil){
+      if(!this.ancientLifeLastTick) this.ancientLifeLastTick = now;
+      if(now - this.ancientLifeLastTick >= 1000){
+        this.ancientLifeLastTick = now;
+        const _beforeHp = this.hp;
+        this.hp = Math.min(this.maxHP, this.hp + 15);
+        try{ accountOnHeal(this.hp - _beforeHp); }catch(e){}
+        createParticles(this.x+this.width/2, this.y+this.height/2, '#2ecc71', 10, 3);
+      }
+    } else {
+      this.ancientLifeLastTick = 0;
+      this.ancientLifeUntil = 0;
+    }
     // Jimmy jetpack passive
     if(this.type==='jimmy'){
       if(!this.isJetpacking && now-this.lastJetpack>=this.jetpackCooldown && !this.isDoingSuper){
@@ -5903,6 +6464,43 @@ class Player{
         } else {
           this.speed = this._baseSpeed;
         }
+      }
+    }
+
+
+    // IRA pickup: 6s — -75% cooldown colpo (cooldown * 0.25) +25% speed
+    if(this.iraUntil && now < this.iraUntil){
+      // keep the maximum speed (do not downgrade other buffs)
+      this.speed = Math.max(this.speed, this._baseSpeed * 1.25);
+
+      // keep the fastest cooldown between current and IRA effect
+      if(typeof this.cooldown==='number' && this._baseCooldown!=null){
+        this.cooldown = Math.min(this.cooldown, this._baseCooldown * 0.25);
+      }
+    } else if(this.iraUntil && now >= this.iraUntil){
+      // effect ended: restore baseline unless another effect is controlling it
+      this.iraUntil = 0;
+
+      // restore cooldown if not inside Bane SUPER window
+      if(!(this.type==='bane' && this.baneSuperUntil && now < this.baneSuperUntil)){
+        if(typeof this._iraPrevCooldown==='number'){
+          this.cooldown = this._iraPrevCooldown;
+        } else if(this._baseCooldown!=null){
+          this.cooldown = this._baseCooldown;
+        }
+      }
+      this._iraPrevCooldown = undefined;
+
+      // restore speed only if no other speed buff is currently active
+      const otherSpeedActive =
+        (this.speedBuffUntil && now < this.speedBuffUntil) ||
+        (this.type==='bane' && this.baneSuperSpeedUntil && now < this.baneSuperSpeedUntil) ||
+        (this.type==='salsy' && this.salsyBoostUntil && now < this.salsyBoostUntil) ||
+        (this.type==='jimmy' && this.isJetpacking && this.speedBuffUntil && now < this.speedBuffUntil);
+
+      const iraSpeed = this._baseSpeed * 1.25;
+      if(!otherSpeedActive){
+        if(this.speed <= iraSpeed + 0.0001) this.speed = this._baseSpeed;
       }
     }
 
@@ -6133,7 +6731,7 @@ class Player{
               for(const h of hits){
                 const share=h.w/sumW;
                 const raw=totalBase*share;
-                const dmg=Math.max(6, Math.round(raw * SUPER_DAMAGE_MULT * this.attackBuffMultiplier));
+                const dmg=Math.max(6, Math.round(raw * SUPER_DAMAGE_MULT * this.attackBuffMultiplier * 1.12));
                 const _final=applyEnemyDamage(h.enemy, dmg);
 
                 // Hit FX
@@ -6196,56 +6794,109 @@ class Player{
         // Jimmy SUPER rework:
         // - NON si aggrappa ai nemici (niente "stop" sul bersaglio).
         // - Jimmy li attraversa (pass-through) e applica lo stesso colpo/danni quando li raggiunge.
-        const chaseSpeed=this.speed*6;
-
-        // Se siamo nel "pass-through window", continua dritto nella direzione salvata
-        if(this._superGrapplePassUntil && now < this._superGrapplePassUntil){
-          this.vx=this._superGrappleDirX*chaseSpeed;
-          this.vy=this._superGrappleDirY*chaseSpeed;
+        // - FIX: hard timeout su superDuration + timeout per singolo bersaglio (evita blocchi contro shooter/laser).
+        if(elapsed >= (this.superDuration||0)){
+          this.endSuper();
         } else {
-          this._superGrapplePassUntil=0;
+          const chaseSpeed=this.speed*6;
 
-          if(this.superTargets.length>0){
-            const target=this.superTargets[0];
-            if(!enemies.includes(target)){
-              this.superTargets.shift();
-            } else {
-              const px=this.x+this.width/2, py=this.y+this.height/2;
-              const tx=target.x+target.width/2, ty=target.y+target.height/2;
-              const dx=tx-px;const dy=ty-py;
-              const dist=Math.hypot(dx,dy);
+          // Se siamo nel "pass-through window", continua dritto nella direzione salvata
+          if(this._superGrapplePassUntil && now < this._superGrapplePassUntil){
+            this.vx=this._superGrappleDirX*chaseSpeed;
+            this.vy=this._superGrappleDirY*chaseSpeed;
+          } else {
+            this._superGrapplePassUntil=0;
 
-              if(dist>50){
-                this.vx=(dx/(dist||1))*chaseSpeed;
-                this.vy=(dy/(dist||1))*chaseSpeed;
-              } else {
-                // hit once, then keep moving forward briefly (pass-through)
-                const base=120;
-                const mult=(this.type==='jimmy')?(SUPER_DAMAGE_MULT*JIMMY_SUPER_ADDITIONAL_MULT):SUPER_DAMAGE_MULT;
-                const dmg=Math.round(base*mult*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)*(this.type==='jimmy'?2.0:1));
-                const _final=applyEnemyDamage(target, dmg);
-                createParticles(target.x,target.y,'#e74c3c',15,6);
-                showDamageNumber(target.x,target.y, _final);
-                if(target.hp<=0){
-                  createParticles(target.x,target.y,'#fff176',30,6);
-                  const idx=enemies.indexOf(target);
-                  if(idx>-1){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
-                }
-                }
-
-                // store direction and move through (no interaction/stop)
-                let nx=dx/(dist||1), ny=dy/(dist||1);
-                if(!isFinite(nx) || !isFinite(ny)){ nx=this.facingRight?1:-1; ny=0; }
-                this._superGrappleDirX=nx; this._superGrappleDirY=ny;
-                this._superGrapplePassUntil=now+160;
-
-                // next target
+            // Per-target timeout: se insegue lo stesso nemico troppo a lungo, lo salta
+            let skipChase=false;
+            if(this.superTargets.length>0){
+              const t0=this.superTargets[0];
+              const tid=(t0 && t0._id!=null)?t0._id:t0;
+              if(this._jimmySuperCurId!==tid){
+                this._jimmySuperCurId=tid;
+                this._jimmySuperCurSince=now;
+              }
+              if(this._jimmySuperCurSince && (now-this._jimmySuperCurSince)>850){
+                // skip target (prevents infinite chase vs ranged enemies)
                 this.superTargets.shift();
-                this._superPhase=Date.now();
+                this._jimmySuperCurId=null;
+                this._jimmySuperCurSince=0;
+
+                // small forward nudge to avoid "glue" feeling
+                let ax=(this.aimX!=null?this.aimX:(this.facingRight?1:-1));
+                let ay=(this.aimY!=null?this.aimY:0);
+                let al=Math.hypot(ax,ay)||1;
+                ax/=al; ay/=al;
+                this._superGrappleDirX=ax; this._superGrappleDirY=ay;
+                this._superGrapplePassUntil=now+140;
+                this.vx=ax*chaseSpeed;
+                this.vy=ay*chaseSpeed;
+                skipChase=true;
+              }
+            } else {
+              this._jimmySuperCurId=null;
+              this._jimmySuperCurSince=0;
+            }
+
+            if(!skipChase){
+              if(this.superTargets.length>0){
+                const target=this.superTargets[0];
+                if(!enemies.includes(target)){
+                  this.superTargets.shift();
+                  this._jimmySuperCurId=null;
+                  this._jimmySuperCurSince=0;
+                } else {
+                  const px=this.x+this.width/2, py=this.y+this.height/2;
+                  const tx=target.x+target.width/2, ty=target.y+target.height/2;
+                  const dx=tx-px;const dy=ty-py;
+                  const dist=Math.hypot(dx,dy);
+
+                  // Safety: avoid NaN lock
+                  if(!Number.isFinite(dx)||!Number.isFinite(dy)||!Number.isFinite(dist)){
+                    this.superTargets.shift();
+                    this._jimmySuperCurId=null;
+                    this._jimmySuperCurSince=0;
+                  } else if(dist>50){
+                    this.vx=(dx/(dist||1))*chaseSpeed;
+                    this.vy=(dy/(dist||1))*chaseSpeed;
+                  } else {
+                    // hit once, then keep moving forward briefly (pass-through)
+                    const base=120;
+                    const mult=(this.type==='jimmy')?(SUPER_DAMAGE_MULT*JIMMY_SUPER_ADDITIONAL_MULT):SUPER_DAMAGE_MULT;
+                    const dmg=Math.round(base*mult*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)*(this.type==='jimmy'?2.0:1));
+                    const _final=applyEnemyDamage(target, dmg);
+                    createParticles(target.x,target.y,'#e74c3c',15,6);
+                    showDamageNumber(target.x,target.y, _final);
+                    if(target.hp<=0){
+                      createParticles(target.x,target.y,'#fff176',30,6);
+                      const idx=enemies.indexOf(target);
+                      if(idx>-1){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                    }
+                    }
+
+                    // store direction and move through (no interaction/stop)
+                    let nx=dx/(dist||1), ny=dy/(dist||1);
+                    // FIX: if we are exactly overlapped (nx=ny=0), fall back to aim/facing
+                    if(!isFinite(nx) || !isFinite(ny) || (Math.abs(nx)+Math.abs(ny))<0.001){
+                      nx=(this.aimX!=null?this.aimX:(this.facingRight?1:-1));
+                      ny=(this.aimY!=null?this.aimY:0);
+                      const l=Math.hypot(nx,ny)||1;
+                      nx/=l; ny/=l;
+                    }
+                    this._superGrappleDirX=nx; this._superGrappleDirY=ny;
+                    this._superGrapplePassUntil=now+160;
+
+                    // next target
+                    this.superTargets.shift();
+                    this._jimmySuperCurId=null;
+                    this._jimmySuperCurSince=0;
+                    this._superPhase=Date.now();
+                  }
+                }
+              } else {
+                if(now-this.superStartTime>=Math.min(this.superDuration,1200))this.endSuper();
               }
             }
-          } else {
-            if(now-this.superStartTime>=Math.min(this.superDuration,1200))this.endSuper();
           }
         }
       } else if(this.attackType==='sword'){
@@ -6806,7 +7457,7 @@ for(let i=0;i<3;i++){
 
               if(closestEnemy){
                 const baseDmg=this.damage;
-                const dmg=Math.round(baseDmg * multipliers[idx] * this.attackBuffMultiplier);
+                const dmg=Math.round(baseDmg * multipliers[idx] * this.attackBuffMultiplier * 1.12);
                 const _dmg=dmg; const _final=applyEnemyDamage(closestEnemy,_dmg);
                 createParticles(closestEnemy.x,closestEnemy.y,'#e67e22',12,5);
                 showDamageNumber(closestEnemy.x,closestEnemy.y, _final);
@@ -6946,33 +7597,86 @@ for(let i=0;i<3;i++){
       });
 
 
-    } else if(this.attackType==='lucienBlade'){
-      // 4 colpi ravvicinati (15x4), stile simile a Salsy ma più vicino
-      const attackAngle=this.facingRight?0:Math.PI;
+    
+} else if(this.attackType==='lucienBlade'){
+      // Lucien — Lama Rapida: 4 colpi ravvicinati (15x4)
+      // FIX:
+      // - Aim 360°: l'angolo del colpo non dipende più solo da facingRight.
+      // - Aimbot: punta automaticamente al nemico più vicino (a qualunque distanza) per l'orientamento.
+      // - Hitbox robusta: usa centri (player/enemy) + iterazione reverse per evitare bug quando rimuovi nemici durante il loop.
       const arcWidth=Math.PI*1.05;
+
+      const getAimAngle = ()=>{
+        const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+
+        // Aimbot: scegli sempre il nemico più vicino per l'orientamento (anche se fuori range)
+        let aimTarget=null; let bestD=Infinity;
+        for(const e of enemies){
+          const ex=e.x+e.width/2, ey=e.y+e.height/2;
+          const d=Math.hypot(ex-pcx, ey-pcy);
+          if(d<bestD){ bestD=d; aimTarget=e; }
+        }
+
+        let ang=0;
+        if(aimTarget){
+          const tx=aimTarget.x+aimTarget.width/2, ty=aimTarget.y+aimTarget.height/2;
+          ang=Math.atan2(ty-pcy, tx-pcx);
+          this._lucienAimTarget = aimTarget;
+          this._lucienAimAngle = ang;
+          this.facingRight = (tx-pcx) >= 0;
+
+          // allinea anche aimX/aimY (utile per eventuali altre logiche/FX)
+          const ax=Math.cos(ang), ay=Math.sin(ang);
+          this.aimX=ax; this.aimY=ay;
+        } else {
+          // fallback: direzione di mira corrente (ultima direzione di movimento) oppure facingRight
+          const dirX=(this.aimX!=null ? this.aimX : (this.facingRight?1:-1));
+          const dirY=(this.aimY!=null ? this.aimY : 0);
+          const len=Math.hypot(dirX,dirY) || 1;
+          const ax=dirX/len, ay=dirY/len;
+          ang=Math.atan2(ay, ax);
+          this._lucienAimTarget = null;
+          this._lucienAimAngle = ang;
+          this.facingRight = ax >= 0;
+        }
+        return ang;
+      };
+
       const doSwing = ()=>{
-        enemies.forEach(enemy=>{
-          const dx=enemy.x-this.x;const dy=enemy.y-this.y;const dist=Math.hypot(dx,dy);
+        const attackAngle = getAimAngle();
+        const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+
+        for(let i=enemies.length-1;i>=0;i--){
+          const enemy=enemies[i];
+          const ecx=enemy.x+enemy.width/2, ecy=enemy.y+enemy.height/2;
+          const dx=ecx-pcx, dy=ecy-pcy;
+          const dist=Math.hypot(dx,dy);
+
+          if(dist>this.range) continue;
+
           const angle=Math.atan2(dy,dx);
           let angleDiff=angle-attackAngle;
           while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
           while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
 
-          if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.20){
+          if(Math.abs(angleDiff) < arcWidth/2 + 0.20){
             const base=15*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
-            const dmg=applyEnemyDamage(enemy, base);
+            const dealt=applyEnemyDamage(enemy, base);
             createParticles(enemy.x,enemy.y,'#c8e6ff',8,4);
-            showDamageNumber(enemy.x,enemy.y,dmg);
+            showDamageNumber(enemy.x,enemy.y,dealt);
+
             if(enemy.hp<=0){
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
-              dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
-              enemies.splice(enemies.indexOf(enemy),1);
+              dropStellarBonusAtIndexIfNeeded(i);
+              enemies.splice(i,1);
               applyScore(100*currentLevel);
-            addKill(); this._baneSuperOnKill();
-                }
+              addKill(); this._baneSuperOnKill();
+            }
           }
-        });
+        }
       };
+
+      // 4 hit rapidi: ricalcola la mira ad ogni swing (così non "manca" quando i nemici si spostano)
       doSwing();
       setTimeout(doSwing, 85);
       setTimeout(doSwing, 170);
@@ -7368,6 +8072,8 @@ if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
       this._superGrapplePassUntil=0;
       this._superGrappleDirX=this.facingRight?1:-1;
       this._superGrappleDirY=0;
+      this._jimmySuperCurId=null;
+      this._jimmySuperCurSince=0;
     }
     else if(this.attackType==='punch'){
       createParticles(this.x+this.width/2,this.y+this.height/2,'#f39c12',20,6);
@@ -7393,26 +8099,73 @@ if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
     }
 
     else if(this.attackType==='lucienBlade'){
-      // Lucien SUPER: spawn 5 collectible bonuses around him (NO gold, NO super-recharge).
-      // Bonuses are real pickups collectable by the player.
-      const allowedTypes = ['heal','atk','speed','shieldPickup','furia','ice'];
+      // Lucien SUPER: rilascia 5 bonus sempre tutti diversi.
+      // Esclusi: ricarica SUPER, GOLD e POISON (malus).
+      // Auto-discovery: prende tutti i bonus presenti nel gioco (PICKUP_WEIGHTED + pickupImgs) tranne quelli esclusi.
+      const excluded = new Set(['super','gold','malus']);
+      const typeSet = new Set();
+
+      try{
+        if(typeof PICKUP_WEIGHTED!=='undefined' && Array.isArray(PICKUP_WEIGHTED)){
+          for(const row of PICKUP_WEIGHTED){
+            if(Array.isArray(row) && row.length) typeSet.add(row[0]);
+          }
+        }
+      }catch(e){}
+
+      try{
+        if(typeof pickupImgs!=='undefined' && pickupImgs){
+          for(const k of Object.keys(pickupImgs)){
+            if(k==='shield') typeSet.add('shieldPickup');
+            else typeSet.add(k);
+          }
+        }
+      }catch(e){}
+
+      // sicurezza: non usare chiavi solo-grafica
+      typeSet.delete('shield');
+
+      const pool = Array.from(typeSet).filter(t=>!excluded.has(t));
+
+      // shuffle (Fisher-Yates) e prendi i primi 5 (tutti diversi)
+      for(let i=pool.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        const tmp=pool[i]; pool[i]=pool[j]; pool[j]=tmp;
+      }
+      const chosen = pool.slice(0,5);
+
       const px = this.x + this.width/2;
       const py = this.y + this.height/2;
 
-      for(let i=0;i<5;i++){
-        const a = Math.random()*Math.PI*2;
+      // Spawn: distribuzione circolare con leggera randomizzazione
+      for(let i=0;i<chosen.length;i++){
+        const a = (i/Math.max(1,chosen.length))*Math.PI*2 + (Math.random()*0.5);
         const r = 60 + Math.random()*25;
-        const t = allowedTypes[Math.floor(Math.random()*allowedTypes.length)];
+        const t = chosen[i];
         const x = Math.max(40, Math.min(canvas.width-40, px + Math.cos(a)*r));
         const y = Math.max(40, Math.min(canvas.height-90, py + Math.sin(a)*r));
         spawnPickup(x, y, t);
         createParticles(x, y, '#80cbc4', 18, 4);
       }
+
+      // Fallback ultra-raro: se pool < 5 (impossibile avere 5 tutti diversi), completa con HEAL senza introdurre esclusi
+      if(chosen.length < 5){
+        for(let k=chosen.length; k<5; k++){
+          const a = Math.random()*Math.PI*2;
+          const r = 60 + Math.random()*25;
+          const x = Math.max(40, Math.min(canvas.width-40, px + Math.cos(a)*r));
+          const y = Math.max(40, Math.min(canvas.height-90, py + Math.sin(a)*r));
+          spawnPickup(x, y, 'heal');
+          createParticles(x, y, '#80cbc4', 18, 4);
+        }
+      }
+
       createParticles(px, py, '#80cbc4', 30, 6);
     }
 
 
-    else if(this.attackType==='kouvagia'){
+
+else if(this.attackType==='kouvagia'){
 
       // Kouvagia super: full heal + large knockback + tiny damage + visual FX
       this.hp=this.maxHP;
@@ -7539,9 +8292,22 @@ else if(this.attackType==='tempostormLaser'){
   }
 
   endSuper(){
+    const now=Date.now();
     this.isDoingSuper=false;this._superHitDone=false;this._lastSwordTick=null;
     this.superTargets=[];this.grappleTarget=null;this.isGrappling=false;
-    this.vx*=0.5;this.vy*=0.5;this.invulnerable=false;
+    this._superGrapplePassUntil=0;
+    this._jimmySuperCurId=null;
+    this._jimmySuperCurSince=0;
+    this.vx*=0.5;this.vy*=0.5;
+
+    // Don't cancel other legitimate invulnerability sources (pickup shield / Jimmy jetpack / Cosmo dash)
+    const keepInvul = !!(
+      (this.pickupShieldUntil && now < this.pickupShieldUntil) ||
+      (this.type==='jimmy' && this.isJetpacking && this.speedBuffUntil && now < this.speedBuffUntil) ||
+      (this.type==='cosmo' && this._cosmoInvulUntil && now < this._cosmoInvulUntil)
+    );
+    this.invulnerable = keepInvul;
+
     if(this.type==='jimmy')this.shieldActive=false
   }
 
@@ -7849,9 +8615,22 @@ const ang = (tx!==null) ? Math.atan2(ty-cy, tx-cx) : (this.facingRight?0:Math.PI
           ctx.stroke();
         }
       }else if(this.attackType==='sword'){
-        ctx.strokeStyle='rgba(155,89,182,0.6)';ctx.lineWidth=5;
-        const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.2;
-        ctx.beginPath();ctx.arc(this.x+this.width/2,this.y+this.height/2,this.range,angle-arcWidth/2,angle+arcWidth/2);ctx.stroke()
+        // Jeff: visual telegraph migliorato (coerente con l'hitbox reale)
+        const cx=this.x+this.width/2, cy=this.y+this.height/2;
+        const angle=this.facingRight?0:Math.PI;
+        const arcWidth=Math.PI*1.6; // uguale alla logica di hit
+        ctx.fillStyle='rgba(155,89,182,0.18)';
+        ctx.strokeStyle='rgba(155,89,182,0.88)';
+        ctx.lineWidth=7;
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,this.range,angle-arcWidth/2,angle+arcWidth/2);
+        ctx.closePath();
+        ctx.shadowColor = '#000000';
+        ctx.shadowBlur = 25;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.stroke();
       }else if(this.attackType==='salsySword'){
         // Visual telegraph: Salsy fan slash area
         const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.35;
@@ -7886,7 +8665,7 @@ ctx.fill();
         ctx.stroke();
       }else if(this.attackType==='lucienBlade'){
         // Visual area: Lucien 4-hit close-range blade fan
-        const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.05;
+        const angle=(typeof this._lucienAimAngle==='number')?this._lucienAimAngle:(this.facingRight?0:Math.PI);const arcWidth=Math.PI*1.05;
         ctx.fillStyle='rgba(200,230,255,0.13)';
         ctx.strokeStyle='rgba(200,230,255,0.82)';
         ctx.lineWidth=6;
@@ -8038,7 +8817,7 @@ ctx.fill();
 class Enemy{
   constructor(type,level){
     const cfg=levelConfigs[Math.max(0,Math.min(levelConfigs.length-1,level-1))];
-    const mult=1+0.15*level;
+    const mult=1; // stats per livello già finali (nessuna scala automatica)
     this.type=type;
     if(!window._enemyIdSeq) window._enemyIdSeq = 1;
     this._id = window._enemyIdSeq++;
@@ -8046,14 +8825,12 @@ class Enemy{
     this.y=Math.random()*(canvas.height-150)+50;
     this.width=Math.round(56*1.2);
     this.height=Math.round(56*1.2);
-    this.vx=(Math.random()-0.5)*cfg.enemySpeed*mult;
-    this.vy=(Math.random()-0.5)*cfg.enemySpeed*mult;
-    this.maxHP=Math.round(cfg.enemyHP*(1+0.25*level));
+    this.vx=(Math.random()-0.5)*cfg.enemySpeed;
+    this.vy=(Math.random()-0.5)*cfg.enemySpeed;
+    this.maxHP=Math.round(cfg.enemyHP);
     this.hp=this.maxHP;
-    const baseDamage=Math.round(cfg.enemyDamage*(1+0.20*level));
-    this.damage=(level>=7)?Math.round(baseDamage*0.8):baseDamage;
-    this.speed=cfg.enemySpeed*mult;
-    if(level===8)this.speed*=0.925;
+    this.damage=Math.round(cfg.enemyDamage);
+this.speed=cfg.enemySpeed;
     // Modalità FACILE: nemici più lenti (-10%) e meno danno (-20%)
     if(difficultyMode==='easy'){
       this.vx*=0.90; this.vy*=0.90;
@@ -8071,18 +8848,26 @@ class Enemy{
       this.attackCooldown=1600;
       this.keepAway=300;
       this.preferRange=520;
+      // Laser: ora schivabile (telegraph + crescita progressiva)
+      this.laserChargeMs = 150;      // telegraph molto breve (100-200ms)
+      this.laserMaxLen   = 650;
+      this.laserWidth    = 30;
+      this.laserTTL      = 1050;     // durata complessiva del fascio (dopo la carica)
+      // "Velocità di colpo": velocità di crescita del laser (px/sec)
+      // (valore moderato così si può schivare; scala leggermente col livello)
+      this.laserSpeed    = 3200 + Math.max(0, (level-18))*120; // costruzione rapidissima
     }
     if(this.type==='boss4'){
       this.width=Math.round(240*1.2);
       this.height=Math.round(240*1.2);
 
       // Override scaling: boss has fixed stats
-      this.maxHP=900;
+      this.maxHP=2500;
       this.hp=this.maxHP;
 
       this.damage=30;          // fan damage
       this.ringDamage=20;      // ring damage
-      this.speed=4.2;
+      this.speed=5.0;
       this.vx=(Math.random()-0.5)*this.speed;
       this.vy=(Math.random()-0.5)*this.speed;
 
@@ -8129,21 +8914,66 @@ class Enemy{
     let nx=dx/dist;
     let ny=dy/dist;
 
-    // OneEyes: keep distance + shoot lasers
+    // OneEyes: kite (allontanarsi) + dispersione tra OneEyes + laser schivabile
     if(this.type==='oneyes'){
-      // keep away if too close
-      if(dist < (this.keepAway||300)){
-        nx = -nx; ny = -ny;
-      } else if(dist > (this.preferRange||520)){
-        // slightly approach if too far
-        // nx,ny already towards player
-      } else {
-        // strafe / small drift
-        const t = nx; nx = -ny*0.7; ny = t*0.7;
+      const keep = (this.keepAway||300);
+      const prefer = (this.preferRange||520);
+
+      // direzione "via dal player"
+      const awayX = -nx, awayY = -ny;
+      let tanX = -awayY, tanY = awayX;
+
+      // slot angolare stabile per farli disporsi in posizioni diverse attorno al player
+      if(this._slotAngle==null){
+        const golden = 2.399963229728653; // golden angle (rad)
+        this._slotAngle = (this._id||0) * golden;
+      }
+      const myAng = Math.atan2(cy - py, cx - px); // angolo player->nemico
+      const targetAng = (this._slotAngle % (Math.PI*2));
+      const diff = Math.atan2(Math.sin(targetAng - myAng), Math.cos(targetAng - myAng));
+      const turn = (diff>=0) ? 1 : -1;
+
+      // Sempre provano ad aumentare la distanza, ma se sono già molto lontani orbitano (senza tornare verso il player)
+      let awayMul = 1.0;
+      let orbitMul = 0.85;
+      if(dist < keep){
+        awayMul = 1.35;
+        orbitMul = 0.25;
+      } else if(dist > prefer*1.35){
+        awayMul = 0.15;
+        orbitMul = 0.95;
+      } else if(dist > prefer*1.15){
+        awayMul = 0.45;
+        orbitMul = 0.90;
       }
 
-      this.vx = nx*this.speed;
-      this.vy = ny*this.speed;
+      // base move: outward + orbit verso lo slot (per non clumpare)
+      let mx = awayX*awayMul + tanX*turn*orbitMul;
+      let my = awayY*awayMul + tanY*turn*orbitMul;
+
+      // Separation: repulsione tra OneEyes per distribuirsi (anti-clumping)
+      let sepX=0, sepY=0;
+      for(let j=0;j<enemies.length;j++){
+        const o=enemies[j];
+        if(o!==this && o.type==='oneyes'){
+          const ocx=o.x+o.width/2, ocy=o.y+o.height/2;
+          const sx = (cx - ocx);
+          const sy = (cy - ocy);
+          const sd = Math.hypot(sx,sy);
+          if(sd>0 && sd<260){
+            const w = (260 - sd)/260;
+            sepX += (sx/sd)*w;
+            sepY += (sy/sd)*w;
+          }
+        }
+      }
+      mx += sepX*1.35;
+      my += sepY*1.35;
+
+      // normalize
+      const md = Math.hypot(mx,my)||1;
+      this.vx = (mx/md)*this.speed;
+      this.vy = (my/md)*this.speed;
 
       // shoot laser (1s duration), with higher cooldown
       if(dist>220 && (now-this.lastAttack)>this.attackCooldown){
@@ -8152,12 +8982,14 @@ class Enemy{
           owner:this,
           x:cx, y:cy,
           angle,
-          length:650,
-          width:18,
-          ttl:1000,
-          damage:15,
+          length:(this.laserMaxLen||650),
+          width:(this.laserWidth||30),
+          ttl:(this.laserTTL||1050),
+          damage:this.damage,
           kind:'oneyes',
-          chargeMs:0
+          chargeMs:(this.laserChargeMs||320),
+          growSpeed:(this.laserSpeed||950),
+          anchorToOwner:true
         });
         createParticles(cx,cy,'#74b9ff',16,4);
         this.lastAttack=now;
@@ -8292,7 +9124,23 @@ ctx.fill();
 }
 
 class ShooterEnemy extends Enemy{
-  constructor(type,level){super(type,level);this.shootCooldown=Math.max(600,1800-level*40);this.lastShoot=0;this.bulletSpeed=5+level*0.15}
+  constructor(type,level){
+    super(type,level);
+
+    this.lastShoot=0;
+
+    // Shot tuning per livello (valori "effettivi" in battaglia)
+    if(level===11){
+      this.shootCooldown=1360;
+      this.bulletSpeed=6.50;
+    }else if(level===12){
+      this.shootCooldown=1200;
+      this.bulletSpeed=6.60;
+    }else{
+      this.shootCooldown=Math.max(600,1800-level*40);
+      this.bulletSpeed=5+level*0.15;
+    }
+  }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
     if(this.stunnedUntil && Date.now() < this.stunnedUntil){
@@ -8315,7 +9163,7 @@ class ShooterEnemy extends Enemy{
       const vx=(dx/len)*this.bulletSpeed;const vy=(dy/len)*this.bulletSpeed;
       spawnProjectile({
         x:this.x+this.width/2,y:this.y+this.height/2,
-        vx,vy,damage:Math.max(1,Math.round(this.damage*0.6)),ttl:4000,
+        vx,vy,damage:Math.max(1,Math.round(this.damage)),ttl:4000,
         color:'#ffd54f',radius:6,friendly:false,source:this
       })
     }
@@ -8354,7 +9202,9 @@ class ArcherEnemy extends Enemy{
     super(type,level);
     this.shootCooldown=Math.max(650, 1250 - level*18);
     this.lastShoot=0;
-    this.arrowSpeed=9.2 + level*0.20;
+    if(level===21) this.arrowSpeed=10.40;
+    else if(level===22) this.arrowSpeed=11.60;
+    else this.arrowSpeed=9.2 + level*0.20;
     this.keepMin=520; // very far
     this.keepMax=700;
   }
@@ -8398,7 +9248,7 @@ class ArcherEnemy extends Enemy{
         vx, vy,
         friendly:false,
         source:this,
-        damage:Math.max(8, Math.round(this.damage*0.85)),
+        damage:Math.max(1, Math.round(this.damage)),
         ttl:3200,
         color:'#e0e0e0',
         radius:4,
@@ -8454,6 +9304,7 @@ class GlacialEnemy extends Enemy{
     this._lastRegenAt=0;
     this.keepMin=280;
     this.keepMax=440;
+    this.glacialBaseTick = (level===23 ? 20 : (level===24 ? 22 : Math.max(3, Math.round(this.damage*0.20))));
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
@@ -8526,7 +9377,7 @@ class GlacialEnemy extends Enemy{
         if(now - this._coneLastTick >= 250){
           this._coneLastTick = now;
           const insideSec = this._coneInsideMs/1000;
-          const base = Math.max(3, Math.round(this.damage*0.20));
+          const base = (this.glacialBaseTick!=null ? this.glacialBaseTick : Math.max(3, Math.round(this.damage*0.20)));
           const ramp = Math.round(insideSec * 2.2); // gradual increase
           const dmg = Math.min(22, base + ramp);
           player.takeDamage(dmg, this);
@@ -8597,7 +9448,27 @@ ctx.fill();
 
 
 class AttackReturnEnemy extends Enemy{
-  constructor(type,level){super(type,level);this.homeX=this.x;this.homeY=this.y;this.state='idle';this.attackRange=60;this.attackCooldown=2200;this.lastAttackTime=0;this.attackSpeed=this.speed*2.5}
+  constructor(type,level){
+    super(type,level);
+    this.homeX=this.x;
+    this.homeY=this.y;
+    this.state='idle';
+    // Range e velocità carica (valori "effettivi" in battaglia)
+    this.attackRange=40;   // hit range
+    this.engageRange=150;  // distanza per iniziare la carica
+
+    // Velocità colpo (carica) per livello
+    if(level===13) this.attackSpeed=17.70;
+    else if(level===14) this.attackSpeed=19.76;
+    else this.attackSpeed=this.speed*2.5;
+
+    if(difficultyMode==='easy'){
+      this.attackSpeed*=0.90;
+    }
+
+    this.attackCooldown=2200;
+    this.lastAttackTime=0;
+}
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
     if(this.stunnedUntil && Date.now() < this.stunnedUntil){
@@ -8611,7 +9482,7 @@ class AttackReturnEnemy extends Enemy{
     if(this.state==='idle'){
       const wanderX=Math.sin(Date.now()/1000+this.homeX)*0.3;const wanderY=Math.cos(Date.now()/1000+this.homeY)*0.3;
       this.vx=wanderX*this.speed;this.vy=wanderY*this.speed;
-      if(distToPlayer<220&&Date.now()-this.lastAttackTime>this.attackCooldown)this.state='attack'
+      if(distToPlayer<(this.engageRange||220)&&Date.now()-this.lastAttackTime>this.attackCooldown)this.state='attack'
     }
     else if(this.state==='attack'){
       const nx=dx/(distToPlayer||1);const ny=dy/(distToPlayer||1);
@@ -8745,11 +9616,11 @@ class Boss5Enemy extends Enemy{
     this.height=Math.round(245*1.2);
 
     // Stat fisse richieste
-    this.maxHP=800;
-    this.hp=800;
+    this.maxHP=2500;
+    this.hp=this.maxHP;
 
     // "Non troppo veloce"
-    this.speed=2.99*0.75; // ~1.69 (leggermente più veloce)
+    this.speed=4.5;
 
     // Danno base (usato solo per eventuale contatto)
     this.damage=50;
@@ -8768,12 +9639,12 @@ class Boss5Enemy extends Enemy{
     this.lastSwingTick=0;
 
     // --- Passiva: ogni 28s respinge + cura 50 ---
-    this.passiveInterval=20000;
+    this.passiveInterval=10000;
     this.nextPassive=Date.now()+this.passiveInterval;
     this.passiveFxUntil=0;
 
     // Area della passiva/super (raggio)
-    this.passiveRadius=750; // aumentata
+    this.passiveRadius=850; // aumentata
   }
 
   startSwingTowards(player){
@@ -8806,7 +9677,7 @@ class Boss5Enemy extends Enemy{
     shakeScreen();
 
     // Cura boss
-    this.hp = Math.min(this.maxHP, this.hp + 80);
+    this.hp = Math.min(this.maxHP, this.hp + 120);
 
     // Effetto sul player SOLO se dentro l'area della super/passiva
     const px=player.x+player.width/2, py=player.y+player.height/2;
@@ -8822,7 +9693,7 @@ class Boss5Enemy extends Enemy{
 
       // Slow: -50% velocità per 2s
       if(player && typeof player.applySlow==='function'){
-        player.applySlow(0.60, 3200);
+        player.applySlow(0.50, 2000);
       }
 
       // clamp in arena
@@ -8870,7 +9741,7 @@ class Boss5Enemy extends Enemy{
 
     if(inside){
       this.lastSwingTick=now;
-      player.takeDamage(18, this);
+      player.takeDamage(20, this);
     }
   }
 
@@ -9458,8 +10329,8 @@ function updateCosmoSingularity(now){
       const t = Math.max(0, 1 - dist/orb.pullR);
       // Always-on pull even at long range, with aggressive ramp-up near the center.
       // Enemies can still move, but the drag + ramp makes the center eventually win.
-      let pull = 0.12 + Math.pow(t, 1.32) * 3.2;
-      if (pull > 3.7) pull = 3.7;
+      let pull = (0.12 + Math.pow(t, 1.32) * 3.2) * 2;
+      if (pull > 7.4) pull = 7.4;
       e.x += (dx/(dist||1))*pull;
       e.y += (dy/(dist||1))*pull;
       // drag inside the field (simulated resistance)
@@ -9597,8 +10468,9 @@ return;
   }
 
   if(player) player.update();
+  if(player) updateArcoAntico(now, player);
     updateHendelCrush();
-  enemies.forEach(e=>{e.update(player)});
+  enemies.forEach(e=>{e.update(player); clampToPlayBounds(e, 2);});
   updateCosmoMarks(now);
   updateCosmoSingularity(now);
   updateCosmoTrails(now);
@@ -9655,6 +10527,7 @@ return;
   drawCosmoSingularity();
   drawCosmoTrails();
   drawRooneyAreaFX(now);
+  drawArcoAntico(now);
   enemies.forEach(e=>e.draw());
   drawBossRings(now);
   drawWolves();
@@ -9710,10 +10583,21 @@ if(bonusBox){
 
   add('SCUDO', player.pickupShieldUntil, '#7fdfff');   // azzurro chiaro
   add('SPEED', player.speedBuffUntil, '#3498db');      // blu
-  add('<span class="ira-glow">IRA</span>', player.baneSuperUntil, '#ff9800'); // arancione (Bane)
+  // IRA pickup (bonus): mostra come gli altri bonus
+  add('IRA', player.iraUntil, '#8A0C00');              // rosso scuro richiesto
+
+  // Bane SUPER: mantieni indicazione separata per evitare doppio "IRA" quando Bane raccoglie il bonus
+  if(player.type==='bane'){
+    add('<span class="ira-glow">IRA SUPER</span>', player.baneSuperUntil, '#ff9800'); // arancione (Bane)
+  }
   add('FURIA', player.furiaHealUntil, '#ff00ff');      // fucsia
   add('ATK', player.attackBuffUntil, '#ff3b3b');       // rosso
   add('POISON', player.poisonUntil, '#4b0082');        // viola scuro
+
+  // Arco Antico (durata colonna)
+  if(typeof ancientColumn!=='undefined' && ancientColumn && ancientColumn.hp>0){
+    add('ARCO ANTICO', ancientColumn.endsAt, '#c0c0c0');
+  }
 
   if(rows.length){
     bonusBox.style.display='block';
@@ -9990,6 +10874,8 @@ document.getElementById('menuBtn').addEventListener('click',()=>{
   // chiudi end screen subito (ma resta la fly anim sopra)
   document.getElementById('endScreen').style.display='none';
   document.getElementById('mainMenu').style.display='block';
+  const menuTopLeft=document.getElementById('menuTopLeft');
+  if(menuTopLeft){ menuTopLeft.style.display='flex'; menuTopLeft.setAttribute('aria-hidden','false'); }
   gameState='menu';
   updateMenuRecordsDisplay();
 
@@ -11054,8 +11940,28 @@ function _applyMarcusConfusion(enemy){
     // avoid double-wrapping
     if(original && original.__marcusWrapped) return;
     const wrapped = function(playerRef){
-      if(_applyMarcusConfusion(this)) return;
-      return original.call(this, playerRef);
+      const ox = this.x, oy = this.y;
+      const didConfuse = _applyMarcusConfusion(this);
+      const res = didConfuse ? undefined : original.call(this, playerRef);
+
+      // Arco Antico slow: scale the movement delta (doesn't touch base speed)
+      try{
+        const now = Date.now();
+        const f = (typeof getArcoAnticoMoveSlowFactor==='function') ? getArcoAnticoMoveSlowFactor(this, now) : 1;
+        if(f!==1){
+          const dx = (this.x - ox);
+          const dy = (this.y - oy);
+          this.x = ox + dx*f;
+          this.y = oy + dy*f;
+          if(typeof this.vx==='number') this.vx *= f;
+          if(typeof this.vy==='number') this.vy *= f;
+          // boundaries
+          if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
+          if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
+        }
+      }catch(e){}
+
+      return res;
     };
     wrapped.__marcusWrapped = true;
     proto.update = wrapped;
