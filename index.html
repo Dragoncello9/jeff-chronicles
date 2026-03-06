@@ -1622,6 +1622,273 @@
 }
 </style>
 
+
+<style id="parallel-ui-mechanisms-only">
+:root{
+  --ui-ease-bounce:cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ui-ease-out:cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Menu entrance — slide-in fluido */
+.menu,
+.end-screen{
+  animation:uiMenuSlideIn 360ms var(--ui-ease-out) both;
+}
+@keyframes uiMenuSlideIn{
+  from{opacity:0;transform:translate(-50%,-46%) scale(0.93)}
+  to{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+
+/* Titolo — glow pulse sottile */
+.menu h1,
+.end-screen h1{
+  animation:uiTitlePulse 3.6s ease-in-out infinite;
+}
+@keyframes uiTitlePulse{
+  0%,100%{text-shadow:3px 3px 6px #000,0 0 8px rgba(231,76,60,0)}
+  50%{text-shadow:3px 3px 6px #000,0 0 18px rgba(231,76,60,0.42)}
+}
+
+/* Bottoni — bounce + inner highlight + shine */
+.btn,
+.pause-btn,
+#pauseBox button,
+.menu-icon-btn,
+.img-btn,
+.char-grid button,
+.charBtn,
+.characterBtn,
+.selectCharBtn,
+.char-button,
+#moreCharsToggle,
+.btn-road-mini,
+#missionsSortBtn,
+.mission .claim-btn{
+  position:relative;
+  overflow:hidden;
+  transition:transform 120ms var(--ui-ease-bounce), box-shadow 120ms ease, filter 120ms ease, border-color 120ms ease;
+  will-change:transform;
+}
+.btn::before,
+.pause-btn::before,
+#pauseBox button::before,
+.menu-icon-btn::before,
+.img-btn::before,
+.char-grid button::before,
+.charBtn::before,
+.characterBtn::before,
+.selectCharBtn::before,
+.char-button::before,
+#moreCharsToggle::before,
+.btn-road-mini::before,
+#missionsSortBtn::before,
+.mission .claim-btn::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.07) 28%, rgba(255,255,255,0) 62%);
+  pointer-events:none;
+}
+.btn::after,
+.pause-btn::after,
+#pauseBox button::after,
+.menu-icon-btn::after,
+.img-btn::after,
+.char-grid button::after,
+.charBtn::after,
+.characterBtn::after,
+.selectCharBtn::after,
+.char-button::after,
+#moreCharsToggle::after,
+.btn-road-mini::after,
+#missionsSortBtn::after,
+.mission .claim-btn::after{
+  content:'';
+  position:absolute;
+  top:-20%;
+  left:-85%;
+  width:42%;
+  height:140%;
+  transform:rotate(18deg);
+  background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.14), rgba(255,255,255,0));
+  pointer-events:none;
+  transition:left 340ms ease;
+}
+.btn:hover,
+.pause-btn:hover,
+#pauseBox button:hover,
+.menu-icon-btn:hover,
+.img-btn:hover,
+.char-grid button:hover:not(.locked):not(.empty),
+.charBtn:hover,
+.characterBtn:hover,
+.selectCharBtn:hover,
+.char-button:hover,
+#moreCharsToggle:hover,
+.btn-road-mini:hover,
+#missionsSortBtn:hover,
+.mission .claim-btn:hover{
+  transform:translateY(-3px) scale(1.03);
+  filter:brightness(1.06);
+}
+.btn:hover::after,
+.pause-btn:hover::after,
+#pauseBox button:hover::after,
+.menu-icon-btn:hover::after,
+.img-btn:hover::after,
+.char-grid button:hover:not(.locked):not(.empty)::after,
+.charBtn:hover::after,
+.characterBtn:hover::after,
+.selectCharBtn:hover::after,
+.char-button:hover::after,
+#moreCharsToggle:hover::after,
+.btn-road-mini:hover::after,
+#missionsSortBtn:hover::after,
+.mission .claim-btn:hover::after{
+  left:135%;
+}
+.btn:active,
+.pause-btn:active,
+#pauseBox button:active,
+.menu-icon-btn:active,
+.img-btn:active,
+.char-grid button:active:not(.locked):not(.empty),
+.charBtn:active,
+.characterBtn:active,
+.selectCharBtn:active,
+.char-button:active,
+#moreCharsToggle:active,
+.btn-road-mini:active,
+#missionsSortBtn:active,
+.mission .claim-btn:active{
+  transform:translateY(2px) scale(0.98);
+  filter:brightness(0.96);
+}
+
+/* Evo banner — overshoot + dissolvenza graduale */
+.evo-banner.show{
+  animation:evoPop 620ms var(--ui-ease-out) forwards;
+}
+@keyframes evoPop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(0.75)}
+  18%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}
+  42%{transform:translate(-50%,-50%) scale(0.97)}
+  62%{opacity:1;transform:translate(-50%,-50%) scale(1.02)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.05)}
+}
+
+/* Super blink — sinusoidale, meno aggressivo */
+.hud-super.ready .hud-bar-fill,
+.hud-super.ready .hud-super-text{
+  animation:superBlink 0.78s ease-in-out infinite;
+}
+@keyframes superBlink{
+  0%,100%{opacity:1}
+  50%{opacity:0.38}
+}
+
+/* XP bar — shimmer sweep */
+.xpbar{
+  position:relative;
+  overflow:hidden;
+}
+.xpbar::after{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-60%;
+  width:40%;
+  height:100%;
+  background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.34), rgba(255,255,255,0));
+  animation:xpSweep 3s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes xpSweep{
+  0%{left:-60%}
+  65%,100%{left:130%}
+}
+
+/* Ether HUD — floating leggero */
+#etherHud{
+  animation:etherFloat 3.2s ease-in-out infinite;
+  will-change:transform;
+}
+@keyframes etherFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-3px)}
+}
+
+/* Skin card / Road node — hover lift + scala */
+.skin-card,
+.road-node:not(.locked){
+  transition:transform 140ms var(--ui-ease-bounce), box-shadow 140ms ease, border-color 140ms ease, filter 140ms ease;
+  will-change:transform;
+}
+.skin-card:hover,
+.road-node:not(.locked):hover{
+  transform:translateY(-5px) scale(1.04);
+}
+
+/* Guide modal — slide-up all'apertura */
+.guide-modal.show .guide-modal-content,
+.guide-modal[style*="display:flex"] .guide-modal-content,
+.guide-modal[style*="display: flex"] .guide-modal-content,
+#menuSettingsModal.show .guide-modal-content,
+#menuSettingsModal[style*="display:flex"] .guide-modal-content,
+#menuSettingsModal[style*="display: flex"] .guide-modal-content{
+  animation:guideSlideUp 300ms var(--ui-ease-out) both;
+}
+@keyframes guideSlideUp{
+  from{opacity:0;transform:translateY(22px) scale(0.97)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* Level up overlay — spin completo + fade più ampio */
+#levelUpOverlay.show{
+  animation:luFade 1300ms ease forwards;
+}
+#levelUpOverlay .lu-card{
+  animation:luPop 1300ms var(--ui-ease-out) forwards;
+}
+#levelUpOverlay::before{
+  animation:luSpin 1300ms linear forwards;
+  opacity:0.95;
+}
+@keyframes luSpin{
+  from{transform:rotate(0deg) scale(1)}
+  to{transform:rotate(360deg) scale(1.18)}
+}
+@keyframes luPop{
+  0%{transform:scale(0.65) translateY(18px);opacity:0}
+  22%{opacity:1}
+  65%{transform:scale(1.06) translateY(-4px)}
+  100%{transform:scale(0.99) translateY(-8px);opacity:1}
+}
+@keyframes luFade{
+  0%{opacity:0}
+  10%{opacity:1}
+  78%{opacity:1}
+  100%{opacity:0}
+}
+
+/* Scanline overlay — CRT sottile sopra il canvas */
+#gameContainer::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.055) 3px,
+      rgba(0,0,0,0.055) 4px),
+    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+  pointer-events:none;
+  z-index:3;
+  opacity:0.5;
+}
+</style>
+
 </head>
 
 
@@ -5041,8 +5308,22 @@ function updateGuideUnlockUI(){
 }
 
 
+window.PARTICLE_SCALE = 0.42;
+window.MAX_LIVE_PARTICLES = 420;
+window.scaleParticleCount = function(count){
+  if(!(count>0)) return 0;
+  return Math.max(1, Math.round(count * window.PARTICLE_SCALE));
+};
+window.getParticleSpawnBudget = function(requested){
+  if(typeof particles === 'undefined') return 0;
+  const scaled = window.scaleParticleCount(requested);
+  const free = Math.max(0, window.MAX_LIVE_PARTICLES - particles.length);
+  return Math.max(0, Math.min(scaled, free));
+};
+
 function createParticles(x,y,color,count=10,size=4){
-  for(let i=0;i<count;i++){
+  const n = window.getParticleSpawnBudget(count);
+  for(let i=0;i<n;i++){
     particles.push({
       x:x+Math.random()*20-10,
       y:y+Math.random()*20-10,
@@ -5982,10 +6263,11 @@ function createVoltryxExplosionFX(x,y,scale=1){
 function emitVoltryxTrail(x,y,isSuper=false){
   // Small shimmering sparks along the projectile path
   const count = isSuper ? 4 : 2;
+  const n = (window.getParticleSpawnBudget ? window.getParticleSpawnBudget(count) : count);
   const spread = isSuper ? 8 : 5;
   const spd = isSuper ? 2.2 : 1.6;
   const life = isSuper ? 20 : 16;
-  for(let i=0;i<count;i++){
+  for(let i=0;i<n;i++){
     particles.push({
       x:x + (Math.random()*2-1)*spread,
       y:y + (Math.random()*2-1)*spread,
@@ -6142,10 +6424,11 @@ function emitMarzTrail(p){
     const idx = (p && p.meta && typeof p.meta.marzIdx==='number') ? p.meta.marzIdx : 0;
     const col = p.color || '#ffffff';
     const count = (idx===1?2: (idx===2?2:2));
+    const n = (window.getParticleSpawnBudget ? window.getParticleSpawnBudget(count) : count);
     const spread = (idx===2?7:6);
     const spd = (idx===0?1.6:(idx===1?1.5:1.7));
     const life = (idx===0?18:(idx===1?16:18));
-    for(let i=0;i<count;i++){
+    for(let i=0;i<n;i++){
       particles.push({
         x:p.x + (Math.random()*2-1)*spread,
         y:p.y + (Math.random()*2-1)*spread,
@@ -15029,6 +15312,564 @@ function setCosmoUnlocked(){
     });
   }
 });
+</script>
+
+<!-- ============================================================
+     ENHANCED ATTACK / SUPER / BONUS FX  –  injected patch
+     Sovrascrive/estende funzioni FX senza toccare meccaniche.
+     ============================================================ -->
+<script>
+// ─── Attendi che il canvas e il ctx siano pronti ─────────────────────────────
+(function patchFX(){
+  'use strict';
+
+  // ── utility interna ──────────────────────────────────────────────────────
+  function safeCtx(){ try{ return (typeof ctx!=='undefined'&&ctx)?ctx:null; }catch(e){return null;} }
+  function safeNow(){ return Date.now(); }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  1.  SISTEMA PARTICELLE AVANZATO
+  //      Sostituisce createParticles con una versione che genera
+  //      particelle con gravità, vita, trail, scintille, stella e fumo.
+  // ══════════════════════════════════════════════════════════════════════════
+  const _origCreate = (typeof createParticles === 'function') ? createParticles : null;
+
+  window.createParticles = function(x, y, color, count=10, size=4, opts={}){
+    if(typeof particles==='undefined') return;
+    const type = opts.type || 'default'; // 'default'|'spark'|'star'|'smoke'|'ring'
+    const n = Math.min((window.getParticleSpawnBudget ? window.getParticleSpawnBudget(count) : count), 200);
+    for(let i=0;i<n;i++){
+      const a  = Math.random()*Math.PI*2;
+      const sp = (1.5 + Math.random()*5.5) * (opts.speed||1);
+      const life = Math.round((18 + Math.random()*22) * (opts.life||1));
+      particles.push({
+        x: x + (Math.random()*18-9),
+        y: y + (Math.random()*18-9),
+        vx: Math.cos(a)*sp,
+        vy: Math.sin(a)*sp - (opts.rise||0),
+        life, maxLife: life,
+        color,
+        size: Math.max(1, size*(0.6+Math.random()*0.8)),
+        gravity: opts.gravity!=null ? opts.gravity : 0.22,
+        _type: type,
+        glow: opts.glow || false
+      });
+    }
+  };
+
+  // Sostituisce drawParticles per supportare glow e forma stella
+  const _origDrawPart = (typeof drawParticles==='function') ? drawParticles : null;
+  window.drawParticles = function(){
+    if(typeof particles==='undefined') return;
+    const c = safeCtx(); if(!c) return;
+    particles.forEach(p=>{
+      if(!p) return;
+      const alpha = Math.max(0, p.life/(p.maxLife||30));
+      c.globalAlpha = alpha;
+      if(p.glow){
+        c.shadowColor = p.color;
+        c.shadowBlur  = 12;
+      }
+      c.fillStyle = p.color;
+      if(p._type==='star'){
+        c.save();
+        c.translate(p.x, p.y);
+        c.rotate(p.life*0.08);
+        c.beginPath();
+        const r=p.size*1.4, r2=r*0.45;
+        for(let k=0;k<5;k++){
+          const a=k*(Math.PI*2/5)-Math.PI/2;
+          k===0?c.moveTo(Math.cos(a)*r,Math.sin(a)*r):c.lineTo(Math.cos(a)*r,Math.sin(a)*r);
+          const a2=a+Math.PI/5;
+          c.lineTo(Math.cos(a2)*r2,Math.sin(a2)*r2);
+        }
+        c.closePath(); c.fill();
+        c.restore();
+      } else {
+        c.fillRect(p.x, p.y, p.size, p.size);
+      }
+      if(p.glow){ c.shadowBlur=0; c.shadowColor='transparent'; }
+    });
+    c.globalAlpha=1;
+  };
+
+  // ── updateParticles: supporta gravità e decelerazione personalizzate ──────
+  const _origUpdate = (typeof updateParticles==='function') ? updateParticles : null;
+  window.updateParticles = function(){
+    if(typeof particles==='undefined') return;
+    particles = particles.filter(p=>{
+      p.x += p.vx; p.y += p.vy;
+      p.vx *= 0.93; p.vy *= 0.93;
+      p.vy += (p.gravity!=null?p.gravity:0.22);
+      p.life--;
+      return p.life>0;
+    });
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  2.  FLASH A SCHERMO (screen flash su super / pickup forte)
+  // ══════════════════════════════════════════════════════════════════════════
+  let _screenFlashes = []; // [{r,g,b,alpha,decay}]
+
+  function addScreenFlash(r,g,b, alpha=0.45, decay=0.045){
+    _screenFlashes.push({r,g,b,alpha,decay});
+  }
+
+  // Chiamata nella gameLoop prima del restore — iniettata sotto
+  function drawScreenFlashes(){
+    if(!_screenFlashes.length) return;
+    const c = safeCtx(); if(!c) return;
+    _screenFlashes = _screenFlashes.filter(f=>{
+      c.save();
+      c.globalAlpha = Math.max(0, f.alpha);
+      c.fillStyle = `rgb(${f.r},${f.g},${f.b})`;
+      c.fillRect(0,0, typeof canvas!=='undefined'?canvas.width:1320, typeof canvas!=='undefined'?canvas.height:780);
+      c.restore();
+      f.alpha -= f.decay;
+      return f.alpha > 0;
+    });
+  }
+  window.drawScreenFlashes = drawScreenFlashes;
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  3.  BURST FX AVANZATI per ogni tipo di attacco
+  //      hitBurst(x,y,type): crea un burst visivo specifico per personaggio
+  // ══════════════════════════════════════════════════════════════════════════
+  window.hitBurst = function(x, y, charType, isSuper){
+    if(typeof particles==='undefined') return;
+    const S = isSuper;
+
+    if(charType==='jimmy'){
+      // Grapple: scintille elettriche turchesi
+      createParticles(x,y,'#00e5ff', S?60:30, S?5:3, {speed:1.6, glow:true, type:'spark'});
+      createParticles(x,y,'#ffffff', S?25:12, 2, {speed:2.2, glow:true, life:0.6});
+      if(S) addScreenFlash(0,200,255, 0.22, 0.04);
+    }
+    else if(charType==='rooney'){
+      // Pugno: impatto giallo-arancio con stella
+      createParticles(x,y,'#ff9800', S?80:40, S?7:5, {speed:1.8, type:'star', glow:true});
+      createParticles(x,y,'#fffde7', S?30:15, 3, {speed:3.0, glow:true, life:0.5});
+      if(S) addScreenFlash(255,150,0, 0.28, 0.05);
+    }
+    else if(charType==='jeff'){
+      // Spada: slash violaceo
+      createParticles(x,y,'#9c27b0', S?70:35, S?6:4, {speed:1.7, glow:true});
+      createParticles(x,y,'#e040fb', S?30:14, 3, {speed:2.5, glow:true, life:0.55, type:'spark'});
+      if(S) addScreenFlash(140,0,200, 0.22, 0.04);
+    }
+    else if(charType==='voltryx'){
+      // Ibrido: energia arancione
+      createParticles(x,y,'#ff6d00', S?75:35, S?6:4, {speed:2.0, glow:true, type:'star'});
+      createParticles(x,y,'#ffab40', S?25:12, 3, {speed:3.0, glow:true, life:0.5});
+      if(S) addScreenFlash(255,80,0, 0.25, 0.05);
+    }
+    else if(charType==='kouvagia'){
+      // Dash-mela: teal/verde acqua
+      createParticles(x,y,'#00bfa5', S?80:38, S?7:5, {speed:1.5, glow:true});
+      createParticles(x,y,'#84ffff', S?28:14, 3, {speed:2.8, glow:true, life:0.5, type:'spark'});
+      if(S) addScreenFlash(0,190,160, 0.25, 0.04);
+    }
+    else if(charType==='salsy'){
+      // Doppia lama: giallo/oro scintillante
+      createParticles(x,y,'#ffd600', S?70:34, S?6:4, {speed:2.0, glow:true, type:'spark'});
+      createParticles(x,y,'#fff9c4', S?25:12, 2, {speed:3.2, glow:true, life:0.5});
+      if(S) addScreenFlash(255,220,0, 0.22, 0.04);
+    }
+    else if(charType==='tempostorm'){
+      // Laser blu
+      createParticles(x,y,'#00b0ff', S?65:30, S?5:3, {speed:1.8, glow:true, type:'spark'});
+      createParticles(x,y,'#e1f5fe', S?20:10, 2, {speed:3.0, glow:true, life:0.55});
+      if(S) addScreenFlash(0,130,255, 0.28, 0.05);
+    }
+    else if(charType==='marz'){
+      // Magia: tricolore
+      createParticles(x,y,'#ff00ff', S?40:20, S?5:3, {speed:1.8, glow:true, type:'star'});
+      createParticles(x,y,'#00e5ff', S?40:20, S?5:3, {speed:2.0, glow:true, type:'star'});
+      createParticles(x,y,'#fff176', S?30:15, 4, {speed:2.4, glow:true, type:'star'});
+      if(S) addScreenFlash(140,0,180, 0.3, 0.05);
+    }
+    else if(charType==='hecate'){
+      // Arco: freccia argentea
+      createParticles(x,y,'#cfd8dc', S?60:28, S?5:3, {speed:2.2, glow:true, type:'spark'});
+      createParticles(x,y,'#e8eaf6', S?22:10, 2, {speed:3.5, glow:true, life:0.5});
+      if(S) addScreenFlash(180,200,220, 0.22, 0.04);
+    }
+    else if(charType==='marcus'){
+      // Note musicali: verde-giallo
+      createParticles(x,y,'#69f0ae', S?60:28, S?6:4, {speed:1.5, glow:true, rise:0.5});
+      createParticles(x,y,'#fffde7', S?20:10, 2, {speed:2.0, glow:true, life:0.55, type:'star'});
+      if(S) addScreenFlash(0,200,130, 0.22, 0.04);
+    }
+    else if(charType==='lucien'){
+      // Lama rapida: ciano freddo
+      createParticles(x,y,'#18ffff', S?70:32, S?5:3, {speed:2.5, glow:true, type:'spark'});
+      createParticles(x,y,'#80deea', S?22:10, 2, {speed:3.5, glow:true, life:0.45});
+      if(S) addScreenFlash(0,230,230, 0.22, 0.04);
+    }
+    else if(charType==='pdor'){
+      // Dardo arcano: viola brillante
+      createParticles(x,y,'#7c4dff', S?65:30, S?6:4, {speed:1.8, glow:true, type:'star'});
+      createParticles(x,y,'#ea80fc', S?25:12, 3, {speed:2.8, glow:true, life:0.5, type:'spark'});
+      if(S) addScreenFlash(100,0,255, 0.25, 0.04);
+    }
+    else if(charType==='bane'){
+      // Ascia: rosso sangue con scintille scure
+      createParticles(x,y,'#d32f2f', S?75:36, S?7:5, {speed:1.6, glow:true});
+      createParticles(x,y,'#ff5252', S?30:14, 4, {speed:2.5, glow:true, life:0.5, type:'spark'});
+      createParticles(x,y,'#8b0000', S?20:10, 5, {speed:1.2});
+      if(S) addScreenFlash(180,0,0, 0.3, 0.05);
+    }
+    else if(charType==='hendel'){
+      // Martello: grigio pietra con onde
+      createParticles(x,y,'#9e9e9e', S?80:40, S?7:5, {speed:1.4, glow:false});
+      createParticles(x,y,'#bdbdbd', S?28:14, 4, {speed:2.2, glow:true, life:0.5});
+      createParticles(x,y,'#5d4037', S?14:7, 6, {speed:1.0});
+      if(S) addScreenFlash(100,100,100, 0.3, 0.05);
+    }
+    else if(charType==='kaerith'){
+      // Fiammata: arancio-rosso intenso
+      createParticles(x,y,'#ff3d00', S?90:44, S?7:5, {speed:1.8, glow:true, rise:0.4});
+      createParticles(x,y,'#ff9800', S?40:20, 4, {speed:1.4, glow:true, rise:0.6, life:1.2});
+      createParticles(x,y,'#fff3e0', S?20:10, 3, {speed:2.5, glow:true, life:0.45});
+      if(S) addScreenFlash(255,60,0, 0.32, 0.05);
+    }
+    else if(charType==='cosmo'){
+      // Cosmico: vuoto nero con stelle
+      createParticles(x,y,'#1a0025', S?80:40, S?6:4, {speed:2.0, glow:false});
+      createParticles(x,y,'#7b1fa2', S?40:20, 4, {speed:1.5, glow:true, type:'star'});
+      createParticles(x,y,'#e040fb', S?25:12, 3, {speed:2.8, glow:true, life:0.5, type:'spark'});
+      if(S) addScreenFlash(50,0,80, 0.28, 0.04);
+    }
+    else {
+      // generico
+      createParticles(x,y,'#fff176', S?40:18, S?5:3, {speed:1.8, glow:true});
+    }
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  4.  PATCHING di applyPickupEffect → effetti raccolta POTENZIATI
+  // ══════════════════════════════════════════════════════════════════════════
+  const _origApply = (typeof applyPickupEffect==='function') ? applyPickupEffect : null;
+  window.applyPickupEffect = function(playerRef, type){
+    if(_origApply) _origApply.call(this, playerRef, type);
+
+    if(!playerRef) return;
+    const px = playerRef.x + (playerRef.width||0)/2;
+    const py = playerRef.y + (playerRef.height||0)/2;
+
+    switch(type){
+      case 'heal':
+        // Burst verde + stelle brillanti
+        createParticles(px,py,'#00e676', 55, 6, {glow:true, type:'star', rise:0.6, speed:1.2});
+        createParticles(px,py,'#b9f6ca', 20, 3, {glow:true, rise:1.0, speed:0.8, life:1.4});
+        addScreenFlash(0,200,100, 0.18, 0.035);
+        break;
+      case 'atk':
+        createParticles(px,py,'#ff1744', 60, 6, {glow:true, type:'star', speed:1.8});
+        createParticles(px,py,'#ff8a80', 22, 3, {glow:true, type:'spark', speed:2.4, life:0.55});
+        addScreenFlash(220,30,0, 0.22, 0.04);
+        break;
+      case 'super':
+        createParticles(px,py,'#ffd600', 65, 6, {glow:true, type:'star', speed:1.5});
+        createParticles(px,py,'#fffde7', 25, 3, {glow:true, speed:2.0, life:0.5});
+        addScreenFlash(255,220,0, 0.25, 0.04);
+        break;
+      case 'gold':
+        for(let i=0;i<6;i++){
+          const a=i/6*Math.PI*2;
+          const r=40+Math.random()*20;
+          createParticles(px+Math.cos(a)*r, py+Math.sin(a)*r, '#ffd600', 18, 5, {glow:true, type:'star', speed:1.2});
+        }
+        createParticles(px,py,'#fff9c4', 40, 4, {glow:true, type:'star', speed:0.8, rise:0.4});
+        addScreenFlash(255,220,0, 0.38, 0.055);
+        break;
+      case 'speed':
+        createParticles(px,py,'#2979ff', 55, 5, {glow:true, type:'spark', speed:2.5});
+        createParticles(px,py,'#82b1ff', 20, 3, {glow:true, speed:3.5, life:0.5});
+        addScreenFlash(30,120,255, 0.2, 0.04);
+        break;
+      case 'shieldPickup':
+        createParticles(px,py,'#00e5ff', 60, 5, {glow:true, speed:1.4});
+        createParticles(px,py,'#ffffff', 20, 3, {glow:true, type:'star', speed:0.8, rise:0.3, life:1.3});
+        addScreenFlash(0,220,255, 0.2, 0.04);
+        break;
+      case 'ira':
+        createParticles(px,py,'#ff6f00', 65, 6, {glow:true, type:'star', speed:1.8});
+        createParticles(px,py,'#ffab40', 25, 4, {glow:true, type:'spark', speed:2.5, life:0.5});
+        addScreenFlash(240,80,0, 0.28, 0.05);
+        break;
+      case 'letteraAmore':
+        createParticles(px,py,'chocolate', 45, 5, {glow:true, type:'star', rise:0.4, speed:1.3});
+        createParticles(px,py,'#ffccbc', 18, 3, {glow:true, rise:0.8, speed:0.9, life:1.5});
+        addScreenFlash(140,60,0, 0.18, 0.035);
+        break;
+      case 'mezzaluna':
+        createParticles(px,py,'#90caf9', 60, 6, {glow:true, type:'star', speed:1.5, rise:0.3});
+        createParticles(px,py,'#e3f2fd', 20, 3, {glow:true, speed:2.0, rise:0.5, life:1.3});
+        addScreenFlash(100,170,240, 0.22, 0.04);
+        break;
+      case 'furia':
+        createParticles(px,py,'#ff00ff', 55, 6, {glow:true, type:'star', speed:1.8});
+        createParticles(px,py,'#f48fb1', 22, 4, {glow:true, type:'spark', speed:2.4, life:0.5});
+        addScreenFlash(200,0,200, 0.25, 0.045);
+        break;
+      case 'ice':
+        createParticles(px,py,'#80deea', 65, 5, {glow:true, type:'spark', speed:2.0});
+        createParticles(px,py,'#b2ebf2', 22, 3, {glow:true, speed:1.2, rise:0.3, life:1.3});
+        addScreenFlash(0,180,200, 0.22, 0.04);
+        break;
+      case 'arcoAntico':
+        createParticles(px,py,'#c0c0c0', 50, 6, {glow:true, speed:1.4});
+        createParticles(px,py,'#ffd54f', 25, 4, {glow:true, type:'star', speed:1.8, life:0.8});
+        addScreenFlash(180,180,140, 0.2, 0.04);
+        break;
+      case 'malus':
+        createParticles(px,py,'#8b0000', 40, 5, {glow:true, speed:1.5});
+        addScreenFlash(100,0,0, 0.25, 0.04);
+        break;
+      case 'stellar':
+        createParticles(px,py,'#ffffff', 55, 5, {glow:true, type:'star', speed:1.3, rise:0.3, life:1.5});
+        addScreenFlash(255,255,255, 0.3, 0.055);
+        break;
+    }
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  5.  drawPickups: aggiungi GLOW e PULSAZIONE agli icon dei pickup
+  // ══════════════════════════════════════════════════════════════════════════
+  const _origDrawPickups = (typeof drawPickups==='function') ? drawPickups : null;
+  window.drawPickups = function(){
+    if(typeof pickups==='undefined') return;
+    const c = safeCtx(); if(!c) return;
+    const now = safeNow();
+
+    pickups.forEach(p=>{
+      const img = (typeof getPickupImage==='function') ? getPickupImage(p.type) : null;
+      const scale = (typeof PICKUP_RENDER_SCALE!=='undefined' && PICKUP_RENDER_SCALE[p.type]) || 1;
+      const w = (p.w!=null)?p.w: (p.radius!=null)?(p.radius*2):28;
+      const h = (p.h!=null)?p.h: (p.radius!=null)?(p.radius*2):28;
+      const dw = w*2*scale;
+      const dh = h*2*scale;
+
+      // Pulsazione dimensione
+      const age = now - (p.created||now);
+      const pulse = 1 + 0.08*Math.sin(age*0.0045);
+
+      // Determina colore glow per tipo
+      const glowMap = {
+        heal:'#00e676', atk:'#ff1744', super:'#ffd600', gold:'#ffd600',
+        speed:'#2979ff', shieldPickup:'#00e5ff', ira:'#ff6f00',
+        letteraAmore:'chocolate', mezzaluna:'#90caf9', furia:'#ff00ff',
+        ice:'#80deea', arcoAntico:'#c0c0c0', malus:'#8b0000',
+        stellar:'#ffffff'
+      };
+      const glowColor = glowMap[p.type] || '#ffffff';
+
+      c.save();
+      c.shadowColor = glowColor;
+      c.shadowBlur  = 18 + 6*Math.sin(age*0.004);
+      c.translate(p.x, p.y);
+      c.scale(pulse, pulse);
+
+      if(img && img.complete && img.naturalWidth>0){
+        c.drawImage(img, -dw/2, -dh/2, dw, dh);
+      } else {
+        c.fillStyle = glowColor;
+        c.beginPath();
+        c.arc(0,0, (p.radius!=null)?p.radius:14, 0, Math.PI*2);
+        c.fill();
+      }
+      c.restore();
+    });
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  6.  Patching di applyEnemyDamage (se esiste) → hitBurst all'impatto
+  //      E showDamageNumber → numero più grande/colorato per critici
+  // ══════════════════════════════════════════════════════════════════════════
+  const _origApplyDmg = (typeof applyEnemyDamage==='function') ? applyEnemyDamage : null;
+  if(_origApplyDmg){
+    window.applyEnemyDamage = function(enemy, dmg, source){
+      const final = _origApplyDmg.call(this, enemy, dmg, source);
+      // Breve scintilla arancio/giallo al punto di impatto
+      try{
+        if(enemy && typeof enemy.x==='number'){
+          const cx = enemy.x+(enemy.width||0)/2;
+          const cy = enemy.y+(enemy.height||0)/2;
+          const charT = (typeof player!=='undefined' && player) ? player.type : null;
+          // Spark breve senza sovraccaricare
+          createParticles(cx, cy, '#fff176', 6, 2, {speed:1.4, glow:true, life:0.5, gravity:0.15});
+          if(charT) hitBurst(cx, cy, charT, false);
+        }
+      }catch(e){}
+      return final;
+    };
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  7.  Super activation FX: patch il metodo superAttack della classe Player
+  //      Aggiunge screen flash + mega burst al momento dell'attivazione super
+  // ══════════════════════════════════════════════════════════════════════════
+  // Intercettiamo tramite accountOnSuperUsed che viene chiamato ad ogni super
+  const _origSuperUsed = (typeof accountOnSuperUsed==='function') ? accountOnSuperUsed : null;
+  if(_origSuperUsed){
+    window.accountOnSuperUsed = function(){
+      _origSuperUsed.call(this);
+      try{
+        if(typeof player==='undefined' || !player) return;
+        const px = player.x+(player.width||0)/2;
+        const py = player.y+(player.height||0)/2;
+        hitBurst(px, py, player.type, true);
+      }catch(e){}
+    };
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  8.  Inietta drawScreenFlashes nel gameLoop (eseguito ogni frame)
+  //      Cerca requestAnimationFrame hook
+  // ══════════════════════════════════════════════════════════════════════════
+  // Patch di shakeScreen per aggiungere un piccolo flash bianco
+  const _origShake = (typeof shakeScreen==='function') ? shakeScreen : null;
+  if(_origShake){
+    window.shakeScreen = function(amount){
+      if(typeof _origShake==='function') _origShake.call(this, amount);
+      addScreenFlash(255,255,255, 0.14, 0.04);
+    };
+  }
+
+  // ── Inietta chiamata drawScreenFlashes ogni frame tramite override di ctx.save()
+  //    (approccio sicuro: agganciamo alla funzione drawParticles che è nel gameLoop)
+  const _dpWrapped = window.drawParticles;
+  window.drawParticles = function(){
+    drawScreenFlashes();
+    _dpWrapped();
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  9.  FX KAERITH INFERNO TOTALE – overlay fuoco migliorato
+  //      Il gioco già traccia _kaerithFireUntil; qui aggiungiamo solo particelle
+  //      aggiuntive ogni secondo mentre l'inferno è attivo
+  // ══════════════════════════════════════════════════════════════════════════
+  let _kaerithFlameLastFx = 0;
+  const _origUpdatePickups = (typeof updatePickups==='function') ? updatePickups : null;
+  // Aggancia kaerith flame fx all'update generico via requestAnimationFrame
+  setInterval(function(){
+    try{
+      if(typeof player==='undefined' || !player) return;
+      if(player.type !== 'kaerith') return;
+      const now = Date.now();
+      if(!player._kaerithFireUntil || now > player._kaerithFireUntil) return;
+      if(now - _kaerithFlameLastFx < 280) return;
+      _kaerithFlameLastFx = now;
+      // Fiamme ambientali che salgono
+      if(typeof canvas==='undefined') return;
+      for(let i=0;i<5;i++){
+        const fx = 40 + Math.random()*(canvas.width-80);
+        const fy = canvas.height - 60 - Math.random()*80;
+        createParticles(fx, fy, '#ff3d00', 8, 5, {glow:true, rise:1.4, speed:0.8, life:1.2, gravity:-0.15});
+        createParticles(fx, fy, '#ff9800', 5, 4, {glow:true, rise:1.8, speed:0.5, life:1.0, gravity:-0.12});
+      }
+    }catch(e){}
+  }, 280);
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 10.  BANE IRA SUPER: aggiornamento FX ogni colpo (già c'è iraFX)
+  //      Aggiunge un piccolo flash rosso sul personaggio
+  // ══════════════════════════════════════════════════════════════════════════
+  const _origCreateIraKillFX = (typeof createIraKillFX==='function') ? createIraKillFX : null;
+  if(_origCreateIraKillFX){
+    window.createIraKillFX = function(x,y){
+      _origCreateIraKillFX.call(this,x,y);
+      addScreenFlash(120,0,0, 0.18, 0.04);
+      createParticles(x,y,'#ff1b3a', 18, 6, {glow:true, type:'star', speed:2.2, life:0.7});
+    };
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 11.  HENDEL STONE PERIMETER: flash grigio potenziato
+  // ══════════════════════════════════════════════════════════════════════════
+  const _origStartHendel = (typeof startHendelCrush==='function') ? startHendelCrush : null;
+  if(_origStartHendel){
+    window.startHendelCrush = function(dur){
+      _origStartHendel.call(this, dur);
+      addScreenFlash(80,80,80, 0.28, 0.05);
+      try{
+        if(typeof player!=='undefined' && player){
+          const px=player.x+(player.width||0)/2, py=player.y+(player.height||0)/2;
+          createParticles(px,py,'#9e9e9e', 55, 7, {glow:false, speed:1.5});
+          createParticles(px,py,'#757575', 25, 5, {glow:false, speed:2.0});
+        }
+      }catch(e){}
+    };
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 12.  COSMO SUPER: flash oscuro potenziato
+  // ══════════════════════════════════════════════════════════════════════════
+  const _origCosmoFX = (typeof createCosmoExplosionFX==='function') ? createCosmoExplosionFX : null;
+  if(_origCosmoFX){
+    window.createCosmoExplosionFX = function(x,y,scale){
+      _origCosmoFX.call(this,x,y,scale);
+      addScreenFlash(0,0,0, 0.38*(scale||1), 0.04);
+      createParticles(x,y,'#e040fb', 30, 5, {glow:true, type:'star', speed:2.0, life:0.8});
+    };
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 13.  showDamageNumber migliorato: critici in rosso grande, normali gialli
+  // ══════════════════════════════════════════════════════════════════════════
+  const _origShowDmg = (typeof showDamageNumber==='function') ? showDamageNumber : null;
+  if(_origShowDmg){
+    window.showDamageNumber = function(x,y,dmg){
+      const div=document.createElement('div');
+      div.className='damage-number';
+      const isBig = (typeof dmg==='number' && dmg >= 80);
+      const isCrit = (typeof dmg==='number' && dmg >= 120);
+      if(isCrit){
+        div.textContent=`💥-${dmg}`;
+        div.style.fontSize='26px';
+        div.style.color='#ff1744';
+        div.style.textShadow='0 0 8px #ff1744, 2px 2px 4px #000';
+        div.style.fontFamily='\'Press Start 2P\', cursive';
+      } else if(isBig){
+        div.textContent=`-${dmg}`;
+        div.style.fontSize='20px';
+        div.style.color='#ff9800';
+        div.style.textShadow='0 0 6px #ff9800, 2px 2px 4px #000';
+      } else {
+        div.textContent=`-${dmg}`;
+        div.style.color='#e74c3c';
+      }
+      const rect=canvas.getBoundingClientRect();
+      div.style.position='fixed';
+      div.style.left=(rect.left+x)+'px';
+      div.style.top=(rect.top+y-10)+'px';
+      div.style.pointerEvents='none';
+      div.style.zIndex='9999';
+      div.style.fontWeight='bold';
+      div.style.textShadow = div.style.textShadow || '2px 2px 4px #000';
+      document.body.appendChild(div);
+      setTimeout(()=>div.remove(), isBig?1200:900);
+    };
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 14.  Pickup bob animation: aggiorna y con seno per far "fluttuare" i pickup
+  // ══════════════════════════════════════════════════════════════════════════
+  setInterval(function(){
+    try{
+      if(typeof pickups==='undefined'||!pickups.length) return;
+      const now=Date.now();
+      pickups.forEach(p=>{
+        // Aggiungiamo un offset visivo sinusoidale senza toccare la hitbox reale
+        if(p._bobOriginY==null) p._bobOriginY = p.y;
+        p.y = p._bobOriginY + Math.sin(now*0.003 + (p._bobOriginY||0)*0.01)*5;
+      });
+    }catch(e){}
+  }, 16);
+
+  console.log('[FX Patch] Animazioni attacchi, super e bonus installate ✓');
+})();
 </script>
 
 </html>
