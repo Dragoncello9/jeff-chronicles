@@ -1620,6 +1620,42 @@
   font-size:10px;
   margin-right:8px;
 }
+#menuSettingsModal .ms-setting-card{
+  margin-top:10px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.18));
+  border:1px solid rgba(255,255,255,0.12);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);
+}
+#menuSettingsModal .ms-setting-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+#menuSettingsModal .ms-pill{
+  min-width:72px;
+  text-align:center;
+  padding:4px 10px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.35);
+  border:1px solid rgba(255,255,255,0.16);
+  color:#fff;
+  font-family:'Press Start 2P', monospace;
+  font-size:10px;
+}
+#menuSettingsModal input[type="range"]{
+  width:100%;
+  accent-color:#7df9ff;
+}
+#menuSettingsModal .ms-sub{
+  margin-top:8px;
+  opacity:0.88;
+  font-size:16px;
+  line-height:1.4;
+}
 </style>
 
 
@@ -2019,6 +2055,15 @@ style="width:56px;height:56px;image-rendering:pixelated;display:block;">
           <input type="radio" name="hudTimerMode" id="hudModeText" value="text">
           <span>Secondi (xx sec)</span>
         </label>
+      </div>
+      <div style="margin-top:14px;opacity:0.95;">Particelle in gioco:</div>
+      <div class="ms-setting-card">
+        <div class="ms-setting-row">
+          <label for="particleDensityRange" style="cursor:pointer;">Intensità effetti</label>
+          <div class="ms-pill" id="particleDensityValue">50%</div>
+        </div>
+        <input type="range" id="particleDensityRange" min="0" max="100" step="1" value="50" aria-label="Quantità particelle">
+        <div class="ms-sub" id="particleDensityHint">50% = impostazione attuale predefinita. Riduci se il PC cala di frame, aumenta se vuoi effetti più densi.</div>
       </div>
     </div>
   </div>
@@ -2719,6 +2764,75 @@ function syncHudTimerModeUI(){
   if(rBars) rBars.addEventListener("change", ()=>{ if(rBars.checked) setHudTimerMode("bars"); });
   if(rText) rText.addEventListener("change", ()=>{ if(rText.checked) setHudTimerMode("text"); });
   syncHudTimerModeUI();
+})();
+
+/* ===== Particle density setting ===== */
+const PARTICLE_LEVEL_KEY = "pf_particle_density_v1";
+const PARTICLE_DEFAULT_LEVEL = 50;
+const PARTICLE_CURRENT_MID_SCALE = 0.42;
+const PARTICLE_CURRENT_MID_CAP = 420;
+const PARTICLE_FULL_SCALE = 1.0;
+const PARTICLE_FULL_CAP = 1000;
+
+function clampParticleLevel(value){
+  const n = Math.round(Number(value));
+  if(!Number.isFinite(n)) return PARTICLE_DEFAULT_LEVEL;
+  return Math.max(0, Math.min(100, n));
+}
+function particleLevelToScale(level){
+  const p = clampParticleLevel(level);
+  if(p <= 50) return PARTICLE_CURRENT_MID_SCALE * (p / 50);
+  return PARTICLE_CURRENT_MID_SCALE + ((p - 50) / 50) * (PARTICLE_FULL_SCALE - PARTICLE_CURRENT_MID_SCALE);
+}
+function particleLevelToCap(level){
+  const p = clampParticleLevel(level);
+  if(p <= 0) return 0;
+  if(p <= 50) return Math.max(12, Math.round(PARTICLE_CURRENT_MID_CAP * (p / 50)));
+  return Math.round(PARTICLE_CURRENT_MID_CAP + ((p - 50) / 50) * (PARTICLE_FULL_CAP - PARTICLE_CURRENT_MID_CAP));
+}
+function getParticleLevel(){
+  try{
+    const raw = localStorage.getItem(PARTICLE_LEVEL_KEY);
+    return (raw==null || raw==="") ? PARTICLE_DEFAULT_LEVEL : clampParticleLevel(raw);
+  }catch(e){ return PARTICLE_DEFAULT_LEVEL; }
+}
+function updateParticleDensityText(level){
+  const pct = clampParticleLevel(level);
+  const valueEl = document.getElementById('particleDensityValue');
+  const hintEl = document.getElementById('particleDensityHint');
+  if(valueEl) valueEl.textContent = `${pct}%`;
+  if(hintEl){
+    if(pct === 50) hintEl.textContent = '50% = impostazione attuale predefinita. Riduci se il PC cala di frame, aumenta se vuoi effetti più densi.';
+    else if(pct < 50) hintEl.textContent = 'Meno del preset attuale: utile per PC più deboli o sessioni molto affollate.';
+    else hintEl.textContent = 'Più del preset attuale: effetti più ricchi ma carico grafico maggiore.';
+  }
+}
+function applyParticleLevel(level){
+  const pct = clampParticleLevel(level);
+  window.PARTICLE_LEVEL = pct;
+  window.PARTICLE_SCALE = particleLevelToScale(pct);
+  window.MAX_LIVE_PARTICLES = particleLevelToCap(pct);
+  updateParticleDensityText(pct);
+  return pct;
+}
+function setParticleLevel(level){
+  const pct = applyParticleLevel(level);
+  try{ localStorage.setItem(PARTICLE_LEVEL_KEY, String(pct)); }catch(e){}
+}
+function syncParticleSettingsUI(){
+  const slider = document.getElementById('particleDensityRange');
+  const pct = getParticleLevel();
+  if(slider) slider.value = String(pct);
+  applyParticleLevel(pct);
+}
+(function initParticleDensitySetting(){
+  applyParticleLevel(getParticleLevel());
+  const slider = document.getElementById('particleDensityRange');
+  if(slider){
+    slider.addEventListener('input', ()=>{ setParticleLevel(slider.value); });
+    slider.addEventListener('change', ()=>{ setParticleLevel(slider.value); });
+  }
+  syncParticleSettingsUI();
 })();
 
 
@@ -5308,8 +5422,8 @@ function updateGuideUnlockUI(){
 }
 
 
-window.PARTICLE_SCALE = 0.42;
-window.MAX_LIVE_PARTICLES = 420;
+window.PARTICLE_SCALE = (typeof window.PARTICLE_SCALE === 'number') ? window.PARTICLE_SCALE : 0.42;
+window.MAX_LIVE_PARTICLES = (typeof window.MAX_LIVE_PARTICLES === 'number') ? window.MAX_LIVE_PARTICLES : 420;
 window.scaleParticleCount = function(count){
   if(!(count>0)) return 0;
   return Math.max(1, Math.round(count * window.PARTICLE_SCALE));
@@ -12882,6 +12996,7 @@ function updateMenuStatsDisplay(char){
     if(!modal) return;
     modal.style.display='flex';
     try{ if(typeof syncHudTimerModeUI==='function') syncHudTimerModeUI(); }catch(e){}
+    try{ if(typeof syncParticleSettingsUI==='function') syncParticleSettingsUI(); }catch(e){}
     modal.classList.add('show');
     modal.setAttribute('aria-hidden','false');
     if(closeBtn) closeBtn.focus();
