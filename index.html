@@ -3,13 +3,16 @@
 <html lang="it">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" name="viewport"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <title>Platform Fighter - Complete</title>
 <!-- Link ai font da Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=VT323&amp;display=swap" rel="stylesheet"/>
 <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    html,body{height:100%}
+    html,body{height:100%;width:100%;overflow:hidden;}
     body{
       font-family:'VT323', monospace; /* Font di gioco */
       background:#000;
@@ -18,6 +21,7 @@
       justify-content:center;
       align-items:center;
       height:100vh;
+      width:100vw;
       overflow:hidden;
       position:relative;
       animation:bodyFadeIn 1.2s ease forwards;
@@ -39,9 +43,11 @@
     #fadeOverlay{position:absolute;left:0;top:0;width:100%;height:100%;background:#000;opacity:0;transition:opacity 650ms ease;z-index:3;pointer-events:none}
 
     #gameContainer{
-      position:relative;width:1200px;height:700px;
-      max-width:calc(100vw - 40px);max-height:calc(100vh - 40px);
-      z-index:2;display:flex;justify-content:center;align-items:center
+      position:relative;
+      width:1440px;height:850px;
+      transform-origin:top left;
+      z-index:2;display:flex;justify-content:center;align-items:center;
+      /* scaling handled by JS resizeGame() */
     }
 
     #gameCanvas{
@@ -2925,7 +2931,7 @@ button:focus-visible{
 <div id="bgDark"></div>
 <div id="fadeOverlay"></div>
 <div id="gameContainer">
-<canvas height="780" id="gameCanvas" width="1320"></canvas>
+<canvas height="850" id="gameCanvas" width="1440"></canvas>
 
 <div id="totalScoreDisplay" style="
   position:absolute;
@@ -2983,6 +2989,7 @@ style="width:56px;height:56px;image-rendering:pixelated;display:block;">
 </svg>
 </button>
   <button class="menu-icon-btn" id="menuSettingsBtn" type="button" title="Impostazioni / Comandi">⚙️</button>
+  <button class="menu-icon-btn" id="menuFullscreenBtn" type="button" title="Schermo intero">⛶</button>
 </div>
 
 
@@ -3073,7 +3080,7 @@ style="width:56px;height:56px;image-rendering:pixelated;display:block;">
 
 <div class="score" id="scoreDisplay" style="display:none;">Score: 0</div>
 <div class="score" id="killsDisplay" style="display:none; top:52px;">Kill: 0</div>
-<div class="timer-wrap" id="timerWrap" style="display:none;"><div class="timer" id="timerDisplay">45</div><button class="pause-btn" id="pauseBtn" title="Pausa">⏸</button></div>
+<div class="timer-wrap" id="timerWrap" style="display:none;"><div class="timer" id="timerDisplay">45</div><button class="pause-btn" id="pauseBtn" title="Pausa">⏸</button><button class="pause-btn" id="fullscreenBtn" title="Schermo intero" style="margin-left:6px;font-size:16px;">⛶</button></div>
 <div class="level-indicator" id="levelDisplay" style="display:none;">Level 1</div>
 <div class="moon-phase-indicator" id="moonPhaseDisplay" style="display:none;"></div>
 
@@ -4297,6 +4304,76 @@ function clampToPlayBounds(ent, extra=0){
   const right = B.right - extra, bottom = B.bottom - extra;
   ent.x = Math.max(left, Math.min(right - (ent.width||0), ent.x));
   ent.y = Math.max(top,  Math.min(bottom - (ent.height||0), ent.y));
+}
+
+/* ── FIELD BORDERS: visual walls with glow + hit flash ────────── */
+// wallFlash[side] = intensity 0-1, fades over time
+// sides: 'left','right','top','bottom'
+const _wallFlash = {left:0, right:0, top:0, bottom:0};
+
+function triggerWallFlash(side){
+  _wallFlash[side] = 1.0;
+}
+
+function drawFieldBorders(now){
+  const B = getPlayBounds();
+  const MARGIN = 10;
+  const left   = B.left   + MARGIN;
+  const right  = B.right  - MARGIN;
+  const top    = B.top    + MARGIN;
+  const bottom = B.bottom - MARGIN;
+  const w = right - left;
+  const h = bottom - top;
+
+  // Base border: subtle permanent glow
+  ctx.save();
+  ctx.strokeStyle = 'rgba(100,160,255,0.22)';
+  ctx.lineWidth = 3;
+  ctx.shadowColor = '#4fc3f7';
+  ctx.shadowBlur = 12;
+  ctx.strokeRect(left, top, w, h);
+
+  // Animated corner accents
+  const cornerLen = 32;
+  const t = now / 1000;
+  const pulse = 0.55 + 0.45 * Math.sin(t * 2.1);
+  ctx.strokeStyle = `rgba(100,200,255,${0.55 * pulse})`;
+  ctx.lineWidth = 3.5;
+  ctx.shadowBlur = 18;
+  // top-left
+  ctx.beginPath(); ctx.moveTo(left, top + cornerLen); ctx.lineTo(left, top); ctx.lineTo(left + cornerLen, top); ctx.stroke();
+  // top-right
+  ctx.beginPath(); ctx.moveTo(right - cornerLen, top); ctx.lineTo(right, top); ctx.lineTo(right, top + cornerLen); ctx.stroke();
+  // bottom-left
+  ctx.beginPath(); ctx.moveTo(left, bottom - cornerLen); ctx.lineTo(left, bottom); ctx.lineTo(left + cornerLen, bottom); ctx.stroke();
+  // bottom-right
+  ctx.beginPath(); ctx.moveTo(right - cornerLen, bottom); ctx.lineTo(right, bottom); ctx.lineTo(right, bottom - cornerLen); ctx.stroke();
+
+  // Hit flash overlays per wall
+  const flashSides = [
+    { key:'left',   x1:left-4,   y1:top,    x2:left+8,   y2:bottom,  gx:left+8,   gy:(top+bottom)/2 },
+    { key:'right',  x1:right-8,  y1:top,    x2:right+4,  y2:bottom,  gx:right-8,  gy:(top+bottom)/2 },
+    { key:'top',    x1:left,     y1:top-4,  x2:right,    y2:top+8,   gx:(left+right)/2, gy:top+8   },
+    { key:'bottom', x1:left,     y1:bottom-8,x2:right,   y2:bottom+4,gx:(left+right)/2, gy:bottom-8},
+  ];
+  for(const s of flashSides){
+    if(_wallFlash[s.key] > 0){
+      const a = _wallFlash[s.key];
+      ctx.save();
+      const grad = ctx.createLinearGradient(s.x1, s.y1, s.x2, s.y2);
+      grad.addColorStop(0, `rgba(150,230,255,0)`);
+      grad.addColorStop(0.5, `rgba(180,240,255,${a * 0.7})`);
+      grad.addColorStop(1, `rgba(150,230,255,0)`);
+      ctx.fillStyle = grad;
+      ctx.shadowColor = '#4fc3f7';
+      ctx.shadowBlur = 28 * a;
+      ctx.fillRect(s.x1, s.y1, s.x2 - s.x1, s.y2 - s.y1);
+      ctx.restore();
+      _wallFlash[s.key] = Math.max(0, a - 0.055);
+    }
+  }
+
+  ctx.restore();
 }
 
 
@@ -7047,7 +7124,7 @@ function detonateCollana(playerRef){
 
   const dmgAccum = playerRef.collanaDmgAccum || 0;
   // Danno base primo colpo — molto più alto
-  const firstDmg = Math.round(80 + dmgAccum * 4.5);
+  const firstDmg = Math.round(40 + dmgAccum * 4.5);
   // Soglia minima abbassata: la catena continua più a lungo
   const minThreshold = 30 + Math.floor(dmgAccum / 100) * 10;
 
@@ -7095,9 +7172,9 @@ function detonateCollana(playerRef){
       }
     }, delayMs);
 
-    delayMs += 60;   // era 85ms — catena più veloce
+    delayMs += 120;   // era 60ms
     prevX = tx; prevY = ty;
-    currentDmg *= 1.50;   // era 1.35 — sale più velocemente
+    currentDmg *= 1.30;   // +30% ogni salto
     jumped++;
   }
 
@@ -7376,9 +7453,12 @@ function showDamageNumber(x,y,dmg,opts){
     div.style.textShadow='2px 2px 4px #000';
   }
   const rect=canvas.getBoundingClientRect();
+  // Account for CSS scale transform applied by resizeGame()
+  const scaleX = rect.width / canvas.width;
+  const scaleY = rect.height / canvas.height;
   const jx=(Math.random()-0.5)*18;
-  div.style.left=(rect.left+x+jx)+'px';
-  div.style.top=(rect.top+y-10)+'px';
+  div.style.left=(rect.left + x*scaleX + jx)+'px';
+  div.style.top=(rect.top  + y*scaleY - 10)+'px';
   document.body.appendChild(div);
   setTimeout(()=>div.remove(),1000)
 }
@@ -9808,8 +9888,10 @@ function updatePickups(playerRef){
         div.style.cssText = 'position:absolute;font-family:"Press Start 2P",cursive;font-size:11px;color:#fff;text-shadow:1px 1px 3px #000;pointer-events:none;z-index:201;animation:floatUp 1s ease-out forwards;white-space:nowrap;';
         div.textContent = label;
         const rect = canvas.getBoundingClientRect();
-        div.style.left = (rect.left + pcx - 20) + 'px';
-        div.style.top = (rect.top + pcy - 40) + 'px';
+        const scaleX = rect.width / canvas.width;
+        const scaleY = rect.height / canvas.height;
+        div.style.left = (rect.left + pcx*scaleX - 20) + 'px';
+        div.style.top = (rect.top + pcy*scaleY - 40) + 'px';
         document.body.appendChild(div);
         setTimeout(()=>div.remove(), 1000);
       }catch(e){}
@@ -11064,19 +11146,43 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
     if(!keys['w']&&!keys['s']&&!this.isGrappling)this.vy*=0.86;
 
     const margin=10;
-    const push=10;
-    let hitWall=false;
     const B=getPlayBounds();
 
     const left=B.left+margin, right=B.right-margin;
     const top=B.top+margin, bottom=B.bottom-margin;
 
-    if(this.x<left){ this.x=left+push; hitWall=true; }
-    if(this.x+this.width>right){ this.x=right-this.width-push; hitWall=true; }
-    if(this.y<top){ this.y=top+push; hitWall=true; }
-    if(this.y+this.height>bottom){ this.y=bottom-this.height-push; hitWall=true; }
+    let hitWall=false;
+    // BOUNCE: invert and dampen velocity on wall hit, trigger flash
+    if(this.x<left){
+      this.x=left;
+      if(this.vx<0){ this.vx = Math.abs(this.vx)*0.45; }
+      hitWall=true;
+      triggerWallFlash('left');
+      createParticles(left+8, this.y+this.height/2, '#90caf9', 10, 4);
+    }
+    if(this.x+this.width>right){
+      this.x=right-this.width;
+      if(this.vx>0){ this.vx = -Math.abs(this.vx)*0.45; }
+      hitWall=true;
+      triggerWallFlash('right');
+      createParticles(right-8, this.y+this.height/2, '#90caf9', 10, 4);
+    }
+    if(this.y<top){
+      this.y=top;
+      if(this.vy<0){ this.vy = Math.abs(this.vy)*0.45; }
+      hitWall=true;
+      triggerWallFlash('top');
+      createParticles(this.x+this.width/2, top+8, '#90caf9', 10, 4);
+    }
+    if(this.y+this.height>bottom){
+      this.y=bottom-this.height;
+      if(this.vy>0){ this.vy = -Math.abs(this.vy)*0.45; }
+      hitWall=true;
+      triggerWallFlash('bottom');
+      createParticles(this.x+this.width/2, bottom-8, '#90caf9', 10, 4);
+    }
 
-    if(hitWall){ createParticles(this.x+this.width/2,this.y+this.height/2,'#90caf9',6,3); }
+    if(hitWall){ /* wall flash + particles already triggered per-side above */ }
 
     if(this.dashCooldown>0)this.dashCooldown--;
 
@@ -13171,9 +13277,11 @@ this.speed=cfg.enemySpeed;
 
         const _ms= (typeof _mezzalunaEnemySpeedMult==='function') ? _mezzalunaEnemySpeedMult(this, Date.now()) : 1;
     this.x+=this.vx*_ms;this.y+=this.vy*_ms;
-    // boundaries
-    if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
+    // boundaries — soft bounce
+    if(this.x<0){ this.x=0; if(this.vx<0) this.vx *= -0.4; }
+    if(this.x+this.width>canvas.width){ this.x=canvas.width-this.width; if(this.vx>0) this.vx *= -0.4; }
+    if(this.y<0){ this.y=0; if(this.vy<0) this.vy *= -0.4; }
+    if(this.y+this.height>canvas.height-30){ this.y=canvas.height-30-this.height; if(this.vy>0) this.vy *= -0.4; }
   }
   draw(){
     const imgKey = (this.type==='boss' || this.type==='boss1') ? 'boss1' : this.type;
@@ -14902,6 +15010,9 @@ return;
 
     drawKaerithFireOverlay(now);
 
+  // FIELD BORDERS: drawn behind everything
+  drawFieldBorders(now);
+
   // draw Marz Super zone behind entities
   drawMagicZone(now);
   drawPdorOrbs(now);
@@ -15894,6 +16005,60 @@ function closeSkinMenu(){
   }catch(e){}
 }
 document.addEventListener("DOMContentLoaded", ()=>{
+
+  /* ── RESPONSIVE SCALING ───────────────────────────── */
+  const GAME_W = 1440, GAME_H = 850;
+  const gc = document.getElementById('gameContainer');
+
+  function resizeGame(){
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const scale = Math.min(vw / GAME_W, vh / GAME_H);
+    if(gc){
+      gc.style.transform = `scale(${scale})`;
+      gc.style.left = Math.round((vw - GAME_W * scale) / 2) + 'px';
+      gc.style.top  = Math.round((vh - GAME_H * scale) / 2) + 'px';
+      gc.style.position = 'absolute';
+    }
+  }
+  resizeGame();
+  window.addEventListener('resize', resizeGame);
+  screen.orientation && screen.orientation.addEventListener('change', resizeGame);
+
+  /* ── FULLSCREEN ────────────────────────────────────── */
+  function toggleFullscreen(){
+    const fsBtn = document.getElementById('fullscreenBtn');
+    if(!document.fullscreenElement){
+      (document.documentElement.requestFullscreen
+        || document.documentElement.webkitRequestFullscreen
+        || document.documentElement.mozRequestFullScreen
+        || (()=>{})
+      ).call(document.documentElement);
+    } else {
+      (document.exitFullscreen
+        || document.webkitExitFullscreen
+        || document.mozCancelFullScreen
+        || (()=>{})
+      ).call(document);
+    }
+  }
+  document.addEventListener('fullscreenchange', ()=>{
+    const icon = document.fullscreenElement ? '✕⛶' : '⛶';
+    const fsBtn = document.getElementById('fullscreenBtn');
+    if(fsBtn) fsBtn.textContent = icon;
+    const mfsBtn = document.getElementById('menuFullscreenBtn');
+    if(mfsBtn) mfsBtn.textContent = icon;
+    resizeGame();
+  });
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  if(fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
+  const menuFullscreenBtn = document.getElementById('menuFullscreenBtn');
+  if(menuFullscreenBtn) menuFullscreenBtn.addEventListener('click', toggleFullscreen);
+  // Also allow F key during game as shortcut
+  document.addEventListener('keydown', e=>{
+    if(e.key === 'F' && e.altKey) toggleFullscreen();
+  });
+
   document.addEventListener('keydown', (e)=>{ if(typeof isPauseKeyEvent==='function' && isPauseKeyEvent(e)){ if(gameState==='playing') openPauseMenu(); else if(gameState==='paused') resumeFromPause(); }});
   const pauseBtn=document.getElementById('pauseBtn');
   const pauseContinue=document.getElementById('pauseContinueBtn');
