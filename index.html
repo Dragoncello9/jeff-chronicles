@@ -1367,6 +1367,28 @@
   text-shadow:0 0 6px rgba(189,189,189,0.25);
 }
 
+/* ===== Mission Ethereal Badge ===== */
+.mission-ethereal{
+  margin-left:6px;
+  padding:2px 7px;
+  border-radius:999px;
+  font-family:'Press Start 2P', monospace;
+  font-size:8px;
+  background:rgba(156,39,176,0.22);
+  border:1px solid rgba(206,147,216,0.80);
+  color:#ce93d8;
+  text-shadow:0 0 8px rgba(206,147,216,0.7), 0 0 16px rgba(156,39,176,0.5);
+  animation:etherealPulse 2.4s ease-in-out infinite;
+}
+@keyframes etherealPulse{
+  0%,100%{ box-shadow:0 0 4px rgba(206,147,216,0.3); }
+  50%{ box-shadow:0 0 12px rgba(206,147,216,0.7), 0 0 22px rgba(156,39,176,0.4); }
+}
+.mission.ethereal-row{
+  border-left:3px solid rgba(206,147,216,0.6);
+  background:rgba(156,39,176,0.06);
+}
+
 /* ===== TOTAL SCORE HIGHLIGHT ===== */
 .total-score,
 #totalScore,
@@ -3491,14 +3513,29 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 
 <!-- SKIN Screen -->
 <div class="menu" id="skinMenu" style="display:none;">
-  <h2 style="margin-bottom:6px;">🧥 SKIN</h2>
-  <p style="margin:0 0 10px;font-size:16px;color:#ddd;">Personaggi sbloccati</p>
+  <h2 style="margin-bottom:4px;">🧥 SKIN</h2>
+  <p style="margin:0 0 6px;font-size:15px;color:#ddd;">Acquista e seleziona le skin cosmetiche</p>
+  <p id="skinEtherDisplay" style="margin:0 0 10px;font-size:13px;color:#f1c40f;font-family:'Press Start 2P',cursive;">💎 Frammenti: 0</p>
 
-  <div class="skin-scroller-wrap">
-    <div id="skinScroller" class="skin-scroller" aria-label="Lista skin a scorrimento orizzontale"></div>
+  <!-- Tabs -->
+  <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;">
+    <button class="btn" id="skinTabShopBtn"  style="font-size:12px;padding:6px 14px;">🛒 Shop</button>
+    <button class="btn" id="skinTabActiveBtn" style="font-size:12px;padding:6px 14px;">✅ Attive</button>
   </div>
 
-  <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+  <!-- Shop panel -->
+  <div id="skinShopPanel">
+    <div id="skinScroller" class="skin-scroller" aria-label="Shop skin"></div>
+  </div>
+
+  <!-- Active skins panel -->
+  <div id="skinActivePanel" style="display:none;">
+    <div id="skinActiveScroller" class="skin-scroller" aria-label="Skin attive"></div>
+  </div>
+
+  <p id="skinFeedback" style="min-height:22px;font-size:13px;color:#fff176;margin-top:8px;text-align:center;"></p>
+
+  <div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
     <button id="skinBackBtn" class="btn" type="button">⬅ Torna al Menu</button>
   </div>
 </div>
@@ -3819,16 +3856,22 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 <li>Ogni personaggio è forte se usato nel modo giusto.</li>
 </ul>
 <h3>✴️ EVOLUZIONI </h3>
-<p>rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei, ma un vero e proprio cambiamento nello stile di gioco del personaggio.</p> <p><strong>Quando avvengono</strong>: dopo aver superato il boss del <strong>Livello 15</strong> (e da quel punto in poi), il personaggio può entrare nello stato <em>Evoluto</em> <strong>solo se</strong> il tuo <strong>RECORD</strong> con quel personaggio è <strong>superiore a 100.000</strong> (vale solo per i personaggi che dispongono di un’evoluzione). L’evoluzione viene annunciata a schermo con un banner dedicato.</p> <p><strong>Filosofia delle evoluzioni</strong>: le evoluzioni <u>aumentano gli HP massimi (+50%)</u>, ma <u>non aumentano direttamente velocità o danno base</u>. Al contrario, sbloccano <strong>passive speciali</strong> che premiano l’uso intelligente delle meccaniche del personaggio. Questo mantiene il gioco bilanciato e strategico.</p> <h4>Effetti generali</h4> <ul> <li>L’evoluzione dura per il resto della partita.</li> <li>Tutti i personaggi ottengono <strong>+50% HP massimi</strong> quando evolvono.</li> <li>Ogni personaggio ottiene un <strong>vantaggio unico</strong>, coerente con il suo ruolo.</li> <li>Le evoluzioni premiano precisione, timing e gestione dei nemici.</li> </ul> <h4>⚙️ Evoluzioni attuali</h4> <p><strong>🔫 Jimmy – Predatore Evoluto</strong><br/> La <strong>Super</strong> è disponibile ogni <strong>5,5 secondi</strong>. Se uccidi il bersaglio agganciato con il <strong>grapple</strong>, il <strong>prossimo grapple</strong> ha <strong>cooldown azzerato</strong>. Inoltre, il <strong>jetpack</strong> dura <strong>+1 secondo</strong>.</p>
-<p><strong>🐱 Rooney – Impatto Brutale</strong><br/>Il <strong>primo colpo</strong> inflitto a ogni nemico infligge <strong>+100% danni</strong> (nemici normali) o <strong>+75% danni</strong> (boss ed élite). Quando Rooney attiva la <strong>Super</strong> da evoluto, oltre all'area nel punto di attivazione genera <strong>3 aree aggiuntive</strong> in posizioni casuali (totale <strong>4 aree</strong>).</p>
-<p><strong>🗡️ Jeff – Rigenerazione da Combattimento</strong><br/>Ogni nemico ucciso cura Jeff di <strong>15 HP</strong>. Se un singolo <strong>attacco base</strong> colpisce <strong>2+ nemici</strong>, quell'attacco infligge <strong>~+30% danni</strong>. Se <strong>3 o più nemici</strong> sono dentro l'area della super, Jeff ottiene <strong>-15% cooldown attacco base</strong> finché resta nell'area.</p>
-<p><strong>🦊 Voltryx – Sovraccarico Ibrido</strong><br/>Dopo un attacco <strong>ranged</strong>, il successivo <strong>melee</strong> entro 2 secondi infligge <strong>+75% danni</strong>. Dopo un attacco <strong>melee</strong>, il successivo <strong>ranged</strong> entro 2 secondi ha un'esplosione con <strong>+50% raggio</strong>. Durante la <strong>Super</strong> ottiene <strong>+25% velocità</strong>.</p>
-<p><strong>🦉 Kouvagia – Predatore del Caos</strong><br/>Ogni dash che colpisce almeno un nemico applica <strong>Ferita</strong> per 3 secondi. I nemici <em>Feriti</em> infliggono <strong>-20% danni</strong> a Kouvagia e, se muoiono vicino a lui, curano il <strong>doppio</strong> (+6 HP invece di +3). L'esplosione finale del dash ha un piccolo <strong>knockback</strong>.</p>
-<p><strong>⚜️ Salsy – Marchio del Duelista</strong><br/>I nemici marchiati subiscono danni aumentati. Il <strong>primo doppio fendente</strong> su un nemico marchiato <strong>consuma il marchio</strong> e applica una <strong>lacerazione</strong> (8 dmg ogni 0,5s per 4s). Se consuma un marchio, Salsy ottiene un <strong>mini-scatto di velocità</strong> (+35% per 1,2s).</p>
-<p><strong>🔋 Tempostorm – Nucleo di Compressione</strong><br/>Se un nemico resta nel laser abbastanza a lungo da ricevere anche il <strong>secondo tick</strong>, viene <strong>rallentato del 25%</strong> per 2,5s. I nemici colpiti dalla <strong>Super</strong> restano <strong>instabili</strong> per 5s e subiscono <strong>+20% danni</strong> dai laser.</p>
-<p><strong>🪄 Marz – Triangolo Arcano</strong><br/>Se almeno <strong>2 dei 3 fasci</strong> colpiscono bersagli diversi nello stesso attacco, si crea un <strong>legame arcano</strong> tra loro: i nemici che attraversano la linea subiscono tick di danno per 2s. Dentro il <strong>sigillo</strong>, i 3 fasci guadagnano <strong>homing più aggressivo</strong>.</p>
-<p><em>Nota:</em> gli altri personaggi potrebbero ottenere evoluzioni dedicate in futuro.</p>
-<h4> Consigli strategici</h4> <ul> <li>Sfrutta l’evoluzione per cambiare approccio: da difensivo a aggressivo (o viceversa).</li> <li>Dopo l’evoluzione, eliminare i nemici velocemente diventa ancora più importante per massimizzare punteggio e controllo.</li> <li>Le evoluzioni non rendono invincibili: il posizionamento resta fondamentale.</li> </ul> <p><strong>Le evoluzioni sono il momento in cui Jeff’s Chronicles premia davvero la padronanza del personaggio.</strong></p>
+<p>Le evoluzioni rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei: durano per tutto il resto della run.</p>
+<p><strong>Quando avvengono</strong>: dopo aver superato il boss del <strong>Livello 15</strong> (e da quel punto in poi), il personaggio può entrare nello stato <em>Evoluto</em> <strong>solo se</strong> il tuo <strong>RECORD</strong> con quel personaggio è <strong>superiore a 100.000</strong>. L'evoluzione viene annunciata a schermo con un banner dedicato.</p>
+<h4>Effetti dell'evoluzione (uguali per tutti i personaggi)</h4>
+<ul>
+  <li><strong>+50% HP massimi</strong> — permanente per la run, con ripristino immediato dell'HP aggiuntivo.</li>
+  <li><strong>+25% danno base</strong> — il danno di ogni attacco sale del 25% in modo permanente.</li>
+  <li><strong>Bonus pickup +50% più lunghi</strong> — tutti i bonus a tempo (ATK, Speed, IRA, Scudo, Furia, Estasi, Mezzaluna, Collana, ecc.) durano il 50% in più rispetto al normale.</li>
+</ul>
+<p>Questi tre potenziamenti si applicano a <strong>ogni</strong> personaggio del gioco che possiede l'evoluzione, senza eccezioni.</p>
+<h4>Consigli strategici</h4>
+<ul>
+  <li>Raccogliere più bonus possibile dopo l'evoluzione è fondamentale: durano molto più a lungo.</li>
+  <li>Il +25% danno rende i personaggi a basso DPS (Marcus, Lucien, Cosmo) molto più competitivi nei livelli alti.</li>
+  <li>Le evoluzioni non rendono invincibili: il posizionamento resta fondamentale.</li>
+</ul>
+<p><strong>Le evoluzioni sono il momento in cui Jeff's Chronicles premia davvero la padronanza del personaggio.</strong></p>
 <h3>🏁 CONCLUSIONE</h3>
 <p><strong>Jeff’s Chronicles</strong> premia abilità, strategia e conoscenza dei personaggi. Impara i loro meccanismi, sfrutta i pickup e punta al record massimo.</p>
 </div>
@@ -4570,6 +4613,7 @@ try{
   }
   if(shouldSave) saveAccount();
 }catch(e){}
+
 }
 
 
@@ -5359,17 +5403,19 @@ const characterStats={
     range:650,
     cooldown:500,
     name:'Marcus',
+    evolution:true,
     attackType:'marcusStream',
     superCooldown:27000,
     superDuration:10000
   },
   lucien:{
     hp:430,
-    speed:6.7, // leggermente sopra la media
-    damage:15,      // per colpo (x4)
-    range:220,      // molto ravvicinato
+    speed:6.7,
+    damage:15,
+    range:220,
     cooldown:700,
     name:'Lucien',
+    evolution:true,
     attackType:'lucienBlade',
     superCooldown:21000,
     superDuration:450
@@ -5382,6 +5428,7 @@ const characterStats={
     range:700,
     cooldown:420,
     name:'Pdor',
+    evolution:true,
     attackType:'pdorDart',
     superCooldown:16000,
     superDuration:1000
@@ -5390,11 +5437,12 @@ const characterStats={
 
   bane:{
     hp:490,
-    speed:5.5, // leggermente più veloce di Tempostorm, ma sempre media-bassa
+    speed:5.5,
     damage:67,
-    range:230,      // raggio medio-basso
-    cooldown:650,   // swing ascia
+    range:230,
+    cooldown:650,
     name:'Bane',
+    evolution:true,
     attackType:'axeattack',
     superCooldown:60000,
     superDuration:8000
@@ -5402,11 +5450,12 @@ const characterStats={
 
   hendel:{
     hp:500,
-    speed:5, // la più bassa (o tra le più basse) del gioco
+    speed:5,
     damage:120,
     range:160,
-    cooldown:810, // attacco base molto lento
+    cooldown:810,
     name:'Hendel',
+    evolution:true,
     attackType:'hammerattack',
     superCooldown:26000,
     superDuration:3000
@@ -5417,8 +5466,9 @@ const characterStats={
     speed:6.5,
     damage:0,
     range:300,
-    cooldown:1000, // fiammata continua
+    cooldown:1000,
     name:'Kaerith',
+    evolution:true,
     attackType:'kaerithFlame',
     superCooldown:21000,
     superDuration:6000
@@ -5431,6 +5481,7 @@ const characterStats={
     range:990,
     cooldown:900,
     name:'Hècate',
+    evolution:true,
     attackType:'hecateBow',
     superCooldown:22000,
     superDuration:700
@@ -5444,6 +5495,7 @@ const characterStats={
     range:480,
     cooldown:800,
     name:'Cosmo',
+    evolution:true,
     attackType:'cosmo',
     superCooldown: 44000,
     superDuration:7000
@@ -5496,7 +5548,8 @@ const ACCOUNT_DEFAULT = {
   schema: 2,
   stats: {totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0, jimmySuperKills:0, jimmySuperUses:0, rooneySuperUses:0, jeffSuperUses:0, voltryxSuperUses:0, kouvagiaSuperUses:0, salsySuperUses:0, tempostormSuperUses:0, marzSuperUses:0, hecateSuperUses:0, marcusSuperUses:0, lucienSuperUses:0, pdorSuperUses:0, baneSuperUses:0, hendelSuperUses:0, kaerithSuperUses:0, cosmoSuperUses:0,
   // Kill per personaggio (per missioni cumulabili tra partite)
-  killsWith_jimmy:0, killsWith_rooney:0, killsWith_jeff:0, killsWith_voltryx:0, killsWith_kouvagia:0, killsWith_salsy:0, killsWith_tempostorm:0, killsWith_marz:0, killsWith_hecate:0, killsWith_cosmo:0, killsWith_marcus:0, killsWith_lucien:0, killsWith_pdor:0, killsWith_bane:0, killsWith_hendel:0, killsWith_kaerith:0 },
+  killsWith_jimmy:0, killsWith_rooney:0, killsWith_jeff:0, killsWith_voltryx:0, killsWith_kouvagia:0, killsWith_salsy:0, killsWith_tempostorm:0, killsWith_marz:0, killsWith_hecate:0, killsWith_cosmo:0, killsWith_marcus:0, killsWith_lucien:0, killsWith_pdor:0, killsWith_bane:0, killsWith_hendel:0, killsWith_kaerith:0,
+  gamesPlayedWith_jimmy:0, gamesPlayedWith_rooney:0, gamesPlayedWith_jeff:0 },
   missions: [
   // 1000 kill missions
   { id:"m_jimmy_1000",    char:"jimmy",    target:1000, progress:0, xpReward:120, claimed:false, difficulty:null },
@@ -5588,6 +5641,11 @@ const ACCOUNT_DEFAULT = {
   // MITICA (platino) - 300 XP
   { id:"x_totalScore_1500000", type:"totalScore", target:1500000, progress:0, xpReward: 1000, claimed:false, difficulty:"mythic" },
 
+  // ETEREE (viola mistico) - sbloccano la possibilità di acquisto skin
+  { id:"eth_jimmy_evo_skin",  type:"charGames", char:"jimmy",  target:50, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"jimmy_evo"  },
+  { id:"eth_rooney_evo_skin", type:"charGames", char:"rooney", target:50, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"rooney_evo" },
+  { id:"eth_jeff_evo_skin",   type:"charGames", char:"jeff",   target:50, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"jeff_evo"   },
+
 ]
 };
 
@@ -5650,6 +5708,10 @@ function syncMissionsFromStats(){
       else if(m.type==='charSuperUses'){
         const k = (m.char ? (String(m.char)+'SuperUses') : null);
         m.progress = Math.min(m.target, Math.floor((k && accountState.stats && accountState.stats[k])||0));
+      }
+      else if(m.type==='charGames'){
+        const k = 'gamesPlayedWith_' + (m.char||'');
+        m.progress = Math.min(m.target, Math.floor((accountState.stats && accountState.stats[k])||0));
       }
       else if(accountState.stats && m.type && (m.type in accountState.stats)) m.progress = Math.min(m.target, Math.floor(accountState.stats[m.type]||0));
       else if(m.type==='recordScore') m.progress = Math.min(m.target, Math.floor((records && records[m.char])||0));
@@ -5737,6 +5799,9 @@ function loadAccount(){
         killsWith_bane: Math.max(0, Math.floor(a.stats.killsWith_bane||0)),
         killsWith_hendel: Math.max(0, Math.floor(a.stats.killsWith_hendel||0)),
         killsWith_kaerith: Math.max(0, Math.floor(a.stats.killsWith_kaerith||0)),
+        gamesPlayedWith_jimmy:  Math.max(0, Math.floor(a.stats.gamesPlayedWith_jimmy||0)),
+        gamesPlayedWith_rooney: Math.max(0, Math.floor(a.stats.gamesPlayedWith_rooney||0)),
+        gamesPlayedWith_jeff:   Math.max(0, Math.floor(a.stats.gamesPlayedWith_jeff||0)),
       };
     }
 
@@ -6064,6 +6129,11 @@ function missionTitle(m){
   if(m.type==='noDamageToLevel') return `Subisci 0 danni fino al livello ${m.levelTarget||15}`;
   if(m.type==='superUses') return `Usa la super ${m.target} volte (totali)`;
   if(m.type==='charSuperUses') return `Utilizza la super di ${charLabel(m.char)} ${m.target} volte`;
+  if(m.type==='charGames'){
+    const skinEntry = (typeof SKIN_CATALOGUE!=='undefined') ? SKIN_CATALOGUE.find(s=>s.id===m.skinUnlock) : null;
+    const skinName = skinEntry ? skinEntry.name : (m.skinUnlock||'skin');
+    return `Gioca ${m.target} partite con ${charLabel(m.char)} — sblocca: ${skinName}`;
+  }
   if(m.type==='jimmySuperKills') return `Uccidi ${m.target} nemici con la super di Jimmy`;
   if(m.type==='pickups') return `Raccogli ${m.target} pickup (totali)`;
   if(m.type==='totalHeal') return `Recupera ${m.target} HP (totali)`;
@@ -6139,7 +6209,8 @@ const missionsSorted = (() => {
         if(x.difficulty==='mid') return 2;
         if(x.difficulty==='hard') return 3;
         if(x.difficulty==='mythic') return 4;
-        return 5;
+        if(x.difficulty==='ethereal') return 5;
+        return 6;
       };
 
       const dw = weight(a) - weight(b);
@@ -6164,8 +6235,15 @@ const missionsSorted = (() => {
 
     const title=document.createElement("div");
     title.className="m-title";
+    const isEthereal = (m.difficulty === 'ethereal');
     const isBaseMission = (m && m.char && !m.type && ['jimmy','rooney','jeff'].includes(m.char));
-    const badge = isBaseMission ? "<span class='mission-base'>BASE</span>" : (m.difficulty==='easy') ? "<span class='mission-easy'>SEMPLICE</span>" : (m.difficulty==='mid') ? "<span class='mission-mid'>INTERMEDIA</span>" : (m.difficulty==='hard') ? "<span class='mission-hard'>COMPLICATA</span>" : (m.difficulty==='mythic') ? "<span class='mission-mythic'>MITICA</span>" : "";
+    const badge = isEthereal ? "<span class='mission-ethereal'>ETEREA</span>"
+      : isBaseMission ? "<span class='mission-base'>BASE</span>"
+      : (m.difficulty==='easy') ? "<span class='mission-easy'>SEMPLICE</span>"
+      : (m.difficulty==='mid') ? "<span class='mission-mid'>INTERMEDIA</span>"
+      : (m.difficulty==='hard') ? "<span class='mission-hard'>COMPLICATA</span>"
+      : (m.difficulty==='mythic') ? "<span class='mission-mythic'>MITICA</span>" : "";
+    if(isEthereal) row.classList.add('ethereal-row');
     if(m.char && !m.type){
       title.innerHTML = `Fai ${m.target} kill con ${charLabel(m.char)} ${badge}`;
     } else {
@@ -6180,7 +6258,12 @@ const missionsSorted = (() => {
     else if(m.type==='totalHeal') unit='HP';
     else if(m.type==='totalScore' || m.type==='recordScore') unit='punti';
     else if(['bossLevel','reachLevel','noSuperToLevel','noDamageToLevel'].includes(m.type)) unit='completato';
-    prog.textContent = `${p}/${m.target} ${unit} • Ricompensa: ${m.xpReward} XP`;
+    else if(m.type==='charGames') unit='partite';
+
+    const rewardText = (m.difficulty==='ethereal')
+      ? `Ricompensa: Sblocco acquisto skin`
+      : `Ricompensa: ${m.xpReward} XP`;
+    prog.textContent = `${p}/${m.target} ${unit} • ${rewardText}`;
 
     const barwrap=document.createElement("div");
     barwrap.className="m-barwrap";
@@ -6199,43 +6282,55 @@ const missionsSorted = (() => {
     btn.className="claim-btn";
     if(claimed){
       btn.classList.add("claimed");
-      btn.textContent=" Riscattata";
+      btn.textContent = (m.difficulty==='ethereal') ? "✓ Skin sbloccata" : "✓ Riscattata";
       btn.disabled=true;
     }else if(done){
       btn.classList.add("ready");
-      btn.textContent="Riscatta +XP";
+      btn.textContent = (m.difficulty==='ethereal') ? "✨ Sblocca Skin" : "Riscatta +XP";
       btn.disabled=false;
       btn.addEventListener("click", ()=>{
         const key = missionKey(m);
-
-        // Already paid/claimed (robust)
         if(missionPayouts && (key in missionPayouts)) return;
 
-        const reward = Math.max(0, Math.floor(m.xpReward||0));
-
-        // 1) Write payout ledger first: prevents "claimed but no XP" after refresh/close
-        if(!missionPayouts || typeof missionPayouts!=="object") missionPayouts = {};
-        missionPayouts[key] = reward;
-        saveMissionPayouts(missionPayouts);
-
-        // 2) Mark claimed (both systems for backward compatibility)
-        if(missionClaims){
-          missionClaims.add(key);
-          saveMissionClaims(missionClaims);
+        if(m.difficulty==='ethereal'){
+          // Ethereal: unlock the skin for purchase (no XP)
+          if(!missionPayouts || typeof missionPayouts!=="object") missionPayouts = {};
+          missionPayouts[key] = 0; // 0 XP, just mark as claimed
+          saveMissionPayouts(missionPayouts);
+          if(missionClaims){ missionClaims.add(key); saveMissionClaims(missionClaims); }
+          m.claimed = true;
+          // Unlock the skin in skinPurchases (mark as purchaseable, NOT purchased)
+          if(m.skinUnlock){
+            if(!skinPurchases) skinPurchases = {};
+            skinPurchases[m.skinUnlock + '_unlocked'] = true; // flag: can be bought
+            saveSkinPurchases();
+          }
+          btn.classList.remove("ready"); btn.classList.add("claimed");
+          btn.textContent = "✓ Skin sbloccata"; btn.disabled = true;
+          const fb = document.createElement('div');
+          fb.style.cssText='color:#ce93d8;font-size:11px;margin-top:4px;font-family:\'Press Start 2P\',cursive;';
+          fb.textContent='Ora acquistabile nel negozio Skin!';
+          btn.parentNode.insertBefore(fb, btn.nextSibling);
+          setTimeout(()=>fb.remove(), 4000);
+        } else {
+          // Normal mission: award XP
+          const reward = Math.max(0, Math.floor(m.xpReward||0));
+          if(!missionPayouts || typeof missionPayouts!=="object") missionPayouts = {};
+          missionPayouts[key] = reward;
+          saveMissionPayouts(missionPayouts);
+          if(missionClaims){ missionClaims.add(key); saveMissionClaims(missionClaims); }
+          m.claimed = true;
+          accountState.missionXpAwarded = Math.max(0, Math.floor(accountState.missionXpAwarded||0)) + reward;
+          accountState.totalXp = Math.max(0, Math.floor(accountState.totalXp||0)) + reward;
+          recalcAccountFromTotalXp(true);
+          saveAccount();
+          showXpFloat(`+${reward} XP`);
+          refreshAccountUi(true);
         }
-        m.claimed = true;
-
-        // 3) Apply XP and persist
-        accountState.missionXpAwarded = Math.max(0, Math.floor(accountState.missionXpAwarded||0)) + reward;
-        accountState.totalXp = Math.max(0, Math.floor(accountState.totalXp||0)) + reward;
-        recalcAccountFromTotalXp(true);
-        saveAccount();
-
-        showXpFloat(`+${reward} XP`);
-        refreshAccountUi(true);
+        renderMissions();
       });
     }else{
-      btn.textContent="Non completata";
+      btn.textContent = (m.difficulty==='ethereal') ? "Non completata" : "Non completata";
       btn.disabled=true;
     }
 
@@ -7590,7 +7685,9 @@ const target=this._nearestEnemy();
     // Bite
     if(dist <= this.range && (now-this.lastAttack) >= this.cooldown){
       this.lastAttack=now;
-      const finalDmg = Math.max(0, Math.round(this.damage * markMult(target)));
+      // EVO Hècate – Cacciatrice di Stelle: lupi infliggono +50% danno
+      const wolfBondMult = 1.0;
+      const finalDmg = Math.max(0, Math.round(this.damage * markMult(target) * wolfBondMult));
       target.hp -= finalDmg;
       showDamageNumber(target.x, target.y, finalDmg);
       createParticles(tx, ty, '#b0bec5', 10, 3);
@@ -8119,14 +8216,7 @@ function markMult(enemy){
   return (enemy && enemy.salsyMarkUntil && Date.now() < enemy.salsyMarkUntil) ? 2 : 1;
 }
 function applyEnemyDamage(enemy, baseDmg){
-  // Rooney EVO passive: first hit on a given enemy
-  // +100% vs normal enemies, +75% vs bosses/elite
   let mult=1;
-  if(typeof player!=='undefined' && player && player.type==='rooney' && player.evolved && enemy && !enemy._rooneyFirstHit){
-    const isBossOrElite = !!(enemy.isBoss || enemy.isElite || enemy.type==='boss1'||enemy.type==='boss2'||enemy.type==='boss3'||enemy.type==='boss4'||enemy.type==='boss5');
-    mult = isBossOrElite ? 1.75 : 2; // +75% boss/elite, +100% normal
-    enemy._rooneyFirstHit=true;
-  }
   // Kouvagia EVO – Ferita: nemici feriti infliggono -20% danni a Kouvagia (gestito in player damage receive)
   // Il flag _kouvagiaWounded serve per ridurre i danni in entrata (vedi update/hit player)
   const _nowD=Date.now();
@@ -8137,15 +8227,16 @@ function applyEnemyDamage(enemy, baseDmg){
     }
   }catch(e){}
   const _moonMult = (typeof _mezzalunaPlayerDamageMult==='function') ? _mezzalunaPlayerDamageMult(_nowD) : 1;
-  // COMBO MULTIPLIER: +1% every 5 hits, max +20%, resets on taking damage
+  // COMBO MULTIPLIER: +1% every 3 hits, max +20%, resets on taking damage
   let _comboMult = 1;
   try{
     if(typeof player!=='undefined' && player && player.combo>0 && player._comboTimer && _nowD < player._comboTimer){
       _comboMult = Math.min(1.20, 1 + Math.floor(player.combo/3)*0.01);
     } else if(typeof player!=='undefined' && player && player._comboTimer && _nowD >= player._comboTimer){
-      player.combo = 0; // expire combo
+      player.combo = 0;
     }
   }catch(e){}
+
   const finalDmg = Math.max(0, Math.round(baseDmg * mult * _moonMult * markMult(enemy) * getAncientWarMult(_nowD, enemy) * _comboMult));
 
   enemy._lastHitAt = _nowD;
@@ -8853,7 +8944,7 @@ function updateProjectiles(){
               enemies.splice(i,1);
               applyScore(100*currentLevel);
                 addKill(); if(this.type==='kouvagia'){
-                  const healAmt = (player && player.evolved && e && e._kouvagiaWounded && Date.now()<e._kouvagiaWounded) ? 6 : 3;
+                  const healAmt = 3;
                   this.hp=Math.min(this.maxHP,this.hp+healAmt);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
@@ -8932,7 +9023,7 @@ if(p.aoeRadius>0){
               enemies.splice(i,1);
               applyScore(100*currentLevel);
                 addKill(); if(this.type==='kouvagia'){
-                  const healAmt2 = (player && player.evolved && e && e._kouvagiaWounded && Date.now()<e._kouvagiaWounded) ? 6 : 3;
+                  const healAmt2 = 3;
                   this.hp=Math.min(this.maxHP,this.hp+healAmt2);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
@@ -9660,8 +9751,7 @@ function updateTempBeams(){
       if(inside){
         if(!state){
           // first hit
-          const instBoost = (e._tempostormInstableUntil && now < e._tempostormInstableUntil) ? 1.20 : 1.0;
-          const dmg = Math.round(B.damage1 * instBoost);
+          const dmg = Math.round(B.damage1);
           const final = applyEnemyDamage(e, dmg);
           showDamageNumber(e.x,e.y, final);
           createParticles(e.x+e.width/2,e.y+e.height/2,'#4fc3f7',10,4);
@@ -9669,16 +9759,11 @@ function updateTempBeams(){
         } else {
           // check linger bonus only if stayed inside continuously
           if(!state.extraDone && !state.left && (now - state.firstHit) >= 180){
-            const instBoost2 = (e._tempostormInstableUntil && now < e._tempostormInstableUntil) ? 1.20 : 1.0;
-            const dmg2=Math.round(B.damageStay * instBoost2);
+            const dmg2=Math.round(B.damageStay);
             const final2 = applyEnemyDamage(e, dmg2);
             showDamageNumber(e.x,e.y, final2);
             createParticles(e.x+e.width/2,e.y+e.height/2,'#81d4fa',12,4);
             state.extraDone=true;
-            // Tempostorm EVO – Nucleo di Compressione: rallenta il nemico del 25% per 2.5s
-            if(typeof player!=='undefined' && player && player.type==='tempostorm' && player.evolved){
-              e._tempostormSlowUntil = now + 2500;
-            }
           }
         }
       } else {
@@ -9901,6 +9986,9 @@ function updatePickups(playerRef){
   });
 }
 function applyPickupEffect(playerRef,type){
+  // EVO: tutti i bonus a tempo durano il 50% in più se il player è evoluto
+  const _dm = (playerRef && playerRef._evoBonusDurMult) ? playerRef._evoBonusDurMult : 1.0;
+
   if(type==='heal'){
     const healAmount=Math.round(playerRef.maxHP*0.25);
     const _before=playerRef.hp;
@@ -9911,127 +9999,115 @@ function applyPickupEffect(playerRef,type){
     createParticles(playerRef.x,playerRef.y,'#2ecc71',20);
   } else if(type==='atk'){
     const now = Date.now();
+    const dur = Math.round(10000 * _dm);
     playerRef.attackBuffMultiplier=1.6;
     playerRef.attackBuffStart = now;
-    playerRef.attackBuffDuration = 10000;
-    playerRef.attackBuffUntil=now+10000;
+    playerRef.attackBuffDuration = dur;
+    playerRef.attackBuffUntil=now+dur;
     createParticles(playerRef.x,playerRef.y,'#e74c3c',20);
   } else if(type==='super'){
     playerRef.lastSuper=Date.now()-playerRef.superCooldown-100;
     createParticles(playerRef.x,playerRef.y,'#f1c40f',20);
-    } else if(type==='stellar'){
-    // StellarBonus: +100 HP, +25% speed for 3s, white opaque glow for 3s
+  } else if(type==='stellar'){
+    const dur = Math.round(3000 * _dm);
     const _beforeHp = playerRef.hp;
     playerRef.hp = Math.min(playerRef.maxHP, playerRef.hp + 100);
     try{ accountOnHeal(playerRef.hp - _beforeHp); }catch(e){}
     playerRef.speed = playerRef._baseSpeed * 1.25;
     playerRef.speedBuffStart = Date.now();
-    playerRef.speedBuffDuration = 3000;
-    playerRef.speedBuffUntil = Date.now() + 3000;
+    playerRef.speedBuffDuration = dur;
+    playerRef.speedBuffUntil = Date.now() + dur;
     playerRef.stellarGlowUntil = Date.now() + 1000;
     createParticles(playerRef.x, playerRef.y, '#000000', 36, 5);
   } else if(type==='gold'){
     const now = Date.now();
+    const dur = Math.round(15000 * _dm);
     const _beforeHp = playerRef.hp;
     playerRef.hp=playerRef.maxHP;
     try{ accountOnHeal(playerRef.hp - _beforeHp); }catch(e){}
     playerRef.attackBuffMultiplier=2.0;
     playerRef.attackBuffStart = now;
-    playerRef.attackBuffDuration = 15000;
-    playerRef.attackBuffUntil=now+15000;
+    playerRef.attackBuffDuration = dur;
+    playerRef.attackBuffUntil=now+dur;
     playerRef.lastSuper=now-playerRef.superCooldown-100;
     createParticles(playerRef.x,playerRef.y,'gold',40);
     for(let i=0;i<8;i++) createParticles(playerRef.x+(Math.random()-0.5)*40,playerRef.y+(Math.random()-0.5)*40,'#fff176',6);
   } else if(type==='speed'){
     const now = Date.now();
+    const dur = Math.round(7000 * _dm);
     playerRef.speed=playerRef._baseSpeed*1.5;
     playerRef.speedBuffStart = now;
-    playerRef.speedBuffDuration = 7000;
-    playerRef.speedBuffUntil=now+7000;
+    playerRef.speedBuffDuration = dur;
+    playerRef.speedBuffUntil=now+dur;
     createParticles(playerRef.x,playerRef.y,'#3498db',20);
   } else if(type==='ira'){
-    // IRA: 6s — -75% cooldown colpo (cooldown * 0.25) +25% speed
     const now=Date.now();
+    const dur = Math.round(6000 * _dm);
     playerRef.iraStart = now;
-    playerRef.iraDuration = 6000;
-    playerRef.iraUntil = now + 6000;
-
-    // speed: do not downgrade other buffs (keep the max)
+    playerRef.iraDuration = dur;
+    playerRef.iraUntil = now + dur;
     playerRef.speed = Math.max(playerRef.speed, playerRef._baseSpeed * 1.25);
-
-    // cooldown: keep the fastest between current and IRA effect
     if(typeof playerRef.cooldown === 'number' && playerRef._baseCooldown!=null){
       if(typeof playerRef._iraPrevCooldown!=='number'){
         playerRef._iraPrevCooldown = playerRef.cooldown;
       }
       playerRef.cooldown = Math.min(playerRef.cooldown, playerRef._baseCooldown * 0.25);
     }
-
     createParticles(playerRef.x+playerRef.width/2,playerRef.y+playerRef.height/2,'#ff6f00',28,5);
   } else if(type==='letteraAmore'){
-    // LETTERA D'AMORE -> ESTASI: 15s lifesteal 7%
     const now = Date.now();
+    const dur = Math.round(15000 * _dm);
     playerRef.estasiStart = now;
-    playerRef.estasiDuration = 15000;
-    playerRef.estasiUntil = now + 15000;
-    // feedback visivo (marrone cioccolato)
+    playerRef.estasiDuration = dur;
+    playerRef.estasiUntil = now + dur;
     createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, 'chocolate', 34, 5);
   } else if(type==='mezzaluna'){
-    // MEZZALUNA: ciclo lunare 12s (3 fasi da 4s). I nemici colpiti vengono marchiati finché il bonus è attivo.
     const now = Date.now();
+    const dur = Math.round(12000 * _dm);
     playerRef.mezzalunaStart = now;
-    playerRef.mezzalunaUntil = now + 12000;
+    playerRef.mezzalunaUntil = now + dur;
     playerRef.mezzalunaPhase = 1;
     playerRef._mezzalunaDrainLast = 0;
     playerRef._mezzalunaDrainStep = 0;
-
-    // feedback visivo iniziale (aura lunare)
     createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, '#90caf9', 46, 6);
-
   } else if(type==='shieldPickup'){
     const now = Date.now();
+    const dur = Math.round(6000 * _dm);
     playerRef.pickupShieldStart = now;
-    playerRef.pickupShieldDuration = 6000;
-    playerRef.pickupShieldUntil=now+6000;
+    playerRef.pickupShieldDuration = dur;
+    playerRef.pickupShieldUntil=now+dur;
     playerRef.invulnerable=true;
     createParticles(playerRef.x,playerRef.y,'#7fdbff',30);
-
-    } else if(type==='furia'){
-    // Cura nel tempo: +10 HP/s per 10s
+  } else if(type==='furia'){
     const now = Date.now();
+    const dur = Math.round(10000 * _dm);
     playerRef.furiaHealStart = now;
-    playerRef.furiaHealDuration = 10000;
-    playerRef.furiaHealUntil = now+10000;
+    playerRef.furiaHealDuration = dur;
+    playerRef.furiaHealUntil = now+dur;
     playerRef.furiaLastHeal = now;
-
-    // Onde di danno (3 aree visibili che si allargano)
     const cx = playerRef.x + playerRef.width/2;
     const cy = playerRef.y + playerRef.height/2;
     spawnFuriaWaves(cx, cy);
-
-    // Extra feedback visivo
     createParticles(cx,cy,'#ff00ff',70,6);
   } else if(type==='ice'){
+    const iceDur = Math.round(17000 * _dm);
     enemies.forEach(e=>{
       e.speed *= 0.4;
-      e.iceUntil = Date.now()+17000;
+      e.iceUntil = Date.now()+iceDur;
       e.iceDps = 2;
       e.iceLastTick = Date.now();
     });
     createParticles(playerRef.x,playerRef.y,'#000000',40);
   } else if(type==='arcoAntico'){
-    // Arco Antico: crea una colonna al centro (60 HP) per 12s.
-    // Aura: -20% velocità ai nemici vicini; ogni 3s attiva un Sigillo.
     activateArcoAntico(playerRef);
     createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, '#c0c0c0', 24, 5);
   } else if(type==='collana'){
-    // COLLANA DI ENERGIA: assorbe danno ricevuto per 8s e al termine
-    // Collana: accumula danno reale ricevuto → usato come carica per la detonazione
     const now = Date.now();
+    const dur = Math.round(8000 * _dm);
     playerRef.collanaActive   = true;
     playerRef.collanaStart    = now;
-    playerRef.collanaEnd      = now + 8000;
-    playerRef.collanaDmgAccum = 0;   // danno reale accumulato durante i 8s
+    playerRef.collanaEnd      = now + dur;
+    playerRef.collanaDmgAccum = 0;
     createParticles(playerRef.x + playerRef.width/2, playerRef.y + playerRef.height/2, '#7c4dff', 30, 6);
     if(typeof spawnCollanaTrigger==='function') spawnCollanaTrigger(playerRef, false);
   } else if(type==='malus'){
@@ -10115,7 +10191,6 @@ class Player{
     this._evoFxUntil=0;
     // StellarBonus visual
     this.stellarGlowUntil=0;
-    this._jimmyNextGrappleCdMult=1;
   }
 
   evolve(){
@@ -10124,7 +10199,6 @@ class Player{
     const now=Date.now();
     this._evoFxUntil=now+650;
 
-    // ===== EVOLUTION BASE BONUS (tutti i personaggi) =====
     // +50% HP massimi (permanente per la run)
     try{
       const oldMax = Number(this.maxHP)||0;
@@ -10134,52 +10208,17 @@ class Player{
       this.hp = Math.min(newMax, (Number(this.hp)||0) + delta);
     }catch(e){}
 
-    // ===== EVO SPECIFICHE =====
-    // Jimmy – Predatore Evoluto: SUPER ogni 5.5s + jetpack dura +1s (grapple kill reset gestito in attack())
-    if(this.type==='jimmy'){
-      this.superCooldown = 5500;
-      try{
-        this.jetpackDuration = Math.max(0, (Number(this.jetpackDuration)||0) + 1000);
-        if(this.isJetpacking && this.speedBuffUntil && this.speedBuffUntil>now){
-          this.speedBuffUntil += 1000;
-        }
-      }catch(e){}
-    }
+    // +25% danno base (permanente per la run)
+    try{
+      this.damage = Math.round((Number(this.damage)||0) * 1.25);
+      if(this._baseDamage != null) this._baseDamage = Math.round(this._baseDamage * 1.25);
+    }catch(e){}
 
-    // Rooney – Impatto Brutale: bonus primo colpo +100% normali / +75% boss&elite (gestito in applyEnemyDamage)
-    // nessun init extra necessario (usa enemy._rooneyFirstHit già esistente)
+    // Tutti i bonus pickup dureranno il 50% in più (moltiplicatore usato in applyPickupEffect)
+    this._evoBonusDurMult = 1.5;
 
-    // Jeff – Rigenerazione da Combattimento: cura su kill + +30% su 2+ hit + NUOVO: -15% cd base se 3+ nemici in super
-    // flag init: _jeffSuperCdBonusActive
-    if(this.type==='jeff'){
-      this._jeffSuperCdBonusActive = false;
-    }
-
-    // Voltryx – Sovraccarico Ibrido
-    if(this.type==='voltryx'){
-      this._voltryxLastRangedAt = 0;
-      this._voltryxLastMeleeAt = 0;
-    }
-
-    // Kouvagia – Predatore del Caos
-    if(this.type==='kouvagia'){
-      // _kouvagiaWoundUntil per nemico gestito in dash logic
-    }
-
-    // Salsy – Marchio del Duelista
-    if(this.type==='salsy'){
-      // _salsyMarkConsumed per nemico + miniDash gestito in attack
-    }
-
-    // Tempostorm – Nucleo di Compressione
-    if(this.type==='tempostorm'){
-      // _tempostormSlowUntil per nemico + _tempostormInstableUntil gestiti in beam logic
-    }
-
-    // Marz – Triangolo Arcano
-    if(this.type==='marz'){
-      this._marzLastAttackHitCount = 0; // quanti bersagli distinti ha colpito l'ultimo attacco
-    }
+    // _evoXpBonus: segnala al sistema XP di dare +50% alla fine della run
+    this._evoXpBonus = true;
   }
 
 
@@ -10422,8 +10461,8 @@ class Player{
             start: now,
             lastPulse: 0,
             pulseMs: 90,
-            range: (characterStats?.[this.type]?.range ?? 206),                 // range ridotto (-30%)
-            angle: Math.PI/6,           // 30°
+            range: (characterStats?.[this.type]?.range ?? 206),
+            angle: Math.PI/6,
             dir: _aimToNearest(),
             damageActive: true,
             releasedAt: 0,
@@ -10485,10 +10524,7 @@ class Player{
             const dist=Math.hypot((e.x+e.width/2)-(this.x+this.width/2),(e.y+e.height/2)-(this.y+this.height/2));
             if(dist<110){
               dashHitAny=true;
-              // EVO: applica Ferita (3s)
-              if(this.evolved && this._kouvagiaEvoWoundDash){
-                e._kouvagiaWounded = Date.now() + 3000;
-              }
+
               const dmg=Math.round(40*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
               const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
               createParticles(e.x,e.y,'#e84393',10,5);
@@ -10499,13 +10535,12 @@ class Player{
                 enemies.splice(i,1);
                 applyScore(100*currentLevel);
                 addKill(); this._baneSuperOnKill();
-                const kHeal = (this.evolved && e._kouvagiaWounded && Date.now()<e._kouvagiaWounded) ? 6 : 3;
+                const kHeal = 3;
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+kHeal);createParticles(this.x,this.y,'#2ecc71',6,3);}
               }
             }
           }
           // EVO: reset wound dash flag after first frame it hit something
-          if(dashHitAny) this._kouvagiaEvoWoundDash=false;
         }else this._kouvagiaDashHitCd--;
       }
       if(now-this.dashTime>(this._dashDuration||200)){
@@ -10520,27 +10555,19 @@ class Player{
             const e=enemies[i];
             const dist=Math.hypot((e.x+e.width/2)-(this.x+this.width/2),(e.y+e.height/2)-(this.y+this.height/2));
             if(dist<165){
-              // EVO: applica Ferita anche nell'esplosione finale + knockback
-              if(this.evolved){ e._kouvagiaWounded = Date.now() + 3000; }
+
               const dmg=Math.round(65*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
               const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
               createParticles(e.x,e.y,'#fd79a8',16,5);
               showDamageNumber(e.x,e.y, _final);
-              // EVO: piccolo knockback sull'esplosione finale
-              if(this.evolved){
-                const kbDx=(e.x+e.width/2)-(this.x+this.width/2);
-                const kbDy=(e.y+e.height/2)-(this.y+this.height/2);
-                const kbDist=Math.hypot(kbDx,kbDy)||1;
-                e.x += (kbDx/kbDist)*55;
-                e.y += (kbDy/kbDist)*30;
-              }
+
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
                 dropStellarBonusAtIndexIfNeeded(i);
                 enemies.splice(i,1);
                 applyScore(100*currentLevel);
                 addKill(); this._baneSuperOnKill();
-                const kHeal2 = (this.evolved) ? 6 : 3;
+                const kHeal2 = 3;
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+kHeal2);createParticles(this.x,this.y,'#2ecc71',6,3);}
               }
             }
@@ -10613,7 +10640,7 @@ class Player{
           }
 
           // Jimmy EVO passive: after killing the grapple target, the NEXT grapple has -100% cooldown (ready subito)
-          if(this.type==='jimmy' && this.evolved && killedGrappleTarget){ this._jimmyNextGrappleCdMult=0; }
+
 
           this.isGrappling=false;this.grappleTarget=null;this.vx=0;this.vy=0;this.grappleStartTime=0;
         }
@@ -10632,28 +10659,9 @@ class Player{
             // Rooney SUPER (rework):
             // - Area QUADRATA.
             // - Danno totale massimo: ~300 (senza buff) distribuito tra TUTTI i nemici nell'area.
-            // - Falloff: più un nemico è lontano dal centro, meno danno subisce.
-            // EVO: se Rooney è evoluto, oltre all'area base ne genera altre 3 in posizioni casuali (totale 4 aree).
-            const half=320; // mezzo lato del quadrato (lato=640) [60% più grande]
+            const half=320;
             const baseX=this.x+this.width/2, baseY=this.y+this.height/2;
-
             const centers=[{x:baseX,y:baseY}];
-            if(this.evolved){
-              try{
-                const B=getPlayBounds();
-                const minX=B.left + half + 18;
-                const maxX=B.right - half - 18;
-                const minY=B.top + half + 18;
-                const maxY=B.bottom - half - 18;
-                for(let n=0;n<3;n++){
-                  const cx = (maxX>minX) ? (minX + Math.random()*(maxX-minX)) : baseX;
-                  const cy = (maxY>minY) ? (minY + Math.random()*(maxY-minY)) : baseY;
-                  centers.push({x:cx,y:cy});
-                }
-              }catch(e){
-                for(let n=0;n<3;n++) centers.push({x:baseX,y:baseY});
-              }
-            }
 
             const doArea=(px,py)=>{
               // VISUAL: show the super area on screen
@@ -10729,9 +10737,6 @@ class Player{
                 createParticles(enemy.x,enemy.y,'#f39c12',30,6);
                 showDamageNumber(enemy.x,enemy.y, _final);
                 if(enemy.hp<=0){
-  if(player && player.type==='jeff' && player.evolved){
-    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 15);
-}
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   // IRA kill special FX (Bane SUPER)
                   if(player && player.type==='bane' && Date.now() < player.baneSuperUntil){
@@ -10869,9 +10874,6 @@ class Player{
                 createParticles(enemy.x,enemy.y,'#9b59b6',8,4);
                 showDamageNumber(enemy.x,enemy.y, _final);
                 if(enemy.hp<=0){
-  if(player && player.type==='jeff' && player.evolved){
-    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 15);
-}
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   dropStellarBonusAtIndexIfNeeded(idx);
                   enemies.splice(idx,1);
@@ -11113,18 +11115,15 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
 
           if(inHandle || inHead){
             if(H.hitSet) H.hitSet.add(e);
-
-            // Only one enemy per swing
             H.hitDone = true;
-
-            // Stun for 0.5s
             e.stunnedUntil = Date.now() + 500;
 
             const dmgBase = 120 * (this.attackBuffMultiplier||1) * (this.baneSuperAttackMult||1);
             const final = applyEnemyDamage(e, dmgBase);
-
             showDamageNumber(e.x, e.y, final);
             createParticles(ex, ey, '#ff8c1a', 18, 5);
+
+
 
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
@@ -11199,6 +11198,10 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
       this.isDashing=true;this.dashTime=Date.now();
 
 
+
+
+
+
       // COSMO dash: short teleport + cosmic trail (0.5s) + slightly longer cooldown
       if(this.type==='cosmo'){
         const now=Date.now();
@@ -11265,11 +11268,7 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
     // Allow Cosmo to keep using base attack (J) even while SUPER is active
     if(now-this.lastAttack<this.cooldown || (this.isDoingSuper && this.type!=='cosmo')) return false;
     // Jimmy EVO passive: after killing the grapple target, the next grapple has -100% cooldown (only for that next grapple)
-    if(this.type==='jimmy' && this.evolved && this.attackType==='grapple' && this._jimmyNextGrappleCdMult && this._jimmyNextGrappleCdMult<1){
-      const mult=this._jimmyNextGrappleCdMult;
-      this.lastAttack = now - Math.round(this.cooldown*(1-mult));
-      this._jimmyNextGrappleCdMult=1;
-    } else {
+ else {
       this.lastAttack=now;
     }
     this.attacking=true;this.attackTime=now;
@@ -11530,29 +11529,11 @@ for(let i=0;i<3;i++){
           while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
           if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.15){
             const base=37*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
-            // EVO Salsy: se nemico marchiato, consuma il marchio e applica lacerazione + mini-scatto
-            let evoConsume=false;
-            if(this.evolved && enemy.salsyMarkUntil && Date.now() < enemy.salsyMarkUntil && !enemy._salsyLacerationConsumed){
-              evoConsume=true;
-              enemy._salsyLacerationConsumed=true;
-              enemy.salsyMarkUntil=0; // consuma il marchio
-              // applica lacerazione: DoT per 4s
-              enemy._salsyLacerationUntil = Date.now() + 4000;
-              enemy._salsyLacerationLast = Date.now();
-              createParticles(enemy.x,enemy.y,'#f1c40f',20,6);
-            }
             const dmg=applyEnemyDamage(enemy, base);
             createParticles(enemy.x,enemy.y,'#f1c40f',10,4);
             showDamageNumber(enemy.x,enemy.y,dmg);
-            // EVO: mini-scatto di velocità dopo consumo marchio
-            if(evoConsume){
-              this.speed = Math.max(this.speed, this._baseSpeed * 1.35);
-              this.speedBuffUntil = Math.max(this.speedBuffUntil||0, Date.now() + 1200);
-            }
+
             if(enemy.hp<=0){
-  if(player && player.type==='jeff' && player.evolved){
-    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 15);
-}
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
               dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
               enemies.splice(enemies.indexOf(enemy),1);
@@ -11705,7 +11686,7 @@ for(let i=0;i<3;i++){
         }
       });
 
-      const __multiBoost = (this.type==='jeff' && this.evolved && __hitList.length>=2) ? 1.30 : 1.00;
+      const __multiBoost = 1.00;
       const __dmgBase = Math.round(this.damage*__multiBoost*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
 
       for(const enemy of __hitList){
@@ -11713,9 +11694,6 @@ for(let i=0;i<3;i++){
         createParticles(enemy.x,enemy.y,'#9b59b6',10,4);
         showDamageNumber(enemy.x,enemy.y, _final);
         if(enemy.hp<=0){
-          if(player && player.type==='jeff' && player.evolved){
-            player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 15);
-          }
           createParticles(enemy.x,enemy.y,'#fff176',30,6);
           const idx=enemies.indexOf(enemy);
           if(idx>=0){
@@ -11733,14 +11711,11 @@ for(let i=0;i<3;i++){
           createParticles(assistTarget.x,assistTarget.y,'#9b59b6',10,4);
           showDamageNumber(assistTarget.x,assistTarget.y, _final);
           if(assistTarget.hp<=0){
-            if(player && player.type==='jeff' && player.evolved){
-              player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 15);
-            }
             createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
             dropStellarBonusAtIndexIfNeeded(enemies.indexOf(assistTarget));
             enemies.splice(enemies.indexOf(assistTarget),1);
             applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
-                }
+          }
         }
       }
 
@@ -11759,7 +11734,7 @@ for(let i=0;i<3;i++){
       this._kouvagiaExplosionPending=true;
 
       // EVO: track that a dash just started to apply wound on first contact
-      if(this.evolved) this._kouvagiaEvoWoundDash = true;
+
 
     } else if(this.attackType==='hybrid'){
       
@@ -11776,7 +11751,7 @@ for(let i=0;i<3;i++){
         const vy=(dy/len)*speed;
 
         // EVO: if last melee was within 2s, ranged explosion radius +50%
-        const evoAoeBoost = (this.evolved && this._voltryxLastMeleeAt && (now - this._voltryxLastMeleeAt) < 2000) ? 1.5 : 1.0;
+        const evoAoeBoost = 1.0;
         const baseAoeDmg = Math.round(45* this.attackBuffMultiplier);
         spawnProjectile({
           x:this.x+this.width/2, y:this.y+this.height/2,
@@ -11787,11 +11762,11 @@ for(let i=0;i<3;i++){
           meta:{voltryxBase:true}
         });
         createParticles(this.x+this.width/2,this.y+this.height/2,'#ff9100',14,3);
-        if(this.evolved) this._voltryxLastRangedAt = now;
+
       } else {
         // Close: two quick punches, slightly less strong than Rooney
         // EVO: if last ranged was within 2s, melee dmg +75%
-        const evoMeleeBoost = (this.evolved && this._voltryxLastRangedAt && (now - this._voltryxLastRangedAt) < 2000) ? 1.75 : 1.0;
+        const evoMeleeBoost = 1.0;
         const perPunchBase=50; // Rooney base ~60; Voltryx slightly less
         const punch = ()=>{
           let closest=null;let best=160;
@@ -11815,7 +11790,7 @@ for(let i=0;i<3;i++){
         };
         punch();
         setTimeout(punch, 240);
-        if(this.evolved) this._voltryxLastMeleeAt = now;
+
       }
     }
 
@@ -11895,22 +11870,11 @@ else if(this.attackType==='magic'){
   const targets = sorted.slice(0,3);
   const fallback = targets[0] || this.findClosestEnemy(this.range);
 
-  // EVO Marz – Triangolo Arcano: se almeno 2 fasci colpiscono bersagli DIVERSI, crea un legame arcano tra loro
-  const distinctTargets = [...new Set(targets.filter(Boolean))];
-  if(this.evolved && distinctTargets.length>=2){
-    // spawn arcane link: ticks ogni 250ms per 2s su nemici che attraversano la linea
-    const pairs=[];
-    for(let pi=0;pi<distinctTargets.length-1;pi++) pairs.push([distinctTargets[pi], distinctTargets[pi+1]]);
-    if(typeof window._marzArcaneLinks==='undefined') window._marzArcaneLinks=[];
-    const linkUntil=now+2000;
-    pairs.forEach(pair=>{
-      window._marzArcaneLinks.push({a:pair[0],b:pair[1],until:linkUntil,lastTick:0,dmg:8});
-    });
-  }
-  if(this.evolved) this._marzLastAttackHitCount = distinctTargets.length;
+
+
 
   // EVO Marz: dentro il sigillo i fasci hanno homing più aggressivo
-  const marzHomingSpeed = (this.evolved && magicZone && magicZone.radius>0) ? 13 : 11;
+  const marzHomingSpeed = 11;
 
   for(let i=0;i<3;i++){
     const t = targets[i] || fallback;
@@ -12248,12 +12212,7 @@ else if(this.attackType==='hybrid'){
         isVoltryxSuper:true,pulseInterval:260,lastPulse:0,
         meta:{voltryxSuper:true}
       });
-      // EVO Voltryx: +25% speed during super
-      if(this.evolved){
-        const boostUntil = now + (this.superDuration || 1500);
-        this.speedBuffUntil = Math.max(this.speedBuffUntil||0, boostUntil);
-        this.speed = Math.max(this.speed, this._baseSpeed * 1.25);
-      }
+
       createParticles(this.x+this.width/2,this.y+this.height/2,'#ff6d00',40,6);
       shakeScreen();
     }
@@ -12276,10 +12235,7 @@ else if(this.attackType==='tempostormLaser'){
       showDamageNumber(e.x,e.y, removed);
       createParticles(e.x+e.width/2,e.y+e.height/2,'#00b0ff',18,5);
     }
-    // Tempostorm EVO – Nucleo di Compressione: nemici colpiti dalla super restano instabili 5s (+20% danno laser)
-    if(this.evolved){
-      e._tempostormInstableUntil = Date.now() + 5000;
-    }
+
   });
 
   if(stolen>0){
@@ -12385,12 +12341,8 @@ else if(this.attackType==='tempostormLaser'){
       }
     }catch(e){}
 
-    // Kouvagia EVO – Predatore del Caos: i nemici Feriti infliggono -20% danni
-    try{
-      if(this.type==='kouvagia' && this.evolved && attacker && attacker._kouvagiaWounded && Date.now() < attacker._kouvagiaWounded){
-        damage = Math.round(Number(damage) * 0.80);
-      }
-    }catch(e){}
+
+
 
     // apply damage to Hendel (or any player)
     this.hp-=damage;
@@ -12405,6 +12357,7 @@ else if(this.attackType==='tempostormLaser'){
     // HIT FLASH: red screen tint
     if(typeof window._playerHitFlash === 'undefined') window._playerHitFlash = 0;
     window._playerHitFlash = Math.max(window._playerHitFlash, 18);
+
     applyScore(-50);
     this._baneSuperOnKill();
     createParticles(this.x,this.y,'#c0392b',12,5);
@@ -12476,9 +12429,9 @@ else if(this.attackType==='tempostormLaser'){
   }
 
   draw(){
-    const baseImg = images[this.type];
-    const evoImg = (this.evolved && imagesEvo && imagesEvo[this.type]) ? imagesEvo[this.type] : null;
-    const activeImg = (evoImg && evoImg.complete) ? evoImg : baseImg;
+    const activeImg = (typeof getPlayerSpriteImg==='function')
+      ? getPlayerSpriteImg(this.type, this.evolved)
+      : (images[this.type] || null);
 
     // DASH FLASH: white/cyan flicker during invulnerable dash
     const now_draw = Date.now();
@@ -12506,6 +12459,8 @@ else if(this.attackType==='tempostormLaser'){
         ctx.restore();
       }
     }catch(e){}
+
+
 
     if(activeImg && activeImg.complete){
       ctx.save();
@@ -14251,6 +14206,17 @@ function endGame(won){
 
   if(gameState!=='playing') return;
   gameState='ended';
+
+  // Track games played per character for ethereal missions
+  try{
+    const ch = (player && player.type) ? player.type : (selectedCharacter||'');
+    if(ch && accountState && accountState.stats){
+      const gKey = 'gamesPlayedWith_' + ch;
+      accountState.stats[gKey] = Math.floor(accountState.stats[gKey]||0) + 1;
+      syncMissionsFromStats();
+      saveAccount();
+    }
+  }catch(e){}
   document.getElementById('endScreen').style.display='block';
   const kd=document.getElementById('killsDisplay'); if(kd) kd.style.display='none';
   document.getElementById('endTitle').textContent=won?'VICTORY':'GAME OVER';
@@ -14258,9 +14224,12 @@ function endGame(won){
   document.getElementById('endSub').textContent=`Hai raggiunto il Livello ${currentLevel}`;
   
   // XP battaglia: livello raggiunto * 2 (assegnato quando si torna al menu / si riprova)
-  pendingBattleXp = Math.max(0, Math.floor((currentLevel||0) * 2));
+  const _baseXp = Math.max(0, Math.floor((currentLevel||0) * 2));
+  // +50% XP se il personaggio si è evoluto durante la run
+  const _evoXpMult = (player && player._evoXpBonus) ? 1.5 : 1.0;
+  pendingBattleXp = Math.round(_baseXp * _evoXpMult);
   const xpEl = document.getElementById('endXpEarned');
-  if(xpEl) xpEl.textContent = `XP Ottenuti: ${pendingBattleXp}`;
+  if(xpEl) xpEl.textContent = `XP Ottenuti: ${pendingBattleXp}${_evoXpMult>1 ? ' (+50% EVO)' : ''}`;
 const rec=records[selectedCharacter]||0;
   if(score>rec){records[selectedCharacter]=score;saveRecords(); try{ syncMissionsFromStats(); saveAccount(); }catch(e){} }
   document.getElementById('recordMessage').textContent=`Record Personaggio: ${records[selectedCharacter]||0}`;
@@ -14654,6 +14623,8 @@ function updateCosmoMarks(now){
 
       // clear
       e._cosmoMark = null;
+
+
     }
   }
 }
@@ -14875,75 +14846,6 @@ return;
     updateHendelCrush();
   enemies.forEach(e=>{e.update(player); clampToPlayBounds(e, 2);});
 
-  // ===== EVO TICKS =====
-  // Salsy EVO – Lacerazione DoT (8 dmg/s for 4s on mark-consumed enemies)
-  if(player && player.type==='salsy' && player.evolved){
-    for(let i=enemies.length-1;i>=0;i--){
-      const e=enemies[i];
-      if(e._salsyLacerationUntil && now < e._salsyLacerationUntil){
-        if(!e._salsyLacerationLast) e._salsyLacerationLast=now;
-        if(now - e._salsyLacerationLast >= 500){
-          e._salsyLacerationLast=now;
-          const lacDmg=applyEnemyDamage(e, 8);
-          if(lacDmg>0){ showDamageNumber(e.x,e.y,lacDmg); createParticles(e.x,e.y,'#f1c40f',4,3); }
-          if(e.hp<=0){
-            createParticles(e.x,e.y,'#fff176',30,6);
-            dropStellarBonusAtIndexIfNeeded(i);
-            enemies.splice(i,1);
-            applyScore(100*currentLevel); addKill();
-          }
-        }
-      }
-    }
-  }
-
-  // Jeff EVO – bonus: se 3+ nemici nella super, -15% cd attacco base finché resta nell'area
-  if(player && player.type==='jeff' && player.evolved && player.isDoingSuper){
-    try{
-      let inSuperArea=0;
-      for(const e of enemies){
-        const d=Math.hypot((e.x+e.width/2)-(player.x+player.width/2),(e.y+e.height/2)-(player.y+player.height/2));
-        if(d < (typeof JEFF_SUPER_RADIUS!=='undefined' ? JEFF_SUPER_RADIUS : 200)) inSuperArea++;
-      }
-      if(inSuperArea>=3 && !player._jeffSuperCdBonusActive){
-        player._jeffSuperCdBonusActive=true;
-        player.cooldown = Math.round(player._baseCooldown * 0.85);
-      } else if(inSuperArea<3 && player._jeffSuperCdBonusActive){
-        player._jeffSuperCdBonusActive=false;
-        player.cooldown = player._baseCooldown;
-      }
-    }catch(e){}
-  } else if(player && player.type==='jeff' && player.evolved && !player.isDoingSuper && player._jeffSuperCdBonusActive){
-    player._jeffSuperCdBonusActive=false;
-    try{ player.cooldown = player._baseCooldown; }catch(e){}
-  }
-  // Marz EVO – Legame Arcano: tick danni ai nemici che attraversano la linea tra i bersagli
-  if(player && player.type==='marz' && player.evolved && window._marzArcaneLinks && window._marzArcaneLinks.length){
-    window._marzArcaneLinks = window._marzArcaneLinks.filter(link=>{
-      if(now > link.until) return false;
-      if(now - link.lastTick < 250) return true;
-      link.lastTick = now;
-      const ax=link.a.x+link.a.width/2, ay=link.a.y+link.a.height/2;
-      const bx=link.b.x+link.b.width/2, by=link.b.y+link.b.height/2;
-      for(let i=enemies.length-1;i>=0;i--){
-        const e=enemies[i];
-        if(e===link.a || e===link.b) continue;
-        const ex=e.x+e.width/2, ey=e.y+e.height/2;
-        const d=_distPointToSeg ? _distPointToSeg(ex,ey,ax,ay,bx,by) : 9999;
-        if(d < 38){
-          const dealt=applyEnemyDamage(e, link.dmg);
-          if(dealt>0){ showDamageNumber(e.x,e.y,dealt); createParticles(ex,ey,'#ff00ff',4,3); }
-          if(e.hp<=0){
-            createParticles(e.x,e.y,'#fff176',20,5);
-            dropStellarBonusAtIndexIfNeeded(i);
-            enemies.splice(i,1);
-            applyScore(100*currentLevel); addKill();
-          }
-        }
-      }
-      return true;
-    });
-  }
   // ===================
   updateCosmoMarks(now);
   updateCosmoSingularity(now);
@@ -15124,6 +15026,9 @@ return;
       comboEl.style.opacity='0';
     }
   }catch(e){}
+
+
+
   // ===== SUPER HUD (barre o secondi) =====
 const scEl = document.getElementById('superCooldown');
 const scFillEl = document.getElementById('superBarFill');
@@ -15951,40 +15856,175 @@ function getUnlockedCharacterKeys(){
 }
 
 
-function renderSkinMenu(){
-  const sc=document.getElementById("skinScroller");
+/* ─── SKIN MENU RENDERING ─────────────────────────────── */
+const _ETHER_ICON_SRC = 'https://i.postimg.cc/Ss8ZVQGy/9728424b-a5a4-42fd-84d0-b644c6a22ae4.png';
+function _etherIcon(size=16){ return `<img src="${_ETHER_ICON_SRC}" style="width:${size}px;height:${size}px;image-rendering:pixelated;vertical-align:middle;margin-right:2px;">`; }
+
+function renderSkinShop(){
+  const sc = document.getElementById('skinScroller');
   if(!sc) return;
+  sc.innerHTML = '';
 
-  const keys=getUnlockedCharacterKeys();
-  sc.innerHTML="";
+  SKIN_CATALOGUE.forEach(skin=>{
+    const owned    = isSkinOwned(skin.id);
+    const unlocked = isSkinUnlocked(skin.id);
+    const active   = getActiveSkin(skin.char) === skin.id;
+    const img      = _skinImages[skin.id];
+    const imgHtml  = (img && img.src)
+      ? `<img src="${img.src}" alt="${skin.name}" style="width:72px;height:72px;object-fit:contain;image-rendering:pixelated;${!unlocked&&!owned?'opacity:0.35;filter:grayscale(1);':''}">`
+      : `<div style="width:72px;height:72px;background:#222;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px;">?</div>`;
 
-  if(keys.length===0){
-    sc.innerHTML = `<div style="padding:10px;color:#ddd;font-size:16px;opacity:0.9;">Nessun personaggio sbloccato ancora.</div>`;
-    return;
-  }
+    const card = document.createElement('div');
+    card.className = 'skin-card';
+    const borderColor = active ? '#f1c40f' : owned ? '#2ecc71' : unlocked ? '#ce93d8' : '#444';
+    card.style.cssText = `cursor:pointer;border:3px solid ${borderColor};position:relative;`;
 
-  keys.forEach((k)=>{
-    // name from character card if available
-    let name=k.toUpperCase();
-    const h3=document.querySelector(`.character-card[data-char="${k}"] h3`);
-    if(h3 && h3.textContent) name=h3.textContent.trim();
+    let actionBtn = '';
+    if(active){
+      actionBtn = `<button class="btn" style="font-size:10px;padding:4px 8px;background:#f1c40f;color:#000;margin-top:6px;" onclick="deactivateSkin('${skin.char}')">✓ ATTIVA</button>`;
+    } else if(owned){
+      actionBtn = `<button class="btn" style="font-size:10px;padding:4px 8px;background:#2ecc71;color:#000;margin-top:6px;" onclick="activateSkin('${skin.char}','${skin.id}')">SELEZIONA</button>`;
+    } else if(unlocked){
+      actionBtn = `<button class="btn" style="font-size:10px;padding:4px 8px;margin-top:6px;border-color:#ce93d8;" onclick="confirmBuySkin('${skin.id}','${skin.name}')">${_etherIcon(13)}${SKIN_COST} ACQUISTA</button>`;
+    } else {
+      actionBtn = `<button class="btn" style="font-size:10px;padding:4px 8px;margin-top:6px;opacity:0.5;cursor:not-allowed;" disabled>🔒 BLOCCATA</button>`;
+    }
 
-    // image source
-    let src="";
-    try{
-      if(typeof images!=="undefined" && images && images[k] && images[k].src) src=images[k].src;
-    }catch(e){}
+    const subText = active ? '✓ Attiva' : owned ? 'Acquistata' : unlocked ? _etherIcon(11)+' 500' : '🔒 Missione Eterea';
+    const subColor = active ? '#f1c40f' : owned ? '#2ecc71' : unlocked ? '#ce93d8' : '#666';
 
-    const card=document.createElement("div");
-    card.className="skin-card";
-    const imgHtml = src ? `<img alt="${name}" src="${src}"/>` : `<div class="skin-img-missing" aria-hidden="true">?</div>`;
     card.innerHTML = `
       ${imgHtml}
-      <div class="skin-name">${name}</div>
-      <div class="skin-sub">Sbloccato</div>
+      <div class="skin-name">${skin.name}</div>
+      <div class="skin-sub" style="color:${subColor}">${subText}</div>
+      ${actionBtn}
     `;
     sc.appendChild(card);
   });
+}
+
+function renderSkinActive(){
+  const sc = document.getElementById('skinActiveScroller');
+  if(!sc) return;
+  sc.innerHTML = '';
+
+  const chars = ['jimmy','rooney','jeff','voltryx','kouvagia','salsy','tempostorm','marz','marcus','lucien','pdor','bane','hendel','kaerith','hecate','cosmo'];
+  chars.forEach(ch=>{
+    const activeId   = getActiveSkin(ch);
+    const skin       = activeId ? SKIN_CATALOGUE.find(s=>s.id===activeId) : null;
+    const ownedSkins = SKIN_CATALOGUE.filter(s=>s.char===ch && isSkinOwned(s.id));
+    const options    = [{id:null, name:'Default'}].concat(ownedSkins.map(s=>({id:s.id, name:s.name})));
+    const currentIdx = Math.max(0, options.findIndex(o=>o.id===(activeId||null)));
+
+    const imgSrc = skin
+      ? (_skinImages[skin.id]&&_skinImages[skin.id].src ? _skinImages[skin.id].src : '')
+      : (images[ch]&&images[ch].src ? images[ch].src : '');
+    const charName = (characterStats&&characterStats[ch]) ? characterStats[ch].name : ch.toUpperCase();
+    const imgHtml  = imgSrc
+      ? `<img src="${imgSrc}" alt="${charName}" style="width:72px;height:72px;object-fit:contain;image-rendering:pixelated;">`
+      : `<div style="width:72px;height:72px;background:#222;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;">?</div>`;
+
+    const card = document.createElement('div');
+    card.className = 'skin-card';
+    card.style.cssText = `border:2px solid ${skin?'#f1c40f':'#444'};`;
+
+    const selectorHtml = options.length > 1
+      ? `<div style="display:flex;align-items:center;gap:4px;margin-top:6px;">
+           <button class="btn" style="font-size:10px;padding:2px 7px;" onclick="cycleSkin('${ch}',-1)">◀</button>
+           <span id="skinLabel_${ch}" style="font-size:9px;color:#fff;font-family:'Press Start 2P',cursive;min-width:58px;text-align:center;">${options[currentIdx].name}</span>
+           <button class="btn" style="font-size:10px;padding:2px 7px;" onclick="cycleSkin('${ch}',1)">▶</button>
+         </div>`
+      : `<div style="font-size:9px;color:#888;margin-top:4px;">Nessuna skin</div>`;
+
+    card.innerHTML = `
+      ${imgHtml}
+      <div class="skin-name">${charName}</div>
+      <div class="skin-sub" style="color:${skin?'#f1c40f':'#888'}">${skin ? skin.name : 'Default'}</div>
+      ${selectorHtml}
+    `;
+    sc.appendChild(card);
+  });
+}
+
+function cycleSkin(charType, dir){
+  const ownedSkins = SKIN_CATALOGUE.filter(s=>s.char===charType && isSkinOwned(s.id));
+  const options    = [{id:null, name:'Default'}].concat(ownedSkins.map(s=>({id:s.id, name:s.name})));
+  const currentId  = getActiveSkin(charType) || null;
+  let idx = options.findIndex(o=>o.id===currentId);
+  if(idx<0) idx=0;
+  idx = (idx + dir + options.length) % options.length;
+  const chosen = options[idx];
+  setActiveSkin(charType, chosen.id);
+  const lbl = document.getElementById(`skinLabel_${charType}`);
+  if(lbl) lbl.textContent = chosen.name;
+  renderSkinActive();
+  const fb = document.getElementById('skinFeedback');
+  if(fb){ fb.textContent = chosen.id ? `${chosen.name} selezionata!` : 'Default ripristinato.'; fb.style.color='#f1c40f'; setTimeout(()=>{if(fb)fb.textContent='';},1800); }
+}
+
+function confirmBuySkin(skinId, skinName){
+  if(!isSkinUnlocked(skinId)){
+    const fb = document.getElementById('skinFeedback');
+    if(fb){ fb.textContent='🔒 Completa la Missione Eterea per sbloccarla!'; fb.style.color='#ce93d8'; setTimeout(()=>{if(fb)fb.textContent='';},3000); }
+    return;
+  }
+  const old = document.getElementById('skinConfirmPopup');
+  if(old) old.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'skinConfirmPopup';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.75);';
+  overlay.innerHTML = `
+    <div style="background:#1a1a2e;border:3px solid #f1c40f;border-radius:16px;padding:28px 32px;max-width:340px;text-align:center;font-family:'Press Start 2P',cursive;box-shadow:0 0 40px rgba(241,196,15,0.4);">
+      <div style="font-size:16px;color:#f1c40f;margin-bottom:10px;">ACQUISTA SKIN</div>
+      <div style="font-size:13px;color:#fff;margin-bottom:8px;">${skinName}</div>
+      <div style="font-size:12px;color:#ddd;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;">
+        Costo:&nbsp;${_etherIcon(18)}<span style="color:#f1c40f;">${SKIN_COST}</span>
+        &nbsp;|&nbsp; Hai:&nbsp;${_etherIcon(18)}<span style="color:#7fffd4;">${ether||0}</span>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;">
+        <button class="btn" style="padding:8px 18px;background:#2ecc71;color:#000;font-size:11px;" id="skinConfirmYes">✓ CONFERMA</button>
+        <button class="btn" style="padding:8px 18px;background:#e74c3c;color:#fff;font-size:11px;" id="skinConfirmNo">✕ ANNULLA</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  document.getElementById('skinConfirmYes').onclick = ()=>{ overlay.remove(); buySkin(skinId); };
+  document.getElementById('skinConfirmNo').onclick  = ()=>{ overlay.remove(); };
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.remove(); });
+}
+
+function buySkin(skinId){
+  const res = trySkinPurchase(skinId);
+  const fb = document.getElementById('skinFeedback');
+  if(fb){ fb.textContent = res.msg; fb.style.color = res.ok ? '#2ecc71' : '#e74c3c'; setTimeout(()=>{ if(fb) fb.textContent=''; }, 2500); }
+  if(res.ok){ renderSkinShop(); updateSkinEtherDisplay(); }
+}
+
+function activateSkin(charType, skinId){
+  if(!isSkinOwned(skinId)) return;
+  setActiveSkin(charType, skinId);
+  const fb = document.getElementById('skinFeedback');
+  if(fb){ fb.textContent = 'Skin attivata!'; fb.style.color='#f1c40f'; setTimeout(()=>{ if(fb) fb.textContent=''; }, 1800); }
+  renderSkinShop();
+}
+
+function deactivateSkin(charType){
+  setActiveSkin(charType, null);
+  const fb = document.getElementById('skinFeedback');
+  if(fb){ fb.textContent = 'Default ripristinato.'; fb.style.color='#aaa'; setTimeout(()=>{ if(fb) fb.textContent=''; }, 1800); }
+  renderSkinShop();
+  renderSkinActive();
+}
+
+function updateSkinEtherDisplay(){
+  const el = document.getElementById('skinEtherDisplay');
+  if(el) el.innerHTML = `${_etherIcon(18)} Frammenti:&nbsp;<span style="color:#f1c40f;">${ether||0}</span>`;
+}
+
+function skinSetTab(tab){
+  const shop   = document.getElementById('skinShopPanel');
+  const active = document.getElementById('skinActivePanel');
+  if(tab==='shop'){ if(shop) shop.style.display=''; if(active) active.style.display='none'; renderSkinShop(); }
+  else            { if(shop) shop.style.display='none'; if(active) active.style.display=''; renderSkinActive(); }
 }
 
 function openSkinMenu(){
@@ -15993,9 +16033,15 @@ function openSkinMenu(){
     const sm=document.getElementById("skinMenu");
     if(mm) mm.style.display="none";
     if(sm) sm.style.display="block";
-    renderSkinMenu();
+    updateSkinEtherDisplay();
+    skinSetTab('shop');
+    const shopBtn  = document.getElementById('skinTabShopBtn');
+    const activeBtn= document.getElementById('skinTabActiveBtn');
+    if(shopBtn)  shopBtn.onclick  = ()=>skinSetTab('shop');
+    if(activeBtn) activeBtn.onclick = ()=>skinSetTab('active');
   }catch(e){}
 }
+
 function closeSkinMenu(){
   try{
     const mm=document.getElementById("mainMenu");
@@ -16004,6 +16050,9 @@ function closeSkinMenu(){
     if(mm) mm.style.display="block";
   }catch(e){}
 }
+
+// Legacy stub (called elsewhere in code)
+function renderSkinMenu(){ renderSkinShop(); }
 document.addEventListener("DOMContentLoaded", ()=>{
 
   /* ── RESPONSIVE SCALING ───────────────────────────── */
@@ -16529,6 +16578,8 @@ Player.prototype.attack = function(){
 
     const baseDmg = Math.round((this.damage||50) * (this.attackBuffMultiplier||1));
 
+
+
     spawnProjectile({
       x:cx,
       y:cy,
@@ -16562,6 +16613,8 @@ Player.prototype.attack = function(){
     const _beforeHp = this.hp;
     this.hp = Math.min(this.maxHP, this.hp + healAmount);
     try{ accountOnHeal(this.hp - _beforeHp); }catch(e){}
+
+
 
 
     const cx = this.x + this.width/2;
@@ -17158,6 +17211,81 @@ function saveCharPurchases(obj){
 }
 let charPurchases = loadCharPurchases();
 function isCharPurchased(id){ return !!(charPurchases && charPurchases[id]); }
+
+/* ═══════════════════════════════════════════════════════
+   SKIN SYSTEM
+   ═══════════════════════════════════════════════════════ */
+const SKIN_PURCHASES_KEY = 'pf_skin_purchases_v1';
+const SKIN_ACTIVE_KEY    = 'pf_skin_active_v1';
+const SKIN_COST = 500;
+
+// Catalogue: id, char, name, src (evo sprite repurposed as cosmetic only)
+const SKIN_CATALOGUE = [
+  { id:'jimmy_evo',   char:'jimmy',  name:'Jimmy EVO',   src:'https://i.postimg.cc/g26ZX0n9/jimmyevo.png'  },
+  { id:'rooney_evo',  char:'rooney', name:'Rooney EVO',  src:'https://i.postimg.cc/x8Ck0fWs/rooneyevo.png' },
+  { id:'jeff_evo',    char:'jeff',   name:'Jeff EVO',    src:'https://i.postimg.cc/FsYf8KbV/jeffevo.png'   },
+];
+
+// Preload skin images
+const _skinImages = {};
+SKIN_CATALOGUE.forEach(s=>{
+  const img = new Image();
+  img.src = s.src;
+  _skinImages[s.id] = img;
+});
+
+function loadSkinPurchases(){
+  try{ return JSON.parse(localStorage.getItem(SKIN_PURCHASES_KEY)||'{}') || {}; }catch(e){ return {}; }
+}
+function saveSkinPurchases(){
+  try{ localStorage.setItem(SKIN_PURCHASES_KEY, JSON.stringify(skinPurchases)); }catch(e){}
+}
+function loadActiveSkins(){
+  try{ return JSON.parse(localStorage.getItem(SKIN_ACTIVE_KEY)||'{}') || {}; }catch(e){ return {}; }
+}
+function saveActiveSkins(){
+  try{ localStorage.setItem(SKIN_ACTIVE_KEY, JSON.stringify(activeSkins)); }catch(e){}
+}
+
+let skinPurchases = loadSkinPurchases(); // { jimmy_evo: true, ... }
+let activeSkins   = loadActiveSkins();   // { jimmy: 'jimmy_evo', ... }  (null = default)
+
+function isSkinUnlocked(skinId){ return !!(skinPurchases && skinPurchases[skinId + '_unlocked']); }
+function isSkinOwned(skinId){ return !!(skinPurchases && skinPurchases[skinId]); }
+function getActiveSkin(charType){ return (activeSkins && activeSkins[charType]) || null; }
+
+function trySkinPurchase(skinId){
+  if(isSkinOwned(skinId)) return { ok:true, msg:'Già acquistata!' };
+  if(!isSkinUnlocked(skinId)) return { ok:false, msg:'Skin non ancora sbloccata! Completa la missione Eterea.' };
+  if((ether||0) < SKIN_COST) return { ok:false, msg:`Frammenti insufficienti (servono ${SKIN_COST})` };
+  ether = Math.max(0, Math.floor(ether||0) - SKIN_COST);
+  saveEther(); updateEther();
+  skinPurchases[skinId] = true;
+  saveSkinPurchases();
+  return { ok:true, msg:'Skin acquistata!' };
+}
+
+function setActiveSkin(charType, skinId){
+  // skinId=null → torna alla skin default
+  if(skinId === null){
+    delete activeSkins[charType];
+  } else {
+    activeSkins[charType] = skinId;
+  }
+  saveActiveSkins();
+}
+
+/* Helper called in Player.draw() to get the correct sprite */
+function getPlayerSpriteImg(charType, evolved){
+  // 1. Check active cosmetic skin (independent of evolved state)
+  const sid = getActiveSkin(charType);
+  if(sid){
+    const s = SKIN_CATALOGUE.find(s=>s.id===sid);
+    if(s && _skinImages[sid] && _skinImages[sid].complete) return _skinImages[sid];
+  }
+  // 2. Always use default sprite (evo images are now skins only)
+  return images[charType] || null;
+}
 
 function unlockCosmoUI(){
   try{
