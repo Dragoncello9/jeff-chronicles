@@ -289,19 +289,16 @@
 
 /* Bordo animato */
 @keyframes borderGlow{
-  0%  {box-shadow:0 0 18px rgba(231,76,60,0.4), 0 0 40px rgba(231,76,60,0.15), inset 0 0 30px rgba(0,0,0,0.7);}
-  50% {box-shadow:0 0 40px rgba(231,76,60,0.85), 0 0 80px rgba(231,76,60,0.35), inset 0 0 30px rgba(0,0,0,0.7);}
-  100%{box-shadow:0 0 18px rgba(231,76,60,0.4), 0 0 40px rgba(231,76,60,0.15), inset 0 0 30px rgba(0,0,0,0.7);}
+  0%  {box-shadow:0 0 12px rgba(231,76,60,0.28), 0 0 26px rgba(231,76,60,0.10), inset 0 0 20px rgba(0,0,0,0.6);}
+  50% {box-shadow:0 0 24px rgba(231,76,60,0.55), 0 0 50px rgba(231,76,60,0.22), inset 0 0 20px rgba(0,0,0,0.6);}
+  100%{box-shadow:0 0 12px rgba(231,76,60,0.28), 0 0 26px rgba(231,76,60,0.10), inset 0 0 20px rgba(0,0,0,0.6);}
 }
 
 /* Power-on effect */
 @keyframes powerOn{
-  0%  {opacity:0;transform:translate(-50%,-50%) scaleY(0.02) scaleX(1.05);}
-  15% {opacity:1;transform:translate(-50%,-50%) scaleY(0.02) scaleX(1.05);}
-  30% {transform:translate(-50%,-50%) scaleY(1.08) scaleX(0.98);}
-  50% {transform:translate(-50%,-50%) scaleY(0.96) scaleX(1.01);}
-  65% {transform:translate(-50%,-50%) scaleY(1.02) scaleX(1.00);}
-  80% {transform:translate(-50%,-50%) scaleY(0.99) scaleX(1.00);}
+  0%  {opacity:0;transform:translate(-50%,-50%) scaleY(0.08) scaleX(1.02);}
+  20% {opacity:1;transform:translate(-50%,-50%) scaleY(1.04) scaleX(0.99);}
+  60% {transform:translate(-50%,-50%) scaleY(0.98) scaleX(1.00);}
   100%{transform:translate(-50%,-50%) scaleY(1)   scaleX(1);}
 }
 
@@ -311,18 +308,18 @@
   text-align:center;z-index:20;width:calc(100% - 80px);max-width:660px;
   font-family:'Press Start 2P', cursive;
   overflow:hidden;
-  animation: powerOn 0.9s cubic-bezier(0.23,1,0.32,1) forwards,
-             borderGlow 2.4s ease-in-out 0.9s infinite;
+  animation: powerOn 0.55s cubic-bezier(0.23,1,0.32,1) forwards,
+             borderGlow 2.4s ease-in-out 0.55s infinite;
 }
 
 /* Glitch title */
 @keyframes glitchMain{
-  0%,92%,100% {clip-path:none;transform:none;}
-  93%{clip-path:polygon(0 18%,100% 18%,100% 38%,0 38%);transform:translate(-4px,0);}
-  94%{clip-path:polygon(0 55%,100% 55%,100% 70%,0 70%);transform:translate(4px,0);}
-  95%{clip-path:none;transform:none;}
-  96%{clip-path:polygon(0 5%,100% 5%,100% 22%,0 22%);transform:translate(-3px,0);color:#0ff;}
-  97%{clip-path:none;transform:none;color:#e74c3c;}
+  0%,94%,100% {clip-path:none;transform:none;}
+  95%{clip-path:polygon(0 22%,100% 22%,100% 36%,0 36%);transform:translate(-2px,0);}
+  96%{clip-path:polygon(0 58%,100% 58%,100% 70%,0 70%);transform:translate(2px,0);}
+  97%{clip-path:none;transform:none;}
+  98%{clip-path:polygon(0 8%,100% 8%,100% 20%,0 20%);transform:translate(-1px,0);color:#0ff;}
+  99%{clip-path:none;transform:none;color:#e74c3c;}
 }
 @keyframes glitchBefore{
   0%,92%,100%{opacity:0;}
@@ -350,7 +347,7 @@
   color:#e74c3c;
   text-shadow:3px 3px 0 #7b0000, 0 0 30px rgba(231,76,60,0.8), 0 0 60px rgba(231,76,60,0.4);
   margin-bottom:6px;line-height:1.4;position:relative;
-  animation:titleReveal 1.1s ease 0.6s both, glitchMain 6s ease 2s infinite;
+  animation:titleReveal 0.65s ease 0.35s both, glitchMain 8s ease 1.5s infinite;
 }
 #platformScreen .ps-title::before{
   content:attr(data-text);
@@ -362,22 +359,22 @@
   font-size:11px;color:#f39c12;
   text-shadow:0 0 10px rgba(243,156,18,0.7);
   margin-bottom:6px;
-  animation:subReveal 0.7s ease 1.5s both;
+  animation:subReveal 0.5s ease 0.9s both;
   letter-spacing:0.12em;
 }
 #platformScreen .ps-question {
   font-size:14px;color:#ddd;margin-bottom:32px;line-height:1.8;
-  animation:subReveal 0.7s ease 1.8s both;
+  animation:subReveal 0.5s ease 1.1s both;
 }
 
 /* Pulsanti piattaforma */
 @keyframes btnGlowKb{
-  0%,100%{box-shadow:0 0 10px rgba(255,255,255,0.12), 0 6px 20px rgba(0,0,0,0.5);}
-  50%{box-shadow:0 0 28px rgba(255,255,255,0.35), 0 6px 30px rgba(0,0,0,0.6);}
+  0%,100%{box-shadow:0 0 6px rgba(255,255,255,0.08), 0 4px 14px rgba(0,0,0,0.4);}
+  50%{box-shadow:0 0 16px rgba(255,255,255,0.20), 0 4px 20px rgba(0,0,0,0.5);}
 }
 @keyframes btnGlowMob{
-  0%,100%{box-shadow:0 0 10px rgba(243,156,18,0.18), 0 6px 20px rgba(0,0,0,0.5);}
-  50%{box-shadow:0 0 30px rgba(243,156,18,0.55), 0 6px 30px rgba(0,0,0,0.6);}
+  0%,100%{box-shadow:0 0 6px rgba(243,156,18,0.12), 0 4px 14px rgba(0,0,0,0.4);}
+  50%{box-shadow:0 0 18px rgba(243,156,18,0.35), 0 4px 20px rgba(0,0,0,0.5);}
 }
 
 .platform-btn {
@@ -394,10 +391,10 @@
   pointer-events:none;
 }
 #platformKeyboard {
-  animation:btnReveal 0.65s cubic-bezier(0.34,1.56,0.64,1) 2.1s both, btnGlowKb 2.8s ease 2.8s infinite;
+  animation:btnReveal 0.5s cubic-bezier(0.34,1.56,0.64,1) 1.2s both, btnGlowKb 3.5s ease 1.8s infinite;
 }
 #platformMobile {
-  animation:btnReveal 0.65s cubic-bezier(0.34,1.56,0.64,1) 2.4s both, btnGlowMob 2.8s ease 3.1s infinite;
+  animation:btnReveal 0.5s cubic-bezier(0.34,1.56,0.64,1) 1.5s both, btnGlowMob 3.5s ease 2.1s infinite;
 }
 .platform-btn:hover {
   border-color:#e74c3c;
@@ -2868,6 +2865,32 @@ button:focus-visible{
   outline-offset: 3px;
 }
 
+
+/* ── Skin info button (ⓘ) ── */
+.skin-info-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #ce93d8;
+  background: rgba(0,0,0,0.7);
+  color: #ce93d8;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 10;
+  padding: 0;
+  font-family: sans-serif;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.skin-info-btn:hover {
+  background: #ce93d8;
+  color: #000;
+  border-color: #f8bbd0;
+}
 </style>
 
 <!-- JS Hooks: applica classi di animazione dinamicamente -->
@@ -4591,6 +4614,44 @@ function addKill(n=1){
   // mission progress (account level)
   try{ accountOnKill((player && player.type) ? player.type : selectedCharacter, n); }catch(e){}
 
+  // Traccia consecutive kills (reset se giocatore ha preso danno)
+  try{
+    window.runConsecutiveKills = (window.runConsecutiveKills||0) + n;
+    if(window.runConsecutiveKills > (window.runBestConsecutiveKills||0)){
+      window.runBestConsecutiveKills = window.runConsecutiveKills;
+    }
+  }catch(e){}
+
+  // Traccia comeback kills (HP < 20% del max)
+  try{
+    if(player && player.hp > 0 && player.maxHP > 0 && (player.hp / player.maxHP) < 0.20){
+      accountOnComebackKill();
+    }
+  }catch(e){}
+
+  // Traccia kill prima del livello 3
+  try{
+    if(currentLevel < 3){
+      const beforeL3 = (accountState && accountState.stats) ? (accountState.stats.killsBeforeL3||0) : 0;
+      if(accountState && accountState.stats) accountState.stats.killsBeforeL3 = beforeL3 + n;
+      for(const m of (accountState&&accountState.missions?accountState.missions:[])){
+        if(!m.claimed && m.type==='killsBeforeLevel3'){
+          m.progress = Math.min(m.target, accountState.stats.killsBeforeL3||0);
+        }
+      }
+    }
+  }catch(e){}
+
+  // Traccia kills-in-10-secondi
+  try{
+    const t10 = Date.now();
+    if(!window.runKillsInTenWindow) window.runKillsInTenWindow=[];
+    for(let qi=0;qi<n;qi++) window.runKillsInTenWindow.push(t10);
+    window.runKillsInTenWindow = window.runKillsInTenWindow.filter(ts=>(t10-ts)<=10000);
+    const cnt10 = window.runKillsInTenWindow.length;
+    if(cnt10 > (window.runBestKillsInTen||0)) window.runBestKillsInTen = cnt10;
+  }catch(e){}
+
   // matchKills mission update (solo in UNA partita: non accumula tra run)
 try{
   let shouldSave=false;
@@ -4614,6 +4675,21 @@ try{
   if(shouldSave) saveAccount();
 }catch(e){}
 
+  // SKIN PASSIVE: Jeff EVO → +15 HP per kill
+  try{
+    if(player && player.type==='jeff' && player._activeSkinPassiveId==='jeff_evo'){
+      const _healAmt = 15;
+      const _before = player.hp;
+      player.hp = Math.min(player.maxHP, player.hp + _healAmt);
+      const _delta = player.hp - _before;
+      if(_delta > 0){
+        createParticles(player.x+player.width/2, player.y+player.height/2, '#2ecc71', 8, 3);
+        showDamageNumber(player.x+player.width/2, player.y-10, _delta, {heal:true, color:'#2ecc71'});
+        try{ accountOnHeal(_delta); }catch(e){}
+      }
+    }
+  }catch(e){}
+
 }
 
 
@@ -4632,11 +4708,11 @@ const PICKUP_WEIGHTED = [
     ['shieldPickup', 1],
     ['furia', 1],
     ['ice', 1],
-    ['ira', 1],
-    ['letteraAmore', 1],
-    ['mezzaluna', 1],
-    ['arcoAntico', 0.6],
-    ['collana', 1.0],
+    ['ira', 0.50],        // alzato da 0.25
+    ['letteraAmore', 0.6], // abbassato da 1
+    ['mezzaluna', 0.50],  // alzato da 0.25
+    ['arcoAntico', 0.45], // alzato da 0.15
+    ['collana', 0.50],    // alzato da 0.25
     ['malus', 0.25], // nerfed
   ];
 function pickRandomPickupType(){
@@ -4853,6 +4929,7 @@ function updateMagicZone(now){
         showDamageNumber(e.x,e.y,_final);
         // colorful hit FX
         createParticles(ex,ey, magicZone.colors[(magicZone.colorIdx++)%magicZone.colors.length], 10, 4);
+
         if(e.hp<=0){
           createParticles(e.x,e.y,'#fff176',30,6);
           dropStellarBonusAtIndexIfNeeded(i);
@@ -4872,30 +4949,67 @@ function drawMagicZone(now){
   const t = Math.max(0, Math.min(1, (now - magicZone.startsAt) / magicZone.durationMs));
   const pulse = 0.5 + 0.5*Math.sin(now/240);
 
+  // Controlla palette EVIL
+  const _mzColors = (magicZone.colors && magicZone.colors.length>=3) ? magicZone.colors : null;
+  const _mzIsEvil = _mzColors && _mzColors[0] === '#4caf22';
+
   ctx.save();
   ctx.globalAlpha = 0.18 + 0.18*(1-t);
+
+  // gradiente fill: default magenta/ciano/giallo — EVIL: verde veleno/viola/rosso
   const grad = ctx.createRadialGradient(magicZone.x, magicZone.y, 10, magicZone.x, magicZone.y, magicZone.radius);
-  grad.addColorStop(0, 'rgba(255,0,255,0.55)');
-  grad.addColorStop(0.5, 'rgba(0,229,255,0.35)');
-  grad.addColorStop(1, 'rgba(255,241,118,0.08)');
-  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = grad;
+  if(_mzIsEvil){
+    grad.addColorStop(0, 'rgba(76,175,34,0.55)');    // verde veleno
+    grad.addColorStop(0.5, 'rgba(123,0,153,0.35)');  // viola scuro
+    grad.addColorStop(1, 'rgba(139,0,0,0.08)');       // rosso cupo
+  } else {
+    grad.addColorStop(0, 'rgba(255,0,255,0.55)');
+    grad.addColorStop(0.5, 'rgba(0,229,255,0.35)');
+    grad.addColorStop(1, 'rgba(255,241,118,0.08)');
+  }
+  ctx.shadowColor = _mzIsEvil ? '#4caf22' : '#000000';
+  ctx.shadowBlur = _mzIsEvil ? 30 : 25;
+  ctx.fillStyle = grad;
   ctx.beginPath();
   ctx.arc(magicZone.x, magicZone.y, magicZone.radius, 0, Math.PI*2);
-  
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
+  ctx.fill();
 
-ctx.fill();
-
-  // rings
+  // anelli — EVIL: verde/viola/rosso | DEFAULT: magenta/ciano/giallo
   ctx.globalAlpha = 0.55;
   ctx.lineWidth = 6 + 6*pulse;
-  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,0,255,0.55)';
-  ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius*(0.35+0.05*pulse), 0, Math.PI*2); ctx.stroke();
-  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(0,229,255,0.55)';
-  ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius*(0.65+0.06*(1-pulse)), 0, Math.PI*2); ctx.stroke();
-  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,241,118,0.55)';
-  ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius, 0, Math.PI*2); ctx.stroke();
+  if(_mzIsEvil){
+    ctx.shadowColor = '#4caf22'; ctx.shadowBlur = 22;
+    ctx.strokeStyle = `rgba(76,175,34,0.60)`;
+    ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius*(0.35+0.05*pulse), 0, Math.PI*2); ctx.stroke();
+    ctx.shadowColor = '#7b0099'; ctx.shadowBlur = 22;
+    ctx.strokeStyle = `rgba(123,0,153,0.60)`;
+    ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius*(0.65+0.06*(1-pulse)), 0, Math.PI*2); ctx.stroke();
+    ctx.shadowColor = '#8b0000'; ctx.shadowBlur = 22;
+    ctx.strokeStyle = `rgba(139,0,0,0.60)`;
+    ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius, 0, Math.PI*2); ctx.stroke();
+    // EVIL: linee di veleno pulsanti (raggi dal centro)
+    ctx.globalAlpha = 0.20 + 0.12*pulse;
+    ctx.lineWidth = 1.8;
+    ctx.strokeStyle = 'rgba(76,175,34,0.85)';
+    ctx.shadowColor = '#4caf22'; ctx.shadowBlur = 14;
+    for(let ri=0;ri<8;ri++){
+      const ang = (now/600) + ri*(Math.PI/4);
+      ctx.beginPath();
+      ctx.moveTo(magicZone.x, magicZone.y);
+      ctx.lineTo(magicZone.x + Math.cos(ang)*magicZone.radius*0.92, magicZone.y + Math.sin(ang)*magicZone.radius*0.92);
+      ctx.stroke();
+    }
+  } else {
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25;
+    ctx.strokeStyle = 'rgba(255,0,255,0.55)';
+    ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius*(0.35+0.05*pulse), 0, Math.PI*2); ctx.stroke();
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25;
+    ctx.strokeStyle = 'rgba(0,229,255,0.55)';
+    ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius*(0.65+0.06*(1-pulse)), 0, Math.PI*2); ctx.stroke();
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25;
+    ctx.strokeStyle = 'rgba(255,241,118,0.55)';
+    ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius, 0, Math.PI*2); ctx.stroke();
+  }
 
   ctx.restore();
 }
@@ -5111,7 +5225,7 @@ let levelAdvanceLock=false;
 let shakeAmount=0;
 
 const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image(),pdor:new Image(),bane:new Image(),hendel:new Image(),kaerith:new Image(),cosmo:new Image()};
-images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
+images.rooney.src='https://i.postimg.cc/Pf6YmqdF/rooney.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
 images.voltryx.src='https://i.postimg.cc/bv85Bbs4/voltryx-(1).png';
@@ -5128,8 +5242,12 @@ images.hendel.src='https://i.postimg.cc/g2G7LYjr/hendel.png';
 images.kaerith.src='https://i.postimg.cc/pLBZRcHy/Kaerith.png';
 images.cosmo.src='https://i.postimg.cc/yY5Z6hHP/cosmo.png';
 const wolfImg=new Image(); wolfImg.src='https://i.postimg.cc/4y9yBGFw/lupo.png';
+const imagesMetal={rooney:new Image(),jimmy:new Image()};
+const imageJakeff=new Image(); imageJakeff.src='https://i.postimg.cc/8cCytnJ1/jakeff-(1).png';
+imagesMetal.rooney.src='https://i.postimg.cc/GtSXNJGB/METALrooney.png';
+imagesMetal.jimmy.src='https://i.postimg.cc/VNWpghsW/METALjimmy-(1).png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
-imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
+imagesEvo.jimmy.src='https://i.postimg.cc/RZwWbCxg/jimmy-EVO.png';
 imagesEvo.rooney.src='https://i.postimg.cc/x8Ck0fWs/rooneyevo.png';
 imagesEvo.jeff.src='https://i.postimg.cc/FsYf8KbV/jeffevo.png';
 // --- Pickup images (keep pickup size small; same dimensions already used) ---
@@ -5520,7 +5638,7 @@ const levelConfigs=[
   {enemyType:'shooter',enemyHP:175,enemyDamage:34,enemySpeed:5.0,time:45,enemyCount:7}, // Level 12
   {enemyType:'attacker',enemyHP:325,enemyDamage:45,enemySpeed:7.08,time:50,enemyCount:5}, // Level 13
   {enemyType:'attacker',enemyHP:350,enemyDamage:50,enemySpeed:7.91,time:60,enemyCount:6}, // Level 14
-  {enemyType:'boss3',enemyHP:2200,enemyDamage:104,enemySpeed:5.85,time:100,enemyCount:1}, // Level 15
+  {enemyType:'boss3',enemyHP:2200,enemyDamage:104,enemySpeed:6.15,time:100,enemyCount:1}, // Level 15
   {enemyType:'veleno',enemyHP:300,enemyDamage:15,enemySpeed:6.8,time:50,enemyCount:7}, // Level 16
   {enemyType:'veleno',enemyHP:350,enemyDamage:15,enemySpeed:7.0,time:50,enemyCount:9}, // Level 17
   {enemyType:'oneyes',enemyHP:315,enemyDamage:24,enemySpeed:5.27,time:55,enemyCount:4}, // Level 18
@@ -5530,7 +5648,7 @@ const levelConfigs=[
   {enemyType:'archer',enemyHP:405,enemyDamage:50,enemySpeed:5.40,time:65,enemyCount:5}, // Level 22
   {enemyType:'glacial',enemyHP:900,enemyDamage:20,enemySpeed:6.91,time:70,enemyCount:2}, // Level 23
   {enemyType:'glacial',enemyHP:1040,enemyDamage:20,enemySpeed:7.45,time:80,enemyCount:3}, // Level 24
-  {enemyType:'boss5',enemyHP:2250,enemyDamage:18,enemySpeed:4.05,time:200,enemyCount:1} // Level 25
+  {enemyType:'boss5',enemyHP:3000,enemyDamage:58,enemySpeed:4.05,time:200,enemyCount:1} // Level 25
 ];
 
 const RECORDS_KEY='pf_records_v19';
@@ -5549,7 +5667,13 @@ const ACCOUNT_DEFAULT = {
   stats: {totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0, jimmySuperKills:0, jimmySuperUses:0, rooneySuperUses:0, jeffSuperUses:0, voltryxSuperUses:0, kouvagiaSuperUses:0, salsySuperUses:0, tempostormSuperUses:0, marzSuperUses:0, hecateSuperUses:0, marcusSuperUses:0, lucienSuperUses:0, pdorSuperUses:0, baneSuperUses:0, hendelSuperUses:0, kaerithSuperUses:0, cosmoSuperUses:0,
   // Kill per personaggio (per missioni cumulabili tra partite)
   killsWith_jimmy:0, killsWith_rooney:0, killsWith_jeff:0, killsWith_voltryx:0, killsWith_kouvagia:0, killsWith_salsy:0, killsWith_tempostorm:0, killsWith_marz:0, killsWith_hecate:0, killsWith_cosmo:0, killsWith_marcus:0, killsWith_lucien:0, killsWith_pdor:0, killsWith_bane:0, killsWith_hendel:0, killsWith_kaerith:0,
-  gamesPlayedWith_jimmy:0, gamesPlayedWith_rooney:0, gamesPlayedWith_jeff:0 },
+  gamesPlayedWith_jimmy:0, gamesPlayedWith_rooney:0, gamesPlayedWith_jeff:0,
+  // Danno per personaggio (missioni METAL)
+  damageWith_jimmy:0, damageWith_rooney:0, damageWith_jeff:0,
+  // Nuovi contatori missioni v7
+  dashUses:0, surviveSeconds:0, totalGames:0, killAllBosses:0, comebackKills:0,
+  bestMatchScore:0, bestConsecutiveKills:0, bestSuperKillStreak:0, bestKillsInTen:0,
+  lowHpSuperKills:0, totalGamesNoDeath:0, killsBeforeL3:0 },
   missions: [
   // 1000 kill missions
   { id:"m_jimmy_1000",    char:"jimmy",    target:1000, progress:0, xpReward:120, claimed:false, difficulty:null },
@@ -5638,6 +5762,37 @@ const ACCOUNT_DEFAULT = {
 { id:"h_totalHeal_500000",  title:"Recupera 500000 HP (totali)",  type:"totalHeal", target:500000, progress:0, xpReward:450, claimed:false, difficulty:"hard" },
 
 
+  // ===== NUOVE MISSIONI FACILI (10) =====
+  { id:"e_totalGames_10",      title:"Completa 10 partite",                    type:"totalGames",       target:10,   progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_dashUses_100",       title:"Usa il dash 100 volte (totali)",         type:"dashUses",         target:100,  progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_surviveSeconds_3600",title:"Sopravvivi 3600 secondi totali di gioco",type:"surviveSeconds",   target:3600, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_killBoss_5",         title:"Sconfiggi 5 boss (totali)",              type:"killAllBosses",    target:5,    progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_goldPickups_20",     title:"Raccogli 20 Pickups Gold (totali)",      type:"goldPickups",      target:20,   progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_matchScore_20000",   title:"Ottieni 20000 punti in una sola partita",type:"matchScoreRecord", target:20000,progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_comebackKills_10",   title:"Uccidi 10 nemici con meno del 20% HP",   type:"comebackKills",    target:10,   progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_killsBeforeL3_50",   title:"Raggiungi 50 kill prima del livello 3",  type:"killsBeforeLevel3",target:50,   progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_superKillStreak_5",  title:"Uccidi 5 nemici in una sola super",      type:"superKillStreak",  target:5,    progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_killsInTen_10",      title:"Uccidi 10 nemici in 10 secondi",         type:"killsInTenSeconds",target:10,   progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+
+  // ===== NUOVE MISSIONI INTERMEDIE (10) =====
+  { id:"m_totalGames_50",      title:"Completa 50 partite",                    type:"totalGames",       target:50,   progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_dashUses_500",       title:"Usa il dash 500 volte (totali)",         type:"dashUses",         target:500,  progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_surviveSeconds_18000",title:"Sopravvivi 18000 secondi totali",       type:"surviveSeconds",   target:18000,progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_killBoss_25",        title:"Sconfiggi 25 boss (totali)",             type:"killAllBosses",    target:25,   progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_matchScore_80000",   title:"Ottieni 80000 punti in una sola partita",type:"matchScoreRecord", target:80000,progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_consecutiveKills_30",title:"30 kill consecutive senza prendere danni",type:"consecutiveKills",target:30,   progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_comebackKills_100",  title:"Uccidi 100 nemici con meno del 20% HP",  type:"comebackKills",    target:100,  progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_superKillStreak_15", title:"Uccidi 15 nemici in una sola super",     type:"superKillStreak",  target:15,   progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_noDashRun_lvl10",    title:"Arriva al liv.10 senza usare il dash",   type:"noDashRun",        target:1, levelTarget:10, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_killsInTen_25",      title:"Uccidi 25 nemici in 10 secondi",         type:"killsInTenSeconds",target:25,   progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+
+  // ===== NUOVE MISSIONI COMPLICATE (5) =====
+  { id:"h_totalGames_200",     title:"Completa 200 partite",                   type:"totalGames",       target:200,  progress:0, xpReward:450, claimed:false, difficulty:"hard" },
+  { id:"h_consecutiveKills_75",title:"75 kill consecutive senza danni (record)",type:"consecutiveKills",target:75,   progress:0, xpReward:450, claimed:false, difficulty:"hard" },
+  { id:"h_killsNoPickup_lvl8", title:"Arriva al liv.8 senza raccogliere pickup",type:"killsNoPickup", target:1, levelTarget:8, progress:0, xpReward:450, claimed:false, difficulty:"hard" },
+  { id:"h_lowHpSuperKills_10", title:"Usa la super sotto 15% HP e sopravvivi x10",type:"lowHpSuperKills",target:10,  progress:0, xpReward:450, claimed:false, difficulty:"hard" },
+  { id:"h_totalGamesNoDeath_5",title:"Vinci 5 partite senza perdere tutti gli HP",type:"totalGamesNoDeath",target:5, progress:0, xpReward:450, claimed:false, difficulty:"hard" },
+
   // MITICA (platino) - 300 XP
   { id:"x_totalScore_1500000", type:"totalScore", target:1500000, progress:0, xpReward: 1000, claimed:false, difficulty:"mythic" },
 
@@ -5645,16 +5800,25 @@ const ACCOUNT_DEFAULT = {
   { id:"eth_jimmy_evo_skin",  type:"charGames", char:"jimmy",  target:50, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"jimmy_evo"  },
   { id:"eth_rooney_evo_skin", type:"charGames", char:"rooney", target:50, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"rooney_evo" },
   { id:"eth_jeff_evo_skin",   type:"charGames", char:"jeff",   target:50, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"jeff_evo"   },
+  { id:"eth_voltryx_ice_skin",       type:"charGames", char:"voltryx",    target:60, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"voltryx_ice"       },
+  { id:"eth_tempostorm_energy_skin", type:"charGames", char:"tempostorm", target:60, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"tempostorm_energy" },
+  { id:"eth_marz_evil_skin",         type:"charGames", char:"marz",       target:60, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"marz_evil"         },
+  { id:"eth_salsy_red_skin",         type:"charGames", char:"salsy",      target:60, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"salsy_red"         },
+  { id:"eth_kouvagia_evil_skin",     type:"charGames", char:"kouvagia",   target:60, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"kouvagia_evil"     },
+  // ── METAL skins (danno per personaggio) ──────────────────────────────────────
+  { id:"eth_jimmy_metal_skin",  type:"charDamage", char:"jimmy",  target:300000, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"jimmy_metal"  },
+  { id:"eth_rooney_metal_skin", type:"charDamage", char:"rooney", target:300000, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"rooney_metal" },
+  { id:"eth_jeff_jakeff_skin",  type:"charDamage", char:"jeff",   target:500000, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"jeff_jakeff"  },
 
 ]
 };
 
 function xpNeedForLevel(level){
-  // Curva potenza 1.75: XP(n) = baseXP × n^1.75
+  // Curva potenza 1.35: XP(n) = baseXP × n^1.35
   // XP necessario per passare dal livello 'level' al successivo.
   level = Math.max(1, Math.floor(level||1));
   const baseXP = 100;
-  return Math.max(100, Math.floor(baseXP * Math.pow(level, 1.75)));
+  return Math.max(100, Math.floor(baseXP * Math.pow(level, 1.35)));
 }
 
 function xpNeedForLevelOld(level){
@@ -5668,7 +5832,7 @@ function xpNeedForLevelOld(level){
 }
 
 function recalcAccountFromTotalXp(showAnim){
-  // Deriva level/xp/xpNeed dalla totalXp usando la curva potenza 1.75 (baseXP × n^1.75)
+  // Deriva level/xp/xpNeed dalla totalXp usando la curva potenza 1.35 (baseXP × n^1.35)
   const prevLevel = accountState.level;
   let total = Math.max(0, Math.floor(accountState.totalXp||0));
   let lvl = 1;
@@ -5713,8 +5877,17 @@ function syncMissionsFromStats(){
         const k = 'gamesPlayedWith_' + (m.char||'');
         m.progress = Math.min(m.target, Math.floor((accountState.stats && accountState.stats[k])||0));
       }
+      else if(m.type==='charDamage'){
+        const k = 'damageWith_' + (m.char||'');
+        m.progress = Math.min(m.target, Math.floor((accountState.stats && accountState.stats[k])||0));
+      }
       else if(accountState.stats && m.type && (m.type in accountState.stats)) m.progress = Math.min(m.target, Math.floor(accountState.stats[m.type]||0));
       else if(m.type==='recordScore') m.progress = Math.min(m.target, Math.floor((records && records[m.char])||0));
+      else if(m.type==='matchScoreRecord')   m.progress = Math.min(m.target, Math.floor(accountState.stats.bestMatchScore||0));
+      else if(m.type==='consecutiveKills')   m.progress = Math.min(m.target, Math.floor(accountState.stats.bestConsecutiveKills||0));
+      else if(m.type==='superKillStreak')    m.progress = Math.min(m.target, Math.floor(accountState.stats.bestSuperKillStreak||0));
+      else if(m.type==='killsInTenSeconds')  m.progress = Math.min(m.target, Math.floor(accountState.stats.bestKillsInTen||0));
+      else if(m.type==='killsBeforeLevel3')  m.progress = Math.min(m.target, Math.floor(accountState.stats.killsBeforeL3||0));
       // Missioni kill per personaggio (senza type, solo char): ricostruisce da stats.killsWith_*
       else if(!m.type && m.char){
         const k = 'killsWith_' + m.char;
@@ -5766,6 +5939,18 @@ function loadAccount(){
         totalScore: Math.max(0, Math.floor(a.stats.totalScore||0)),
         totalHeal: Math.max(0, Math.floor(a.stats.totalHeal||0)),
         jimmySuperKills: Math.max(0, Math.floor(a.stats.jimmySuperKills||0)),
+        // Nuovi contatori
+        dashUses: Math.max(0, Math.floor(a.stats.dashUses||0)),
+        surviveSeconds: Math.max(0, Math.floor(a.stats.surviveSeconds||0)),
+        totalGames: Math.max(0, Math.floor(a.stats.totalGames||0)),
+        killAllBosses: Math.max(0, Math.floor(a.stats.killAllBosses||0)),
+        comebackKills: Math.max(0, Math.floor(a.stats.comebackKills||0)),
+        bestMatchScore: Math.max(0, Math.floor(a.stats.bestMatchScore||0)),
+        bestConsecutiveKills: Math.max(0, Math.floor(a.stats.bestConsecutiveKills||0)),
+        bestSuperKillStreak: Math.max(0, Math.floor(a.stats.bestSuperKillStreak||0)),
+        bestKillsInTen: Math.max(0, Math.floor(a.stats.bestKillsInTen||0)),
+        lowHpSuperKills: Math.max(0, Math.floor(a.stats.lowHpSuperKills||0)),
+        totalGamesNoDeath: Math.max(0, Math.floor(a.stats.totalGamesNoDeath||0)),
         jimmySuperUses: Math.max(0, Math.floor(a.stats.jimmySuperUses||0)),
         rooneySuperUses: Math.max(0, Math.floor(a.stats.rooneySuperUses||0)),
         jeffSuperUses: Math.max(0, Math.floor(a.stats.jeffSuperUses||0)),
@@ -5802,6 +5987,9 @@ function loadAccount(){
         gamesPlayedWith_jimmy:  Math.max(0, Math.floor(a.stats.gamesPlayedWith_jimmy||0)),
         gamesPlayedWith_rooney: Math.max(0, Math.floor(a.stats.gamesPlayedWith_rooney||0)),
         gamesPlayedWith_jeff:   Math.max(0, Math.floor(a.stats.gamesPlayedWith_jeff||0)),
+        damageWith_jimmy:  Math.max(0, Math.floor(a.stats.damageWith_jimmy||0)),
+        damageWith_rooney: Math.max(0, Math.floor(a.stats.damageWith_rooney||0)),
+        damageWith_jeff:   Math.max(0, Math.floor(a.stats.damageWith_jeff||0)),
       };
     }
 
@@ -6134,11 +6322,32 @@ function missionTitle(m){
     const skinName = skinEntry ? skinEntry.name : (m.skinUnlock||'skin');
     return `Gioca ${m.target} partite con ${charLabel(m.char)} — sblocca: ${skinName}`;
   }
+  if(m.type==='charDamage'){
+    const skinEntry = (typeof SKIN_CATALOGUE!=='undefined') ? SKIN_CATALOGUE.find(s=>s.id===m.skinUnlock) : null;
+    const skinName = skinEntry ? skinEntry.name : (m.skinUnlock||'skin');
+    return `Causa ${m.target.toLocaleString('it-IT')} danni totali con ${charLabel(m.char)} — sblocca: ${skinName}`;
+  }
   if(m.type==='jimmySuperKills') return `Uccidi ${m.target} nemici con la super di Jimmy`;
   if(m.type==='pickups') return `Raccogli ${m.target} pickup (totali)`;
   if(m.type==='totalHeal') return `Recupera ${m.target} HP (totali)`;
   if(m.type==='recordScore') return `Raggiungi record di ${m.target} con ${charLabel(m.char)}`;
   if(m.type==='goldPickups') return `Raccogli ${m.target} Pickups Gold (totali)`;
+  // Nuovi tipi
+  if(m.type==='dashUses') return `Usa il dash ${m.target} volte (totali)`;
+  if(m.type==='surviveSeconds') return `Sopravvivi per ${m.target} secondi totali di gioco`;
+  if(m.type==='consecutiveKills') return `Fai ${m.target} kill consecutive senza subire danni (record in una partita)`;
+  if(m.type==='comebackKills') return `Uccidi ${m.target} nemici mentre hai meno del 20% di HP (totali)`;
+  if(m.type==='killsNoPickup') return `Supera il livello ${m.levelTarget||5} senza raccogliere nessun pickup`;
+  if(m.type==='matchScoreRecord') return `Ottieni ${m.target} punti in una sola partita`;
+  if(m.type==='killsInTenSeconds') return `Uccidi ${m.target} nemici in 10 secondi (in una partita)`;
+  if(m.type==='totalGames') return `Completa ${m.target} partite`;
+  if(m.type==='superKillStreak') return `Usa la super e uccidi almeno ${m.target} nemici in una singola attivazione`;
+  if(m.type==='killsBeforeLevel3') return `Raggiungi ${m.target} kill prima di arrivare al livello 3`;
+  if(m.type==='noDashRun') return `Completa una partita fino al livello ${m.levelTarget||10} senza usare mai il dash`;
+  if(m.type==='killAllBosses') return `Sconfiggi ${m.target} boss (totali)`;
+  if(m.type==='lowHpSuperKills') return `Usa la super con meno del 15% di HP e sopravvivi per ${m.target} volte`;
+  if(m.type==='killsWithDash') return `Colpisci e uccidi ${m.target} nemici immediatamente durante un dash`;
+  if(m.type==='totalGamesNoDeath') return `Vinci ${m.target} partite senza perdere mai tutti gli HP`;
   return 'Missione';
 }
 
@@ -6256,9 +6465,13 @@ const missionsSorted = (() => {
     let unit='progresso';
     if(!m.type && m.char) unit='kill';
     else if(m.type==='totalHeal') unit='HP';
-    else if(m.type==='totalScore' || m.type==='recordScore') unit='punti';
-    else if(['bossLevel','reachLevel','noSuperToLevel','noDamageToLevel'].includes(m.type)) unit='completato';
-    else if(m.type==='charGames') unit='partite';
+    else if(m.type==='totalScore' || m.type==='recordScore' || m.type==='matchScoreRecord') unit='punti';
+    else if(['bossLevel','reachLevel','noSuperToLevel','noDamageToLevel','killsNoPickup','noDashRun','totalGamesNoDeath','lowHpSuperKills'].includes(m.type)) unit='completato';
+    else if(m.type==='charGames' || m.type==='totalGames') unit='partite';
+    else if(m.type==='dashUses') unit='dash';
+    else if(m.type==='surviveSeconds') unit='secondi';
+    else if(m.type==='killAllBosses') unit='boss';
+    else if(m.type==='comebackKills' || m.type==='consecutiveKills' || m.type==='killsBeforeLevel3' || m.type==='superKillStreak' || m.type==='killsInTenSeconds') unit='kill';
 
     const rewardText = (m.difficulty==='ethereal')
       ? `Ricompensa: Sblocco acquisto skin`
@@ -6358,6 +6571,13 @@ function accountOnKill(charType, n=1){
         }
       }
     }
+    // Traccia super kill streak (quante kill durante un'attivazione singola)
+    if(player && player.isDoingSuper){
+      window.runCurrentSuperKillStreak = (window.runCurrentSuperKillStreak||0) + n;
+      if(window.runCurrentSuperKillStreak > (window.runBestSuperKillStreak||0)){
+        window.runBestSuperKillStreak = window.runCurrentSuperKillStreak;
+      }
+    }
   }catch(e){}
 // character kill missions (solo missioni kill: quelle senza 'type')
   for(const m of accountState.missions){
@@ -6405,10 +6625,22 @@ function accountOnDamageDealt(dmg){
     accountState.stats = accountState.stats || {};
     accountState.stats.totalDamage = Math.max(0, Math.floor(accountState.stats.totalDamage||0)) + dmg;
 
+    // Track per-character damage
+    try{
+      const _chType = (typeof player!=='undefined' && player && player.type) ? player.type : null;
+      if(_chType === 'jimmy' || _chType === 'rooney' || _chType === 'jeff'){
+        const _dmgKey = 'damageWith_' + _chType;
+        accountState.stats[_dmgKey] = Math.max(0, Math.floor(accountState.stats[_dmgKey]||0)) + dmg;
+      }
+    }catch(e){}
     for(const m of accountState.missions){
       if(m.claimed) continue;
       if(m.type==='totalDamage'){
         m.progress = Math.min(m.target, accountState.stats.totalDamage);
+      }
+      if(m.type==='charDamage'){
+        const _k = 'damageWith_' + (m.char||'');
+        m.progress = Math.min(m.target, Math.floor(accountState.stats[_k]||0));
       }
     }
     saveAccount();
@@ -6496,6 +6728,9 @@ function accountOnSuperUsed(){
 function accountOnPlayerDamaged(){
   try{
     runTookDamage = true;
+    window.runTookAnyDamage = true;
+    // Reset streak di kill consecutive (missione)
+    window.runConsecutiveKills = 0;
     // missione no-damage fino al livello X: se prendi danno, resta non completata in questa run
   }catch(e){}
 }
@@ -6505,6 +6740,8 @@ function accountOnPickupCollected(pickupType){
     if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0 };
     accountState.stats.pickups = Math.max(0, Math.floor(accountState.stats.pickups||0)) + 1;
     if(pickupType==='gold') accountState.stats.totalGoldPickups = Math.max(0, Math.floor(accountState.stats.totalGoldPickups||0)) + 1;
+    // Conta pickup per la run (missione killsNoPickup)
+    window.runPickupsCollected = (window.runPickupsCollected||0) + 1;
     for(const m of accountState.missions){
       if(m.claimed) continue;
       if(m.type==='pickups'){
@@ -6512,6 +6749,115 @@ function accountOnPickupCollected(pickupType){
       }
       if(m.type==='goldPickups'){
         m.progress = Math.min(m.target, Math.floor(accountState.stats.totalGoldPickups||0));
+      }
+    }
+    saveAccount();
+  }catch(e){}
+}
+
+// ===== NUOVI TRACKER MISSIONI =====
+
+// Tracker dash
+function accountOnDashUsed(){
+  try{
+    accountState.stats = accountState.stats || {};
+    accountState.stats.dashUses = Math.max(0, Math.floor(accountState.stats.dashUses||0)) + 1;
+    for(const m of accountState.missions){
+      if(!m.claimed && m.type==='dashUses'){
+        m.progress = Math.min(m.target, accountState.stats.dashUses);
+      }
+    }
+    saveAccount();
+  }catch(e){}
+}
+
+// Tracker tempo sopravvissuto (chiamato ogni secondo di gioco reale)
+function accountOnSurviveSecond(){
+  try{
+    accountState.stats = accountState.stats || {};
+    accountState.stats.surviveSeconds = Math.max(0, Math.floor(accountState.stats.surviveSeconds||0)) + 1;
+    for(const m of accountState.missions){
+      if(!m.claimed && m.type==='surviveSeconds'){
+        m.progress = Math.min(m.target, accountState.stats.surviveSeconds);
+      }
+    }
+    saveAccount();
+  }catch(e){}
+}
+
+// Tracker boss uccisi
+function accountOnBossKilled(){
+  try{
+    accountState.stats = accountState.stats || {};
+    accountState.stats.killAllBosses = Math.max(0, Math.floor(accountState.stats.killAllBosses||0)) + 1;
+    for(const m of accountState.missions){
+      if(!m.claimed && m.type==='killAllBosses'){
+        m.progress = Math.min(m.target, accountState.stats.killAllBosses);
+      }
+    }
+    saveAccount();
+  }catch(e){}
+}
+
+// Tracker partite completate
+function accountOnGameComplete(noPickupRun, noDashRun, noDeathRun, matchScore, consecutiveKillsRecord, superKillStreakRecord, killsInTenRecord){
+  try{
+    accountState.stats = accountState.stats || {};
+    accountState.stats.totalGames = Math.max(0, Math.floor(accountState.stats.totalGames||0)) + 1;
+    if(noDeathRun) accountState.stats.totalGamesNoDeath = Math.max(0, Math.floor(accountState.stats.totalGamesNoDeath||0)) + 1;
+    if(matchScore > (accountState.stats.bestMatchScore||0)){
+      accountState.stats.bestMatchScore = matchScore;
+    }
+    if(consecutiveKillsRecord > (accountState.stats.bestConsecutiveKills||0)){
+      accountState.stats.bestConsecutiveKills = consecutiveKillsRecord;
+    }
+    if(superKillStreakRecord > (accountState.stats.bestSuperKillStreak||0)){
+      accountState.stats.bestSuperKillStreak = superKillStreakRecord;
+    }
+    if(killsInTenRecord > (accountState.stats.bestKillsInTen||0)){
+      accountState.stats.bestKillsInTen = killsInTenRecord;
+    }
+    for(const m of accountState.missions){
+      if(m.claimed) continue;
+      if(m.type==='totalGames') m.progress = Math.min(m.target, accountState.stats.totalGames);
+      if(m.type==='totalGamesNoDeath') m.progress = Math.min(m.target, accountState.stats.totalGamesNoDeath||0);
+      if(m.type==='matchScoreRecord') m.progress = Math.min(m.target, accountState.stats.bestMatchScore||0);
+      if(m.type==='consecutiveKills') m.progress = Math.min(m.target, accountState.stats.bestConsecutiveKills||0);
+      if(m.type==='superKillStreak') m.progress = Math.min(m.target, accountState.stats.bestSuperKillStreak||0);
+      if(m.type==='killsInTenSeconds') m.progress = Math.min(m.target, accountState.stats.bestKillsInTen||0);
+      if(m.type==='noDashRun' && noDashRun && currentLevel >= (m.levelTarget||10)){
+        m.progress = 1;
+      }
+      if(m.type==='killsNoPickup' && noPickupRun && currentLevel >= (m.levelTarget||8)){
+        m.progress = 1;
+      }
+    }
+    saveAccount();
+  }catch(e){}
+}
+
+// Tracker comeback kills (uccisioni con HP < 20%)
+function accountOnComebackKill(){
+  try{
+    accountState.stats = accountState.stats || {};
+    accountState.stats.comebackKills = Math.max(0, Math.floor(accountState.stats.comebackKills||0)) + 1;
+    for(const m of accountState.missions){
+      if(!m.claimed && m.type==='comebackKills'){
+        m.progress = Math.min(m.target, accountState.stats.comebackKills);
+      }
+    }
+    saveAccount();
+  }catch(e){}
+}
+
+// Tracker low HP super kills
+function accountOnLowHpSuperSurvive(){
+  try{
+    accountState.stats = accountState.stats || {};
+    accountState.stats.lowHpSuperKills = Math.max(0, Math.floor(accountState.stats.lowHpSuperKills||0)) + 1;
+    for(const m of accountState.missions){
+      if(!m.claimed && m.type==='lowHpSuperKills'){
+        m.progress = Math.min(m.target, accountState.stats.lowHpSuperKills);
       }
     }
     saveAccount();
@@ -7219,7 +7565,7 @@ function detonateCollana(playerRef){
 
   const dmgAccum = playerRef.collanaDmgAccum || 0;
   // Danno base primo colpo — molto più alto
-  const firstDmg = Math.round(40 + dmgAccum * 4.5);
+  const firstDmg = Math.round(40 + dmgAccum * 2.25);
   // Soglia minima abbassata: la catena continua più a lungo
   const minThreshold = 30 + Math.floor(dmgAccum / 100) * 10;
 
@@ -7269,7 +7615,7 @@ function detonateCollana(playerRef){
 
     delayMs += 120;   // era 60ms
     prevX = tx; prevY = ty;
-    currentDmg *= 1.30;   // +30% ogni salto
+    currentDmg *= 0.65;   // dimezzato rispetto a prima (+30% → -35% per salto)
     jumped++;
   }
 
@@ -7530,6 +7876,7 @@ function showDamageNumber(x,y,dmg,opts){
   div.className='damage-number';
   const isCrit = opts.crit || dmg>=80;
   const isHeal = opts.heal;
+  const isCurse = opts.curse;
   // Scale font with damage magnitude
   const baseSize = isHeal ? 18 : (isCrit ? Math.min(36, 18 + Math.floor(dmg/25)) : Math.min(26, 14 + Math.floor(dmg/30)));
   div.style.fontSize = baseSize + 'px';
@@ -7537,6 +7884,11 @@ function showDamageNumber(x,y,dmg,opts){
     div.textContent=`+${dmg}`;
     div.style.color='#2ecc71';
     div.style.textShadow='0 0 8px #27ae60,2px 2px 4px #000';
+  } else if(isCurse){
+    div.textContent=`☠${dmg}`;
+    div.style.color='#76ff03';
+    div.style.textShadow='0 0 10px #00e676,0 0 20px #39ff14,2px 2px 4px #000';
+    div.style.fontWeight='bold';
   } else if(isCrit){
     div.textContent=`${dmg}!!`;
     div.style.color='#f1c40f';
@@ -7604,6 +7956,8 @@ class Wolf{
 // Account mission: no-damage run tracking
     if(d>0){ try{ accountOnPlayerDamaged(); }catch(e){} }
     createParticles(this.x+this.width/2, this.y+this.height/2, '#90caf9', 14, 4);
+
+
 
     // Hendel passive: every enemy that hits him is knocked back and takes 40 damage
     if(this.type==='hendel' && attacker && typeof attacker.hp==='number'){
@@ -8213,7 +8567,10 @@ function getPreferredTarget(enemy, playerObj){
 }
 
 function markMult(enemy){
-  return (enemy && enemy.salsyMarkUntil && Date.now() < enemy.salsyMarkUntil) ? 2 : 1;
+  if(!(enemy && enemy.salsyMarkUntil && Date.now() < enemy.salsyMarkUntil)) return 1;
+  // RED Salsy skin: x2.5 instead of x2
+  if(typeof player!=='undefined' && player && player._activeSkinPassiveId==='salsy_red') return 2.5;
+  return 2;
 }
 function applyEnemyDamage(enemy, baseDmg){
   let mult=1;
@@ -8224,6 +8581,14 @@ function applyEnemyDamage(enemy, baseDmg){
   try{
     if(typeof player!=='undefined' && player && player.mezzalunaUntil && _nowD < player.mezzalunaUntil){
       enemy.mezzalunaMarkUntil = player.mezzalunaUntil;
+    }
+  }catch(e){}
+
+  // EVIL MARZ — MALEDIZIONE: nemici colpiti vengono marchiati con teschio verde veleno
+  try{
+    if(typeof player!=='undefined' && player && player._evilMarzCurse){
+      enemy._curseMarzUntil = _nowD + 99999999; // marchio permanente per il round
+      if(!enemy._curseMarzFirst) enemy._curseMarzFirst = _nowD; // timestamp prima maledizione
     }
   }catch(e){}
   const _moonMult = (typeof _mezzalunaPlayerDamageMult==='function') ? _mezzalunaPlayerDamageMult(_nowD) : 1;
@@ -8272,6 +8637,30 @@ function applyEnemyDamage(enemy, baseDmg){
   }catch(e){}
 
   try{ accountOnDamageDealt(finalDmg); }catch(e){}
+
+  // COLLANA DI ENERGIA: accumula anche i danni CAUSATI come carica aggiuntiva
+  // (separato dai danni subiti — peso minore per non sbilanciare)
+  try{
+    if(typeof player!=='undefined' && player && player.collanaActive && finalDmg>0){
+      const _collanaDealtBonus = Math.round(finalDmg * 0.05); // ridotto da 0.35 a 0.05 (molto meno impatto)
+      player.collanaDmgAccum = (player.collanaDmgAccum||0) + _collanaDealtBonus;
+      // piccola orb visiva ogni 50 danni accumulati da dealt
+      if(!player._collanaDmgDealtVfx) player._collanaDmgDealtVfx = 0;
+      player._collanaDmgDealtVfx += _collanaDealtBonus;
+      if(player._collanaDmgDealtVfx >= 50){
+        player._collanaDmgDealtVfx = 0;
+        if(typeof collanaOrbs!=='undefined') collanaOrbs.push({
+          owner: player,
+          ang: Math.random()*Math.PI*2,
+          angSpeed: 0.09 + Math.random()*0.07,
+          r: 40 + Math.random()*20,
+          born: Date.now(),
+          dmg: player.collanaDmgAccum,
+          dealt: true
+        });
+      }
+    }
+  }catch(e){}
 
   // CRIT VISUAL: every 10 combo hits, show a highlighted crit number
   try{
@@ -8449,35 +8838,49 @@ let voltryxFxBursts = [];   // expanding orange rings
 let voltryxScreenFlash = 0; // frames
 
 function createVoltryxExplosionFX(x,y,scale=1){
-  // Particle burst (orange energy)
   const s = Math.max(0.6, Math.min(2.2, scale||1));
-  createParticles(x,y,'#ff6d00',Math.round(55*s),5);
-  createParticles(x,y,'#ff9100',Math.round(45*s),4);
-  createParticles(x,y,'#ffe0b2',Math.round(22*s),3);
+  // Skin-aware burst colors
+  const _vePal = (typeof getSkinFxPalette==='function' && typeof player!=='undefined' && player && player.type==='voltryx')
+    ? getSkinFxPalette('voltryx') : null;
+  const _veC1 = (_vePal && _vePal.super) ? _vePal.super[0] : '#ff6d00';
+  const _veC2 = (_vePal && _vePal.super) ? _vePal.super[1] : '#ff9100';
+  const _veC3 = (_vePal && _vePal.super) ? (_vePal.particleExtra ? _vePal.particleExtra[0] : _vePal.super[2]) : '#ffe0b2';
+  createParticles(x,y,_veC1,Math.round(55*s),5);
+  createParticles(x,y,_veC2,Math.round(45*s),4);
+  createParticles(x,y,_veC3,Math.round(22*s),3);
+  // ICE skin: aggiunge scintille cristallo extra
+  if(_vePal && _vePal.particleExtra){
+    createParticles(x,y,_vePal.particleExtra[1]||'#cce8ff',Math.round(18*s),2);
+  }
 
-  // Expanding glow rings
+  // Expanding glow rings (colore anello dalla palette)
+  const _veRingCol = (_vePal && _vePal.ringColor) ? _vePal.ringColor : '#ff9100';
   for(let k=0;k<3;k++){
     voltryxFxBursts.push({
       x, y,
       r: (16*s) + k*(12*s),
       vr: (7*s) + k*(1.4*s),
       life: Math.round((18 + k*6) * s),
-      maxLife: Math.round((18 + k*6) * s)
+      maxLife: Math.round((18 + k*6) * s),
+      ringColor: _veRingCol
     });
   }
 
-  // Stronger shake/flash for bigger impacts
   voltryxScreenFlash = Math.max(voltryxScreenFlash, Math.round(12*s));
   try{ shakeAmount = Math.max(shakeAmount||0, 10*s); }catch(e){}
 }
 
 function emitVoltryxTrail(x,y,isSuper=false){
-  // Small shimmering sparks along the projectile path
+  const _vtPal = (typeof getSkinFxPalette==='function' && typeof player!=='undefined' && player && player.type==='voltryx')
+    ? getSkinFxPalette('voltryx') : null;
   const count = isSuper ? 4 : 2;
   const n = (window.getParticleSpawnBudget ? window.getParticleSpawnBudget(count) : count);
   const spread = isSuper ? 8 : 5;
   const spd = isSuper ? 2.2 : 1.6;
   const life = isSuper ? 20 : 16;
+  // colori trail: ICE -> azzurro/bianco ghiaccio con leggero shimmer
+  const _c1 = (_vtPal && _vtPal.super) ? (_vtPal.particleExtra ? _vtPal.particleExtra[0] : _vtPal.super[2]||'#c8f0ff') : '#ffe0b2';
+  const _c2 = (_vtPal && _vtPal.super) ? _vtPal.super[0] : (isSuper ? '#ff6d00' : '#ff9100');
   for(let i=0;i<n;i++){
     particles.push({
       x:x + (Math.random()*2-1)*spread,
@@ -8485,7 +8888,7 @@ function emitVoltryxTrail(x,y,isSuper=false){
       vx:(Math.random()-0.5)*spd,
       vy:(Math.random()-0.5)*spd,
       life: life,
-      color: (Math.random()<0.28 ? '#ffe0b2' : (isSuper ? '#ff6d00' : '#ff9100')),
+      color: (Math.random()<0.28 ? _c1 : _c2),
       size: (isSuper ? 3 : 2)
     });
   }
@@ -8501,14 +8904,24 @@ function updateVoltryxFX(){
 }
 
 function drawVoltryxFX(){
-  // Draw rings behind particles/projectiles
   voltryxFxBursts.forEach(b=>{
     const a = Math.max(0, b.life/(b.maxLife||1));
     ctx.save();
     ctx.globalAlpha = Math.min(0.5, 0.14 + a*0.45);
-    ctx.shadowColor = '#ff6d00';
+    // usa il ringColor salvato nel burst (supporta skin ICE)
+    const rc = b.ringColor || '#ff9100';
+    ctx.shadowColor = rc;
     ctx.shadowBlur = 28;
-    ctx.strokeStyle = 'rgba(255,145,0,'+(0.18 + a*0.65)+')';
+    // converti hex in rgba con alpha dinamica
+    const hex2rgba = (h,al)=>{
+      try{
+        let hh=h.replace('#','');
+        if(hh.length===3) hh=hh.split('').map(c=>c+c).join('');
+        const n=parseInt(hh,16);
+        return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${al})`;
+      }catch(e){ return `rgba(255,145,0,${al})`; }
+    };
+    ctx.strokeStyle = hex2rgba(rc, 0.18 + a*0.65);
     ctx.lineWidth = Math.max(2, 6*a);
     ctx.beginPath();
     ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
@@ -8664,16 +9077,35 @@ function drawMarzBolt(p){
   ctx.translate(p.x, p.y);
   ctx.globalCompositeOperation = 'lighter';
 
-  // soft outer glow
+  // Controlla skin EVIL (marz)
+  const _mbPal = (typeof getSkinFxPalette==='function' && typeof player!=='undefined' && player && player.type==='marz')
+    ? getSkinFxPalette('marz') : null;
+  const _isEvil = !!(_mbPal && _mbPal.zoneColors);
+
+  // soft outer glow (colore base = col, già skin-aware)
   const g = ctx.createRadialGradient(0,0,0,0,0,R*2.8);
-  g.addColorStop(0, 'rgba(255,255,255,0.75)');
-  g.addColorStop(0.22, _hexToRgbaSimple(col, 0.55));
-  g.addColorStop(0.55, _hexToRgbaSimple(col, 0.22));
+  // EVIL: inner core bianco, outer più saturo e tetro
+  g.addColorStop(0, _isEvil ? 'rgba(200,220,180,0.70)' : 'rgba(255,255,255,0.75)');
+  g.addColorStop(0.22, _hexToRgbaSimple(col, _isEvil ? 0.72 : 0.55));
+  g.addColorStop(0.55, _hexToRgbaSimple(col, _isEvil ? 0.38 : 0.22));
   g.addColorStop(1, _hexToRgbaSimple(col, 0.00));
   ctx.fillStyle = g;
   ctx.shadowColor = col;
-  ctx.shadowBlur = 28;
+  ctx.shadowBlur = _isEvil ? 36 : 28;
   ctx.beginPath(); ctx.arc(0,0,R*2.2,0,Math.PI*2); ctx.fill();
+
+  // EVIL: alone veleno attorno all'orb (secondo glow esterno)
+  if(_isEvil){
+    const evilRingCol = idx===0 ? '#4caf22' : (idx===1 ? '#7b0099' : '#8b0000');
+    const ge = ctx.createRadialGradient(0,0,R*0.5,0,0,R*3.8);
+    ge.addColorStop(0, _hexToRgbaSimple(evilRingCol, 0.00));
+    ge.addColorStop(0.55, _hexToRgbaSimple(evilRingCol, 0.28));
+    ge.addColorStop(1, _hexToRgbaSimple(evilRingCol, 0.00));
+    ctx.fillStyle = ge;
+    ctx.shadowColor = evilRingCol;
+    ctx.shadowBlur = 20;
+    ctx.beginPath(); ctx.arc(0,0,R*3.4,0,Math.PI*2); ctx.fill();
+  }
 
   // helpers
   function drawStar(rOuter, rInner, points){
@@ -8689,22 +9121,22 @@ function drawMarzBolt(p){
   }
 
   if(idx===0){
-    // Magenta: rotating sigil star (hexagram vibe)
-    ctx.rotate(t*1.8);
-    ctx.shadowBlur = 22;
-    ctx.fillStyle = _hexToRgbaSimple(col, 0.48);
-    drawStar(R*1.15, R*0.50, 6);
+    // Magenta (default) / Verde veleno (EVIL): rotating sigil
+    ctx.rotate(_isEvil ? -t*2.4 : t*1.8);  // EVIL: rotazione inversa più rapida
+    ctx.shadowBlur = _isEvil ? 30 : 22;
+    ctx.fillStyle = _hexToRgbaSimple(col, _isEvil ? 0.55 : 0.48);
+    drawStar(_isEvil ? R*1.25 : R*1.15, _isEvil ? R*0.40 : R*0.50, _isEvil ? 5 : 6); // EVIL: 5 punte (pentagramma)
     ctx.fill();
 
-    ctx.lineWidth = 2.2;
-    ctx.strokeStyle = _hexToRgbaSimple('#ffffff', 0.62);
-    ctx.shadowColor = '#ffffff';
+    ctx.lineWidth = _isEvil ? 2.8 : 2.2;
+    ctx.strokeStyle = _isEvil ? _hexToRgbaSimple('#8b0000', 0.70) : _hexToRgbaSimple('#ffffff', 0.62);
+    ctx.shadowColor = _isEvil ? '#8b0000' : '#ffffff';
     ctx.shadowBlur = 28;
     ctx.stroke();
 
     // inner core
     const gg = ctx.createRadialGradient(-R*0.1,-R*0.1,0,0,0,R*1.05);
-    gg.addColorStop(0,'rgba(255,255,255,0.95)');
+    gg.addColorStop(0, _isEvil ? 'rgba(180,230,140,0.92)' : 'rgba(255,255,255,0.95)');
     gg.addColorStop(0.5,_hexToRgbaSimple(col,0.75));
     gg.addColorStop(1,_hexToRgbaSimple(col,0.15));
     ctx.fillStyle=gg;
@@ -8712,9 +9144,9 @@ function drawMarzBolt(p){
     ctx.shadowBlur=18;
     ctx.beginPath(); ctx.arc(0,0,R*0.72,0,Math.PI*2); ctx.fill();
 
-    // orbiting sparks
+    // orbiting sparks / dots
     ctx.globalAlpha = 0.8;
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.fillStyle = _isEvil ? _hexToRgbaSimple('#4caf22', 0.90) : 'rgba(255,255,255,0.85)';
     for(let k=0;k<3;k++){
       const a = t*2.6 + k*(Math.PI*2/3);
       ctx.fillRect(Math.cos(a)*R*1.55, Math.sin(a)*R*1.55, 2.2, 2.2);
@@ -8938,6 +9370,8 @@ function updateProjectiles(){
             const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
             createParticles(e.x,e.y,'#f39c12',12,5);
             showDamageNumber(e.x,e.y, _final);
+            // ICE Voltryx skin: slow 12%
+            try{ if(typeof player!=='undefined'&&player&&player.type==='voltryx'&&player._activeSkinPassiveId==='voltryx_ice') applySkinSlow(e,0.25,2500); }catch(e2){}
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
               dropStellarBonusAtIndexIfNeeded(i);
@@ -8975,6 +9409,9 @@ if(p.aoeRadius>0){
                 const _dmg=dmg; const _final=applyEnemyDamage(ee,_dmg);
                 createParticles(ee.x,ee.y,'#ffb74d',8,4);
                 showDamageNumber(ee.x,ee.y, _final);
+                // ICE Voltryx skin: slow 25%
+                try{ if(typeof player!=='undefined'&&player&&player.type==='voltryx'&&player._activeSkinPassiveId==='voltryx_ice') applySkinSlow(ee,0.25,2500); }catch(e2){}
+
                 if(ee.hp<=0){
                   createParticles(ee.x,ee.y,'#fff176',30,6);
                   dropStellarBonusAtIndexIfNeeded(j);
@@ -8989,6 +9426,7 @@ if(p.aoeRadius>0){
             const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
             createParticles(e.x,e.y,'#ffd54f',8,4);
             showDamageNumber(e.x,e.y, _final);
+
             // Hècate: main arrow splits into 3 arrows to OTHER enemies
             if(p.meta && p.meta.type==='hecateMain'){
               const impactX=p.x, impactY=p.y;
@@ -9353,62 +9791,116 @@ ctx.globalAlpha = 1;
     }
 
     // Default circular bullets
-    // Voltryx base shot: bright orange energy orb with animated arcs
+    // Voltryx base shot: bright energy orb with animated arcs (orange default / ice blue with ICE skin)
     if(p.meta && p.meta.voltryxBase){
       const t = (Date.now() - (p.created||0)) * 0.012;
       const r = Math.max(7, p.radius||10);
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
 
-      // Outer glow gradient
-      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r*2.4);
-      g.addColorStop(0, 'rgba(255,255,255,0.95)');
-      g.addColorStop(0.25, 'rgba(255,224,178,0.75)');
-      g.addColorStop(0.55, 'rgba(255,145,0,0.55)');
-      g.addColorStop(1, 'rgba(255,145,0,0)');
-      ctx.fillStyle = g;
-      ctx.shadowColor = '#ff9100';
-      ctx.shadowBlur = 32;
-      ctx.beginPath(); ctx.arc(p.x, p.y, r*2.1, 0, Math.PI*2); ctx.fill();
+      // Controlla skin ICE attiva
+      const _vbPal = (typeof getSkinFxPalette==='function' && typeof player!=='undefined' && player && player.type==='voltryx')
+        ? getSkinFxPalette('voltryx') : null;
+      const _isIce = !!(_vbPal && _vbPal.ringColor);
 
-      // Core
-      const g2 = ctx.createRadialGradient(p.x - r*0.2, p.y - r*0.2, 0, p.x, p.y, r*1.2);
-      g2.addColorStop(0, 'rgba(255,255,255,0.98)');
-      g2.addColorStop(0.35, 'rgba(255,224,178,0.95)');
-      g2.addColorStop(1, 'rgba(255,109,0,0.85)');
-      ctx.fillStyle = g2;
-      ctx.shadowColor = '#ff6d00';
-      ctx.shadowBlur = 22;
-      ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI*2); ctx.fill();
+      if(_isIce){
+        // ── ICE: sfera di ghiaccio con riflessi cristallini ──
+        // Outer glow azzurro ghiaccio
+        const gi = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r*2.6);
+        gi.addColorStop(0, 'rgba(255,255,255,0.95)');
+        gi.addColorStop(0.22, 'rgba(200,240,255,0.80)');
+        gi.addColorStop(0.55, 'rgba(91,200,232,0.50)');
+        gi.addColorStop(1,   'rgba(91,200,232,0)');
+        ctx.fillStyle = gi;
+        ctx.shadowColor = '#5bc8e8';
+        ctx.shadowBlur = 36;
+        ctx.beginPath(); ctx.arc(p.x, p.y, r*2.2, 0, Math.PI*2); ctx.fill();
 
-      // Animated electric arcs
-      ctx.globalAlpha = 0.9;
-      ctx.lineWidth = 2.2;
-      ctx.strokeStyle = 'rgba(255,255,255,0.70)';
-      ctx.shadowColor = '#ffe0b2';
-      ctx.shadowBlur = 28;
-      for(let k=0;k<2;k++){
-        const rr = r*1.25 + k*3;
-        const a0 = t + k*1.7;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, rr, a0, a0 + Math.PI*0.85);
-        ctx.stroke();
-      }
+        // Core ghiaccio
+        const gi2 = ctx.createRadialGradient(p.x - r*0.25, p.y - r*0.25, 0, p.x, p.y, r*1.2);
+        gi2.addColorStop(0, 'rgba(255,255,255,0.99)');
+        gi2.addColorStop(0.35, 'rgba(200,240,255,0.95)');
+        gi2.addColorStop(1,   'rgba(91,200,232,0.85)');
+        ctx.fillStyle = gi2;
+        ctx.shadowColor = '#a8e6f0';
+        ctx.shadowBlur = 22;
+        ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI*2); ctx.fill();
 
-      // Tiny sparks (short strokes)
-      ctx.globalAlpha = 0.65;
-      ctx.lineWidth = 1.6;
-      ctx.strokeStyle = 'rgba(255,224,178,0.85)';
-      ctx.shadowColor = '#ff9100';
-      ctx.shadowBlur = 14;
-      for(let s=0;s<3;s++){
-        const ang = t*1.8 + s*2.1;
-        const rr = r*1.6;
-        const x1 = p.x + Math.cos(ang)*rr;
-        const y1 = p.y + Math.sin(ang)*rr;
-        const x2 = p.x + Math.cos(ang)* (rr + 8);
-        const y2 = p.y + Math.sin(ang)* (rr + 8);
-        ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+        // Bordo cristallino (esagoni/spicchi ghiaccio simulati con archi)
+        ctx.globalAlpha = 0.75;
+        ctx.lineWidth = 1.8;
+        ctx.strokeStyle = 'rgba(200,248,255,0.80)';
+        ctx.shadowColor = '#c8f0ff';
+        ctx.shadowBlur = 22;
+        for(let k=0;k<3;k++){
+          const rr = r*1.2 + k*2.5;
+          const a0 = t*0.9 + k*(Math.PI*2/3);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, rr, a0, a0 + Math.PI*0.6);
+          ctx.stroke();
+        }
+        // Brillii ghiaccio (raggi corti)
+        ctx.globalAlpha = 0.55;
+        ctx.lineWidth = 1.4;
+        ctx.strokeStyle = 'rgba(255,255,255,0.90)';
+        ctx.shadowColor = '#89d4f5';
+        ctx.shadowBlur = 10;
+        for(let s=0;s<4;s++){
+          const ang = t*0.6 + s*(Math.PI/2);
+          const r0 = r*0.5, r1 = r*1.4;
+          ctx.beginPath();
+          ctx.moveTo(p.x + Math.cos(ang)*r0, p.y + Math.sin(ang)*r0);
+          ctx.lineTo(p.x + Math.cos(ang)*r1, p.y + Math.sin(ang)*r1);
+          ctx.stroke();
+        }
+      } else {
+        // ── DEFAULT: arancio energia ──
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r*2.4);
+        g.addColorStop(0, 'rgba(255,255,255,0.95)');
+        g.addColorStop(0.25, 'rgba(255,224,178,0.75)');
+        g.addColorStop(0.55, 'rgba(255,145,0,0.55)');
+        g.addColorStop(1, 'rgba(255,145,0,0)');
+        ctx.fillStyle = g;
+        ctx.shadowColor = '#ff9100';
+        ctx.shadowBlur = 32;
+        ctx.beginPath(); ctx.arc(p.x, p.y, r*2.1, 0, Math.PI*2); ctx.fill();
+
+        const g2 = ctx.createRadialGradient(p.x - r*0.2, p.y - r*0.2, 0, p.x, p.y, r*1.2);
+        g2.addColorStop(0, 'rgba(255,255,255,0.98)');
+        g2.addColorStop(0.35, 'rgba(255,224,178,0.95)');
+        g2.addColorStop(1, 'rgba(255,109,0,0.85)');
+        ctx.fillStyle = g2;
+        ctx.shadowColor = '#ff6d00';
+        ctx.shadowBlur = 22;
+        ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI*2); ctx.fill();
+
+        ctx.globalAlpha = 0.9;
+        ctx.lineWidth = 2.2;
+        ctx.strokeStyle = 'rgba(255,255,255,0.70)';
+        ctx.shadowColor = '#ffe0b2';
+        ctx.shadowBlur = 28;
+        for(let k=0;k<2;k++){
+          const rr = r*1.25 + k*3;
+          const a0 = t + k*1.7;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, rr, a0, a0 + Math.PI*0.85);
+          ctx.stroke();
+        }
+
+        ctx.globalAlpha = 0.65;
+        ctx.lineWidth = 1.6;
+        ctx.strokeStyle = 'rgba(255,224,178,0.85)';
+        ctx.shadowColor = '#ff9100';
+        ctx.shadowBlur = 14;
+        for(let s=0;s<3;s++){
+          const ang = t*1.8 + s*2.1;
+          const rr = r*1.6;
+          const x1 = p.x + Math.cos(ang)*rr;
+          const y1 = p.y + Math.sin(ang)*rr;
+          const x2 = p.x + Math.cos(ang)* (rr + 8);
+          const y2 = p.y + Math.sin(ang)* (rr + 8);
+          ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+        }
       }
 
       ctx.restore();
@@ -9428,53 +9920,115 @@ ctx.fill();
 
     if(p.isVoltryxSuper){
       const tt = (Date.now() - (p.created||0)) * 0.010;
-      // Re-draw the super orb with richer animation (energy core + rotating arcs)
       const R = 18;
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
 
-      const gg = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, R*2.8);
-      gg.addColorStop(0, 'rgba(255,255,255,0.92)');
-      gg.addColorStop(0.28, 'rgba(255,224,178,0.70)');
-      gg.addColorStop(0.55, 'rgba(255,109,0,0.55)');
-      gg.addColorStop(1, 'rgba(255,109,0,0)');
-      ctx.fillStyle = gg;
-      ctx.shadowColor = '#ff6d00';
-      ctx.shadowBlur = 40;
-      ctx.beginPath(); ctx.arc(p.x, p.y, R*2.4, 0, Math.PI*2); ctx.fill();
+      // Controlla skin ICE
+      const _vsPal = (typeof getSkinFxPalette==='function' && typeof player!=='undefined' && player && player.type==='voltryx')
+        ? getSkinFxPalette('voltryx') : null;
+      const _vsIce = !!(_vsPal && _vsPal.ringColor);
 
-      const gg2 = ctx.createRadialGradient(p.x - 3, p.y - 3, 0, p.x, p.y, R*1.35);
-      gg2.addColorStop(0, 'rgba(255,255,255,0.96)');
-      gg2.addColorStop(0.35, 'rgba(255,224,178,0.92)');
-      gg2.addColorStop(1, 'rgba(255,109,0,0.90)');
-      ctx.fillStyle = gg2;
-      ctx.shadowColor = '#ff9100';
-      ctx.shadowBlur = 26;
-      ctx.beginPath(); ctx.arc(p.x, p.y, R, 0, Math.PI*2); ctx.fill();
+      if(_vsIce){
+        // ── ICE SUPER: sfera glaciale enorme con cristalli rotanti ──
+        const ggs = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, R*3.2);
+        ggs.addColorStop(0, 'rgba(255,255,255,0.95)');
+        ggs.addColorStop(0.22, 'rgba(180,230,255,0.78)');
+        ggs.addColorStop(0.55, 'rgba(91,200,232,0.50)');
+        ggs.addColorStop(1,   'rgba(91,200,232,0)');
+        ctx.fillStyle = ggs;
+        ctx.shadowColor = '#5bc8e8';
+        ctx.shadowBlur = 50;
+        ctx.beginPath(); ctx.arc(p.x, p.y, R*2.7, 0, Math.PI*2); ctx.fill();
 
-      // Rotating arcs inside
-      ctx.globalAlpha = 0.9;
-      ctx.lineWidth = 3.2;
-      ctx.strokeStyle = 'rgba(255,255,255,0.65)';
-      ctx.shadowColor = '#ffe0b2';
-      ctx.shadowBlur = 20;
-      for(let k=0;k<3;k++){
-        const rr = R*0.75 + k*4.5;
-        const a0 = tt*1.5 + k*2.2;
+        const ggs2 = ctx.createRadialGradient(p.x - 3, p.y - 3, 0, p.x, p.y, R*1.5);
+        ggs2.addColorStop(0, 'rgba(255,255,255,0.98)');
+        ggs2.addColorStop(0.35, 'rgba(200,240,255,0.94)');
+        ggs2.addColorStop(1,   'rgba(91,200,232,0.90)');
+        ctx.fillStyle = ggs2;
+        ctx.shadowColor = '#a8e6f0';
+        ctx.shadowBlur = 28;
+        ctx.beginPath(); ctx.arc(p.x, p.y, R, 0, Math.PI*2); ctx.fill();
+
+        // Spicchi di cristallo rotanti (6 archi alternati)
+        ctx.globalAlpha = 0.85;
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(200,248,255,0.80)';
+        ctx.shadowColor = '#c8f0ff';
+        ctx.shadowBlur = 22;
+        for(let k=0;k<4;k++){
+          const rr = R*0.7 + k*5;
+          const a0 = tt*1.1 + k*(Math.PI/2);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, rr, a0, a0 + Math.PI*0.55);
+          ctx.stroke();
+        }
+        // Raggi ghiaccio verso l'esterno
+        ctx.globalAlpha = 0.60;
+        ctx.lineWidth = 1.8;
+        ctx.strokeStyle = 'rgba(255,255,255,0.90)';
+        ctx.shadowColor = '#89d4f5';
+        ctx.shadowBlur = 12;
+        for(let s=0;s<6;s++){
+          const ang = tt*0.5 + s*(Math.PI/3);
+          const r0 = R*0.4, r1 = R*2.0;
+          ctx.beginPath();
+          ctx.moveTo(p.x + Math.cos(ang)*r0, p.y + Math.sin(ang)*r0);
+          ctx.lineTo(p.x + Math.cos(ang)*r1, p.y + Math.sin(ang)*r1);
+          ctx.stroke();
+        }
+        // Aura ghiaccio pulsante
+        ctx.globalAlpha = 0.50;
+        ctx.shadowColor = '#5bc8e8';
+        ctx.shadowBlur = 30;
+        ctx.strokeStyle = 'rgba(91,200,232,'+(0.20 + 0.20*Math.sin(tt*1.8))+')';
+        ctx.lineWidth = 5;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, rr, a0, a0 + Math.PI*0.75);
+        ctx.arc(p.x, p.y, p.aoeRadius, 0, Math.PI*2);
+        ctx.stroke();
+      } else {
+        // ── DEFAULT SUPER: arancio fuoco ──
+        const gg = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, R*2.8);
+        gg.addColorStop(0, 'rgba(255,255,255,0.92)');
+        gg.addColorStop(0.28, 'rgba(255,224,178,0.70)');
+        gg.addColorStop(0.55, 'rgba(255,109,0,0.55)');
+        gg.addColorStop(1, 'rgba(255,109,0,0)');
+        ctx.fillStyle = gg;
+        ctx.shadowColor = '#ff6d00';
+        ctx.shadowBlur = 40;
+        ctx.beginPath(); ctx.arc(p.x, p.y, R*2.4, 0, Math.PI*2); ctx.fill();
+
+        const gg2 = ctx.createRadialGradient(p.x - 3, p.y - 3, 0, p.x, p.y, R*1.35);
+        gg2.addColorStop(0, 'rgba(255,255,255,0.96)');
+        gg2.addColorStop(0.35, 'rgba(255,224,178,0.92)');
+        gg2.addColorStop(1, 'rgba(255,109,0,0.90)');
+        ctx.fillStyle = gg2;
+        ctx.shadowColor = '#ff9100';
+        ctx.shadowBlur = 26;
+        ctx.beginPath(); ctx.arc(p.x, p.y, R, 0, Math.PI*2); ctx.fill();
+
+        ctx.globalAlpha = 0.9;
+        ctx.lineWidth = 3.2;
+        ctx.strokeStyle = 'rgba(255,255,255,0.65)';
+        ctx.shadowColor = '#ffe0b2';
+        ctx.shadowBlur = 20;
+        for(let k=0;k<3;k++){
+          const rr = R*0.75 + k*4.5;
+          const a0 = tt*1.5 + k*2.2;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, rr, a0, a0 + Math.PI*0.75);
+          ctx.stroke();
+        }
+
+        ctx.globalAlpha = 0.65;
+        ctx.shadowColor = '#ff6d00';
+        ctx.shadowBlur = 28;
+        ctx.strokeStyle = 'rgba(255,109,0,'+(0.25 + 0.25*Math.sin(tt*1.8))+')';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.aoeRadius, 0, Math.PI*2);
         ctx.stroke();
       }
-
-      // Aura ring (aoeRadius) with light pulsing
-      ctx.globalAlpha = 0.65;
-      ctx.shadowColor = '#ff6d00';
-      ctx.shadowBlur = 28;
-      ctx.strokeStyle = 'rgba(255,109,0,'+(0.25 + 0.25*Math.sin(tt*1.8))+')';
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.aoeRadius, 0, Math.PI*2);
-      ctx.stroke();
 
       ctx.restore();
       ctx.globalAlpha = 1;
@@ -9544,6 +10098,9 @@ function segmentIntersectsRect(x1,y1,x2,y2,rx,ry,rw,rh){
 function updateLasers(){
   const now=Date.now();
   lasers = lasers.filter(L=>{
+    // Rimuovi laser se il nemico che lo ha sparato è morto (es. one-eyes)
+    if(L.owner && typeof L.owner.hp === 'number' && L.owner.hp <= 0) return false;
+
     // Anchor/Tracking
     if(L.trackPlayer && player){
       const ocx = (L.owner? (L.owner.x + L.owner.width/2) : L.x);
@@ -9709,7 +10266,6 @@ function drawLasers(){
 
 
 function spawnTempBeam(opts){
-  // opts: {x1,y1,x2,y2,width,ttl,damage1,damageStay,friendly}
   tempBeams.push({
     x1:opts.x1,y1:opts.y1,x2:opts.x2,y2:opts.y2,
     width:opts.width||18,
@@ -9717,7 +10273,8 @@ function spawnTempBeam(opts){
     ttl:opts.ttl||260,
     damage1:opts.damage1||40,
     damageStay:opts.damageStay||30,
-    hitMap:new Map() // enemy -> {firstHit, left, extraDone}
+    hitMap:new Map(),
+    skinPalette: opts.skinPalette || null   // ← salva la palette per drawTempBeams
   });
 }
 
@@ -9754,7 +10311,8 @@ function updateTempBeams(){
           const dmg = Math.round(B.damage1);
           const final = applyEnemyDamage(e, dmg);
           showDamageNumber(e.x,e.y, final);
-          createParticles(e.x+e.width/2,e.y+e.height/2,'#4fc3f7',10,4);
+          const _tbHitC = (B.skinPalette && B.skinPalette.attack) ? B.skinPalette.attack[0] : '#4fc3f7';
+          createParticles(e.x+e.width/2,e.y+e.height/2,_tbHitC,10,4);
           B.hitMap.set(e,{firstHit:now,left:false,extraDone:false});
         } else {
           // check linger bonus only if stayed inside continuously
@@ -9762,7 +10320,8 @@ function updateTempBeams(){
             const dmg2=Math.round(B.damageStay);
             const final2 = applyEnemyDamage(e, dmg2);
             showDamageNumber(e.x,e.y, final2);
-            createParticles(e.x+e.width/2,e.y+e.height/2,'#81d4fa',12,4);
+            const _tbHitC2 = (B.skinPalette && B.skinPalette.attack) ? B.skinPalette.attack[1] : '#81d4fa';
+            createParticles(e.x+e.width/2,e.y+e.height/2,_tbHitC2,12,4);
             state.extraDone=true;
           }
         }
@@ -9791,22 +10350,56 @@ function drawTempBeams(){
     ctx.globalCompositeOperation='lighter';
     ctx.globalAlpha = 0.95;
 
+    // ENERGY skin: gradiente arancio invece di azzurro
+    const _tbPal = B.skinPalette || null;
     const g = ctx.createLinearGradient(x1,y1,x2,y2);
-    g.addColorStop(0,    'rgba(0,176,255,0.05)');
-    g.addColorStop(0.12, 'rgba(0,229,255,'+(0.55*flick)+')');
-    g.addColorStop(0.50, 'rgba(129,212,250,'+(0.95*flick)+')');
-    g.addColorStop(0.88, 'rgba(0,176,255,'+(0.55*flick)+')');
-    g.addColorStop(1,    'rgba(0,176,255,0.05)');
+    if(_tbPal && _tbPal.beamGrad){
+      // palette ENERGY tempostorm
+      const af = 0.55*flick;
+      const af2 = 0.95*flick;
+      g.addColorStop(0,    'rgba(255,100,0,0.05)');
+      g.addColorStop(0.12, 'rgba(255,165,0,'+af+')');
+      g.addColorStop(0.50, 'rgba(255,220,80,'+af2+')');
+      g.addColorStop(0.88, 'rgba(255,140,0,'+af+')');
+      g.addColorStop(1,    'rgba(255,100,0,0.05)');
+    } else {
+      g.addColorStop(0,    'rgba(0,176,255,0.05)');
+      g.addColorStop(0.12, 'rgba(0,229,255,'+(0.55*flick)+')');
+      g.addColorStop(0.50, 'rgba(129,212,250,'+(0.95*flick)+')');
+      g.addColorStop(0.88, 'rgba(0,176,255,'+(0.55*flick)+')');
+      g.addColorStop(1,    'rgba(0,176,255,0.05)');
+    }
 
     ctx.strokeStyle = g;
     ctx.lineWidth = w;
-    ctx.shadowColor = 'rgba(128,216,255,0.95)';
+    ctx.shadowColor = (_tbPal && _tbPal.beamShadow) ? _tbPal.beamShadow : 'rgba(128,216,255,0.95)';
     ctx.shadowBlur = 42;
 
     ctx.beginPath();
     ctx.moveTo(x1,y1);
     ctx.lineTo(x2,y2);
     ctx.stroke();
+
+    // ENERGY skin: secondo passaggio con alone arancio più spesso + bordo esterno
+    if(_tbPal && _tbPal.beamGrad){
+      const af3 = 0.28*flick;
+      const gE2 = ctx.createLinearGradient(x1,y1,x2,y2);
+      gE2.addColorStop(0,    'rgba(255,60,0,0.00)');
+      gE2.addColorStop(0.20, 'rgba(255,120,0,'+af3+')');
+      gE2.addColorStop(0.50, 'rgba(255,200,30,'+(af3*1.4)+')');
+      gE2.addColorStop(0.80, 'rgba(255,120,0,'+af3+')');
+      gE2.addColorStop(1,    'rgba(255,60,0,0.00)');
+      ctx.strokeStyle = gE2;
+      ctx.lineWidth = w * 2.2;
+      ctx.shadowColor = 'rgba(255,120,0,0.60)';
+      ctx.shadowBlur = 60;
+      ctx.globalAlpha = 0.45;
+      ctx.beginPath();
+      ctx.moveTo(x1,y1);
+      ctx.lineTo(x2,y2);
+      ctx.stroke();
+      ctx.globalAlpha = 0.95;
+    }
 
     // "photons" moving along the beam
     const dx=x2-x1, dy=y2-y1;
@@ -9832,13 +10425,32 @@ function drawTempBeams(){
       ctx.arc(sxp,syp, Math.max(2.2, w*0.10), 0, Math.PI*2);
       ctx.fill();
 
+      // photon outer ring: usa colore beam dalla palette (ENERGY: arancio)
+      const _tbPhtColor = (_tbPal && _tbPal.beamPhoton) ? _tbPal.beamPhoton : null;
       ctx.globalAlpha = 0.32;
-      ctx.fillStyle = 'rgba(129,212,250,0.95)';
-      ctx.shadowColor = 'rgba(0,176,255,0.95)';
+      ctx.fillStyle   = _tbPhtColor ? `rgba(255,165,0,0.95)` : 'rgba(129,212,250,0.95)';
+      ctx.shadowColor = _tbPhtColor ? `rgba(255,140,0,0.95)` : 'rgba(0,176,255,0.95)';
       ctx.shadowBlur = 22;
       ctx.beginPath();
       ctx.arc(sxp,syp, Math.max(3.2, w*0.16), 0, Math.PI*2);
       ctx.fill();
+    }
+
+    // ENERGY skin: scintille arancio che si distaccano lateralmente dal beam
+    if(_tbPal && _tbPal.beamGrad && Math.random()<0.55){
+      const _sp = Math.random();
+      const _spx = x1 + dx*_sp;
+      const _spy = y1 + dy*_sp;
+      const _perp = (Math.random()<0.5?-1:1) * (6 + Math.random()*10);
+      particles.push({
+        x: _spx + (-uy)*_perp,
+        y: _spy + (ux)*_perp,
+        vx: (-uy)*_perp*0.12 + (Math.random()-0.5)*1.8,
+        vy:  (ux)*_perp*0.12 + (Math.random()-0.5)*1.8,
+        life: 14 + Math.random()*10,
+        color: (Math.random()<0.5 ? '#ff8c00' : '#ffe080'),
+        size: 2 + Math.random()*2
+      });
     }
 
     ctx.restore();
@@ -10108,6 +10720,7 @@ function applyPickupEffect(playerRef,type){
     playerRef.collanaStart    = now;
     playerRef.collanaEnd      = now + dur;
     playerRef.collanaDmgAccum = 0;
+    playerRef._collanaDmgDealtVfx = 0;
     createParticles(playerRef.x + playerRef.width/2, playerRef.y + playerRef.height/2, '#7c4dff', 30, 6);
     if(typeof spawnCollanaTrigger==='function') spawnCollanaTrigger(playerRef, false);
   } else if(type==='malus'){
@@ -10260,6 +10873,34 @@ class Player{
     if(this.shieldBroken&&now-this.shieldBrokenTime>this.shieldRegenMs){
       this.shieldBroken=false;this.shieldDurability=this.shieldMaxDurability
     }
+
+    // METAL ROONEY — SCUDO CICLICO: ogni 10 sec si attiva uno scudo invulnerabilità per 2 sec
+    try{
+      if(this.type==='rooney' && this._metalRooneyDmgReduce){
+        if(this._metalRooneyShieldUntil && now < this._metalRooneyShieldUntil){
+          // scudo attivo: forza invulnerabilità (senza sovrascrivere pickupShield)
+          this.invulnerable = true;
+        } else if(this._metalRooneyShieldUntil && now >= this._metalRooneyShieldUntil){
+          // scudo appena scaduto: disattiva invulnerabilità (se non ci sono altri shield attivi)
+          this._metalRooneyShieldUntil = 0;
+          if(!(this.pickupShieldUntil && now < this.pickupShieldUntil) &&
+             !(this._cosmoInvulUntil   && now < this._cosmoInvulUntil)){
+            this.invulnerable = false;
+          }
+          // programma prossima attivazione
+          this._metalRooneyShieldNext = now + this._metalRooneyShieldCycle;
+        }
+        if(this._metalRooneyShieldNext && now >= this._metalRooneyShieldNext && !this._metalRooneyShieldUntil){
+          // attiva scudo
+          this._metalRooneyShieldUntil = now + this._metalRooneyShieldDur;
+          this._metalRooneyShieldNext  = 0;
+          // VFX attivazione: lampi azzurro acciaio
+          createParticles(this.x+this.width/2, this.y+this.height/2, '#90caf9', 18, 5);
+          createParticles(this.x+this.width/2, this.y+this.height/2, '#e3f2fd', 10, 4);
+          createParticles(this.x+this.width/2, this.y+this.height/2, '#1565c0', 8, 3);
+        }
+      }
+    }catch(e){}
     if(this.attackBuffUntil && now>this.attackBuffUntil){this.attackBuffMultiplier=1;this.attackBuffUntil=0}
     if(this._slowUntil && now>this._slowUntil){ this._slowUntil=0; this._slowPct=0; }
     if(this.speedBuffUntil && now>this.speedBuffUntil){
@@ -10529,6 +11170,8 @@ class Player{
               const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
               createParticles(e.x,e.y,'#e84393',10,5);
               showDamageNumber(e.x,e.y, _final);
+              // EVIL Kouvagia: applica veleno-plus
+              try{ if(this._activeSkinPassiveId==='kouvagia_evil'){ applySkinPoisonPlus(e); createParticles(e.x,e.y,'#76ff03',6,3); } }catch(_e2){}
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
                 dropStellarBonusAtIndexIfNeeded(i);
@@ -10560,7 +11203,8 @@ class Player{
               const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
               createParticles(e.x,e.y,'#fd79a8',16,5);
               showDamageNumber(e.x,e.y, _final);
-
+              // EVIL Kouvagia: poison-plus anche sull'esplosione
+              try{ if(this._activeSkinPassiveId==='kouvagia_evil'){ applySkinPoisonPlus(e); createParticles(e.x,e.y,'#76ff03',8,4); } }catch(_e2){}
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
                 dropStellarBonusAtIndexIfNeeded(i);
@@ -10662,6 +11306,19 @@ class Player{
             const half=320;
             const baseX=this.x+this.width/2, baseY=this.y+this.height/2;
             const centers=[{x:baseX,y:baseY}];
+            // Rooney EVO skin passive: 3 aree casuali extra in tutto il campo
+            try{
+              if(player && player._activeSkinPassiveId==='rooney_evo'){
+                const _cw = canvas ? canvas.width : 1100;
+                const _ch = canvas ? canvas.height : 600;
+                const _pad = half + 20;
+                for(let _ei=0; _ei<3; _ei++){
+                  const _rx = _pad + Math.random() * Math.max(1, _cw - _pad*2);
+                  const _ry = _pad + Math.random() * Math.max(1, _ch - _pad*2);
+                  centers.push({x:_rx, y:_ry});
+                }
+              }
+            }catch(e){}
 
             const doArea=(px,py)=>{
               // VISUAL: show the super area on screen
@@ -10685,6 +11342,8 @@ class Player{
               }
 
               if(hits.length>0){
+                // METAL Rooney skin palette
+                const _rSPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
                 // Compensiamo SUPER_DAMAGE_MULT così che la SOMMA dei danni (senza buff) sia ~300.
                 const totalBase=Math.round(350 / SUPER_DAMAGE_MULT);
                 const sumW=hits.reduce((a,h)=>a+h.w,0) || 1;
@@ -10695,29 +11354,42 @@ class Player{
                   const dmg=Math.max(6, Math.round(raw * SUPER_DAMAGE_MULT * this.attackBuffMultiplier * 1.12));
                   const _final=applyEnemyDamage(h.enemy, dmg);
 
-                  // Hit FX
-                  createParticles(h.enemy.x,h.enemy.y,'#f39c12',22,6);
+                  // Hit FX — METAL: blu metallico; default: arancio
+                  const _sHitC1=(_rSPal&&_rSPal.super)?_rSPal.super[0]:'#f39c12';
+                  const _sHitC2=(_rSPal&&_rSPal.super)?_rSPal.super[2]:null;
+                  createParticles(h.enemy.x,h.enemy.y,_sHitC1,22,6);
+                  if(_sHitC2) createParticles(h.enemy.x,h.enemy.y,_sHitC2,12,5);
+                  // METAL: anello blu metallico pulsante sull'impatto
+                  if(_rSPal&&_rSPal.ringColor){try{ctx.save();ctx.globalAlpha=0.65;ctx.shadowColor=_rSPal.ringColor;ctx.shadowBlur=28;ctx.strokeStyle=_rSPal.super[1]||_rSPal.ringColor;ctx.lineWidth=5;ctx.beginPath();ctx.arc(h.enemy.x+h.enemy.width/2,h.enemy.y+h.enemy.height/2,36,0,Math.PI*2);ctx.stroke();ctx.restore();}catch(e){}}
                   showDamageNumber(h.enemy.x,h.enemy.y, _final);
                 }
 
                 // Ground-break FX (debris + dust) nell'area quadrata
-                createParticles(px,py,'#795548',55,8);
+                const _sDebC=(_rSPal&&_rSPal.super)?_rSPal.super[1]:'#795548';
+                const _sDst1=(_rSPal&&_rSPal.super)?_rSPal.super[0]:'#6d4c41';
+                createParticles(px,py,_sDebC,55,8);
                 for(let k=0;k<12;k++){
                   const rx=px + (Math.random()*2-1)*half;
                   const ry=py + (Math.random()*2-1)*half;
-                  createParticles(rx,ry,'#6d4c41',14,6);
-                  createParticles(rx,ry,'#b0bec5',8,4);
+                  createParticles(rx,ry,_sDst1,14,6);
+                  createParticles(rx,ry,_rSPal?(_rSPal.particleExtra?_rSPal.particleExtra[0]:'#b0bec5'):'#b0bec5',8,4);
                 }
 
                 // rimuovi i morti (e assegna score) subito, come per le altre super
                 for(let i=enemies.length-1;i>=0;i--){
                   if(enemies[i].hp<=0){
-                    createParticles(enemies[i].x,enemies[i].y,'#fff176',30,6);
+                    const _rKC=(_rSPal&&_rSPal.particleExtra)?_rSPal.particleExtra[0]:'#fff176';
+                    createParticles(enemies[i].x,enemies[i].y,_rKC,30,6);
                     dropStellarBonusAtIndexIfNeeded(i);
                     enemies.splice(i,1);
                     applyScore(100*currentLevel);
                     addKill(); this._baneSuperOnKill();
                   }
+                }
+                // METAL Rooney: metallic screen flash blu
+                if(_rSPal&&_rSPal.screenFlash){
+                  window.metalScreenFlash = 24;
+                  window.metalScreenFlashColor = _rSPal.screenFlash;
                 }
               }
             };
@@ -10734,10 +11406,37 @@ class Player{
                 let extra=1;if(this.type==='rooney'&&dist<150)extra=1.5;
                 const dmg=Math.round(base*mult*extra*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
                 const _dmg=dmg; const _final=applyEnemyDamage(enemy,_dmg);
-                createParticles(enemy.x,enemy.y,'#f39c12',30,6);
+                // METAL skin palette for punch super
+                const _pSPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+                const _pSC1 = (_pSPal&&_pSPal.super)?_pSPal.super[0]:'#f39c12';
+                const _pSC2 = (_pSPal&&_pSPal.super)?_pSPal.super[2]:null;
+                createParticles(enemy.x,enemy.y,_pSC1,30,6);
+                if(_pSC2) createParticles(enemy.x,enemy.y,_pSC2,15,5);
+                // METAL Jimmy: burst di cerchi concentrici azzurri/bianchi
+                if(this.type==='jimmy' && _pSPal&&_pSPal.ringColor){try{
+                  const _ex=enemy.x+enemy.width/2, _ey=enemy.y+enemy.height/2;
+                  [28,46,66].forEach((r,ri)=>{
+                    ctx.save();ctx.globalAlpha=0.55-ri*0.12;
+                    ctx.shadowColor=_pSPal.ringColor;ctx.shadowBlur=18;
+                    ctx.strokeStyle=ri===1?(_pSPal.super[1]||_pSPal.ringColor):(_pSPal.super[2]||'#fff');
+                    ctx.lineWidth=4-ri;
+                    ctx.beginPath();ctx.arc(_ex,_ey,r,0,Math.PI*2);ctx.stroke();
+                    ctx.restore();
+                  });
+                }catch(e){}}
+                // METAL Rooney: sfoglio blu metallico esplosivo
+                if(this.type==='rooney' && _pSPal&&_pSPal.ringColor){try{
+                  const _ex=enemy.x+enemy.width/2, _ey=enemy.y+enemy.height/2;
+                  ctx.save();ctx.globalAlpha=0.6;
+                  ctx.shadowColor=_pSPal.ringColor;ctx.shadowBlur=24;
+                  ctx.strokeStyle=_pSPal.super[0];ctx.lineWidth=6;
+                  ctx.beginPath();ctx.arc(_ex,_ey,38,0,Math.PI*2);ctx.stroke();
+                  ctx.restore();
+                }catch(e){}}
                 showDamageNumber(enemy.x,enemy.y, _final);
                 if(enemy.hp<=0){
-                  createParticles(enemy.x,enemy.y,'#fff176',30,6);
+                  const _pSkC=(_pSPal&&_pSPal.particleExtra)?_pSPal.particleExtra[0]:'#fff176';
+                  createParticles(enemy.x,enemy.y,_pSkC,30,6);
                   // IRA kill special FX (Bane SUPER)
                   if(player && player.type==='bane' && Date.now() < player.baneSuperUntil){
                     createIraKillFX(enemy.x, enemy.y);
@@ -10828,10 +11527,33 @@ class Player{
                     const mult=(this.type==='jimmy')?(SUPER_DAMAGE_MULT*JIMMY_SUPER_ADDITIONAL_MULT):SUPER_DAMAGE_MULT;
                     const dmg=Math.round(base*mult*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)*(this.type==='jimmy'?2.0:1));
                     const _final=applyEnemyDamage(target, dmg);
-                    createParticles(target.x,target.y,'#e74c3c',15,6);
+                    // METAL Jimmy grapple hit FX — azzurro/bianco
+                    const _jGPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+                    const _jGC1 = (_jGPal&&_jGPal.super)?_jGPal.super[0]:'#e74c3c';
+                    const _jGC2 = (_jGPal&&_jGPal.super)?_jGPal.super[2]:null;
+                    createParticles(target.x,target.y,_jGC1,15,6);
+                    if(_jGC2) createParticles(target.x,target.y,_jGC2,10,4);
+                    // METAL Jimmy: burst di onde circolari bianco-azzurre + screen flash
+                    if(_jGPal&&_jGPal.ringColor){try{
+                      const _tx=target.x+target.width/2, _ty=target.y+target.height/2;
+                      [20,38,58,78].forEach((r,ri)=>{
+                        ctx.save();
+                        ctx.globalAlpha=0.70-ri*0.14;
+                        ctx.shadowColor=_jGPal.ringColor; ctx.shadowBlur=20;
+                        ctx.strokeStyle=ri%2===0?(_jGPal.super[1]||'#e3f2fd'):(_jGPal.super[3]||'#ffffff');
+                        ctx.lineWidth=4-ri*0.5;
+                        ctx.beginPath();ctx.arc(_tx,_ty,r,0,Math.PI*2);ctx.stroke();
+                        ctx.restore();
+                      });
+                      // Screen flash azzurro
+                      window.metalScreenFlash = 18;
+                      window.metalScreenFlashColor = _jGPal.screenFlash||'#4fc3f7';
+                    }catch(e){}}
                     showDamageNumber(target.x,target.y, _final);
                     if(target.hp<=0){
-                      createParticles(target.x,target.y,'#fff176',30,6);
+                      const _jGKC=(_jGPal&&_jGPal.particleExtra)?_jGPal.particleExtra[2]||_jGPal.particleExtra[0]:'#fff176';
+                      createParticles(target.x,target.y,_jGKC,30,6);
+                      if(_jGPal) createParticles(target.x,target.y,_jGPal.super[0],18,5);
                       const idx=enemies.indexOf(target);
                       if(idx>-1){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
                     }
@@ -10864,23 +11586,91 @@ class Player{
         }
       } else if(this.attackType==='sword'){
         if(elapsed>=0&&elapsed<this.superDuration){
+          // JAKEFF palette
+          const _jkSPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
           if(!this._lastSwordTick||now-this._lastSwordTick>=180){
             this._lastSwordTick=now;
+            const _cx=this.x+this.width/2, _cy=this.y+this.height/2;
             enemies.forEach((enemy,idx)=>{
               const dist=Math.hypot(enemy.x-this.x,enemy.y-this.y);
               if(dist<JEFF_SUPER_RADIUS){
                 const tickDmg=Math.round(28*SUPER_DAMAGE_MULT);
                 const _dmg=tickDmg; const _final=applyEnemyDamage(enemy,_dmg);
-                createParticles(enemy.x,enemy.y,'#9b59b6',8,4);
+                const _jkSC1 = (_jkSPal&&_jkSPal.super) ? _jkSPal.super[0] : '#9b59b6';
+                const _jkSC2 = (_jkSPal&&_jkSPal.super) ? _jkSPal.super[2] : null;
+                createParticles(enemy.x,enemy.y,_jkSC1,8,4);
+                if(_jkSC2) createParticles(enemy.x,enemy.y,_jkSC2,5,3);
+                // JAKEFF: raggio di taglio dal centro del giocatore al nemico
+                if(_jkSPal&&_jkSPal.ringColor){try{
+                  ctx.save();
+                  // beam line argento
+                  ctx.globalAlpha=0.55; ctx.strokeStyle=_jkSPal.super[0];
+                  ctx.shadowColor=_jkSPal.super[0]; ctx.shadowBlur=18;
+                  ctx.lineWidth=3; ctx.setLineDash([8,5]);
+                  ctx.beginPath(); ctx.moveTo(_cx,_cy); ctx.lineTo(enemy.x+enemy.width/2,enemy.y+enemy.height/2); ctx.stroke();
+                  ctx.setLineDash([]);
+                  // impatto: esplosione argento+rosso sull'enemy
+                  ctx.globalAlpha=0.65; ctx.strokeStyle=_jkSPal.super[2]||'#b22222';
+                  ctx.shadowColor=_jkSPal.super[2]; ctx.shadowBlur=22; ctx.lineWidth=4;
+                  ctx.beginPath(); ctx.arc(enemy.x+enemy.width/2,enemy.y+enemy.height/2,20,0,Math.PI*2); ctx.stroke();
+                  ctx.restore();
+                }catch(e){}}
                 showDamageNumber(enemy.x,enemy.y, _final);
                 if(enemy.hp<=0){
-                  createParticles(enemy.x,enemy.y,'#fff176',30,6);
+                  const _jkSKC = (_jkSPal&&_jkSPal.killBurst) ? _jkSPal.killBurst : '#fff176';
+                  createParticles(enemy.x,enemy.y,_jkSKC,30,6);
+                  if(_jkSPal) createParticles(enemy.x,enemy.y,_jkSPal.super[2]||'#b22222',20,6);
                   dropStellarBonusAtIndexIfNeeded(idx);
                   enemies.splice(idx,1);
                   applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
                 }
               }
             });
+            // JAKEFF: onde di shockwave concentriche argento-rosse ad ogni tick
+            if(_jkSPal&&_jkSPal.ringColor){try{
+              const _progress = elapsed / (this.superDuration||1800);
+              const _pulseR = JEFF_SUPER_RADIUS * (0.4 + 0.6*Math.sin(_progress*Math.PI*3+Date.now()*0.004));
+              ctx.save();
+              // onda argento esterna
+              ctx.globalAlpha=0.35+0.15*Math.sin(Date.now()*0.005);
+              ctx.shadowColor=_jkSPal.super[0]; ctx.shadowBlur=24;
+              ctx.strokeStyle=_jkSPal.super[0]; ctx.lineWidth=5;
+              ctx.beginPath(); ctx.arc(_cx,_cy,JEFF_SUPER_RADIUS,0,Math.PI*2); ctx.stroke();
+              // onda rossa intermedia
+              ctx.globalAlpha=0.45+0.20*Math.sin(Date.now()*0.007+1);
+              ctx.shadowColor=_jkSPal.super[2]; ctx.shadowBlur=18;
+              ctx.strokeStyle=_jkSPal.super[2]; ctx.lineWidth=3;
+              ctx.beginPath(); ctx.arc(_cx,_cy,Math.abs(_pulseR),0,Math.PI*2); ctx.stroke();
+              // onda interna grigia pulsante
+              ctx.globalAlpha=0.25+0.15*Math.sin(Date.now()*0.009+2);
+              ctx.strokeStyle=_jkSPal.particleExtra?_jkSPal.particleExtra[2]:'#3a3a3a'; ctx.lineWidth=8;
+              ctx.shadowBlur=10;
+              ctx.beginPath(); ctx.arc(_cx,_cy,JEFF_SUPER_RADIUS*0.55,0,Math.PI*2); ctx.stroke();
+              // riempimento area: gradient circolare argento
+              const _grad=ctx.createRadialGradient(_cx,_cy,0,_cx,_cy,JEFF_SUPER_RADIUS);
+              _grad.addColorStop(0,'rgba(192,192,192,0.08)');
+              _grad.addColorStop(0.5,'rgba(178,34,34,0.06)');
+              _grad.addColorStop(1,'rgba(192,192,192,0)');
+              ctx.globalAlpha=0.8;
+              ctx.fillStyle=_grad;
+              ctx.beginPath(); ctx.arc(_cx,_cy,JEFF_SUPER_RADIUS,0,Math.PI*2); ctx.fill();
+              ctx.restore();
+            }catch(e){}}
+            // JAKEFF: schegge metalliche radiali in tutte le direzioni
+            if(_jkSPal){try{
+              const _numSparks=6;
+              for(let _si=0;_si<_numSparks;_si++){
+                const _sa=(_si/_numSparks)*Math.PI*2+(Date.now()*0.003);
+                const _sd=40+Math.random()*JEFF_SUPER_RADIUS*0.6;
+                const _sx=_cx+Math.cos(_sa)*_sd, _sy=_cy+Math.sin(_sa)*_sd;
+                createParticles(_sx,_sy,_jkSPal.super[Math.floor(Math.random()*3)],3,4);
+              }
+            }catch(e){}}
+          }
+          // screen flash rosso scuro ad inizio super
+          if(elapsed<220 && _jkSPal&&_jkSPal.screenFlash){
+            window.metalScreenFlash = Math.max(window.metalScreenFlash||0, 28);
+            window.metalScreenFlashColor = _jkSPal.screenFlash;
           }
         } else this.endSuper();
 
@@ -11196,6 +11986,10 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
   dodge(){
     if(this.dashCooldown<=0&&!this.isDoingSuper){
       this.isDashing=true;this.dashTime=Date.now();
+      // Traccia uso dash per missioni
+      try{ accountOnDashUsed(); }catch(e){}
+      // Flag per missione noDashRun
+      if(typeof runUsedDash !== 'undefined') runUsedDash = true; else window.runUsedDash = true;
 
 
 
@@ -11390,6 +12184,8 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
     else if(this.attackType==='punch'){
       if(this.type==='rooney'){
         const multipliers=[1,1.15,1.25];
+        // METAL skin FX palette
+        const _rPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
         // 360° aimbot:
         // - Aim: punta SEMPRE verso il nemico più vicino (anche fuori range), per coerenza visiva.
         // - Hit: applica danno SOLO se il nemico è entro range.
@@ -11450,10 +12246,16 @@ for(let i=0;i<3;i++){
                 const baseDmg=this.damage;
                 const dmg=Math.round(baseDmg * multipliers[idx] * this.attackBuffMultiplier * 1.12);
                 const _dmg=dmg; const _final=applyEnemyDamage(closestEnemy,_dmg);
-                createParticles(closestEnemy.x,closestEnemy.y,'#e67e22',12,5);
+                // METAL Rooney: particelle blu metalliche
+                const _rAtk1=(_rPal&&_rPal.attack)?_rPal.attack[0]:'#e67e22';
+                const _rAtk2=(_rPal&&_rPal.attack)?_rPal.attack[2]:null;
+                createParticles(closestEnemy.x,closestEnemy.y,_rAtk1,12,5);
+                if(_rAtk2) createParticles(closestEnemy.x,closestEnemy.y,_rAtk2,6,3);
+                if(_rPal&&_rPal.ringColor){try{ctx.save();ctx.globalAlpha=0.4+0.15*idx;ctx.shadowColor=_rPal.ringColor;ctx.shadowBlur=20;ctx.strokeStyle=_rPal.ringColor;ctx.lineWidth=3;ctx.beginPath();ctx.arc(closestEnemy.x+closestEnemy.width/2,closestEnemy.y+closestEnemy.height/2,28+idx*10,0,Math.PI*2);ctx.stroke();ctx.restore();}catch(e){}}
                 showDamageNumber(closestEnemy.x,closestEnemy.y, _final);
                 if(closestEnemy.hp<=0){
-                  createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
+                  const _killC=(_rPal&&_rPal.particleExtra)?_rPal.particleExtra[0]:'#fff176';
+                  createParticles(closestEnemy.x,closestEnemy.y,_killC,30,6);
                   const idxEnemy=enemies.indexOf(closestEnemy);
                   if(idxEnemy>-1){dropStellarBonusAtIndexIfNeeded(idxEnemy);enemies.splice(idxEnemy,1);applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
                 }
@@ -11463,6 +12265,8 @@ for(let i=0;i<3;i++){
           })(i), i*240);
         }
       } else {
+        // METAL Jimmy skin palette
+        const _jPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
         let closestEnemy=null;let closestDist=this.range;
         enemies.forEach(enemy=>{
           const dx=enemy.x-this.x;const dy=enemy.y-this.y;
@@ -11472,10 +12276,17 @@ for(let i=0;i<3;i++){
         if(closestEnemy){
           const dmg=Math.round(this.damage*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
           const _dmg=dmg; const _final=applyEnemyDamage(closestEnemy,_dmg);
-          createParticles(closestEnemy.x,closestEnemy.y,'#e67e22',12,5);
+          const _jAtk1=(_jPal&&_jPal.attack)?_jPal.attack[0]:'#e67e22';
+          const _jAtk2=(_jPal&&_jPal.attack)?_jPal.attack[1]:null;
+          createParticles(closestEnemy.x,closestEnemy.y,_jAtk1,12,5);
+          if(_jAtk2) createParticles(closestEnemy.x,closestEnemy.y,_jAtk2,5,3);
+          // METAL Jimmy: flash azzurro-bianco con ring ghiaccio
+          if(_jPal&&_jPal.ringColor){try{ctx.save();ctx.globalAlpha=0.5;ctx.shadowColor=_jPal.ringColor;ctx.shadowBlur=22;ctx.strokeStyle=_jPal.attack[2]||_jPal.ringColor;ctx.lineWidth=3;ctx.beginPath();ctx.arc(closestEnemy.x+closestEnemy.width/2,closestEnemy.y+closestEnemy.height/2,24,0,Math.PI*2);ctx.stroke();ctx.restore();}catch(e){}}
           showDamageNumber(closestEnemy.x,closestEnemy.y, _final);
           if(closestEnemy.hp<=0){
-            createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
+            const _jKillC=(_jPal&&_jPal.particleExtra)?_jPal.particleExtra[1]:'#fff176';
+            createParticles(closestEnemy.x,closestEnemy.y,_jKillC,30,6);
+            if(_jPal) createParticles(closestEnemy.x,closestEnemy.y,_jPal.attack[0],15,5);
             dropStellarBonusAtIndexIfNeeded(enemies.indexOf(closestEnemy));
             enemies.splice(enemies.indexOf(closestEnemy),1);
             applyScore(100*currentLevel);
@@ -11486,10 +12297,12 @@ for(let i=0;i<3;i++){
           if(distA<this.range+240){
             const dmg=Math.round(this.damage*0.9*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
             const _dmg=dmg; const _final=applyEnemyDamage(assistTarget,_dmg);
-            createParticles(assistTarget.x,assistTarget.y,'#e67e22',12,5);
+            const _jAtk1=(_jPal&&_jPal.attack)?_jPal.attack[0]:'#e67e22';
+            createParticles(assistTarget.x,assistTarget.y,_jAtk1,12,5);
             showDamageNumber(assistTarget.x,assistTarget.y, _final);
             if(assistTarget.hp<=0){
-              createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
+              const _jKillC=(_jPal&&_jPal.particleExtra)?_jPal.particleExtra[1]:'#fff176';
+              createParticles(assistTarget.x,assistTarget.y,_jKillC,30,6);
               dropStellarBonusAtIndexIfNeeded(enemies.indexOf(assistTarget));
               enemies.splice(enemies.indexOf(assistTarget),1);
               applyScore(100*currentLevel);
@@ -11520,6 +12333,10 @@ for(let i=0;i<3;i++){
       // Two consecutive fan slashes (25x2) at medium-close range
       const attackAngle=this.facingRight?0:Math.PI;
       const arcWidth=Math.PI*1.35;
+      // RED skin: scintille rosse invece di gialle
+      const _sSwPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+      const _sSwC = (_sSwPal && _sSwPal.attack) ? _sSwPal.attack[0] : '#f1c40f';
+      const _sSwC2 = (_sSwPal && _sSwPal.attack) ? _sSwPal.attack[1] : null;
       const doSwing = ()=>{
         enemies.forEach(enemy=>{
           const dx=enemy.x-this.x;const dy=enemy.y-this.y;const dist=Math.hypot(dx,dy);
@@ -11530,7 +12347,8 @@ for(let i=0;i<3;i++){
           if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.15){
             const base=37*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
             const dmg=applyEnemyDamage(enemy, base);
-            createParticles(enemy.x,enemy.y,'#f1c40f',10,4);
+            createParticles(enemy.x,enemy.y,_sSwC,10,4);
+            if(_sSwC2) createParticles(enemy.x,enemy.y,_sSwC2,5,3);
             showDamageNumber(enemy.x,enemy.y,dmg);
 
             if(enemy.hp<=0){
@@ -11673,6 +12491,8 @@ for(let i=0;i<3;i++){
 
     } else if(this.attackType==='sword'){
       const attackAngle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.6;
+      // JAKEFF skin palette
+      const _jkPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
 
       const __hitList=[];
       enemies.forEach(enemy=>{
@@ -11691,10 +12511,34 @@ for(let i=0;i<3;i++){
 
       for(const enemy of __hitList){
         const _dmg=__dmgBase; const _final=applyEnemyDamage(enemy,_dmg);
-        createParticles(enemy.x,enemy.y,'#9b59b6',10,4);
+        const _jkC1 = (_jkPal&&_jkPal.attack) ? _jkPal.attack[0] : '#9b59b6';
+        const _jkC2 = (_jkPal&&_jkPal.attack) ? _jkPal.attack[1] : null;
+        createParticles(enemy.x,enemy.y,_jkC1,10,4);
+        if(_jkC2) createParticles(enemy.x,enemy.y,_jkC2,5,3);
+        // JAKEFF: slash arc visivo argento-rosso
+        if(_jkPal&&_jkPal.ringColor){try{
+          const _ex=enemy.x+enemy.width/2, _ey=enemy.y+enemy.height/2;
+          const _t=Date.now()*0.001;
+          ctx.save();
+          // arco di taglio argento
+          ctx.globalAlpha=0.60; ctx.shadowColor=_jkPal.attack[0]; ctx.shadowBlur=16;
+          ctx.strokeStyle=_jkPal.attack[0]; ctx.lineWidth=4;
+          ctx.beginPath(); ctx.arc(_ex,_ey,32,attackAngle-arcWidth*0.45,attackAngle+arcWidth*0.45); ctx.stroke();
+          // riflesso rosso
+          ctx.globalAlpha=0.40; ctx.shadowColor=_jkPal.attack[1]; ctx.shadowBlur=10;
+          ctx.strokeStyle=_jkPal.attack[1]; ctx.lineWidth=2;
+          ctx.beginPath(); ctx.arc(_ex,_ey,22,attackAngle-arcWidth*0.3,attackAngle+arcWidth*0.3); ctx.stroke();
+          // scintilla centrale
+          ctx.globalAlpha=0.75; ctx.fillStyle=_jkPal.attack[2]||'#fff';
+          ctx.shadowColor=_jkPal.attack[2]||'#fff'; ctx.shadowBlur=12;
+          ctx.beginPath(); ctx.arc(_ex,_ey,5,0,Math.PI*2); ctx.fill();
+          ctx.restore();
+        }catch(e){}}
         showDamageNumber(enemy.x,enemy.y, _final);
         if(enemy.hp<=0){
-          createParticles(enemy.x,enemy.y,'#fff176',30,6);
+          const _jkKC = (_jkPal&&_jkPal.killBurst) ? _jkPal.killBurst : '#fff176';
+          createParticles(enemy.x,enemy.y,_jkKC,30,6);
+          if(_jkPal) createParticles(enemy.x,enemy.y,_jkPal.attack[1],14,5);
           const idx=enemies.indexOf(enemy);
           if(idx>=0){
             dropStellarBonusAtIndexIfNeeded(idx);
@@ -11708,10 +12552,12 @@ for(let i=0;i<3;i++){
         if(distAssist<this.range+60){
           const dmg=Math.round(this.damage*0.7*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
           const _dmg=dmg; const _final=applyEnemyDamage(assistTarget,_dmg);
-          createParticles(assistTarget.x,assistTarget.y,'#9b59b6',10,4);
+          const _jkC1 = (_jkPal&&_jkPal.attack) ? _jkPal.attack[0] : '#9b59b6';
+          createParticles(assistTarget.x,assistTarget.y,_jkC1,10,4);
           showDamageNumber(assistTarget.x,assistTarget.y, _final);
           if(assistTarget.hp<=0){
-            createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
+            const _jkKC = (_jkPal&&_jkPal.killBurst) ? _jkPal.killBurst : '#fff176';
+            createParticles(assistTarget.x,assistTarget.y,_jkKC,30,6);
             dropStellarBonusAtIndexIfNeeded(enemies.indexOf(assistTarget));
             enemies.splice(enemies.indexOf(assistTarget),1);
             applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
@@ -11753,15 +12599,23 @@ for(let i=0;i<3;i++){
         // EVO: if last melee was within 2s, ranged explosion radius +50%
         const evoAoeBoost = 1.0;
         const baseAoeDmg = Math.round(45* this.attackBuffMultiplier);
+        // ICE skin: colori azzurro ghiaccio invece di arancio
+        const _vPal = getSkinFxPalette ? getSkinFxPalette(this.type) : null;
+        const _vAtkColor = (_vPal && _vPal.attack) ? _vPal.attack[0] : '#ff9100';
+        const _vAtkColor2 = (_vPal && _vPal.attack) ? _vPal.attack[1] : '#ff9100';
         spawnProjectile({
           x:this.x+this.width/2, y:this.y+this.height/2,
           vx, vy, speed,
-          damage:baseAoeDmg, ttl:2000, color:'#ff9100',
+          damage:baseAoeDmg, ttl:2000, color:_vAtkColor,
           radius:10, friendly:true, aoeRadius:Math.round(110*evoAoeBoost), aoeFullDamage:true, homing:false,
           explodeOnExpire:true,
           meta:{voltryxBase:true}
         });
-        createParticles(this.x+this.width/2,this.y+this.height/2,'#ff9100',14,3);
+        createParticles(this.x+this.width/2,this.y+this.height/2,_vAtkColor2,14,3);
+        // ICE skin: cristalli/scintille ghiaccio extra
+        if(_vPal && _vPal.particleExtra){
+          createParticles(this.x+this.width/2,this.y+this.height/2,_vPal.particleExtra[1]||'#c8f0ff',7,2);
+        }
 
       } else {
         // Close: two quick punches, slightly less strong than Rooney
@@ -11777,8 +12631,13 @@ for(let i=0;i<3;i++){
           if(closest){
             const dmg=Math.round(perPunchBase*evoMeleeBoost*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
             const _dmg=dmg; const _final=applyEnemyDamage(closest,_dmg);
-            createParticles(closest.x,closest.y,'#e67e22',12,5);
+            const _vPalM = getSkinFxPalette ? getSkinFxPalette(this.type) : null;
+            const _vMeleeCol = (_vPalM && _vPalM.attack) ? _vPalM.attack[1] : '#e67e22';
+            createParticles(closest.x,closest.y,_vMeleeCol,12,5);
+            if(_vPalM && _vPalM.particleExtra) createParticles(closest.x,closest.y,_vPalM.particleExtra[0],5,2);
             showDamageNumber(closest.x,closest.y, _final);
+            // ICE Voltryx skin: slow 12%
+            try{ if(this._activeSkinPassiveId==='voltryx_ice') applySkinSlow(closest,0.25,2500); }catch(_e2){}
             if(closest.hp<=0){
               createParticles(closest.x,closest.y,'#fff176',30,6);
               dropStellarBonusAtIndexIfNeeded(enemies.indexOf(closest));
@@ -11848,18 +12707,28 @@ else if(this.attackType==='tempostormLaser'){
   const ex=sx+(dx/len)*this.range;
   const ey=sy+(dy/len)*this.range;
 
+  // ENERGY skin: colori arancio invece di azzurro
+  const _tPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+  const _tAtkC = (_tPal && _tPal.attack) ? _tPal.attack[0] : '#4fc3f7';
+  const _tAtkC2 = (_tPal && _tPal.attack) ? _tPal.attack[1] : '#4fc3f7';
+  // ENERGY skin: width triplicata
+  const _tBeamW = (_tPal && _tPal.beamGrad) ? 54 : 18;
   spawnTempBeam({
     x1:sx,y1:sy,x2:ex,y2:ey,
-    width:18,ttl:260,
+    width:_tBeamW,ttl:260,
     damage1:Math.round(40*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
-    damageStay:Math.round(30*this.attackBuffMultiplier*(this.baneSuperAttackMult||1))
+    damageStay:Math.round(30*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
+    skinPalette: _tPal
   });
-  createParticles(sx,sy,'#4fc3f7',14,4);
+  createParticles(sx,sy,_tAtkC,14,4);
+  if(_tPal && _tPal.particleExtra) createParticles(sx,sy,_tAtkC2,6,3);
 }
 
 else if(this.attackType==='magic'){
   const damages = (characterStats.marz && characterStats.marz.tripleDamage) ? characterStats.marz.tripleDamage : [40,50,60];
-  const colors = ['#ff00ff','#00e5ff','#fff176'];
+  // EVIL skin: verde veleno, viola scuro, rosso cupo — default: magenta/ciano/giallo
+  const _mPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+  const colors = (_mPal && _mPal.attack) ? _mPal.attack : ['#ff00ff','#00e5ff','#fff176'];
 
   // Choose up to 3 distinct targets; if fewer, stack on available targets
   const sorted=enemies.slice().sort((a,b)=>{
@@ -12065,6 +12934,11 @@ if(this.type==='hecate'){
 
 if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
     this.lastSuper=now;this.isDoingSuper=true;this.superStartTime=now;this._HitDone=false;
+    // Traccia se la super è stata usata con HP < 15%
+    try{
+      window.runLowHpSuperActive = (this.hp > 0 && this.maxHP > 0 && (this.hp / this.maxHP) < 0.15);
+      window.runCurrentSuperKillStreak = 0; // reset contatore streak nuova super
+    }catch(e){}
 
     if(this.type==='jimmy'){this.invulnerable=true;this.shieldActive=true}
 
@@ -12084,14 +12958,39 @@ if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
       this._jimmySuperCurSince=0;
     }
     else if(this.attackType==='punch'){
-      createParticles(this.x+this.width/2,this.y+this.height/2,'#f39c12',20,6);
+      // METAL skin: usa colore dalla palette invece di arancio fisso
+      const _punchSpawnPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+      const _punchSpC = (_punchSpawnPal&&_punchSpawnPal.attack) ? _punchSpawnPal.attack[0] : '#f39c12';
+      const _punchSpC2 = (_punchSpawnPal&&_punchSpawnPal.attack) ? _punchSpawnPal.attack[2] : null;
+      createParticles(this.x+this.width/2,this.y+this.height/2,_punchSpC,20,6);
+      if(_punchSpC2) createParticles(this.x+this.width/2,this.y+this.height/2,_punchSpC2,8,4);
     }
     else if(this.attackType==='sword'){
-      createParticles(this.x+this.width/2,this.y+this.height/2,'#9b59b6',20,6);
+      // JAKEFF palette on attack spawn
+      const _jkSpawnPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+      const _jkSpC = (_jkSpawnPal&&_jkSpawnPal.attack) ? _jkSpawnPal.attack[0] : '#9b59b6';
+      const _jkSpC2 = (_jkSpawnPal&&_jkSpawnPal.attack) ? _jkSpawnPal.attack[1] : null;
+      createParticles(this.x+this.width/2,this.y+this.height/2,_jkSpC,20,6);
+      if(_jkSpC2) createParticles(this.x+this.width/2,this.y+this.height/2,_jkSpC2,10,4);
+      // JAKEFF: anello di avvio slash argento
+      if(_jkSpawnPal&&_jkSpawnPal.ringColor){try{
+        const _px=this.x+this.width/2, _py=this.y+this.height/2;
+        ctx.save();
+        ctx.globalAlpha=0.70; ctx.shadowColor=_jkSpawnPal.ringColor; ctx.shadowBlur=22;
+        ctx.strokeStyle=_jkSpawnPal.ringColor; ctx.lineWidth=5;
+        ctx.beginPath(); ctx.arc(_px,_py,45,0,Math.PI*2); ctx.stroke();
+        ctx.globalAlpha=0.45; ctx.strokeStyle=_jkSpawnPal.attack[1]; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.arc(_px,_py,28,0,Math.PI*2); ctx.stroke();
+        ctx.restore();
+      }catch(e){}}
     }
 
     else if(this.attackType==='salsySword'){
       // Mark up to 3 enemies; marked enemies take double damage for a while
+      // RED skin: marchio e particelle rosse
+      const _sMkPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+      const _sMkC = (_sMkPal && _sMkPal.markColor) ? _sMkPal.markColor : '#f1c40f';
+      const _sMkC2 = (_sMkPal && _sMkPal.particleExtra) ? _sMkPal.particleExtra[0] : '#f1c40f';
       const sorted=enemies.slice().sort((a,b)=>{
         const da=Math.hypot((a.x+a.width/2)-(this.x+this.width/2),(a.y+a.height/2)-(this.y+this.height/2));
         const db=Math.hypot((b.x+b.width/2)-(this.x+this.width/2),(b.y+b.height/2)-(this.y+this.height/2));
@@ -12101,9 +13000,15 @@ if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
       const until=now+7000;
       targets.forEach(t=>{
         t.salsyMarkUntil=until;
-        createParticles(t.x,t.y,'#f1c40f',22,5);
+        // Salva il colore del marchio sull'enemy per il rendering
+        t._salsyMarkColor = _sMkC;
+        createParticles(t.x,t.y,_sMkC,22,5);
+        createParticles(t.x,t.y,_sMkC2,10,4);
+        // RED Salsy: slow 35% for mark duration
+        try{ if(this._activeSkinPassiveId==='salsy_red') applySkinSlow(t,0.35,7000); }catch(_e2){}
       });
-      createParticles(this.x+this.width/2,this.y+this.height/2,'#f1c40f',26,6);
+      createParticles(this.x+this.width/2,this.y+this.height/2,_sMkC,26,6);
+      createParticles(this.x+this.width/2,this.y+this.height/2,_sMkC2,14,5);
     }
 
     else if(this.attackType==='lucienBlade'){
@@ -12175,11 +13080,20 @@ if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
 
 else if(this.attackType==='kouvagia'){
 
-      // Kouvagia super: full heal + large knockback + tiny damage + visual FX
+      // Kouvagia super: stessa meccanica — solo colori FX cambiano con EVIL skin
+      const _kSPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+      const _kSIsEvil = !!(_kSPal && _kSPal.waveColor);
+      const _kSC1 = _kSIsEvil ? '#76ff03' : '#55efc4';
+      const _kSC2 = _kSIsEvil ? '#b2ff59' : '#81ecec';
+      const _kSC3 = _kSIsEvil ? '#33691e' : '#81ecec';
+
       this.hp=this.maxHP;
       this._kouvagiaSuperFxStart=now;
       this._kouvagiaSuperFxUntil=now+900;
-      createParticles(this.x+this.width/2,this.y+this.height/2,'#55efc4',60,6);
+      // Salva palette per il draw dell'onda
+      this._kouvagiaSuperPalette = _kSPal;
+      createParticles(this.x+this.width/2,this.y+this.height/2,_kSC1,60,6);
+      createParticles(this.x+this.width/2,this.y+this.height/2,_kSC2,30,5);
 
       const R=360;
       for(let i=0;i<enemies.length;i++){
@@ -12188,12 +13102,13 @@ else if(this.attackType==='kouvagia'){
         const dy=(e.y+e.height/2)-(this.y+this.height/2);
         const dist=Math.hypot(dx,dy)||1;
         if(dist<=R){
-          // tiny damage
           const dmg=3;
           const _final=applyEnemyDamage(e,dmg);
           showDamageNumber(e.x,e.y,_final);
-          createParticles(e.x,e.y,'#81ecec',8,4);
-          // knockback
+          createParticles(e.x,e.y,_kSC2,8,4);
+          createParticles(e.x,e.y,_kSC3,4,3);
+          // EVIL Kouvagia: poison-plus sulla super
+          try{ if(this._activeSkinPassiveId==='kouvagia_evil'){ applySkinPoisonPlus(e); createParticles(e.x,e.y,'#76ff03',6,3); } }catch(_e2){}
           const push=120;
           e.x += (dx/dist)*push;
           e.y += (dy/dist)*push;
@@ -12204,26 +13119,42 @@ else if(this.attackType==='kouvagia'){
 else if(this.attackType==='hybrid'){
 
       const dmgPerPulse = Math.round(120 * this.attackBuffMultiplier);
+      // ICE skin: sfera ghiaccio invece di arancio
+      const _vSPal = getSkinFxPalette ? getSkinFxPalette(this.type) : null;
+      const _vSuperC = (_vSPal && _vSPal.super) ? _vSPal.super[0] : '#ff6d00';
+      const _vSuperC2 = (_vSPal && _vSPal.super) ? _vSPal.super[1] : '#ff6d00';
       spawnProjectile({
         x:this.x+this.width/2,y:this.y+this.height/2,
         vx:(this.facingRight?1:-1)*4,vy:0,speed:6,
-        damage:dmgPerPulse,ttl:this.superDuration,color:'#ff6d00',
+        damage:dmgPerPulse,ttl:this.superDuration,color:_vSuperC,
         radius:16,friendly:true,aoeRadius:120,homing:true,
         isVoltryxSuper:true,pulseInterval:260,lastPulse:0,
         meta:{voltryxSuper:true}
       });
 
-      createParticles(this.x+this.width/2,this.y+this.height/2,'#ff6d00',40,6);
+      createParticles(this.x+this.width/2,this.y+this.height/2,_vSuperC,40,6);
+      if(_vSPal && _vSPal.super) createParticles(this.x+this.width/2,this.y+this.height/2,_vSuperC2,25,5);
+      if(_vSPal && _vSPal.particleExtra) createParticles(this.x+this.width/2,this.y+this.height/2,_vSPal.particleExtra[0],18,3);
       shakeScreen();
     }
 
 else if(this.attackType==='tempostormLaser'){
+  // ─ Meccanica identica con entrambe le skin:
+  //   raggruppa nemici al centro, ruba metà HP, li trasferisce al player
   const cx=canvas.width/2;
   const cy=(canvas.height-30)/2;
   let stolen=0;
 
+  // Palette ENERGY: sostituisce i colori azzurri con arancio/giallo
+  const _tSPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+  const _tsIsEnergy = !!(_tSPal && _tSPal.beamGrad);
+  // default azzurro — ENERGY arancio
+  const _tC1 = _tsIsEnergy ? '#ff8c00' : '#00b0ff';
+  const _tC2 = _tsIsEnergy ? '#ffa500' : '#4fc3f7';
+  const _tC3 = _tsIsEnergy ? '#ffe080' : '#81d4fa';
+
   enemies.forEach(e=>{
-    // group to exact center
+    // sposta al centro (stesso comportamento)
     e.x = cx - e.width/2;
     e.y = cy - e.height/2;
 
@@ -12233,18 +13164,53 @@ else if(this.attackType==='tempostormLaser'){
 
     if(removed>0){
       showDamageNumber(e.x,e.y, removed);
-      createParticles(e.x+e.width/2,e.y+e.height/2,'#00b0ff',18,5);
+      // particelle sull'impatto — colore skin
+      createParticles(e.x+e.width/2,e.y+e.height/2,_tC1,18,5);
+      createParticles(e.x+e.width/2,e.y+e.height/2,_tC3,8,3);
     }
-
   });
 
   if(stolen>0){
     const _beforeHp = this.hp;
     this.hp = Math.min(this.maxHP, this.hp + stolen);
     try{ accountOnHeal(this.hp - _beforeHp); }catch(e){}
-    createParticles(this.x+this.width/2,this.y+this.height/2,'#00b0ff',30,6);
+    // burst sull'HP assorbito (sul player)
+    createParticles(this.x+this.width/2,this.y+this.height/2,_tC1,30,6);
+    createParticles(this.x+this.width/2,this.y+this.height/2,_tC2,18,4);
   }
-  createParticles(cx,cy,'#4fc3f7',60,7);
+
+  // esplosione centrale — solo colori diversi, stessa quantità
+  createParticles(cx,cy,_tC2,60,7);
+  createParticles(cx,cy,_tC3,35,5);
+  createParticles(cx,cy,_tC1,25,6);
+
+  // ENERGY skin: 4 fasci incrociati che si irradiano dal centro
+  if(_tsIsEnergy){
+    const _tBeamDmg = Math.round(35*this.attackBuffMultiplier);
+    const _tBeamAngles = [0, Math.PI*0.5]; // solo 2: orizzontale e verticale
+    const _tBeamLen = Math.max(canvas.width, canvas.height) * 0.7;
+    _tBeamAngles.forEach(ang=>{
+      // entrambe le direzioni per ogni asse
+      [-1,1].forEach(dir=>{
+        const bx2 = cx + Math.cos(ang)*dir*_tBeamLen;
+        const by2 = cy + Math.sin(ang)*dir*_tBeamLen;
+        spawnTempBeam({
+          x1:cx, y1:cy, x2:bx2, y2:by2,
+          width:28, ttl:520,
+          damage1:_tBeamDmg, damageStay:Math.round(_tBeamDmg*0.5),
+          skinPalette:_tSPal
+        });
+      });
+    });
+    createParticles(cx,cy,_tC1,50,8);
+    createParticles(cx,cy,_tC3,30,6);
+  }
+
+  // Flash a schermo (arancio per ENERGY, azzurro per default)
+  if(_tsIsEnergy && typeof voltryxScreenFlash!=='undefined'){
+    voltryxScreenFlash = Math.max(voltryxScreenFlash, 16);
+  }
+
   shakeScreen();
 }
 
@@ -12275,6 +13241,9 @@ else if(this.attackType==='tempostormLaser'){
       const cx=canvas.width/2;
       const cy=(canvas.height-30)/2;
 
+      // EVIL skin: zone e particelle in verde veleno/viola/rosso cupo
+      const _mSPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+      const _mZoneColors = (_mSPal && _mSPal.zoneColors) ? _mSPal.zoneColors : ['#ff00ff','#00e5ff','#fff176','#7c4dff','#18ffff'];
       magicZone = {
         x:cx,
         y:cy,
@@ -12287,14 +13256,20 @@ else if(this.attackType==='tempostormLaser'){
         tickMs:180,
         damagePerTick:Math.round(16*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
         lastTick:0,
-        colors:['#ff00ff','#00e5ff','#fff176','#7c4dff','#18ffff'],
-        colorIdx:0
+        colors:_mZoneColors,
+        colorIdx:0,
+
       };
 
-      // burst FX
-      createParticles(cx,cy,'#ff00ff',50,7);
-      createParticles(cx,cy,'#00e5ff',50,7);
-      createParticles(cx,cy,'#fff176',50,7);
+      // burst FX — usa colori palette o default
+      const _mBc = _mZoneColors;
+      createParticles(cx,cy,_mBc[0],50,7);
+      createParticles(cx,cy,_mBc[1],50,7);
+      createParticles(cx,cy,_mBc[2],50,7);
+      if(_mSPal && _mSPal.particleExtra){
+        createParticles(cx,cy,_mSPal.particleExtra[0],30,5);
+        createParticles(cx,cy,_mSPal.particleExtra[1]||_mSPal.particleExtra[0],20,4);
+      }
       shakeScreen();
     }
 
@@ -12304,6 +13279,18 @@ else if(this.attackType==='tempostormLaser'){
 
   endSuper(){
     const now=Date.now();
+    // Traccia missione: usa la super con HP < 15% e sopravvivi
+    try{
+      if(this === player && this.hp > 0 && this.maxHP > 0){
+        const hpPct = this.hp / this.maxHP;
+        if(window.runLowHpSuperActive && hpPct > 0){
+          accountOnLowHpSuperSurvive();
+        }
+      }
+      window.runLowHpSuperActive = false;
+      // Reset streak kill per singola super
+      window.runCurrentSuperKillStreak = 0;
+    }catch(e){}
     this.isDoingSuper=false;this._superHitDone=false;this._lastSwordTick=null;
     this.superTargets=[];this.grappleTarget=null;this.isGrappling=false;
     this._superGrapplePassUntil=0;
@@ -12338,6 +13325,37 @@ else if(this.attackType==='tempostormLaser'){
       if(attacker && attacker.mezzalunaMarkUntil && now < attacker.mezzalunaMarkUntil && this.mezzalunaUntil && now < this.mezzalunaUntil){
         const ph = (typeof _mezzalunaPhase==='function') ? _mezzalunaPhase(now, this) : 0;
         if(ph>=2){ damage = Math.round(Number(damage) * 0.75); }
+      }
+    }catch(e){}
+
+    // METAL ROONEY — ACCIAIO: riduzione danno 45% quando la skin è attiva
+    try{
+      if(this.type === 'rooney' && this._metalRooneyDmgReduce){
+        damage = Math.max(1, Math.round(Number(damage) * 0.55));
+      }
+    }catch(e){}
+
+    // EVIL MARZ — MALEDIZIONE: se il nemico attaccante è maledetto, subisce il 50% del danno inflitto
+    try{
+      if(attacker && attacker._curseMarzUntil && Date.now() < attacker._curseMarzUntil && typeof attacker.hp==='number' && attacker.hp>0){
+        const curseDmg = Math.max(1, Math.round(Number(damage) * 2.0));
+        attacker.hp -= curseDmg;
+        // feedback visivo: particelle teschio / veleno
+        createParticles(attacker.x + attacker.width/2, attacker.y + attacker.height/2, '#76ff03', 8, 4);
+        createParticles(attacker.x + attacker.width/2, attacker.y + attacker.height/2, '#00e676', 5, 3);
+        showDamageNumber(attacker.x + attacker.width/2, attacker.y, curseDmg, {curse:true});
+        // se il nemico muore per la maledizione
+        if(attacker.hp <= 0 && typeof enemies !== 'undefined' && enemies){
+          const _ci = enemies.indexOf(attacker);
+          if(_ci !== -1){
+            createParticles(attacker.x, attacker.y, '#b9f6ca', 24, 5);
+            createParticles(attacker.x, attacker.y, '#00e676', 12, 4);
+            dropStellarBonusAtIndexIfNeeded(_ci);
+            enemies.splice(_ci, 1);
+            applyScore(100 * currentLevel);
+            addKill();
+          }
+        }
       }
     }catch(e){}
 
@@ -12444,6 +13462,44 @@ else if(this.attackType==='tempostormLaser'){
       ctx.strokeRect(this.x-3, this.y-3, this.width+6, this.height+6);
       ctx.restore();
     }
+
+    // METAL ROONEY — SCUDO CICLICO visuale: anello azzurro acciaio pulsante
+    try{
+      if(this.type==='rooney' && this._metalRooneyShieldUntil && now_draw < this._metalRooneyShieldUntil){
+        const shieldT = 1 - (this._metalRooneyShieldUntil - now_draw) / (this._metalRooneyShieldDur || 2000);
+        const pulse   = 0.65 + 0.35 * Math.sin(now_draw * 0.014);
+        ctx.save();
+        // alone esterno azzurro acciaio
+        ctx.shadowColor = '#4fc3f7';
+        ctx.shadowBlur  = 28 * pulse;
+        ctx.globalAlpha = 0.55 * pulse;
+        ctx.strokeStyle = '#e3f2fd';
+        ctx.lineWidth   = 5;
+        ctx.beginPath();
+        ctx.arc(this.x+this.width/2, this.y+this.height/2, this.width * 0.72 + 6, 0, Math.PI*2);
+        ctx.stroke();
+        // anello interno
+        ctx.globalAlpha = 0.30 * pulse;
+        ctx.fillStyle   = 'rgba(79,195,247,0.25)';
+        ctx.beginPath();
+        ctx.arc(this.x+this.width/2, this.y+this.height/2, this.width * 0.72 + 6, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+      } else if(this.type==='rooney' && this._metalRooneyDmgReduce){
+        // indicatore passivo "acciaio" in idle: sottile alone metallico
+        const idlePulse = 0.18 + 0.10 * Math.sin(now_draw * 0.002);
+        ctx.save();
+        ctx.globalAlpha = idlePulse;
+        ctx.shadowColor = '#1565c0';
+        ctx.shadowBlur  = 12;
+        ctx.strokeStyle = '#90caf9';
+        ctx.lineWidth   = 2;
+        ctx.beginPath();
+        ctx.arc(this.x+this.width/2, this.y+this.height/2, this.width * 0.62, 0, Math.PI*2);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }catch(e){}
 
     // COMBO GLOW: pulsing orange aura when combo >= 5
     try{
@@ -12668,6 +13724,27 @@ ctx.fill();
       ctx.restore();
     }
 
+    // ICE Voltryx: alone azzurro sui nemici rallentati
+    if(this._skinSlowUntil && Date.now() < this._skinSlowUntil){
+      const _sT = Date.now()*0.004;
+      const _sA = 0.30 + 0.20*Math.sin(_sT*2.5);
+      ctx.save();
+      ctx.globalAlpha = _sA;
+      ctx.shadowColor = '#5bc8e8'; ctx.shadowBlur = 14;
+      ctx.strokeStyle = '#5bc8e8'; ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(this.x+this.width/2, this.y+this.height/2, Math.max(this.width,this.height)*0.65, 0, Math.PI*2);
+      ctx.stroke();
+      // cristallo ghiaccio al centro
+      ctx.globalAlpha = _sA * 0.7;
+      ctx.fillStyle = 'rgba(91,200,232,0.25)';
+      ctx.beginPath();
+      ctx.arc(this.x+this.width/2, this.y+this.height/2, Math.max(this.width,this.height)*0.40, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+
     if(this.shieldActive&&!this.shieldBroken){
       ctx.beginPath();ctx.strokeStyle='rgba(127,219,255,0.85)';ctx.lineWidth=6;
       ctx.arc(this.x+this.width/2,this.y+this.height/2,Math.max(this.width,this.height),0,Math.PI*2);ctx.stroke();
@@ -12687,6 +13764,12 @@ ctx.fill();
           const shaftW = 18;         // thickness of the shaft
           const fistW  = 34;         // thickness of the fist end
           const fistL  = 34;         // length of the fist end
+          // METAL skin palette per il colore del pugno
+          const _rTelPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+          const _rTelC = _rTelPal && _rTelPal.attack
+            ? `rgba(${parseInt(_rTelPal.attack[0].slice(1,3),16)},${parseInt(_rTelPal.attack[0].slice(3,5),16)},${parseInt(_rTelPal.attack[0].slice(5,7),16)},0.88)`
+            : 'rgba(231,76,60,0.88)';
+          const _rTelGlow = _rTelPal && _rTelPal.ringColor ? _rTelPal.ringColor : null;
 
           // trova bersaglio (preferisci quello bloccato dall'attacco, se valido entro range)
           let tx=null, ty=null;
@@ -12711,16 +13794,17 @@ const ang = (tx!==null) ? Math.atan2(ty-cy, tx-cx) : (this.facingRight?0:Math.PI
           ctx.save();
           ctx.translate(cx, cy);
           ctx.rotate(ang);
+          if(_rTelGlow){ ctx.shadowColor=_rTelGlow; ctx.shadowBlur=18; }
 
           const punchLen = Math.max(20, this.range);
-          ctx.fillStyle='rgba(231,76,60,0.88)'; // red punch
+          ctx.fillStyle=_rTelC;
 
           // shaft
           ctx.beginPath();
           ctx.rect(0, -shaftW/2, Math.max(0, punchLen-fistL), shaftW);
 
-          ctx.shadowColor = '#000000';
-          ctx.shadowBlur = 25;
+          ctx.shadowColor = _rTelGlow||'#000000';
+          ctx.shadowBlur = _rTelGlow ? 18 : 25;
           ctx.fill();
 
           // fist end (flared)
@@ -12732,55 +13816,92 @@ const ang = (tx!==null) ? Math.atan2(ty-cy, tx-cx) : (this.facingRight?0:Math.PI
           ctx.lineTo(endStart,   fistW*0.55);
           ctx.closePath();
 
-          ctx.shadowColor = '#000000';
-          ctx.shadowBlur = 25;
+          ctx.shadowColor = _rTelGlow||'#000000';
+          ctx.shadowBlur = _rTelGlow ? 22 : 25;
           ctx.fill();
+
+          // METAL: secondo strato più chiaro (bagliore metallico)
+          if(_rTelPal && _rTelPal.attack && _rTelPal.attack[2]){
+            const _rTelC2 = `rgba(${parseInt(_rTelPal.attack[2].slice(1,3),16)},${parseInt(_rTelPal.attack[2].slice(3,5),16)},${parseInt(_rTelPal.attack[2].slice(5,7),16)},0.35)`;
+            ctx.fillStyle=_rTelC2;
+            ctx.beginPath();
+            ctx.rect(0, -shaftW*0.35, Math.max(0, punchLen-fistL), shaftW*0.7);
+            ctx.fill();
+          }
 
           ctx.restore();
         }else{
-          // default punch telegraph
-          ctx.strokeStyle='rgba(230,126,34,0.7)';
+          // default punch telegraph (Jimmy e altri)
+          const _jTelPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+          const _jTelC = _jTelPal && _jTelPal.attack
+            ? `rgba(${parseInt(_jTelPal.attack[0].slice(1,3),16)},${parseInt(_jTelPal.attack[0].slice(3,5),16)},${parseInt(_jTelPal.attack[0].slice(5,7),16)},0.7)`
+            : 'rgba(230,126,34,0.7)';
+          if(_jTelPal && _jTelPal.ringColor){ ctx.shadowColor=_jTelPal.ringColor; ctx.shadowBlur=14; }
+          ctx.strokeStyle=_jTelC;
           ctx.lineWidth=8;
           ctx.beginPath();
           ctx.moveTo(cx,cy);
           ctx.lineTo(punchX,cy);
           ctx.stroke();
+          ctx.shadowBlur=0;
         }
       }else if(this.attackType==='sword'){
         // Jeff: visual telegraph migliorato (coerente con l'hitbox reale)
         const cx=this.x+this.width/2, cy=this.y+this.height/2;
         const angle=this.facingRight?0:Math.PI;
         const arcWidth=Math.PI*1.6; // uguale alla logica di hit
-        ctx.fillStyle='rgba(155,89,182,0.18)';
-        ctx.strokeStyle='rgba(155,89,182,0.88)';
+        // JAKEFF palette
+        const _jkTelPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+        const _jkTelRGB = _jkTelPal && _jkTelPal.attack ? (() => {
+          const h=_jkTelPal.attack[0]; return `${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)}`;
+        })() : '155,89,182';
+        const _jkTelRGB2 = _jkTelPal && _jkTelPal.attack && _jkTelPal.attack[1] ? (() => {
+          const h=_jkTelPal.attack[1]; return `${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)}`;
+        })() : null;
+        ctx.fillStyle=`rgba(${_jkTelRGB},0.18)`;
+        ctx.strokeStyle=`rgba(${_jkTelRGB},0.88)`;
+        if(_jkTelPal && _jkTelPal.ringColor){ ctx.shadowColor=_jkTelPal.ringColor; ctx.shadowBlur=18; }
         ctx.lineWidth=7;
         ctx.beginPath();
         ctx.moveTo(cx,cy);
         ctx.arc(cx,cy,this.range,angle-arcWidth/2,angle+arcWidth/2);
         ctx.closePath();
-        ctx.shadowColor = '#000000';
-        ctx.shadowBlur = 25;
+        ctx.shadowColor = _jkTelPal && _jkTelPal.ringColor ? _jkTelPal.ringColor : '#000000';
+        ctx.shadowBlur = _jkTelPal ? 18 : 25;
         ctx.fill();
         ctx.shadowBlur = 0;
         ctx.stroke();
-        drawCircularSlash(cx, cy, this.range, angle, arcWidth, this.attackTime, 260, 'rgba(155,89,182,0.95)', !this.facingRight);
+        // secondo strato rosso per JAKEFF
+        if(_jkTelRGB2){
+          ctx.fillStyle=`rgba(${_jkTelRGB2},0.10)`;
+          ctx.strokeStyle=`rgba(${_jkTelRGB2},0.55)`;
+          ctx.lineWidth=3;
+          ctx.beginPath();
+          ctx.moveTo(cx,cy);
+          ctx.arc(cx,cy,this.range*0.65,angle-arcWidth/2,angle+arcWidth/2);
+          ctx.closePath();
+          ctx.fill(); ctx.stroke();
+        }
+        const _jkSlashC = _jkTelPal && _jkTelPal.attack ? `rgba(${_jkTelRGB},0.95)` : 'rgba(155,89,182,0.95)';
+        drawCircularSlash(cx, cy, this.range, angle, arcWidth, this.attackTime, 260, _jkSlashC, !this.facingRight);
       }else if(this.attackType==='salsySword'){
-        // Visual telegraph: Salsy fan slash area
+        // Visual telegraph: Salsy fan slash area — RED skin: rosso al posto di giallo
+        const _sDrPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+        const _sDrIsRed = !!(_sDrPal && _sDrPal.markColor);
         const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.35;
-        ctx.fillStyle='rgba(241,196,15,0.12)';
-        ctx.strokeStyle='rgba(241,196,15,0.75)';
+        ctx.fillStyle=_sDrIsRed ? 'rgba(229,57,53,0.14)' : 'rgba(241,196,15,0.12)';
+        ctx.strokeStyle=_sDrIsRed ? 'rgba(229,57,53,0.80)' : 'rgba(241,196,15,0.75)';
+        if(_sDrIsRed){ ctx.shadowColor='#e53935'; ctx.shadowBlur=16; }
         ctx.lineWidth=6;
         ctx.beginPath();
         ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
         ctx.arc(this.x+this.width/2,this.y+this.height/2,this.range,angle-arcWidth/2,angle+arcWidth/2);
         ctx.closePath();
-        
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
-
-ctx.fill();
+        ctx.fill();
         ctx.stroke();
-        drawCircularSlash(this.x+this.width/2, this.y+this.height/2, this.range, angle, arcWidth, this.attackTime, 260, 'rgba(241,196,15,0.95)', !this.facingRight);
+        ctx.shadowBlur=0;
+        const _sDrSlashC = _sDrIsRed ? 'rgba(229,57,53,0.95)' : 'rgba(241,196,15,0.95)';
+        drawCircularSlash(this.x+this.width/2, this.y+this.height/2, this.range, angle, arcWidth, this.attackTime, 260, _sDrSlashC, !this.facingRight);
       }else if(this.attackType==='axeattack'){
         // Visual area: Bane axe swing (270°)
         const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.5;
@@ -12816,10 +13937,22 @@ ctx.fill();
         ctx.stroke();
         drawCircularSlash(this.x+this.width/2, this.y+this.height/2, this.range, angle, arcWidth, this.attackTime, 260, 'rgba(200,230,255,0.95)', (Math.cos(angle)<0));
       }else if(this.attackType==='hybrid'){
-        ctx.strokeStyle='rgba(243,156,18,0.6)';ctx.lineWidth=6;
+        // ICE skin: cerchio azzurro ghiaccio pulsante — default: arancio
+        const _vArcPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+        const _vArcIsIce = !!(_vArcPal && _vArcPal.ringColor);
+        if(_vArcIsIce){
+          const _vArcT = Date.now()*0.003;
+          const _vArcAlpha = 0.45 + 0.20*Math.sin(_vArcT*2.2);
+          ctx.strokeStyle=`rgba(91,200,232,${_vArcAlpha})`;
+          ctx.shadowColor='#5bc8e8'; ctx.shadowBlur=18;
+        } else {
+          ctx.strokeStyle='rgba(243,156,18,0.6)';
+        }
+        ctx.lineWidth=6;
         ctx.beginPath();
         ctx.arc(this.x+this.width/2,this.y+this.height/2,110,0,Math.PI*2);
         ctx.stroke();
+        ctx.shadowBlur=0;
       }
       else if(this.attackType==='tempostormLaser'){
         // Tempostorm: nessuna "mira" extra qui. Il laser reale viene disegnato dal VFX (tempBeams).
@@ -12833,8 +13966,35 @@ ctx.fill();
         const arcRadius=350;ctx.arc(this.x+this.width/2,this.y+this.height/2,arcRadius,0,Math.PI*2);ctx.stroke();ctx.restore()
       }
       else if(this.attackType==='sword'){
-        ctx.save();ctx.strokeStyle='rgba(155,89,182,0.45)';ctx.lineWidth=10;ctx.beginPath();
-        const swordRadius=JEFF_SUPER_RADIUS;ctx.arc(this.x+this.width/2,this.y+this.height/2,swordRadius,0,Math.PI*2);ctx.stroke();ctx.restore()
+        const _jkArcPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+        const _jkArcT = Date.now()*0.003;
+        ctx.save();
+        if(_jkArcPal&&_jkArcPal.ringColor){
+          // JAKEFF: cerchio doppio argento+rosso pulsante
+          const _jkA1 = 0.35+0.20*Math.sin(_jkArcT*1.6);
+          const _jkA2 = 0.25+0.18*Math.sin(_jkArcT*2.2+1.0);
+          const swordRadius=JEFF_SUPER_RADIUS;
+          // cerchio esterno argento
+          ctx.globalAlpha=_jkA1; ctx.shadowColor=_jkArcPal.super[0]; ctx.shadowBlur=20;
+          ctx.strokeStyle=_jkArcPal.super[0]; ctx.lineWidth=7;
+          ctx.beginPath(); ctx.arc(this.x+this.width/2,this.y+this.height/2,swordRadius,0,Math.PI*2); ctx.stroke();
+          // cerchio interno rosso
+          ctx.globalAlpha=_jkA2; ctx.shadowColor=_jkArcPal.super[2]; ctx.shadowBlur=14;
+          ctx.strokeStyle=_jkArcPal.super[2]; ctx.lineWidth=3;
+          ctx.beginPath(); ctx.arc(this.x+this.width/2,this.y+this.height/2,swordRadius*0.65,0,Math.PI*2); ctx.stroke();
+          // raggi a croce
+          ctx.globalAlpha=_jkA1*0.5; ctx.strokeStyle=_jkArcPal.super[0]; ctx.lineWidth=2; ctx.setLineDash([6,8]);
+          const _ox=this.x+this.width/2, _oy=this.y+this.height/2;
+          for(let _ri=0;_ri<4;_ri++){
+            const _ra=(_ri/4)*Math.PI*2+_jkArcT*0.5;
+            ctx.beginPath(); ctx.moveTo(_ox,_oy); ctx.lineTo(_ox+Math.cos(_ra)*swordRadius,_oy+Math.sin(_ra)*swordRadius); ctx.stroke();
+          }
+          ctx.setLineDash([]);
+        } else {
+          ctx.strokeStyle='rgba(155,89,182,0.45)';ctx.lineWidth=10;ctx.beginPath();
+          const swordRadius=JEFF_SUPER_RADIUS;ctx.arc(this.x+this.width/2,this.y+this.height/2,swordRadius,0,Math.PI*2);ctx.stroke();
+        }
+        ctx.restore();
       }
       else if(this.attackType==='grapple'){
         ctx.save();ctx.strokeStyle='rgba(231,76,60,0.45)';ctx.lineWidth=6;
@@ -12842,13 +14002,34 @@ ctx.fill();
         ctx.restore()
       }
       else if(this.attackType==='hybrid'){
-        // aura while super is active
-        ctx.save();ctx.strokeStyle='rgba(243,156,18,0.35)';ctx.lineWidth=8;
+        // ICE skin: aura ghiaccio — default: arancio
+        ctx.save();
+        const _vSArcPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+        const _vSArcIsIce = !!(_vSArcPal && _vSArcPal.ringColor);
+        if(_vSArcIsIce){
+          const _vSArcT = Date.now()*0.003;
+          const _vSArcA = 0.28 + 0.18*Math.sin(_vSArcT*1.8);
+          ctx.strokeStyle=`rgba(91,200,232,${_vSArcA})`;
+          ctx.shadowColor='#5bc8e8'; ctx.shadowBlur=22;
+        } else {
+          ctx.strokeStyle='rgba(243,156,18,0.35)';
+        }
+        ctx.lineWidth=8;
         ctx.beginPath();ctx.arc(this.x+this.width/2,this.y+this.height/2,140,0,Math.PI*2);ctx.stroke();ctx.restore()
       }
             else if(this.attackType==='tempostormLaser'){
+        // ENERGY skin: cerchio arancio — default: azzurro
         ctx.save();
-        ctx.strokeStyle='rgba(0,176,255,0.45)';
+        const _tSArcPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+        const _tSArcIsEnergy = !!(_tSArcPal && _tSArcPal.beamGrad);
+        if(_tSArcIsEnergy){
+          const _tSArcT = Date.now()*0.003;
+          const _tSArcA = 0.38 + 0.18*Math.sin(_tSArcT*2.0);
+          ctx.strokeStyle=`rgba(255,140,0,${_tSArcA})`;
+          ctx.shadowColor='#ffa500'; ctx.shadowBlur=28;
+        } else {
+          ctx.strokeStyle='rgba(0,176,255,0.45)';
+        }
         ctx.lineWidth=10;
         ctx.beginPath();
         ctx.arc(canvas.width/2,(canvas.height-30)/2,180,0,Math.PI*2);
@@ -12856,10 +14037,13 @@ ctx.fill();
         ctx.restore();
       }
 else if(this.attackType==='salsySword'){
-        // Show 1-3 target reticles + launch lines during Salsy super
+        // RED skin: reticoli rossi invece di gialli
         ctx.save();
-        ctx.strokeStyle='rgba(241,196,15,0.75)';
-        ctx.fillStyle='rgba(241,196,15,0.20)';
+        const _sSuPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+        const _sSuIsRed = !!(_sSuPal && _sSuPal.markColor);
+        ctx.strokeStyle=_sSuIsRed ? 'rgba(229,57,53,0.80)' : 'rgba(241,196,15,0.75)';
+        ctx.fillStyle=_sSuIsRed ? 'rgba(229,57,53,0.22)' : 'rgba(241,196,15,0.20)';
+        if(_sSuIsRed){ ctx.shadowColor='#e53935'; ctx.shadowBlur=18; }
         ctx.lineWidth=5;
         const px=this.x+this.width/2, py=this.y+this.height/2;
         const list=(this.superTargets||[]).slice(0,3);
@@ -12906,7 +14090,10 @@ ctx.fill();
       // Area danno durante dash-attacco
       if(this.isDashing && this._kouvagiaDashActive){
         ctx.save();
-        ctx.strokeStyle='rgba(232,67,147,0.55)';
+        const _kDrPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+        const _kDrIsEvil = !!(_kDrPal && _kDrPal.waveColor);
+        ctx.strokeStyle=_kDrIsEvil ? 'rgba(118,255,3,0.65)' : 'rgba(232,67,147,0.55)';
+        if(_kDrIsEvil){ ctx.shadowColor='#76ff03'; ctx.shadowBlur=18; }
         ctx.lineWidth=6;
         ctx.beginPath();
         ctx.arc(this.x+this.width/2,this.y+this.height/2,110,0,Math.PI*2);
@@ -12917,7 +14104,10 @@ ctx.fill();
       // Area esplosione finale (breve telegraph)
       if(this._kouvagiaExplosionPending && this.isDashing){
         ctx.save();
-        ctx.strokeStyle='rgba(253,121,168,0.45)';
+        const _kExPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+        const _kExIsEvil = !!(_kExPal && _kExPal.waveColor);
+        ctx.strokeStyle=_kExIsEvil ? 'rgba(118,255,3,0.50)' : 'rgba(253,121,168,0.45)';
+        if(_kExIsEvil){ ctx.shadowColor='#76ff03'; ctx.shadowBlur=18; }
         ctx.lineWidth=6;
         ctx.beginPath();
         ctx.arc(this.x+this.width/2,this.y+this.height/2,165,0,Math.PI*2);
@@ -12925,19 +14115,24 @@ ctx.fill();
         ctx.restore();
       }
 
-      // Effetto super: onda espansiva + flash
+      // Effetto super: onda espansiva + flash — EVIL skin: verde acido
       const nowFx=Date.now();
       if(this._kouvagiaSuperFxUntil && nowFx < this._kouvagiaSuperFxUntil){
         const t=(nowFx-(this._kouvagiaSuperFxStart||nowFx)) / (this._kouvagiaSuperFxUntil-(this._kouvagiaSuperFxStart||nowFx)+1);
         const r=60 + t*360;
+        // Controlla palette EVIL
+        const _kFxPal = this._kouvagiaSuperPalette || null;
+        const _kFxIsEvil = !!(_kFxPal && _kFxPal.waveColor);
+        const _kFxC = _kFxIsEvil ? '118,255,3' : '85,239,196';
         ctx.save();
-        ctx.strokeStyle='rgba(85,239,196,'+(0.9 - t*0.8)+')';
+        if(_kFxIsEvil){ ctx.shadowColor='#76ff03'; ctx.shadowBlur=30; }
+        ctx.strokeStyle=`rgba(${_kFxC},${0.9 - t*0.8})`;
         ctx.lineWidth=12;
         ctx.beginPath();
         ctx.arc(this.x+this.width/2,this.y+this.height/2,r,0,Math.PI*2);
         ctx.stroke();
         // flash leggero
-        ctx.fillStyle='rgba(85,239,196,'+(0.12*(1-t))+')';
+        ctx.fillStyle=`rgba(${_kFxC},${0.12*(1-t)})`;
         ctx.fillRect(0,0,canvas.width,canvas.height);
         ctx.restore();
       }
@@ -13310,14 +14505,23 @@ this.speed=cfg.enemySpeed;
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
+        // RED skin: cerchio rosso con glow; default: pallino nero
+        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
+          ? this._salsyMarkColor : '#000';
+        const _mrkIsRed = _mrkColor !== '#000';
+        if(_mrkIsRed){
+          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
+          // cerchio esterno glow
+          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
+          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
+        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
+        ctx.fillStyle = _mrkColor;
         ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
-        
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
-
-ctx.fill();
+        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
+        ctx.fill();
         ctx.restore();
       }
     }catch(e){}
@@ -13388,14 +14592,23 @@ class ShooterEnemy extends Enemy{
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
+        // RED skin: cerchio rosso con glow; default: pallino nero
+        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
+          ? this._salsyMarkColor : '#000';
+        const _mrkIsRed = _mrkColor !== '#000';
+        if(_mrkIsRed){
+          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
+          // cerchio esterno glow
+          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
+          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
+        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
+        ctx.fillStyle = _mrkColor;
         ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
-        
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
-
-ctx.fill();
+        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
+        ctx.fill();
         ctx.restore();
       }
     }catch(e){}  
@@ -13483,14 +14696,23 @@ class ArcherEnemy extends Enemy{
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
+        // RED skin: cerchio rosso con glow; default: pallino nero
+        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
+          ? this._salsyMarkColor : '#000';
+        const _mrkIsRed = _mrkColor !== '#000';
+        if(_mrkIsRed){
+          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
+          // cerchio esterno glow
+          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
+          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
+        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
+        ctx.fillStyle = _mrkColor;
         ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
-        
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
-
-ctx.fill();
+        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
+        ctx.fill();
         ctx.restore();
       }
     }catch(e){}  
@@ -13570,9 +14792,12 @@ class GlacialEnemy extends Enemy{
       const dt = now - (this._coneLastCheck || now);
       this._coneLastCheck = now;
 
+      // Aimbot 360°: aggiorna la direzione del cono verso il player ogni frame
+      const ex=this.x+this.width/2, ey=this.y+this.height/2;
+      this.coneDir=Math.atan2((player.y+player.height/2)-ey,(player.x+player.width/2)-ex);
+
       // check player inside cone
       const px=player.x+player.width/2, py=player.y+player.height/2;
-      const ex=this.x+this.width/2, ey=this.y+this.height/2;
       const vx=px-ex, vy=py-ey;
       const pdist=Math.hypot(vx,vy)||1;
       const ang=Math.atan2(vy,vx);
@@ -13644,14 +14869,23 @@ ctx.fill();
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
+        // RED skin: cerchio rosso con glow; default: pallino nero
+        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
+          ? this._salsyMarkColor : '#000';
+        const _mrkIsRed = _mrkColor !== '#000';
+        if(_mrkIsRed){
+          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
+          // cerchio esterno glow
+          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
+          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
+        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
+        ctx.fillStyle = _mrkColor;
         ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
-        
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
-
-ctx.fill();
+        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
+        ctx.fill();
         ctx.restore();
       }
     }catch(e){}  
@@ -13730,14 +14964,23 @@ class AttackReturnEnemy extends Enemy{
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
+        // RED skin: cerchio rosso con glow; default: pallino nero
+        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
+          ? this._salsyMarkColor : '#000';
+        const _mrkIsRed = _mrkColor !== '#000';
+        if(_mrkIsRed){
+          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
+          // cerchio esterno glow
+          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
+          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
+        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
+        ctx.fillStyle = _mrkColor;
         ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
-        
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
-
-ctx.fill();
+        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
+        ctx.fill();
         ctx.restore();
       }
     }catch(e){}  
@@ -13814,14 +15057,23 @@ class BossEnemy extends Enemy{
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
+        // RED skin: cerchio rosso con glow; default: pallino nero
+        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
+          ? this._salsyMarkColor : '#000';
+        const _mrkIsRed = _mrkColor !== '#000';
+        if(_mrkIsRed){
+          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
+          // cerchio esterno glow
+          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
+          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
+        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
+        ctx.fillStyle = _mrkColor;
         ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
-        
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
-
-ctx.fill();
+        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
+        ctx.fill();
         ctx.restore();
       }
     }catch(e){}  
@@ -13838,14 +15090,14 @@ class Boss5Enemy extends Enemy{
     this.height=Math.round(245*1.2);
 
     // Stat fisse richieste
-    this.maxHP=2500;
+    this.maxHP=3000;
     this.hp=this.maxHP;
 
     // "Non troppo veloce"
     this.speed=4.5;
 
     // Danno base (usato solo per eventuale contatto)
-    this.damage=50;
+    this.damage=58;
 
     // --- Attacco: colpo ad ascia a ventaglio 80° (sweep sinistra->destra) ---
     this.fanRange=470;                 // raggio del ventaglio
@@ -13899,7 +15151,7 @@ class Boss5Enemy extends Enemy{
     shakeScreen();
 
     // Cura boss
-    this.hp = Math.min(this.maxHP, this.hp + 120);
+    this.hp = Math.min(this.maxHP, this.hp + 250);
 
     // Effetto sul player SOLO se dentro l'area della super/passiva
     const px=player.x+player.width/2, py=player.y+player.height/2;
@@ -14052,14 +15304,23 @@ class Boss5Enemy extends Enemy{
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
+        // RED skin: cerchio rosso con glow; default: pallino nero
+        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
+          ? this._salsyMarkColor : '#000';
+        const _mrkIsRed = _mrkColor !== '#000';
+        if(_mrkIsRed){
+          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
+          // cerchio esterno glow
+          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
+          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
+        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
+        ctx.fillStyle = _mrkColor;
         ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
-        
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
-
-ctx.fill();
+        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
+        ctx.fill();
         ctx.restore();
       }
     }catch(e){}
@@ -14173,14 +15434,359 @@ function updateBackgroundForLevel(level){
   }
 }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   SKIN PASSIVES — bonus in-game per skin attive
+   ═══════════════════════════════════════════════════════════════ */
+const SKIN_PASSIVES = {
+  // Jimmy EVO: +35% danno attacco base, jetpack +1s
+  jimmy_evo: {
+    label: 'Jimmy EVO',
+    bonuses: [
+      { desc: '+35% danno attacco base' },
+      { desc: 'Jetpack dura 1 secondo in più (4s totali)' },
+    ],
+    apply(player){
+      if(player.type !== 'jimmy') return;
+      // +35% danno
+      player.damage = Math.round((player.damage||0) * 1.35);
+      if(player._baseDamage != null) player._baseDamage = Math.round(player._baseDamage * 1.35);
+      // jetpack dura 1 sec in più
+      player.jetpackDuration = (player.jetpackDuration||3000) + 1000;
+    },
+  },
+  // Jeff EVO: +15 HP per ogni uccisione
+  jeff_evo: {
+    label: 'Jeff EVO',
+    bonuses: [
+      { desc: '+15 HP recuperati per ogni nemico ucciso' },
+    ],
+    apply(player){ /* handled in addKill */ },
+  },
+  // Rooney EVO: super genera 3 aree casuali extra + attacco base -20% cooldown
+  rooney_evo: {
+    label: 'Rooney EVO',
+    bonuses: [
+      { desc: 'Super genera 3 aree casuali extra in tutta la mappa' },
+      { desc: 'Attacco base: cooldown ridotto del 20%' },
+    ],
+    apply(player){
+      if(player.type !== 'rooney') return;
+      // -20% cooldown attacco base
+      player.cooldown = Math.max(80, Math.round((player.cooldown||520) * 0.80));
+      player._baseCooldown = Math.max(80, Math.round((player._baseCooldown||520) * 0.80));
+    },
+  },
+
+  // ICE Voltryx: rallenta i nemici colpiti del 12%
+  voltryx_ice: {
+    label: 'ICE Voltryx',
+    bonuses: [
+      { desc: 'Attacco base e super rallentano i nemici colpiti del 12% per 2 sec' },
+    ],
+    apply(player){},
+  },
+  // EVIL Kouvagia: applica veleno-plus (3 dmg/sec per 14s) ad ogni hit
+  kouvagia_evil: {
+    label: 'EVIL Kouvagia',
+    bonuses: [
+      { desc: 'Ogni colpo (attacco base e super) applica Veleno Plus: 3 dmg/sec per 14 secondi' },
+    ],
+    apply(player){},
+  },
+  // RED Salsy: nemici marchiati rallentati del 35% e subiscono x2.5 danni
+  salsy_red: {
+    label: 'RED Salsy',
+    bonuses: [
+      { desc: 'Nemici marchiati rallentati del 35% per tutta la durata del marchio' },
+      { desc: 'Nemici marchiati subiscono x2.5 danni (invece di x2)' },
+    ],
+    apply(player){},
+  },
+  // ENERGY Tempostorm: larghezza attacco base x3 + 4 fasci incrociati nella super
+  tempostorm_energy: {
+    label: 'ENERGY Tempostorm',
+    bonuses: [
+      { desc: 'Larghezza raggio attacco base triplicata' },
+      { desc: 'La super genera 2 fasci arancioni incrociati (orizzontale + verticale) che si irradiano dal centro' },
+    ],
+    apply(player){},
+  },
+  // EVIL Marz: maledizione — i nemici colpiti subiscono 50% del danno che infliggono al player
+  marz_evil: {
+    label: 'EVIL Marz',
+    bonuses: [
+      { desc: '☠ MALEDIZIONE: ogni nemico colpito da Marz viene marchiato con un teschio verde veleno. Se un nemico maledetto attacca Marz, subisce il 50% del danno che ha inflitto.' },
+    ],
+    apply(player){
+      player._evilMarzCurse = true;
+    },
+  },
+  // METAL Rooney: -45% danni subiti + scudo automatico ogni 10 sec per 2 sec
+  rooney_metal: {
+    label: 'METAL Rooney',
+    bonuses: [
+      { desc: '🛡 ACCIAIO: i colpi subiti infliggono il 45% in meno di danni' },
+      { desc: '⚙ SCUDO CICLICO: ogni 10 secondi uno scudo metallico si attiva automaticamente per 2 secondi, rendendo Rooney invulnerabile' },
+    ],
+    apply(player){
+      if(player.type !== 'rooney') return;
+      player._metalRooneyDmgReduce = true;       // flag riduzione danno 45%
+      player._metalRooneyShieldCycle = 10000;    // ms tra ogni scudo
+      player._metalRooneyShieldDur   = 2000;     // ms durata scudo
+      player._metalRooneyShieldNext  = Date.now() + 10000; // prossima attivazione
+      player._metalRooneyShieldUntil = 0;        // fine scudo attivo
+    },
+  },
+};
+
+/* Applica i passivi della skin attiva al player appena creato */
+function applySkinPassives(player){
+  try{
+    const sid = getActiveSkin(player.type);
+    if(!sid) return;
+    const passive = SKIN_PASSIVES[sid];
+    if(passive && typeof passive.apply === 'function') passive.apply(player);
+    player._activeSkinPassiveId = sid; // memorizza per addKill
+  }catch(e){}
+}
+
+/* Restituisce i bonus descrittivi per una skin */
+function getSkinPassiveBonuses(skinId){
+  const p = SKIN_PASSIVES[skinId];
+  return (p && p.bonuses) ? p.bonuses : [];
+}
+
+
+/* Popup info passivi skin */
+function showSkinPassiveInfo(skinId, skinName){
+  const old = document.getElementById('skinPassivePopup');
+  if(old) old.remove();
+
+  const bonuses = (typeof getSkinPassiveBonuses==='function') ? getSkinPassiveBonuses(skinId) : [];
+
+  const overlay = document.createElement('div');
+  overlay.id = 'skinPassivePopup';
+  overlay.style.cssText = [
+    'position:fixed;inset:0;z-index:20000;',
+    'display:flex;align-items:center;justify-content:center;',
+    'background:rgba(0,0,0,0.78);cursor:zoom-out;',
+  ].join('');
+  overlay.onclick = ()=>overlay.remove();
+
+  const bonusRows = bonuses.length > 0
+    ? bonuses.map(b=>`
+        <div style="display:flex;align-items:flex-start;gap:10px;margin:8px 0;font-size:13px;color:#e0e0e0;font-family:'VT323',monospace;font-size:18px;">
+          <span style="color:#ce93d8;flex:0 0 auto;">⬡</span>
+          <span>${b.desc}</span>
+        </div>`).join('')
+    : '<div style="color:#888;font-size:14px;">Nessun bonus passivo.</div>';
+
+  overlay.innerHTML = `
+    <div onclick="event.stopPropagation()" style="
+      background:#111;border:3px solid #ce93d8;padding:22px 26px;max-width:340px;width:90%;
+      font-family:'Press Start 2P',cursive;text-align:left;position:relative;
+      box-shadow:0 0 32px rgba(206,147,216,0.35);
+    ">
+      <button onclick="document.getElementById('skinPassivePopup').remove()" style="
+        position:absolute;top:8px;right:10px;background:none;border:none;
+        color:#ce93d8;font-size:18px;cursor:pointer;line-height:1;
+      ">✕</button>
+      <div style="color:#ce93d8;font-size:13px;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">Abilità Passiva</div>
+      <div style="color:#fff;font-size:15px;margin-bottom:14px;border-bottom:2px solid #333;padding-bottom:10px;">${skinName}</div>
+      ${bonusRows}
+      <div style="margin-top:14px;font-size:10px;color:#666;font-family:'VT323',monospace;font-size:14px;">
+        I bonus sono attivi automaticamente durante la partita quando la skin è equipaggiata.
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+
+/* ═══ SKIN PASSIVE HELPERS ═══════════════════════════════════════ */
+
+// Slow enemy by pct (0.12 = 12%) for durationMs
+function applySkinSlow(enemy, pct, durationMs){
+  try{
+    if(!enemy) return;
+    const factor = 1 - Math.min(0.95, Math.max(0, pct));
+    const until  = Date.now() + (durationMs||2000);
+    // stack: keep strongest/longest
+    if(enemy._skinSlowUntil && Date.now() < enemy._skinSlowUntil){
+      enemy._skinSlowUntil = Math.max(enemy._skinSlowUntil, until);
+      return;
+    }
+    enemy._skinSlowBase  = enemy.speed;
+    enemy.speed          = Math.max(0.3, (enemy.speed||2) * factor);
+    enemy._skinSlowUntil = until;
+  }catch(e){}
+}
+
+// Poison-plus: 3 dmg/sec for 14s
+function applySkinPoisonPlus(enemy){
+  try{
+    if(!enemy) return;
+    const until = Date.now() + 14000;
+    // extend if already active
+    enemy._poisonPlusUntil    = Math.max(enemy._poisonPlusUntil||0, until);
+    enemy._poisonPlusTick     = enemy._poisonPlusTick || 0;
+    enemy._poisonPlusDmg      = 3; // dmg per tick
+    enemy._poisonPlusInterval = 1000; // 1s
+  }catch(e){}
+}
+
+
+
+/* ════════════════════════════════════════════════════════════════ */
+/* EVIL MARZ — CURSE MARK: disegna il teschio verde acido veleno   */
+/* sui nemici marchiati dalla Maledizione                          */
+/* ════════════════════════════════════════════════════════════════ */
+function drawCurseMarks(){
+  if(typeof enemies==='undefined' || !enemies || !enemies.length) return;
+  try{
+    const now = Date.now();
+    for(const e of enemies){
+      if(!e || !e._curseMarzUntil || now >= e._curseMarzUntil) continue;
+
+      const cx = e.x + e.width / 2;
+      const cy = e.y - 18;
+      const pulse = 0.75 + 0.25 * Math.sin(now * 0.006);
+      const r = 11 * pulse;
+
+      ctx.save();
+
+      // alone verde acido pulsante
+      ctx.shadowColor = '#76ff03';
+      ctx.shadowBlur = 14 * pulse;
+
+      // sfondo circolare semitrasparente
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + 2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,30,0,${0.55 * pulse})`;
+      ctx.fill();
+
+      // bordo verde acido
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + 2, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(118,255,3,${0.85 * pulse})`;
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
+
+      // — Teschio disegnato in Canvas —
+      const s = r * 0.9;
+      ctx.fillStyle = `rgba(118,255,3,${0.92 * pulse})`;
+
+      // cranio (cerchio superiore)
+      ctx.beginPath();
+      ctx.arc(cx, cy - s * 0.1, s * 0.7, 0, Math.PI * 2);
+      ctx.fill();
+
+      // mascella
+      ctx.fillRect(cx - s * 0.45, cy + s * 0.28, s * 0.9, s * 0.42);
+
+      // denti (vuoti nella mascella)
+      ctx.fillStyle = `rgba(0,20,0,0.9)`;
+      const toothW = s * 0.18;
+      const toothH = s * 0.28;
+      const toothY = cy + s * 0.32;
+      for(let t = -1; t <= 1; t++){
+        ctx.fillRect(cx + t * s * 0.3 - toothW / 2, toothY, toothW, toothH);
+      }
+
+      // occhi vuoti
+      ctx.fillStyle = 'rgba(0,20,0,0.95)';
+      ctx.beginPath();
+      ctx.arc(cx - s * 0.25, cy - s * 0.08, s * 0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(cx + s * 0.25, cy - s * 0.08, s * 0.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // naso
+      ctx.beginPath();
+      ctx.moveTo(cx, cy + s * 0.1);
+      ctx.lineTo(cx - s * 0.1, cy + s * 0.22);
+      ctx.lineTo(cx, cy + s * 0.34);
+      ctx.lineTo(cx + s * 0.1, cy + s * 0.22);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.restore();
+    }
+  }catch(err){}
+}
+
+/* Tick skin passives on all enemies (called each frame in game loop) */
+function tickSkinEnemyPassives(now){
+  for(let i=enemies.length-1; i>=0; i--){
+    const e = enemies[i];
+    if(!e) continue;
+
+    // restore skin slow
+    if(e._skinSlowUntil && now >= e._skinSlowUntil){
+      if(typeof e._skinSlowBase === 'number') e.speed = e._skinSlowBase;
+      e._skinSlowBase  = undefined;
+      e._skinSlowUntil = 0;
+    }
+
+    // poison-plus tick
+    if(e._poisonPlusUntil && now < e._poisonPlusUntil){
+      if(!e._poisonPlusTick) e._poisonPlusTick = now;
+      if(now - e._poisonPlusTick >= (e._poisonPlusInterval||1000)){
+        e._poisonPlusTick = now;
+        const dmg = e._poisonPlusDmg || 3;
+        e.hp -= dmg;
+        createParticles(e.x+e.width/2, e.y+e.height/2, '#76ff03', 4, 3);
+        showDamageNumber(e.x+e.width/2, e.y+e.height/2, dmg);
+        if(e.hp <= 0){
+          createParticles(e.x,e.y,'#b2ff59',22,5);
+          dropStellarBonusAtIndexIfNeeded(i);
+          enemies.splice(i,1);
+          applyScore(100*currentLevel);
+          addKill();
+          continue;
+        }
+      }
+    } else if(e._poisonPlusUntil && now >= e._poisonPlusUntil){
+      e._poisonPlusUntil = 0;
+    }
+
+  }
+}
+
+
+/* ════════════════════════════════════════════════════════════════ */
+
+
+
 function startGame(){
   const etherUI = document.getElementById('etherHud');
   if(etherUI) etherUI.style.display='none';
 
   currentLevel=1;score=0;kills=0;matchKills=0;matchHealMissionCount=0;timer=levelConfigs[0].time;
   runUsedSuper=false; runTookDamage=false;
+  window.runUsedDash=false;
+  window.runPickupsCollected=0;
+  window.runConsecutiveKills=0;
+  window.runBestConsecutiveKills=0;
+  window.runSuperKillStreak=0;
+  window.runBestSuperKillStreak=0;
+  window.runKillsInTenWindow=[];
+  window.runBestKillsInTen=0;
+  window.runLowHpSuperActive=false;
+  window.runTookAnyDamage=false;
   player=new Player(selectedCharacter||'jimmy');
+  try{ applySkinPassives(player); }catch(e){}
   enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];wolves=[];
+  bossRings=[];collanaLightnings=[];collanaOrbs=[];furiaWaves=[];
+  magicZone=null;hendelCrush=null;
+  if(window.cosmoSingularity) window.cosmoSingularity=null;
+  if(window.cosmoTrails) window.cosmoTrails=[];
+  if(window._marzArcaneLinks) window._marzArcaneLinks=[];
+  window._playerHitFlash=0; window._playerHealFlash=0;
+  _wallFlash.left=0;_wallFlash.right=0;_wallFlash.top=0;_wallFlash.bottom=0;
+  levelAdvanceLock=false;
 
   if(typeof pdorOrbSets!=='undefined' && pdorOrbSets) pdorOrbSets.length=0;
   spawnEnemiesForLevel(currentLevel);
@@ -14217,8 +15823,26 @@ function endGame(won){
       saveAccount();
     }
   }catch(e){}
+
+  // Track nuove missioni fine partita
+  try{
+    const noPickupRun = (window.runPickupsCollected === 0);
+    const noDashRun   = !window.runUsedDash;
+    const noDeathRun  = !window.runTookAnyDamage;
+    const matchScore  = score || 0;
+    const consecKills = window.runBestConsecutiveKills || 0;
+    const superStreak = window.runBestSuperKillStreak  || 0;
+    const killsInTen  = window.runBestKillsInTen       || 0;
+    accountOnGameComplete(noPickupRun, noDashRun, noDeathRun, matchScore, consecKills, superStreak, killsInTen);
+  }catch(e){}
   document.getElementById('endScreen').style.display='block';
   const kd=document.getElementById('killsDisplay'); if(kd) kd.style.display='none';
+  // Hide in-game HUD elements that shouldn't show on end screen
+  try{
+    const evoHud=document.getElementById('evoStackHud'); if(evoHud) evoHud.innerHTML='';
+    const comboEl=document.getElementById('comboDisplay'); if(comboEl) comboEl.style.opacity='0';
+    const lvPop=document.getElementById('levelUpPopup'); if(lvPop) lvPop.style.opacity='0';
+  }catch(e){}
   document.getElementById('endTitle').textContent=won?'VICTORY':'GAME OVER';
   document.getElementById('endMessage').textContent=`Score Finale: ${score}`;
   document.getElementById('endSub').textContent=`Hai raggiunto il Livello ${currentLevel}`;
@@ -14343,6 +15967,8 @@ function drawKaerithFireOverlay(now){
 
 /* ===== VISUAL FX: Rooney Area (zona quadrata) + Cosmo Shot (hitscan) ===== */
 window.rooneyAreaFX = window.rooneyAreaFX || [];
+window.metalScreenFlash = window.metalScreenFlash || 0;
+window.metalScreenFlashColor = window.metalScreenFlashColor || '#1565c0';
 function addRooneyAreaFX(cx, cy, half){
   try{
     const now=Date.now();
@@ -14362,6 +15988,9 @@ function drawRooneyAreaFX(now){
   const arr = window.rooneyAreaFX;
   if(!arr || !arr.length) return;
   now = now || Date.now();
+  // Check METAL Rooney skin
+  const _rAreaPal = (typeof getSkinFxPalette==='function' && typeof player!=='undefined' && player && player.type==='rooney')
+    ? getSkinFxPalette('rooney') : null;
   for(let i=arr.length-1;i>=0;i--){
     const fx=arr[i];
     const t = (now - fx.start) / (fx.ttl||650);
@@ -14377,30 +16006,44 @@ function drawRooneyAreaFX(now){
     const top  = fx.cy - fx.half - pad;
     const size = fx.half*2 + pad*2;
 
+    // Palette-aware colors
+    const _fillC   = _rAreaPal ? (_rAreaPal.areaFillColor||'rgba(13,71,161,0.32)')   : 'rgba(255,40,40,0.30)';
+    const _borderC = _rAreaPal ? (_rAreaPal.areaBorderColor||'rgba(21,101,192,0.95)') : 'rgba(255,60,60,0.95)';
+    const _innerC  = _rAreaPal ? (_rAreaPal.areaInnerColor||'rgba(25,118,210,0.55)')  : 'rgba(255,0,0,0.55)';
+    const _crackC  = _rAreaPal ? 'rgba(0,30,80,0.9)'  : 'rgba(40,0,0,0.9)';
+    const _dustC   = _rAreaPal ? 'rgba(100,180,255,0.85)' : 'rgba(255,120,120,0.85)';
+
     ctx.save();
     ctx.globalAlpha = 0.28*a;
-    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = 'rgba(255,40,40,0.30)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = _fillC;
     ctx.fillRect(left, top, size, size);
 
     ctx.globalAlpha = (0.85*a);
     ctx.lineWidth = 6 + 3*pulse;
-    ctx.shadowColor = 'rgba(255,0,0,0.65)';
-    ctx.shadowBlur = 22;
-    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,60,60,0.95)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = _borderC;
     ctx.setLineDash([10, 8]);
     ctx.strokeRect(left, top, size, size);
     // inner glow
     ctx.globalAlpha = 0.45*a;
     ctx.setLineDash([]);
     ctx.lineWidth = 3 + 2*pulse;
-    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,0,0,0.55)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = _innerC;
     ctx.strokeRect(left+10, top+10, size-20, size-20);
     ctx.setLineDash([]);
+
+    // METAL extra: scanline effect inside the area
+    if(_rAreaPal){
+      ctx.globalAlpha = 0.12*a;
+      ctx.strokeStyle = _borderC; ctx.lineWidth = 1;
+      for(let sl=0; sl<size; sl+=18){
+        ctx.beginPath(); ctx.moveTo(left, top+sl); ctx.lineTo(left+size, top+sl); ctx.stroke();
+      }
+    }
 
     // inner "cracks"
     ctx.globalAlpha = 0.55*a;
     ctx.lineWidth = 1.8;
-    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(40,0,0,0.9)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = _crackC;
     for(const seg of (fx.cracks||[])){
       ctx.globalAlpha = 0.45*a*seg[4];
       ctx.beginPath();
@@ -14411,7 +16054,7 @@ function drawRooneyAreaFX(now){
 
     // dust ring
     ctx.globalAlpha = 0.18*a;
-    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,120,120,0.85)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = _dustC;
     ctx.lineWidth = 2;
     ctx.strokeRect(left+6, top+6, size-12, size-12);
 
@@ -14817,6 +16460,8 @@ function gameLoop(){
   if(now-lastSecondTick>1000){
     lastSecondTick=now;
     timer--;
+    // Traccia secondi sopravvissuti per missione
+    try{ accountOnSurviveSecond(); }catch(e){}
     if(timer<=0){
       timer=0;
       endGame(false);
@@ -14837,8 +16482,9 @@ return;
         if(!player._passiveRechargeAt) player._passiveRechargeAt = now + 1000;
         if(now >= player._passiveRechargeAt){
           player._passiveRechargeAt = now + 1000;
-          // Accelerate by reducing "lastSuper" effectively
-          player.lastSuper -= 500;
+          // Accelerate by reducing "lastSuper" effectively (never go negative)
+          const _minLastSuper = now - (player.superCooldown||0);
+          player.lastSuper = Math.max(_minLastSuper, player.lastSuper - 500);
         }
       }
     }
@@ -14854,6 +16500,7 @@ return;
   // Marz Super zone tick damage/expansion
   updateMagicZone(now);
   updatePdorOrbs(now);
+  try{ tickSkinEnemyPassives(now); }catch(_te){}
   updateParticles();
   updateIraFX();
   if(typeof updateCollana==='function') updateCollana(Date.now());
@@ -14870,6 +16517,8 @@ return;
     if(enemies[i].hp<=0){
       dropStellarBonusAtIndexIfNeeded(i);
       const dead=enemies.splice(i,1)[0];
+      // Traccia uccisione boss per missioni
+      try{ if(dead && dead.type && dead.type.startsWith('boss')) accountOnBossKilled(); }catch(e){}
       applyScore(100*currentLevel);
       addKill(); createParticles(dead.x,dead.y,'#fff176',30,6);
     }
@@ -14924,6 +16573,7 @@ return;
   drawArcoAntico(now);
   updateDrawAncientExplosion(now);
   enemies.forEach(e=>e.draw());
+  drawCurseMarks();
   drawBossRings(now);
   drawWolves();
   if(player) player.draw();
@@ -14980,11 +16630,29 @@ return;
   if(voltryxScreenFlash>0){
     ctx.save();
     ctx.globalAlpha = Math.min(0.32, voltryxScreenFlash/36);
-    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#ff6d00';
+    // Skin ENERGY Tempostorm: flash arancio dorato | default: arancio Voltryx
+    const _sfPal = (typeof getSkinFxPalette==='function' && typeof player!=='undefined' && player)
+      ? getSkinFxPalette(player.type) : null;
+    const _sfColor = (_sfPal && _sfPal.beamGrad)
+      ? '#ffa500'   // ENERGY tempostorm → arancio caldo
+      : '#ff6d00';  // default Voltryx
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25;
+    ctx.fillStyle = _sfColor;
     ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.restore();
   }
 
+
+  // METAL Rooney/Jimmy super: metallic screen pulse
+  if(window.metalScreenFlash>0){
+    ctx.save();
+    ctx.globalAlpha = Math.min(0.28, window.metalScreenFlash/36);
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 20;
+    ctx.fillStyle = window.metalScreenFlashColor||'#1565c0';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
+    window.metalScreenFlash = Math.max(0, window.metalScreenFlash - 1);
+  }
 
   // COSMO super: cosmic-black screen pulse
   if(cosmoScreenFlash>0){
@@ -15132,6 +16800,19 @@ if(bonusBox){
   if(player && player.collanaActive && player.collanaEnd > nowT){
     addItem('<span style="color:#fff176;text-shadow:0 0 8px #ffe000,0 0 2px #fff;">⚡ COLLANA</span>',
       player.collanaEnd, '#fff176', player.collanaStart || (player.collanaEnd - 8000), 8000);
+  }
+
+  // METAL ROONEY — scudo attivo o countdown prossimo scudo
+  if(player && player.type==='rooney' && player._metalRooneyDmgReduce){
+    if(player._metalRooneyShieldUntil && player._metalRooneyShieldUntil > nowT){
+      addItem('⚙ SCUDO METAL', player._metalRooneyShieldUntil, '#4fc3f7',
+        player._metalRooneyShieldUntil - (player._metalRooneyShieldDur||2000),
+        player._metalRooneyShieldDur||2000);
+    } else if(player._metalRooneyShieldNext && player._metalRooneyShieldNext > nowT){
+      addItem('⚙ PROSSIMO SCUDO', player._metalRooneyShieldNext, '#546e7a',
+        player._metalRooneyShieldNext - (player._metalRooneyShieldCycle||10000),
+        player._metalRooneyShieldCycle||10000);
+    }
   }
 
   if(rows.length){
@@ -15729,7 +17410,7 @@ function updateMarcusUnlock(){
     if(badge) badge.style.display='none';
   }
 }
-setInterval(updateMarcusUnlock,500);
+if(!window._marcusIntervalStarted){ window._marcusIntervalStarted=true; setInterval(updateMarcusUnlock,500); };
 setInterval(updateLucienUnlockUI,500);
 
 
@@ -15867,6 +17548,8 @@ function renderSkinShop(){
 
   SKIN_CATALOGUE.forEach(skin=>{
     const owned    = isSkinOwned(skin.id);
+    // Skin già acquistata → non mostrarla nello shop (si trova nella sezione "Attive")
+    if(owned) return;
     const unlocked = isSkinUnlocked(skin.id);
     const active   = getActiveSkin(skin.char) === skin.id;
     const img      = _skinImages[skin.id];
@@ -15885,15 +17568,24 @@ function renderSkinShop(){
     } else if(owned){
       actionBtn = `<button class="btn" style="font-size:10px;padding:4px 8px;background:#2ecc71;color:#000;margin-top:6px;" onclick="activateSkin('${skin.char}','${skin.id}')">SELEZIONA</button>`;
     } else if(unlocked){
-      actionBtn = `<button class="btn" style="font-size:10px;padding:4px 8px;margin-top:6px;border-color:#ce93d8;" onclick="confirmBuySkin('${skin.id}','${skin.name}')">${_etherIcon(13)}${SKIN_COST} ACQUISTA</button>`;
+      const _bcost = (typeof getSkinCost==='function') ? getSkinCost(skin.id) : SKIN_COST;
+      actionBtn = `<button class="btn" style="font-size:10px;padding:4px 8px;margin-top:6px;border-color:#ce93d8;" onclick="confirmBuySkin('${skin.id}','${skin.name}')">${_etherIcon(13)}${_bcost} ACQUISTA</button>`;
     } else {
       actionBtn = `<button class="btn" style="font-size:10px;padding:4px 8px;margin-top:6px;opacity:0.5;cursor:not-allowed;" disabled>🔒 BLOCCATA</button>`;
     }
 
-    const subText = active ? '✓ Attiva' : owned ? 'Acquistata' : unlocked ? _etherIcon(11)+' 500' : '🔒 Missione Eterea';
+    const _skinCostDisplay = (typeof getSkinCost==='function') ? getSkinCost(skin.id) : SKIN_COST;
+    const subText = active ? '✓ Attiva' : owned ? 'Acquistata' : unlocked ? _etherIcon(11)+' '+_skinCostDisplay : '🔒 Missione Eterea';
     const subColor = active ? '#f1c40f' : owned ? '#2ecc71' : unlocked ? '#ce93d8' : '#666';
 
+    // Pulsante ⓘ info passivi
+    const _bonuses = (typeof getSkinPassiveBonuses==='function') ? getSkinPassiveBonuses(skin.id) : [];
+    const _infoBtnHtml = _bonuses.length > 0
+      ? `<button class="skin-info-btn" onclick="showSkinPassiveInfo('${skin.id}','${skin.name.replace(/'/g,'&#39;')}')" title="Abilità passiva">ⓘ</button>`
+      : '';
+    card.style.position = 'relative';
     card.innerHTML = `
+      ${_infoBtnHtml}
       ${imgHtml}
       <div class="skin-name">${skin.name}</div>
       <div class="skin-sub" style="color:${subColor}">${subText}</div>
@@ -15920,9 +17612,19 @@ function renderSkinActive(){
       ? (_skinImages[skin.id]&&_skinImages[skin.id].src ? _skinImages[skin.id].src : '')
       : (images[ch]&&images[ch].src ? images[ch].src : '');
     const charName = (characterStats&&characterStats[ch]) ? characterStats[ch].name : ch.toUpperCase();
+    // Immagine cliccabile: apre il preview popup
+    const _prevSkinName = skin ? skin.name : 'Default';
+    const _prevOnClick = `openSkinPreview('${imgSrc.replace(/'/g,"\'")}','${_prevSkinName.replace(/'/g,"\'")}','${charName.replace(/'/g,"\'")}')`;
     const imgHtml  = imgSrc
-      ? `<img src="${imgSrc}" alt="${charName}" style="width:72px;height:72px;object-fit:contain;image-rendering:pixelated;">`
-      : `<div style="width:72px;height:72px;background:#222;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;">?</div>`;
+      ? `<img src="${imgSrc}" alt="${charName}"
+           style="width:72px;height:72px;object-fit:contain;image-rendering:pixelated;cursor:zoom-in;
+                  transition:transform .15s,filter .15s;"
+           onmouseover="this.style.transform='scale(1.12)';this.style.filter='drop-shadow(0 0 10px #f1c40f)'"
+           onmouseout="this.style.transform='';this.style.filter=''"
+           onclick="${_prevOnClick}"
+           title="Clicca per ingrandire">`
+      : `<div style="width:72px;height:72px;background:#222;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:zoom-in;"
+           onclick="${_prevOnClick}" title="Clicca per ingrandire">🎮</div>`;
 
     const card = document.createElement('div');
     card.className = 'skin-card';
@@ -15936,7 +17638,14 @@ function renderSkinActive(){
          </div>`
       : `<div style="font-size:9px;color:#888;margin-top:4px;">Nessuna skin</div>`;
 
+    // Pulsante ⓘ info passivi per la skin attiva (se presente)
+    const _aBonuses = (skin && typeof getSkinPassiveBonuses==='function') ? getSkinPassiveBonuses(skin.id) : [];
+    const _aInfoHtml = _aBonuses.length > 0
+      ? `<button class="skin-info-btn" onclick="showSkinPassiveInfo('${skin.id}','${(skin?skin.name:'').replace(/'/g,'&#39;')}')" title="Abilità passiva">ⓘ</button>`
+      : '';
+    card.style.position = 'relative';
     card.innerHTML = `
+      ${_aInfoHtml}
       ${imgHtml}
       <div class="skin-name">${charName}</div>
       <div class="skin-sub" style="color:${skin?'#f1c40f':'#888'}">${skin ? skin.name : 'Default'}</div>
@@ -15962,6 +17671,104 @@ function cycleSkin(charType, dir){
   if(fb){ fb.textContent = chosen.id ? `${chosen.name} selezionata!` : 'Default ripristinato.'; fb.style.color='#f1c40f'; setTimeout(()=>{if(fb)fb.textContent='';},1800); }
 }
 
+/* ─── SKIN PREVIEW POPUP ────────────────────────────────── */
+function openSkinPreview(imgSrc, skinName, charName){
+  const old = document.getElementById('skinPreviewPopup');
+  if(old) old.remove();
+
+  const isDefault = !imgSrc || imgSrc === '';
+  const overlay = document.createElement('div');
+  overlay.id = 'skinPreviewPopup';
+  overlay.style.cssText = [
+    'position:fixed;inset:0;z-index:10000;',
+    'display:flex;align-items:center;justify-content:center;',
+    'background:rgba(0,0,0,0.82);',
+    'cursor:zoom-out;',
+    'animation:skinPrevFadeIn 180ms ease forwards;'
+  ].join('');
+
+  // Inject keyframes once
+  if(!document.getElementById('skinPrevStyle')){
+    const st = document.createElement('style');
+    st.id = 'skinPrevStyle';
+    st.textContent = `
+      @keyframes skinPrevFadeIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
+      @keyframes skinPrevPop{0%{transform:scale(0.80)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+      #skinPreviewPopup .spv-box{
+        position:relative;
+        background:linear-gradient(160deg,#12122a,#0a0a18);
+        border:3px solid #f1c40f;
+        border-radius:20px;
+        padding:28px 28px 22px;
+        max-width:380px;
+        width:calc(100% - 48px);
+        text-align:center;
+        font-family:'Press Start 2P',cursive;
+        box-shadow:0 0 60px rgba(241,196,15,0.35), 0 0 120px rgba(0,0,0,0.7);
+        animation:skinPrevPop 320ms cubic-bezier(0.34,1.56,0.64,1) forwards;
+        cursor:default;
+      }
+      #skinPreviewPopup .spv-img{
+        width:220px;height:220px;
+        object-fit:contain;
+        image-rendering:pixelated;
+        display:block;
+        margin:0 auto 16px;
+        filter:drop-shadow(0 0 24px rgba(241,196,15,0.55));
+        transition:transform .25s;
+      }
+      #skinPreviewPopup .spv-img:hover{ transform:scale(1.07); }
+      #skinPreviewPopup .spv-name{
+        font-size:15px;color:#f1c40f;
+        text-shadow:0 0 12px rgba(241,196,15,0.7);
+        margin-bottom:6px;
+      }
+      #skinPreviewPopup .spv-char{
+        font-size:10px;color:#aaa;margin-bottom:18px;
+      }
+      #skinPreviewPopup .spv-close{
+        background:#e74c3c;color:#fff;border:none;
+        padding:8px 22px;font-size:11px;
+        font-family:'Press Start 2P',cursive;
+        cursor:pointer;border-radius:8px;
+        transition:transform .12s,background .12s;
+      }
+      #skinPreviewPopup .spv-close:hover{
+        background:#c0392b;transform:scale(1.06);
+      }
+      #skinPreviewPopup .spv-badge-default{
+        font-size:9px;color:#888;
+        border:1px solid #444;border-radius:6px;
+        padding:4px 10px;display:inline-block;
+        margin-bottom:14px;
+      }
+    `;
+    document.head.appendChild(st);
+  }
+
+  const imgContent = isDefault
+    ? `<div style="width:220px;height:220px;margin:0 auto 16px;
+         display:flex;align-items:center;justify-content:center;
+         background:#111;border-radius:12px;font-size:52px;">🎮</div>
+       <div class="spv-badge-default">Skin Default</div>`
+    : `<img class="spv-img" src="${imgSrc}" alt="${skinName}">`;
+
+  overlay.innerHTML = `
+    <div class="spv-box" onclick="event.stopPropagation()">
+      ${imgContent}
+      <div class="spv-name">${skinName}</div>
+      <div class="spv-char">${charName}</div>
+      <button class="spv-close" onclick="document.getElementById('skinPreviewPopup').remove()">✕ CHIUDI</button>
+    </div>`;
+
+  overlay.addEventListener('click', ()=> overlay.remove());
+  // chiudi anche con ESC
+  const onKey = e=>{ if(e.key==='Escape'){ overlay.remove(); document.removeEventListener('keydown',onKey); } };
+  document.addEventListener('keydown', onKey);
+
+  document.body.appendChild(overlay);
+}
+
 function confirmBuySkin(skinId, skinName){
   if(!isSkinUnlocked(skinId)){
     const fb = document.getElementById('skinFeedback');
@@ -15978,7 +17785,7 @@ function confirmBuySkin(skinId, skinName){
       <div style="font-size:16px;color:#f1c40f;margin-bottom:10px;">ACQUISTA SKIN</div>
       <div style="font-size:13px;color:#fff;margin-bottom:8px;">${skinName}</div>
       <div style="font-size:12px;color:#ddd;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;">
-        Costo:&nbsp;${_etherIcon(18)}<span style="color:#f1c40f;">${SKIN_COST}</span>
+        Costo:&nbsp;${_etherIcon(18)}<span style="color:#f1c40f;">${(typeof getSkinCost==='function')?getSkinCost(skinId):SKIN_COST}</span>
         &nbsp;|&nbsp; Hai:&nbsp;${_etherIcon(18)}<span style="color:#7fffd4;">${ether||0}</span>
       </div>
       <div style="display:flex;gap:12px;justify-content:center;">
@@ -16224,7 +18031,7 @@ function updateMarcusUnlock(){
     if(badge) badge.style.display='none';
   }
 }
-setInterval(updateMarcusUnlock,500);
+/* marcusInterval already started */;
 
 
 // --- Ensure MARCUS selection behaves like others ---
@@ -16297,7 +18104,7 @@ function updateMarcusUnlock(){
     if(badge) badge.style.display='none';
   }
 }
-setInterval(updateMarcusUnlock,500);
+/* marcusInterval already started */;
 
 
 // --- Ensure MARCUS selection behaves like others ---
@@ -16357,7 +18164,7 @@ function updateMarcusUnlock(){
     if(badge) badge.style.display='none';
   }
 }
-setInterval(updateMarcusUnlock,500);
+/* marcusInterval already started */;
 
 
 // --- Ensure MARCUS selection behaves like others ---
@@ -17217,13 +19024,24 @@ function isCharPurchased(id){ return !!(charPurchases && charPurchases[id]); }
    ═══════════════════════════════════════════════════════ */
 const SKIN_PURCHASES_KEY = 'pf_skin_purchases_v1';
 const SKIN_ACTIVE_KEY    = 'pf_skin_active_v1';
-const SKIN_COST = 500;
+const SKIN_COST = 750;
 
 // Catalogue: id, char, name, src (evo sprite repurposed as cosmetic only)
 const SKIN_CATALOGUE = [
-  { id:'jimmy_evo',   char:'jimmy',  name:'Jimmy EVO',   src:'https://i.postimg.cc/g26ZX0n9/jimmyevo.png'  },
+  { id:'jimmy_evo',   char:'jimmy',  name:'Jimmy EVO',   src:'https://i.postimg.cc/RZwWbCxg/jimmy-EVO.png'  },
   { id:'rooney_evo',  char:'rooney', name:'Rooney EVO',  src:'https://i.postimg.cc/x8Ck0fWs/rooneyevo.png' },
   { id:'jeff_evo',    char:'jeff',   name:'Jeff EVO',    src:'https://i.postimg.cc/FsYf8KbV/jeffevo.png'   },
+  // ── Nuove skin Premium (500 frammenti d'etere) ─────────────────────────────
+  { id:'voltryx_ice',      char:'voltryx',    name:'ICE Voltryx',      src:'https://i.postimg.cc/qM83CFKN/ICEvoltryx.png'         },
+  { id:'tempostorm_energy',char:'tempostorm', name:'ENERGY Tempostorm',src:'https://i.postimg.cc/9ffRKFnm/ENERGYtempostorm.png'   },
+  { id:'marz_evil',        char:'marz',       name:'EVIL Marz',        src:'https://i.postimg.cc/9QbwLq11/EVILmarz.png'           },
+  { id:'salsy_red',        char:'salsy',      name:'RED Salsy',        src:'https://i.postimg.cc/905wz3Wf/REDsalsy.png'           },
+  { id:'kouvagia_evil',    char:'kouvagia',   name:'EVIL Kouvagia',    src:'https://i.postimg.cc/DyhbTKjJ/EVILkouvagia.png'       },
+  // ── METAL Skins (750 frammenti d'etere) ─────────────────────────────────────
+  { id:'rooney_metal', char:'rooney', name:'METAL Rooney', src:'https://i.postimg.cc/GtSXNJGB/METALrooney.png' },
+  { id:'jimmy_metal',  char:'jimmy',  name:'METAL Jimmy',  src:'https://i.postimg.cc/VNWpghsW/METALjimmy-(1).png'  },
+  // ── JAKEFF (1000 frammenti d'etere) ──────────────────────────────────────────
+  { id:'jeff_jakeff', char:'jeff', name:'JAKEFF', src:'https://i.postimg.cc/8cCytnJ1/jakeff-(1).png', cost:1000 },
 ];
 
 // Preload skin images
@@ -17233,6 +19051,89 @@ SKIN_CATALOGUE.forEach(s=>{
   img.src = s.src;
   _skinImages[s.id] = img;
 });
+
+/* ═══════════════════════════════════════════════════════════════════
+   SKIN FX PALETTES — ogni skin premium ridefinisce i colori di
+   attacco base e super del personaggio.
+   ═══════════════════════════════════════════════════════════════════ */
+const SKIN_FX_PALETTES = {
+  // ICE Voltryx — azzurro ghiaccio, cristalli, freddo
+  voltryx_ice: {
+    attack:      ['#a8e6f0','#5bc8e8','#c8f0ff'],
+    'super':       ['#5bc8e8','#a8e6f0','#e0f8ff'],
+    ringColor:   '#5bc8e8',
+    particleExtra: ['#cce8ff','#89d4f5'],
+  },
+  // ENERGY Tempostorm — arancio, giallo caldo
+  tempostorm_energy: {
+    attack:      ['#ff8c00','#ffa500','#ffe080'],
+    'super':       ['#ff8c00','#ffa500','#ffe080'],
+    beamGrad:    ['rgba(255,100,0,0.05)','rgba(255,165,0,{a})','rgba(255,220,80,{a})','rgba(255,140,0,{a})','rgba(255,100,0,0.05)'],
+    beamShadow:  'rgba(255,160,0,0.95)',
+    beamPhoton:  '#ffa500',
+    particleExtra: ['#ff8c00','#ffe080'],
+  },
+  // EVIL Marz — verde veleno, viola scuro, rosso cupo
+  marz_evil: {
+    attack:      ['#4caf22','#7b0099','#8b0000'],
+    'super':       ['#4caf22','#7b0099','#8b0000','#3a7d00','#4b0050'],
+    zoneColors:  ['#4caf22','#7b0099','#8b0000','#3a7d00','#4b0050'],
+    particleExtra: ['#4caf22','#7b0099','#8b0000'],
+  },
+  // RED Salsy — rosso fuoco, cremisi, rosso scuro
+  salsy_red: {
+    attack:      ['#e53935','#ff1744','#ff6b6b'],
+    'super':       ['#e53935','#ff1744','#ff6b6b'],
+    markColor:   '#e53935',
+    particleExtra: ['#ff6b6b','#b71c1c'],
+  },
+  // EVIL Kouvagia — verde acido veleno
+  kouvagia_evil: {
+    attack:      ['#76ff03','#b2ff59','#33691e'],
+    'super':       ['#76ff03','#b2ff59','#33691e'],
+    waveColor:   '#76ff03',
+    particleExtra: ['#b2ff59','#33691e'],
+  },
+
+  // METAL Rooney — blu metallico, blu scuro, acciaio
+  rooney_metal: {
+    attack:      ['#1565c0','#0d47a1','#90caf9','#1e88e5'],
+    'super':       ['#1565c0','#0d47a1','#90caf9','#1976d2','#42a5f5'],
+    ringColor:   '#1e88e5',
+    areaFillColor: 'rgba(13,71,161,0.32)',
+    areaBorderColor: 'rgba(21,101,192,0.95)',
+    areaInnerColor: 'rgba(25,118,210,0.55)',
+    particleExtra: ['#90caf9','#0d47a1','#1565c0'],
+    screenFlash: '#0d47a1',
+  },
+  // JAKEFF Jeff — argento, grigio scuro, rosso acciaio
+  jeff_jakeff: {
+    attack:      ['#c0c0c0','#b22222','#e8e8e8','#8b0000'],
+    'super':       ['#c0c0c0','#e8e8e8','#b22222','#8b0000','#d0d0d0'],
+    ringColor:   '#c0c0c0',
+    particleExtra: ['#e8e8e8','#b22222','#3a3a3a'],
+    screenFlash: '#8b0000',
+    arcColor:    'rgba(192,192,192,{a})',
+    killBurst:   '#c0c0c0',
+  },
+  // METAL Jimmy — azzurro, bianco, celeste ghiaccio
+  jimmy_metal: {
+    attack:      ['#4fc3f7','#e3f2fd','#81d4fa','#b3e5fc'],
+    'super':       ['#4fc3f7','#e3f2fd','#81d4fa','#29b6f6','#ffffff'],
+    ringColor:   '#4fc3f7',
+    particleExtra: ['#e3f2fd','#4fc3f7','#ffffff'],
+    screenFlash: '#4fc3f7',
+  },
+};
+
+/* Restituisce la palette per il personaggio corrente, o null se nessuna skin con palette è attiva */
+function getSkinFxPalette(charType){
+  if(typeof getActiveSkin !== 'function') return null;
+  const sid = getActiveSkin(charType);
+  if(!sid) return null;
+  return SKIN_FX_PALETTES[sid] || null;
+}
+
 
 function loadSkinPurchases(){
   try{ return JSON.parse(localStorage.getItem(SKIN_PURCHASES_KEY)||'{}') || {}; }catch(e){ return {}; }
@@ -17254,11 +19155,17 @@ function isSkinUnlocked(skinId){ return !!(skinPurchases && skinPurchases[skinId
 function isSkinOwned(skinId){ return !!(skinPurchases && skinPurchases[skinId]); }
 function getActiveSkin(charType){ return (activeSkins && activeSkins[charType]) || null; }
 
+function getSkinCost(skinId){
+  const s = SKIN_CATALOGUE.find(s=>s.id===skinId);
+  return (s && s.cost) ? s.cost : SKIN_COST;
+}
+
 function trySkinPurchase(skinId){
+  const _cost = getSkinCost(skinId);
   if(isSkinOwned(skinId)) return { ok:true, msg:'Già acquistata!' };
   if(!isSkinUnlocked(skinId)) return { ok:false, msg:'Skin non ancora sbloccata! Completa la missione Eterea.' };
-  if((ether||0) < SKIN_COST) return { ok:false, msg:`Frammenti insufficienti (servono ${SKIN_COST})` };
-  ether = Math.max(0, Math.floor(ether||0) - SKIN_COST);
+  if((ether||0) < _cost) return { ok:false, msg:`Frammenti insufficienti (servono ${_cost})` };
+  ether = Math.max(0, Math.floor(ether||0) - _cost);
   saveEther(); updateEther();
   skinPurchases[skinId] = true;
   saveSkinPurchases();
@@ -18278,6 +20185,13 @@ function updateLocalBonusHUD(elId, pl, color){
   addB('ESTASI',   pl.estasiUntil,      15000);
   addB('FURIA',    pl.furiaHealUntil,   10000);
   addB('MEZZALUNA',pl.mezzalunaUntil,   12000);
+  // METAL ROONEY
+  if(pl.type==='rooney' && pl._metalRooneyDmgReduce){
+    if(pl._metalRooneyShieldUntil && pl._metalRooneyShieldUntil > Date.now())
+      addB('⚙SCUDO', pl._metalRooneyShieldUntil, pl._metalRooneyShieldDur||2000);
+    else if(pl._metalRooneyShieldNext && pl._metalRooneyShieldNext > Date.now())
+      addB('⚙NEXT',  pl._metalRooneyShieldNext,  pl._metalRooneyShieldCycle||10000);
+  }
   if(pl.collanaActive && pl.collanaEnd > Date.now()){
     addB('⚡ COLLANA', pl.collanaEnd, 8000);
   }
@@ -18515,6 +20429,7 @@ function _localRafLoop(){
   drawArcoAntico(now);
   updateDrawAncientExplosion(now);
   enemies.forEach(e=>{ try{e.draw();}catch(err){} });
+  try{ drawCurseMarks(); }catch(err){}
   drawBossRings(now);
   drawWolves();
 
@@ -18658,7 +20573,7 @@ function updateMarcusUnlock(){
     if(badge) badge.style.display='none';
   }
 }
-setInterval(updateMarcusUnlock,500);
+/* marcusInterval already started */;
 
 
 // --- Ensure MARCUS selection behaves like others ---
