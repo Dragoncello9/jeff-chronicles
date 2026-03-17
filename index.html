@@ -1576,6 +1576,132 @@
 .silverBorder{border:4px solid #c0c0c0 !important;box-shadow:0 0 14px #c0c0c0aa !important;}
 
 .goldBorder{border:4px solid #ffd700 !important;box-shadow:0 0 16px #ffd700aa !important;}
+
+/* ===== LOADING SCREEN ===== */
+#loadingScreen{
+  position:fixed;inset:0;z-index:99999;
+  background:#000;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity 0.7s ease;
+}
+#loadingCanvas{
+  position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
+}
+#loadingContent{
+  position:relative;z-index:2;
+  text-align:center;
+  width:min(580px,88vw);
+  display:flex;flex-direction:column;align-items:center;gap:0;
+}
+#loadingTitle{
+  font-family:'Press Start 2P', cursive;
+  font-size:clamp(15px,3.2vw,26px);
+  color:#e74c3c;
+  text-shadow:3px 3px 0 #7b0000,0 0 30px rgba(231,76,60,0.85),0 0 60px rgba(231,76,60,0.40);
+  letter-spacing:0.06em;line-height:1.4;position:relative;
+  animation:ldTitleReveal 0.8s ease 0.2s both, ldGlitch 7s ease 2s infinite;
+  margin-bottom:6px;
+}
+#loadingTitle::before{
+  content:attr(data-text);position:absolute;inset:0;
+  animation:ldGlitchBefore 6s ease 2.5s infinite;pointer-events:none;
+}
+@keyframes ldTitleReveal{
+  0%{opacity:0;letter-spacing:0.55em;filter:blur(8px);}
+  60%{opacity:1;letter-spacing:0.12em;filter:blur(1px);}
+  100%{opacity:1;letter-spacing:0.06em;filter:blur(0);}
+}
+@keyframes ldGlitch{
+  0%,93%,100%{clip-path:none;transform:none;}
+  94%{clip-path:polygon(0 20%,100% 20%,100% 38%,0 38%);transform:translate(-2px,0);}
+  95%{clip-path:polygon(0 55%,100% 55%,100% 68%,0 68%);transform:translate(2px,0);}
+  96%{clip-path:none;transform:none;}
+  97%{clip-path:polygon(0 6%,100% 6%,100% 18%,0 18%);transform:translate(-1px,0);color:#0ff;}
+  98%{clip-path:none;transform:none;color:#e74c3c;}
+}
+@keyframes ldGlitchBefore{
+  0%,91%,100%{opacity:0;}
+  92%,95%{opacity:1;clip-path:polygon(0 0,100% 0,100% 33%,0 33%);transform:translate(5px,-2px);color:#f00;}
+  93%,96%{opacity:1;clip-path:polygon(0 58%,100% 58%,100% 100%,0 100%);transform:translate(-5px,2px);color:#0ff;}
+  94%{opacity:0;}
+}
+#loadingSubtitle{
+  font-family:'Press Start 2P', cursive;font-size:10px;color:#f39c12;
+  letter-spacing:0.14em;text-shadow:0 0 10px rgba(243,156,18,0.7);
+  animation:ldSubReveal 0.5s ease 0.9s both;margin-bottom:36px;
+}
+@keyframes ldSubReveal{
+  from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}
+}
+#loadingBarWrap{
+  width:100%;height:18px;
+  background:rgba(255,255,255,0.06);border:2px solid rgba(231,76,60,0.55);
+  border-radius:2px;position:relative;overflow:hidden;
+  animation:ldSubReveal 0.5s ease 1.1s both;
+  box-shadow:0 0 14px rgba(231,76,60,0.18),inset 0 0 10px rgba(0,0,0,0.5);
+}
+#loadingBarFill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#7b0000,#e74c3c,#ff8a65);
+  border-radius:1px;transition:width 0.18s ease-out;position:relative;
+}
+#loadingBarFill::after{
+  content:'';position:absolute;right:0;top:0;width:28px;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.55));
+  border-radius:0 1px 1px 0;
+}
+#loadingBarGlow{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(231,76,60,0.22) 50%,transparent 100%);
+  animation:ldBarScan 1.6s linear infinite;pointer-events:none;
+}
+@keyframes ldBarScan{from{transform:translateX(-100%);}to{transform:translateX(200%);}}
+#loadingPct{
+  font-family:'Press Start 2P', cursive;font-size:12px;color:#e74c3c;
+  margin-top:10px;text-shadow:0 0 8px rgba(231,76,60,0.6);
+  animation:ldSubReveal 0.5s ease 1.1s both;letter-spacing:0.08em;
+}
+#loadingLabel{
+  font-family:'Press Start 2P', cursive;font-size:8px;color:rgba(255,255,255,0.38);
+  margin-top:8px;letter-spacing:0.06em;animation:ldSubReveal 0.5s ease 1.2s both;min-height:16px;
+}
+/* ===== END LOADING SCREEN ===== */
+
+/* ===== SKIP PLATFORM BANNER ===== */
+#skipPlatformRow{
+  margin-top:22px;
+  padding:12px 16px;
+  border:1px solid rgba(255,255,255,0.14);
+  border-radius:4px;
+  background:rgba(255,255,255,0.04);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  animation:ldSubReveal 0.5s ease 1.8s both;
+}
+#skipPlatformLabel{
+  display:flex;align-items:center;gap:10px;
+  cursor:pointer;
+  font-family:'Press Start 2P', cursive;
+  font-size:9px;
+  color:#ddd;
+  user-select:none;
+  -webkit-user-select:none;
+}
+#skipPlatformCheck{
+  width:16px;height:16px;
+  accent-color:#e74c3c;
+  cursor:pointer;
+  flex-shrink:0;
+}
+#skipPlatformText{ line-height:1.4; }
+#skipPlatformHint{
+  font-family:'Press Start 2P', cursive;
+  font-size:7px;
+  color:rgba(255,255,255,0.28);
+  letter-spacing:0.04em;
+}
+/* ===== END SKIP PLATFORM BANNER ===== */
+
+/* ===== END LOADING SCREEN ===== */
 </style>
 
 <!-- Injected CSS: compact grid selected state -->
@@ -1697,6 +1823,11 @@
   cursor:pointer !important;
 }
 #totalScoreDisplay:hover{ filter:brightness(1.08); }
+/* Nasconde il punteggio totale mentre la loading screen è attiva */
+#loadingScreen:not([style*="display: none"]) ~ * #totalScoreDisplay,
+#loadingScreen:not([style*="display: none"]) + #totalScoreDisplay { display:none !important; }
+/* Nascosto di default finché il loading non riabilita via JS */
+#totalScoreDisplay { display:none; }
 
 #totalScoreInfoModal{ display:none; }
 #totalScoreInfoModal.show{ display:flex; }
@@ -2989,6 +3120,7 @@ button:focus-visible{
   text-shadow:1px 1px 2px #000;
   font-family:'Press Start 2P', cursive;
   pointer-events:none;
+  display:none;
 ">
 PUNTEGGIO TOTALE: 0
 </div>
@@ -3119,6 +3251,14 @@ style="width:56px;height:56px;image-rendering:pixelated;display:block;">
         <input type="range" id="particleDensityRange" min="0" max="100" step="1" value="50" aria-label="Quantità particelle">
         <div class="ms-sub" id="particleDensityHint">50% = impostazione attuale predefinita. Riduci se il PC cala di frame, aumenta se vuoi effetti più densi.</div>
       </div>
+      <!-- Ripristina selezione piattaforma -->
+      <div class="ms-setting-card" style="margin-top:10px;">
+        <div class="ms-setting-row" style="flex-wrap:wrap;gap:8px;">
+          <span style="font-size:9px;color:#ddd;">Selezione Tastiera / Mobile</span>
+          <button type="button" id="resetPlatformSkipBtn" style="font-family:'Press Start 2P',cursive;font-size:8px;padding:6px 12px;background:#555;color:#fff;border:2px solid #888;cursor:pointer;">RIPRISTINA SCHERMATA</button>
+        </div>
+        <div class="ms-sub" style="margin-top:6px;">Rimostra la schermata di selezione piattaforma al prossimo avvio.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -3132,6 +3272,21 @@ style="width:56px;height:56px;image-rendering:pixelated;display:block;">
 <div class="evo-banner" id="evoBanner" style="display:none;">
 <div id="evoBannerText">EVOLUTO!</div>
 </div>
+<!-- ===== LOADING SCREEN ===== -->
+<div id="loadingScreen">
+  <canvas id="loadingCanvas"></canvas>
+  <div id="loadingContent">
+    <div id="loadingTitle" data-text="JEFF'S CHRONICLES">JEFF'S CHRONICLES</div>
+    <div id="loadingSubtitle">▸ EVO EDITION ◂</div>
+    <div id="loadingBarWrap">
+      <div id="loadingBarFill"></div>
+      <div id="loadingBarGlow"></div>
+    </div>
+    <div id="loadingPct">0%</div>
+    <div id="loadingLabel">Caricamento assets...</div>
+  </div>
+</div>
+
 <!-- ===== PLATFORM SELECT SCREEN ===== -->
 <canvas id="platformCanvas"></canvas>
 <div id="platformScreen">
@@ -3150,6 +3305,16 @@ style="width:56px;height:56px;image-rendering:pixelated;display:block;">
       <span class="platform-label">Telefono / Tablet</span>
     </button>
   </div>
+
+  <!-- Banner "non mostrare più" -->
+  <div id="skipPlatformRow">
+    <label id="skipPlatformLabel">
+      <input type="checkbox" id="skipPlatformCheck">
+      <span id="skipPlatformText">Non mostrare più questa schermata</span>
+    </label>
+    <div id="skipPlatformHint">Potrai reimpostarla dalle Impostazioni</div>
+  </div>
+
 </div>
 
 <!-- ===== MOBILE IN-GAME CONTROLS ===== -->
@@ -4346,6 +4511,7 @@ function drawHendelCrush(){
 
 const URL_FINAL='https://i.postimg.cc/pTHFKHgz/Progetto-senza-titolo-(2).png';
 const URL_ICE='https://i.postimg.cc/K8pgVhTx/icebiome1.png';
+const URL_GELA='https://i.postimg.cc/NM6wXfVZ/Chat-GPT-Image-17-mar-2026-00-07-36.png';
 const canvas=document.getElementById('gameCanvas');
 const ctx=canvas.getContext('2d');
 
@@ -4585,6 +4751,7 @@ function setDifficulty(mode){
     const ld=document.getElementById('levelDisplay'); if(ld) ld.style.display='none';
     const sc=document.getElementById('superCooldown'); if(sc) sc.style.display='none';
     enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];wolves=[];micos=[];
+    try{ gooZones=[]; }catch(_gz){}
 
     if(typeof pdorOrbSets!=='undefined' && pdorOrbSets) pdorOrbSets.length=0;
   ancientColumn=null; ancientSealSlowUntil=0; ancientSealWarUntil=0;
@@ -4614,6 +4781,15 @@ function addKill(n=1){
   if(accountState && accountState.stats){
     accountState.stats.bestMatchKills = Math.max(Math.floor(accountState.stats.bestMatchKills||0), matchKills);
   }
+
+  // Boss kill tracking: se l'ultimo nemico rimosso era un boss, conta per missioni
+  try{
+    if(window._lastKilledEnemyType && typeof window._lastKilledEnemyType === 'string' &&
+       window._lastKilledEnemyType.startsWith('boss')){
+      accountOnBossKilled();
+      window._lastKilledEnemyType = null;
+    }
+  }catch(e){}
 
   // mission progress (account level)
   try{ accountOnKill((player && player.type) ? player.type : selectedCharacter, n); }catch(e){}
@@ -5157,6 +5333,7 @@ function updatePdorOrbs(now){
 
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              if(enemies[i]) window._lastKilledEnemyType = enemies[i].type;
               dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
@@ -5233,19 +5410,20 @@ images.rooney.src='https://i.postimg.cc/Pf6YmqdF/rooney.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
 images.voltryx.src='https://i.postimg.cc/bv85Bbs4/voltryx-(1).png';
-images.kouvagia.src='https://i.postimg.cc/gj1xjk0G/kouvagiaa-(1).png';
+images.kouvagia.src='https://i.postimg.cc/z3WcWLL9/kouvagia.png';
 images.salsy.src='https://i.postimg.cc/prXn2RWx/salsy.png';
 images.tempostorm.src='https://i.postimg.cc/mkzj763m/tempostorm.png';
-images.marz.src='https://i.postimg.cc/j5WJZL5X/marz.png';
-images.hecate.src='https://i.postimg.cc/9QjRg424/hecate.png';
+images.marz.src='https://i.postimg.cc/261RySw4/marz.png';
+images.hecate.src='https://i.postimg.cc/p5Dct7bk/hecate.png';
 images.marcus=new Image(); images.marcus.src='https://i.postimg.cc/MpKjhyKD/image.png';
 images.lucien=new Image(); images.lucien.src='https://i.postimg.cc/XvqZgdhz/Lucien-(1).png';
 images.pdor=new Image(); images.pdor.src='https://i.postimg.cc/y8nHcqnw/pdor24.png';
 images.bane=new Image(); images.bane.src='https://i.postimg.cc/Kjc7KMzX/bane.png';
 images.hendel.src='https://i.postimg.cc/g2G7LYjr/hendel.png';
 images.kaerith.src='https://i.postimg.cc/pLBZRcHy/Kaerith.png';
-images.cosmo.src='https://i.postimg.cc/yY5Z6hHP/cosmo.png';
+images.cosmo.src='https://i.postimg.cc/N21CwVqR/cosmo.png';
 const wolfImg=new Image(); wolfImg.src='https://i.postimg.cc/4y9yBGFw/lupo.png';
+const iceWolfImg=new Image(); iceWolfImg.src='https://i.postimg.cc/sxChcQbW/ICEwolf.png';
 const imagesMetal={rooney:new Image(),jimmy:new Image()};
 const imageJakeff=new Image(); imageJakeff.src='https://i.postimg.cc/8cCytnJ1/jakeff-(1).png';
 imagesMetal.rooney.src='https://i.postimg.cc/GtSXNJGB/METALrooney.png';
@@ -5290,6 +5468,7 @@ marcusNoteImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAMgCAYAA
 // --- Arco Antico pickup + colonna ---
 pickupImgs.arcoAntico = new Image(); pickupImgs.arcoAntico.src='https://i.postimg.cc/g0nG4b80/ARCOANTICO.png';
 pickupImgs.collana = new Image(); pickupImgs.collana.src='https://i.postimg.cc/W4bD8WwZ/Collana.png';
+pickupImgs.altareDemoniaco = new Image(); pickupImgs.altareDemoniaco.src='https://i.postimg.cc/zv2cYMvQ/altaredemoniaco.png';
 
 function getPickupImage(type){
   // internal type names
@@ -5300,7 +5479,8 @@ function getPickupImage(type){
 const enemyImages={
   slime:new Image(),drone:new Image(),boss1:new Image(),mech:new Image(),
   shadow:new Image(),boss2:new Image(),shooter:new Image(),attacker:new Image(),boss3:new Image(),
-  veleno:new Image(),oneyes:new Image(),boss4:new Image(),boss5:new Image(),archer:new Image(),glacial:new Image()
+  veleno:new Image(),oneyes:new Image(),boss4:new Image(),boss5:new Image(),archer:new Image(),glacial:new Image(),
+  gelatinus:new Image(),minigelatinus:new Image()
 };
 enemyImages.slime.src='https://i.postimg.cc/NFVhJNLC/pixelcut-export-(2).png';
 enemyImages.drone.src='https://i.postimg.cc/13x9HtxZ/image-(1).png';
@@ -5319,6 +5499,8 @@ enemyImages.boss4.src='https://i.postimg.cc/8c9bHWff/unnamed-(2).png';
 enemyImages.boss5.src='https://i.postimg.cc/wvGJm86S/boss5.png';
 enemyImages.archer.src='https://i.postimg.cc/VLSg4gpV/archer.png';
 enemyImages.glacial.src='https://i.postimg.cc/W1LG8vMN/glacial.png';
+enemyImages.gelatinus.src='https://i.postimg.cc/G2GssGdV/gelatinus.png';
+enemyImages.minigelatinus.src='https://i.postimg.cc/prv5Qrdr/minigelatinus.png';
 
 // ===== Bestiario (Nemici & Boss) - sblocco globale (tutti i personaggi) =====
 const ENEMY_SEEN_KEY='jeffsChronicles_enemySeen_v1';
@@ -5356,11 +5538,13 @@ const enemyGuideData={
   boss2:{ name:'BOSS II', imgKey:'boss2', desc:'HP: 300 ⭐⭐⭐⭐☆ Danno: 27 ⭐⭐⭐⭐☆ Velocità: ⭐⭐⭐☆☆ Passiva: ❌ | Molto più aggressivo, richiede gestione super.'},
   boss3:{ name:'BOSS III', imgKey:'boss3', desc:'HP: 666 ⭐⭐⭐⭐⭐ Danno:  33 ⭐⭐⭐⭐☆ Velocità: ⭐⭐☆☆☆ Passiva: ❌ | Spartiacque del gioco, alta difficoltà tecnica.'},
   boss4:{ name:'BOSS IV', imgKey:'boss4', desc:'HP: 900 ⭐⭐⭐⭐⭐ Danno: 30 ⭐⭐⭐☆☆ Velocità: ⭐⭐☆☆☆ Attacco: ventaglio 180° + onda circolare che danneggia e attira.'},
-  boss5:{ name:'BOSS V', imgKey:'boss5', desc:'HP: 800 ⭐⭐⭐⭐⭐ Danno: 32 ⭐⭐⭐⭐☆ Velocità: ⭐⭐☆☆☆ Abilità passive: ♻️ Rigenerazione HP ogni 28s 🌊 Onda di respinta 🧊 Rallentamento 50% per 2s se nel raggio'}
+  boss5:{ name:'BOSS V', imgKey:'boss5', desc:'HP: 800 ⭐⭐⭐⭐⭐ Danno: 32 ⭐⭐⭐⭐☆ Velocità: ⭐⭐☆☆☆ Abilità passive: ♻️ Rigenerazione HP ogni 28s 🌊 Onda di respinta 🧊 Rallentamento 50% per 2s se nel raggio'},
+  gelatinus:{ name:'GELATINUS', imgKey:'gelatinus', desc:'Creatura gelatinosa del bioma viola. Sputa gelatina rosa a distanza, creando zone viscose che rallentano il giocatore del 60% e infliggono 7 danni/sec. Alla morte rilascia 2 Mini Gelatinus. HP: ⭐⭐⭐☆☆ Danno sputo: ⭐☆☆☆☆ Velocità: ⭐⭐☆☆☆'},
+  minigelatinus:{ name:'MINI GELATINUS', imgKey:'minigelatinus', desc:'Piccola creatura gelatinosa che nasce alla morte di un Gelatinus. Attacca ravvicinato. HP: ⭐☆☆☆☆ Danno: ⭐⭐☆☆☆ Velocità: ⭐⭐⭐☆☆'}
 };
 
 // Ordine consigliato nella lista
-const enemyGuideOrder=['slime','drone','mech','shadow','shooter','attacker','veleno','oneyes','archer','glacial','boss1','boss2','boss3','boss4','boss5'];
+const enemyGuideOrder=['slime','drone','mech','shadow','shooter','attacker','veleno','oneyes','archer','glacial','gelatinus','minigelatinus','boss1','boss2','boss3','boss4','boss5'];
 
 function buildEnemyGuideUI(){
   const listEl=document.getElementById('enemyGuideList');
@@ -5482,7 +5666,7 @@ const characterStats={
   salsy:{
     hp:460,
     speed:6.5,  // leggermente più veloce di prima
-    damage:33,       // per colpo (x2)
+    damage:38,       // per colpo (x2)
     range:330,       // medio ravvicinata
     cooldown:750,
     name:'Salsy',
@@ -5521,7 +5705,7 @@ const characterStats={
   marcus:{
     hp:450,
     speed:6,
-    damage:15,
+    damage:22,
     range:650,
     cooldown:500,
     name:'Marcus',
@@ -5619,7 +5803,7 @@ const characterStats={
     name:'Cosmo',
     evolution:true,
     attackType:'cosmo',
-    superCooldown: 44000,
+    superCooldown: 58520, // +33% rispetto a 44000
     superDuration:7000
   }
 };
@@ -5650,9 +5834,11 @@ const levelConfigs=[
   {enemyType:'boss4',enemyHP:2250,enemyDamage:27,enemySpeed:4.5,time:180,enemyCount:1}, // Level 20
   {enemyType:'archer',enemyHP:360,enemyDamage:40,enemySpeed:5.18,time:65,enemyCount:4}, // Level 21
   {enemyType:'archer',enemyHP:405,enemyDamage:50,enemySpeed:5.40,time:65,enemyCount:5}, // Level 22
-  {enemyType:'glacial',enemyHP:900,enemyDamage:20,enemySpeed:6.91,time:70,enemyCount:2}, // Level 23
-  {enemyType:'glacial',enemyHP:1040,enemyDamage:20,enemySpeed:7.45,time:80,enemyCount:3}, // Level 24
-  {enemyType:'boss5',enemyHP:3000,enemyDamage:58,enemySpeed:4.05,time:200,enemyCount:1} // Level 25
+  {enemyType:'glacial',enemyHP:900,enemyDamage:20,enemySpeed:4.84,time:70,enemyCount:2}, // Level 23
+  {enemyType:'glacial',enemyHP:1040,enemyDamage:20,enemySpeed:5.22,time:80,enemyCount:3}, // Level 24
+  {enemyType:'boss5',enemyHP:3000,enemyDamage:58,enemySpeed:4.05,time:200,enemyCount:1}, // Level 25
+  {enemyType:'gelatinus',enemyHP:480,enemyDamage:8,enemySpeed:3.2,time:75,enemyCount:3}, // Level 26
+  {enemyType:'gelatinus',enemyHP:560,enemyDamage:10,enemySpeed:3.5,time:85,enemyCount:5}  // Level 27
 ];
 
 const RECORDS_KEY='pf_records_v19';
@@ -5680,9 +5866,9 @@ const ACCOUNT_DEFAULT = {
   // Super danno per personaggio
   superDamageWith_tempostorm:0,
   // Dash per personaggio
-  dashWith_voltryx:0,
+  dashWith_voltryx:0, dashWith_hecate:0,
   // Colpi su nemici marchiati
-  markedHits:0,
+  markedHits:0, baneSuperKills:0, cosmoMarksApplied:0,
   // Nuovi contatori missioni v7
   dashUses:0, surviveSeconds:0, totalGames:0, killAllBosses:0, comebackKills:0,
   bestMatchScore:0, bestConsecutiveKills:0, bestSuperKillStreak:0, bestKillsInTen:0,
@@ -5813,10 +5999,10 @@ const ACCOUNT_DEFAULT = {
   { id:"eth_jimmy_evo_skin",  type:"charGames", char:"jimmy",  target:30, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"jimmy_evo"  },
   { id:"eth_rooney_evo_skin", type:"charGames", char:"rooney", target:30, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"rooney_evo" },
   { id:"eth_jeff_evo_skin",   type:"charGames", char:"jeff",   target:30, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"jeff_evo"   },
-  { id:"eth_voltryx_ice_skin",       type:"charDash",    char:"voltryx",    target:1250,  progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"voltryx_ice"       },
+  { id:"eth_voltryx_ice_skin",       type:"charDash",    char:"voltryx",    target:750,  progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"voltryx_ice"       },
   { id:"eth_tempostorm_energy_skin", type:"charSuperDamage", char:"tempostorm", target:625000, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"tempostorm_energy" },
   { id:"eth_marz_evil_skin",         type:"charGames", char:"marz",       target:60, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"marz_evil"         },
-  { id:"eth_salsy_red_skin",         type:"markedHits",  char:"salsy",      target:15000, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"salsy_red"         },
+  { id:"eth_salsy_red_skin",         type:"markedHits",  char:"salsy",      target:5000,  progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"salsy_red"         },
   { id:"eth_kouvagia_evil_skin",     type:"charGames", char:"kouvagia",   target:60, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"kouvagia_evil"     },
   // ── METAL skins (danno per personaggio) ──────────────────────────────────────
   { id:"eth_jimmy_metal_skin",  type:"charDamage", char:"jimmy",  target:500000, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"jimmy_metal"  },
@@ -5824,6 +6010,9 @@ const ACCOUNT_DEFAULT = {
   { id:"eth_jeff_jakeff_skin",  type:"charDamage", char:"jeff",   target:750000, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"jeff_jakeff"  },
   { id:"eth_voltryx_arcane_skin", type:"charScore",  char:"voltryx", target:5000000, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"voltryx_arcane" },
   { id:"eth_kaerith_evil_skin",   type:"charDamage", char:"kaerith", target:750000, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"kaerith_evil" },
+  { id:"eth_hecate_ice_skin",    type:"charDash",   char:"hecate",   target:750,   progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"hecate_ice" },
+  { id:"eth_cosmo_solar_skin",   type:"cosmoMarksApplied", char:"cosmo", target:6000, progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"cosmo_solar" },
+  { id:"eth_bane_ice_skin",      type:"baneSuperKills", char:"bane", target:5000,  progress:0, xpReward:0, claimed:false, difficulty:"ethereal", skinUnlock:"bane_ice" },
 
 ]
 };
@@ -5902,6 +6091,8 @@ function syncMissionsFromStats(){
         case 'killAllBosses':     m.progress = Math.min(m.target, Math.floor(S.killAllBosses||0)); break;
         case 'comebackKills':     m.progress = Math.min(m.target, Math.floor(S.comebackKills||0)); break;
         case 'markedHits':        m.progress = Math.min(m.target, Math.floor(S.markedHits||0)); break;
+        case 'cosmoMarksApplied': m.progress = Math.min(m.target, Math.floor(S.cosmoMarksApplied||0)); break;
+        case 'baneSuperKills':    m.progress = Math.min(m.target, Math.floor(S.baneSuperKills||0)); break;
         case 'lowHpSuperKills':   m.progress = Math.min(m.target, Math.floor(S.lowHpSuperKills||0)); break;
         case 'totalGamesNoDeath': m.progress = Math.min(m.target, Math.floor(S.totalGamesNoDeath||0)); break;
         case 'matchScoreRecord':  m.progress = Math.min(m.target, Math.floor(S.bestMatchScore||0)); break;
@@ -6062,8 +6253,11 @@ function loadAccount(){
         superDamageWith_tempostorm: Math.max(0, Math.floor(a.stats.superDamageWith_tempostorm||0)),
         // Dash per personaggio
         dashWith_voltryx: Math.max(0, Math.floor(a.stats.dashWith_voltryx||0)),
+        dashWith_hecate:  Math.max(0, Math.floor(a.stats.dashWith_hecate||0)),
         // Colpi su marchiati
         markedHits: Math.max(0, Math.floor(a.stats.markedHits||0)),
+        cosmoMarksApplied: Math.max(0, Math.floor(a.stats.cosmoMarksApplied||0)),
+        baneSuperKills: Math.max(0, Math.floor(a.stats.baneSuperKills||0)),
         // gamesPlayedWith per missioni etere
         gamesPlayedWith_marz:      Math.max(0, Math.floor(a.stats.gamesPlayedWith_marz||0)),
         gamesPlayedWith_kouvagia:  Math.max(0, Math.floor(a.stats.gamesPlayedWith_kouvagia||0)),
@@ -6444,7 +6638,17 @@ function missionTitle(m){
   if(m.type==='killAllBosses') return `Sconfiggi ${m.target} boss (totali)`;
   if(m.type==='lowHpSuperKills') return `Usa la super con meno del 15% di HP e sopravvivi per ${m.target} volte`;
   if(m.type==='killsWithDash') return `Colpisci e uccidi ${m.target} nemici immediatamente durante un dash`;
+  if(m.type==='baneSuperKills'){
+    const skinEntry = (typeof SKIN_CATALOGUE!=='undefined') ? SKIN_CATALOGUE.find(s=>s.id===m.skinUnlock) : null;
+    const skinName = skinEntry ? skinEntry.name : (m.skinUnlock||'skin');
+    return `Uccidi ${m.target.toLocaleString('it-IT')} nemici con la super di Bane attiva — sblocca: ${skinName}`;
+  }
   if(m.type==='totalGamesNoDeath') return `Vinci ${m.target} partite senza perdere mai tutti gli HP`;
+  if(m.type==='cosmoMarksApplied'){
+    const skinEntry = (typeof SKIN_CATALOGUE!=='undefined') ? SKIN_CATALOGUE.find(s=>s.id===m.skinUnlock) : null;
+    const skinName = skinEntry ? skinEntry.name : (m.skinUnlock||'skin');
+    return `Applica Marchio Cosmico su ${m.target.toLocaleString('it-IT')} nemici con Cosmo — sblocca: ${skinName}`;
+  }
   return 'Missione';
 }
 
@@ -6575,6 +6779,8 @@ const missionsSorted = (() => {
     else if(m.type==='comebackKills' || m.type==='consecutiveKills' || m.type==='killsBeforeLevel3' || m.type==='superKillStreak' || m.type==='killsInTenSeconds') unit='kill';
     else if(m.type==='charDamage' || m.type==='totalDamage' || m.type==='charSuperDamage') unit='danni';
     else if(m.type==='charScore') unit='punti';
+    else if(m.type==='baneSuperKills') unit='kill';
+    else if(m.type==='cosmoMarksApplied') unit='marchi';
     else if(m.type==='charDash') unit='dash';
     else if(m.type==='markedHits') unit='colpi';
 
@@ -6617,6 +6823,8 @@ const missionsSorted = (() => {
           saveMissionPayouts(missionPayouts);
           if(missionClaims){ missionClaims.add(key); saveMissionClaims(missionClaims); }
           m.claimed = true;
+          // Ricompensa nascosta: +100 frammenti d'etere (non mostrato nella UI missione)
+          try{ ether = Math.max(0, Math.floor(Number(ether)||0)) + 100; saveEther(); updateEther(); }catch(_ethErr){}
           // Unlock the skin in skinPurchases (mark as purchaseable, NOT purchased)
           if(m.skinUnlock){
             if(!skinPurchases) skinPurchases = {};
@@ -7648,7 +7856,7 @@ function collanaTakeDamageHook(playerRef, amount){
   if(now > playerRef.collanaEnd){ detonateCollana(playerRef); return false; }
 
   const dmg = Math.max(1, amount||0);
-  playerRef.collanaDmgAccum = (playerRef.collanaDmgAccum||0) + dmg;
+  playerRef.collanaDmgAccum = (playerRef.collanaDmgAccum||0) + dmg * 1.45; // v10: +45% carica per danni subiti
 
   // Orb visiva per ogni colpo
   collanaOrbs.push({
@@ -7741,7 +7949,7 @@ function detonateCollana(playerRef){
 
     delayMs += 120;   // era 60ms
     prevX = tx; prevY = ty;
-    currentDmg *= 0.65;   // dimezzato rispetto a prima (+30% → -35% per salto)
+    currentDmg *= 0.75;   // -25% per salto (era -35%), più persistente come da bilanciamento v10
     jumped++;
   }
 
@@ -8165,15 +8373,23 @@ const target=this._nearestEnemy();
     // Bite
     if(dist <= this.range && (now-this.lastAttack) >= this.cooldown){
       this.lastAttack=now;
-      // EVO Hècate – Cacciatrice di Stelle: lupi infliggono +50% danno
       const wolfBondMult = 1.0;
       const finalDmg = Math.max(0, Math.round(this.damage * markMult(target) * wolfBondMult));
       target.hp -= finalDmg;
       showDamageNumber(target.x, target.y, finalDmg);
-      createParticles(tx, ty, '#b0bec5', 10, 3);
+      // ICE Hecate: morso del lupo = Veleno Glaciale (3 dmg/sec, stun alla scadenza)
+      const _wIceActive = !!(typeof player!=='undefined' && player && player._iceHecate);
+      const _wBiteColor = _wIceActive ? '#4fc3f7' : '#b0bec5';
+      createParticles(tx, ty, _wBiteColor, 10, 3);
+      if(_wIceActive){
+        target._glacialPoisonUntil = now + 5000;    // 5 secondi di veleno
+        target._glacialPoisonDmg   = 3;             // 3 dmg/sec
+        target._glacialPoisonLastTick = now;
+        target._glacialPoisonStunOnEnd = true;       // stun 1 sec alla scadenza
+        createParticles(tx, ty, '#b3e5fc', 8, 4);
+      }
 
       if(target.hp<=0){
-        // kill credit: same as normal kill
         createParticles(target.x, target.y, '#fff176', 30, 6);
         const idx=enemies.indexOf(target);
         if(idx>=0){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);}
@@ -8183,8 +8399,10 @@ const target=this._nearestEnemy();
   }
   draw(){
     // sprite
-    if(wolfImg && wolfImg.complete){
-      ctx.drawImage(wolfImg, this.x, this.y, this.width, this.height);
+    // ICE Hecate: usa immagine lupo ghiaccio se skin attiva
+    const _wIceImg = (typeof player!=='undefined' && player && player._iceHecate && typeof iceWolfImg!=='undefined' && iceWolfImg && iceWolfImg.complete) ? iceWolfImg : wolfImg;
+    if(_wIceImg && _wIceImg.complete){
+      ctx.drawImage(_wIceImg, this.x, this.y, this.width, this.height);
     }else{
       ctx.fillStyle='#90caf9';
       ctx.fillRect(this.x,this.y,this.width,this.height);
@@ -8231,6 +8449,45 @@ function updateWolves(){
 function drawWolves(){
   if(!wolves || wolves.length===0) return;
   for(const w of wolves) w.draw();
+}
+
+function updateGlacialPoison(){
+  if(!enemies || !enemies.length) return;
+  const now = Date.now();
+  for(let i=enemies.length-1; i>=0; i--){
+    const e = enemies[i];
+    if(!e || !e._glacialPoisonUntil) continue;
+    if(now < e._glacialPoisonUntil){
+      if(!e._glacialPoisonLastTick) e._glacialPoisonLastTick = now;
+      if(now - e._glacialPoisonLastTick >= 1000){
+        e._glacialPoisonLastTick = now;
+        const _gpDmg = e._glacialPoisonDmg || 3;
+        e.hp -= _gpDmg;
+        showDamageNumber(e.x, e.y, _gpDmg);
+        createParticles(e.x+e.width/2, e.y+e.height/2, '#4fc3f7', 8, 4);
+        createParticles(e.x+e.width/2, e.y+e.height/2, '#b3e5fc', 5, 3);
+        // Indicatore visivo rallentamento (cristalli ghiaccio)
+        createParticles(e.x+e.width/2, e.y-10, '#e1f5fe', 4, 2);
+        if(e.hp <= 0){
+          createParticles(e.x, e.y, '#fff176', 30, 6);
+          if(enemies[i]) window._lastKilledEnemyType = enemies[i].type;
+          dropStellarBonusAtIndexIfNeeded(i);
+          enemies.splice(i, 1);
+          applyScore(100*currentLevel);
+          addKill();
+          continue;
+        }
+      }
+    } else {
+      if(e._glacialPoisonStunOnEnd){
+        e.stunnedUntil = Math.max(e.stunnedUntil||0, now + 1000);
+        createParticles(e.x+e.width/2, e.y+e.height/2, '#b3e5fc', 12, 4);
+        e._glacialPoisonStunOnEnd = false;
+      }
+      e._glacialPoisonUntil = 0;
+      e._glacialPoisonDmg   = 0;
+    }
+  }
 }
 
 
@@ -8481,6 +8738,7 @@ function activateArcoAntico(playerRef){
             createParticles(e.x,e.y,'#ffcc80',16,5);
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              if(enemies[i]) window._lastKilledEnemyType = enemies[i].type;
               dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
@@ -9356,6 +9614,49 @@ function drawVoltryxFX(){
   });
 }
 
+
+function drawCosmoMarkOnEnemy(e){
+  try{
+    const now = Date.now();
+    const isMarked = (e.salsyMarkUntil && now < e.salsyMarkUntil) || (!!e._cosmoMark);
+    if(!isMarked) return;
+    ctx.save();
+    const _isSolarMark = !!e._cosmoMark && !!(typeof player!=='undefined' && player && player._solarCosmo);
+    if(_isSolarMark){
+      // SOLAR: sole giallo pulsante con raggi
+      const _sp = 0.7 + 0.3*Math.sin(now*0.008);
+      const _sr = 7 * _sp;
+      ctx.shadowColor = '#ffd600'; ctx.shadowBlur = 18;
+      ctx.fillStyle = '#ffd600'; ctx.globalAlpha = 1;
+      ctx.beginPath(); ctx.arc(e.x+e.width/2, e.y-18, _sr, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle = '#ff9800'; ctx.lineWidth = 1.5; ctx.shadowBlur = 8;
+      for(let _ri=0;_ri<8;_ri++){
+        const _ra = (_ri/8)*Math.PI*2 + now*0.003;
+        const _r0 = _sr+2, _r1 = _sr+6;
+        ctx.beginPath();
+        ctx.moveTo(e.x+e.width/2+Math.cos(_ra)*_r0, e.y-18+Math.sin(_ra)*_r0);
+        ctx.lineTo(e.x+e.width/2+Math.cos(_ra)*_r1, e.y-18+Math.sin(_ra)*_r1);
+        ctx.stroke();
+      }
+    } else {
+      const _mrkColor = (e.salsyMarkUntil && now < e.salsyMarkUntil && e._salsyMarkColor)
+        ? e._salsyMarkColor : '#000';
+      const _mrkIsRed = _mrkColor !== '#000';
+      if(_mrkIsRed){
+        ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
+        ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
+        ctx.beginPath(); ctx.arc(e.x+e.width/2, e.y-18, 8, 0, Math.PI*2); ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+      ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
+      ctx.shadowBlur = _mrkIsRed ? 10 : 25;
+      ctx.fillStyle = _mrkColor;
+      ctx.beginPath(); ctx.arc(e.x+e.width/2, e.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.restore();
+  }catch(e2){}
+}
+
 function shakeScreen(){shakeAmount=8}
 
 /* --- COSMO SUPER: cosmic black explosion FX --- */
@@ -9851,13 +10152,20 @@ if(p.aoeRadius>0){
             // single target
             const dmg=Math.round(p.damage);
             const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
-            createParticles(e.x,e.y,'#ffd54f',8,4);
+            // ICE Hecate: slow su TUTTI i colpi (main e split)
+            if(p._iceHecateArrow){
+              try{ applySkinSlow(e, 0.20, 2000); }catch(_se){}
+            }
+            createParticles(e.x,e.y, p._iceHecateArrow ? '#b3e5fc' : '#ffd54f', 8, 4);
             showDamageNumber(e.x,e.y, _final);
 
             // Hècate: main arrow splits into 3 arrows to OTHER enemies
             if(p.meta && p.meta.type==='hecateMain'){
               const impactX=p.x, impactY=p.y;
-              createParticles(impactX, impactY, '#c5cae9', 18, 4);
+              const _hImpactColor = p.color || '#c5cae9';
+              createParticles(impactX, impactY, _hImpactColor, 18, 4);
+              // ICE Hecate: rallenta il nemico colpito del 20%
+              if(p._iceHecateArrow){ try{ applySkinSlow(e, 0.20, 2000); }catch(_se){} }
               const others = enemies.filter(ee=>ee!==e).sort((a,b)=>{
                 const da=Math.hypot((a.x+a.width/2)-impactX,(a.y+a.height/2)-impactY);
                 const db=Math.hypot((b.x+b.width/2)-impactX,(b.y+b.height/2)-impactY);
@@ -9873,7 +10181,8 @@ if(p.aoeRadius>0){
                 const vy=(dy/len)*speed;
                 spawnProjectile({
                   x:impactX,y:impactY,vx,vy,speed,
-                  damage:splitDmg,ttl:520,color:'#c5cae9',
+                  damage:splitDmg,ttl:520,color:p.color||'#c5cae9',
+                  _iceHecateArrow:p._iceHecateArrow||false,
                   radius:6,friendly:true,
                   shape:'arrow',w:22,h:6,angle:Math.atan2(vy,vx),
                   meta:{type:'hecateSplit'},
@@ -9884,6 +10193,7 @@ if(p.aoeRadius>0){
             }
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              if(enemies[i]) window._lastKilledEnemyType = enemies[i].type;
               dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
@@ -9942,6 +10252,10 @@ if(p.aoeRadius>0){
           if(typeof p.onHitPlayer==='function'){ try{ p.onHitPlayer(player); }catch(e){} }
           player.takeDamage(p.damage, p.source || null);
         }
+        // Gelatinus: crea zona gelatinosa sul punto di impatto (anche se player è invulnerabile)
+        if(p._gelaOwner && p._gelaSpitCreateZone){
+          try{ spawnGooZone(p.x, p.y, p._gelaOwner); p._gelaOwner._hasActiveZone = true; }catch(_ge){}
+        }
         return false;
       }
 
@@ -9998,6 +10312,11 @@ if(p.aoeRadius>0){
     // Voltryx SUPER: triple expanding ring explosion when the orb expires or hits
     if(!alive && p.isVoltryxSuper){
       triggerVoltryxSuperExplosion(p.x, p.y);
+    }
+
+    // Gelatinus sputo: crea zona gelatinosa dove atterra (scaduto o fuori bounds)
+    if(!alive && p._gelaOwner && p._gelaSpitCreateZone){
+      try{ spawnGooZone(p.x, p.y, p._gelaOwner); p._gelaOwner._hasActiveZone = true; }catch(_ge){}
     }
 
     return alive;
@@ -11049,6 +11368,97 @@ function drawTempBeams(){
 }
 
 
+function updateDemonicFlames(now){
+  if(!window._demonicFlames || window._demonicFlames.length===0) return;
+  window._demonicFlames = window._demonicFlames.filter(f=>{
+    const t = Math.max(0, Math.min(1, (now - f.created) / f.duration));
+    // Move toward center
+    const cx = canvas.width/2;
+    const cy = canvas.height/2;
+    f.x = (cx + Math.cos(f.angle)*f.startRadius) * (1-t) + cx * t;
+    f.y = (cy + Math.sin(f.angle)*f.startRadius) * (1-t) + cy * t;
+    // Trail particles
+    if(Math.random()<0.5){
+      createParticles(f.x + (Math.random()-0.5)*20, f.y + (Math.random()-0.5)*20, '#9c27b0', 5, 3);
+    }
+    if(Math.random()<0.3){
+      createParticles(f.x + (Math.random()-0.5)*10, f.y + (Math.random()-0.5)*10, '#ce93d8', 4, 2);
+    }
+    // On arrival: deal damage to all enemies nearby
+    if(t >= 1 && !f.hit){
+      f.hit = true;
+      const impactDmg = 120 + (typeof enemies !== 'undefined' ? enemies.length * 15 : 0);
+      if(typeof enemies !== 'undefined' && enemies){
+        for(let _i = enemies.length-1; _i>=0; _i--){
+          const _fe = enemies[_i];
+          if(!_fe) continue;
+          const _fex = _fe.x + (_fe.width||40)/2;
+          const _fey = _fe.y + (_fe.height||40)/2;
+          if(Math.hypot(_fex - cx, _fey - cy) < 260){
+            const _fdmg = applyEnemyDamage(_fe, impactDmg);
+            if(_fdmg>0) showDamageNumber(_fe.x, _fe.y, _fdmg);
+            createParticles(_fex, _fey, '#7b1fa2', 20, 5);
+            createParticles(_fex, _fey, '#ce93d8', 14, 4);
+            if(_fe.hp <= 0){
+              dropStellarBonusAtIndexIfNeeded(_i);
+              enemies.splice(_i, 1);
+              applyScore(100 * (typeof currentLevel!=='undefined'?currentLevel:1));
+              addKill();
+            }
+          }
+        }
+      }
+      // Big impact explosion particles
+      for(let _pi=0; _pi<50; _pi++) createParticles(cx+(Math.random()-0.5)*120, cy+(Math.random()-0.5)*120, '#9c27b0', 10, 6);
+      for(let _pi=0; _pi<30; _pi++) createParticles(cx+(Math.random()-0.5)*60, cy+(Math.random()-0.5)*60, '#e040fb', 8, 5);
+    }
+    return t < 1;
+  });
+}
+
+function drawDemonicFlames(now){
+  if(!window._demonicFlames || window._demonicFlames.length===0) return;
+  const _ctx = (typeof ctx !== 'undefined') ? ctx : null;
+  if(!_ctx) return;
+  for(const f of window._demonicFlames){
+    const t = Math.max(0, Math.min(1, (now - f.created) / f.duration));
+    const alpha = 0.85 + Math.sin(now*0.02)*0.15;
+    _ctx.save();
+    _ctx.globalAlpha = alpha;
+    // Outer glow
+    const grad = _ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size * 1.5);
+    grad.addColorStop(0, 'rgba(224,64,251,0.95)');
+    grad.addColorStop(0.3, 'rgba(156,39,176,0.75)');
+    grad.addColorStop(0.6, 'rgba(74,20,140,0.45)');
+    grad.addColorStop(1,   'rgba(74,20,140,0)');
+    _ctx.shadowColor = '#ce93d8';
+    _ctx.shadowBlur = 40;
+    _ctx.fillStyle = grad;
+    _ctx.beginPath();
+    _ctx.arc(f.x, f.y, f.size * 1.5, 0, Math.PI*2);
+    _ctx.fill();
+    // Inner bright core
+    _ctx.shadowBlur = 20;
+    _ctx.fillStyle = 'rgba(243,229,245,0.9)';
+    _ctx.beginPath();
+    _ctx.arc(f.x, f.y, f.size*0.28, 0, Math.PI*2);
+    _ctx.fill();
+    // Flame petals (4 teardrop shapes rotating)
+    const rot = now*0.005 + f.angle;
+    for(let _p=0; _p<4; _p++){
+      const pAng = rot + (_p * Math.PI/2);
+      const px = f.x + Math.cos(pAng)*f.size*0.55;
+      const py = f.y + Math.sin(pAng)*f.size*0.55;
+      _ctx.fillStyle = 'rgba(171,71,188,0.65)';
+      _ctx.shadowColor = '#ab47bc'; _ctx.shadowBlur = 18;
+      _ctx.beginPath();
+      _ctx.arc(px, py, f.size*0.28, 0, Math.PI*2);
+      _ctx.fill();
+    }
+    _ctx.restore();
+  }
+}
+
 function spawnPickup(x,y,type,value=0){
   // Small collectible pickup (compatible with updatePickups / drawPickups)
   const hitR = (type==='malus') ? MALUS_HIT_RADIUS : BONUS_HIT_RADIUS;
@@ -11098,7 +11508,8 @@ const PICKUP_RENDER_SCALE = {
   letteraAmore: 1.35,
   mezzaluna: 1.35,
   arcoAntico: 1.35,
-  collana: 1.35
+  collana: 1.35,
+  altareDemoniaco: 1.5,
 };
 
 function drawPickups(){
@@ -11170,7 +11581,7 @@ function updatePickups(playerRef){
       try{ accountOnPickupCollected(p.type); }catch(e){}
       // PICKUP LABEL: brief floating text
       try{
-        const pickupNames = {heal:'CURA',atk:'ATK+',super:'SUPER!',speed:'SPEED',shieldPickup:'SCUDO',furia:'FURIA',ice:'GHIACCIO',ira:'IRA',letteraAmore:'ESTASI',mezzaluna:'MEZZALUNA',arcoAntico:'ARCO ANTICO',collana:'COLLANA',gold:'ORO!',malus:'VELENO',stellar:'STELLAR'};
+        const pickupNames = {heal:'CURA',atk:'ATK+',super:'SUPER!',speed:'SPEED',shieldPickup:'SCUDO',furia:'FURIA',ice:'GHIACCIO',ira:'IRA',letteraAmore:'ESTASI',mezzaluna:'MEZZALUNA',arcoAntico:'ARCO ANTICO',collana:'COLLANA',gold:'ORO!',malus:'VELENO',stellar:'STELLAR',altareDemoniaco:'ALTARE DEMONIACO'};
         const label = pickupNames[p.type] || p.type.toUpperCase();
         const div = document.createElement('div');
         div.style.cssText = 'position:absolute;font-family:"Press Start 2P",cursive;font-size:11px;color:#fff;text-shadow:1px 1px 3px #000;pointer-events:none;z-index:201;animation:floatUp 1s ease-out forwards;white-space:nowrap;';
@@ -11322,6 +11733,45 @@ function applyPickupEffect(playerRef,type){
     playerRef.poisonTickLast=now;
     playerRef.poisonTickDamage=1;
     createParticles(playerRef.x,playerRef.y,'#8b0000',30);
+  } else if(type==='altareDemoniaco'){
+    // === ALTARE DEMONIACO: richiama tutti i nemici al centro, poi 4 fiamme viola convergenti ===
+    if(typeof enemies==='undefined' || !enemies || enemies.length===0) return;
+    const cx = canvas.width/2;
+    const cy = canvas.height/2;
+
+    // Effetto particelle evocazione al centro
+    for(let _pi=0; _pi<60; _pi++) createParticles(cx + (Math.random()-0.5)*80, cy + (Math.random()-0.5)*80, '#9c27b0', 8, 5);
+    for(let _pi=0; _pi<30; _pi++) createParticles(cx + (Math.random()-0.5)*40, cy + (Math.random()-0.5)*40, '#ce93d8', 6, 4);
+
+    // Muovi tutti i nemici al centro istantaneamente
+    for(const _ne of enemies){
+      _ne.x = cx - (_ne.width||40)/2 + (Math.random()-0.5)*60;
+      _ne.y = cy - (_ne.height||40)/2 + (Math.random()-0.5)*60;
+      // Stun breve
+      _ne._stunUntil = Date.now() + 1800;
+      _ne.stunnedUntil = Date.now() + 1800;
+      createParticles(_ne.x + (_ne.width||40)/2, _ne.y + (_ne.height||40)/2, '#ab47bc', 14, 4);
+    }
+
+    // Spawna 4 fiamme viola convergenti dall'esterno verso il centro
+    window._demonicFlames = window._demonicFlames || [];
+    const _flameAngles = [0, Math.PI/2, Math.PI, 3*Math.PI/2];
+    const _flameRadius = 380;
+    const _flameCreated = Date.now();
+    for(const _ang of _flameAngles){
+      window._demonicFlames.push({
+        x: cx + Math.cos(_ang) * _flameRadius,
+        y: cy + Math.sin(_ang) * _flameRadius,
+        targetX: cx,
+        targetY: cy,
+        angle: _ang,
+        startRadius: _flameRadius,
+        created: _flameCreated,
+        duration: 900,
+        hit: false,
+        size: 54 + Math.random()*22,
+      });
+    }
   }
 }
 
@@ -11500,7 +11950,8 @@ class Player{
     // Bane SUPER speed boost handling (independent from pickups)
     if(this.type==='bane'){
       if(this.baneSuperSpeedUntil && now < this.baneSuperSpeedUntil){
-        this.speed = Math.max(this.speed, this._baseSpeed * 1.25);
+        const _baneSpeedBoost = (this._iceBane) ? 1.40 : 1.25;
+        this.speed = Math.max(this.speed, this._baseSpeed * _baneSpeedBoost);
       } else if(this.baneSuperSpeedUntil && now >= this.baneSuperSpeedUntil){
         this.baneSuperSpeedUntil = 0;
         // if no other speed buff is active, restore base speed
@@ -12282,7 +12733,11 @@ class Player{
     } else if(this.attackType==='axeattack'){
       // BANE axe wide swing: 270° fan, hits max 2 enemies
       const attackAngle = this.facingRight ? 0 : Math.PI;
-      const arcWidth = Math.PI * 1.5; // 270 degrees
+      // ICE Bane: area +30%
+      const _iceAreaMult = this._iceBane ? 1.30 : 1.0;
+      const _iceRange = this.range * _iceAreaMult;
+      const _iceMaxHits = this._iceBane ? 3 : 2;
+      const arcWidth = Math.PI * 1.5 * _iceAreaMult; // 270° base
       let hits = 0;
       // sort enemies by distance (closer hit first)
       const sorted = enemies.slice().sort((a,b)=>{
@@ -12291,7 +12746,7 @@ class Player{
         return da-db;
       });
       sorted.forEach(enemy=>{
-        if(hits>=2) return;
+        if(hits>=_iceMaxHits) return;
         const dx=enemy.x-this.x;
         const dy=enemy.y-this.y;
         const dist=Math.hypot(dx,dy);
@@ -12299,11 +12754,13 @@ class Player{
         let angleDiff=angle-attackAngle;
         while(angleDiff>Math.PI) angleDiff-=Math.PI*2;
         while(angleDiff<-Math.PI) angleDiff+=Math.PI*2;
-        if(dist < this.range && Math.abs(angleDiff) < arcWidth/2){
+        if(dist < _iceRange && Math.abs(angleDiff) < arcWidth/2){
           const superMult = (this.type==='bane' && this.baneSuperUntil && now < this.baneSuperUntil) ? (this.baneSuperAttackMult||1) : 1;
           const base = this.damage * this.attackBuffMultiplier * superMult;
           const dmg = applyEnemyDamage(enemy, base);
-          createParticles(enemy.x,enemy.y,'#c0392b',14,6);
+          const _ibPal2 = this._iceBane?(typeof getSkinFxPalette==='function'?getSkinFxPalette(this.type):null):null;
+          createParticles(enemy.x,enemy.y,(_ibPal2&&_ibPal2.attack)?_ibPal2.attack[0]:'#c0392b',14,6);
+          if(_ibPal2&&_ibPal2.particleExtra) createParticles(enemy.x,enemy.y,_ibPal2.particleExtra[0],6,3);
           showDamageNumber(enemy.x,enemy.y,dmg);
           hits++;
           if(enemy.hp<=0){
@@ -12404,7 +12861,14 @@ class Player{
             const slope = 13; // ramp ridotta (-35%)
             const dmg = Math.min(59, Math.round(base + insideSec * slope));
 
-            const final = applyEnemyDamage(e, dmg * (this.attackBuffMultiplier||1) * (this.baneSuperAttackMult||1));
+            // EVIL KAERITH HORDE PASSIVE: +8% per ogni nemico in campo (max +120%)
+            let _hordeMultiplier = 1;
+            if(this._evilKaerithHordePassive && typeof enemies !== 'undefined' && enemies.length > 1){
+              const bonusPct = Math.min(1.20, (enemies.length - 1) * 0.08);
+              _hordeMultiplier = 1 + bonusPct;
+            }
+
+            const final = applyEnemyDamage(e, dmg * (this.attackBuffMultiplier||1) * (this.baneSuperAttackMult||1) * _hordeMultiplier);
             showDamageNumber(e.x, e.y, final);
             const _kAtkPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
             const _kAtkC = (_kAtkPal && _kAtkPal.attack) ? _kAtkPal.attack[0] : '#ff3d00';
@@ -12412,7 +12876,14 @@ class Player{
 
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              if(enemies[i]) window._lastKilledEnemyType = enemies[i].type;
               dropStellarBonusAtIndexIfNeeded(i);
+              // EVIL KAERITH: 3% chance altare demoniaco pickup
+              if(this._evilKaerithHordePassive && Math.random() < 0.03){
+                const _ekX = e.x + (e.width||0)/2;
+                const _ekY = e.y + (e.height||0)/2;
+                spawnPickup(_ekX, _ekY, 'altareDemoniaco');
+              }
               enemies.splice(i,1);
               applyScore(100*currentLevel);
               addKill(); if(this._baneSuperOnKill) this._baneSuperOnKill();
@@ -12454,6 +12925,12 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
         if(e.hp<=0){
           createParticles(e.x,e.y,'#fff176',30,6);
           dropStellarBonusAtIndexIfNeeded(i);
+          // EVIL KAERITH: 3% chance altare demoniaco pickup
+          if(player && player._evilKaerithHordePassive && Math.random() < 0.03){
+            const _ekX2 = (e.x||0) + (e.width||0)/2;
+            const _ekY2 = (e.y||0) + (e.height||0)/2;
+            spawnPickup(_ekX2, _ekY2, 'altareDemoniaco');
+          }
           enemies.splice(i,1);
           applyScore(100*currentLevel);
           addKill();
@@ -12511,7 +12988,7 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
             H.hitDone = true;
             e.stunnedUntil = Date.now() + 500;
 
-            const dmgBase = 120 * (this.attackBuffMultiplier||1) * (this.baneSuperAttackMult||1);
+            const dmgBase = this.damage * (this.attackBuffMultiplier||1) * (this.baneSuperAttackMult||1);
             const final = applyEnemyDamage(e, dmgBase);
             showDamageNumber(e.x, e.y, final);
             createParticles(ex, ey, '#ff8c1a', 18, 5);
@@ -12520,6 +12997,7 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
 
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              if(enemies[i]) window._lastKilledEnemyType = enemies[i].type;
               dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
@@ -12639,6 +13117,7 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
             showDamageNumber(e.x,e.y, _final);
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              if(enemies[i]) window._lastKilledEnemyType = enemies[i].type;
               dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
@@ -12772,6 +13251,17 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
       // Mark logic
       if(!best._cosmoMark){
         best._cosmoMark = { applied: now, explodeAt: now+1000, mini:false };
+        // Track per missione cosmoMarksApplied
+        try{
+          if(typeof accountState!=='undefined' && accountState && accountState.stats){
+            accountState.stats.cosmoMarksApplied = Math.max(0, Math.floor(accountState.stats.cosmoMarksApplied||0)) + 1;
+            for(const _mm of accountState.missions){
+              if(!_mm.claimed && _mm.type==='cosmoMarksApplied')
+                _mm.progress = Math.min(_mm.target, accountState.stats.cosmoMarksApplied);
+            }
+            saveAccount();
+          }
+        }catch(e){}
       }else{
         // Re-hit before explosion => trigger immediate burst (+60%) + double slow
         if(now < (best._cosmoMark.explodeAt||0)){
@@ -12948,7 +13438,7 @@ for(let i=0;i<3;i++){
           while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
           while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
           if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.15){
-            const base=37*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
+            const base=this.damage*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
             const dmg=applyEnemyDamage(enemy, base);
             createParticles(enemy.x,enemy.y,_sSwC,10,4);
             if(_sSwC2) createParticles(enemy.x,enemy.y,_sSwC2,5,3);
@@ -12972,7 +13462,11 @@ for(let i=0;i<3;i++){
     } else if(this.attackType==='axeattack'){
       // BANE axe wide swing: 270° fan, hits max 2 enemies
       const attackAngle = this.facingRight ? 0 : Math.PI;
-      const arcWidth = Math.PI * 1.5; // 270 degrees
+      // ICE Bane: area +30%
+      const _iceAreaMult = this._iceBane ? 1.30 : 1.0;
+      const _iceRange = this.range * _iceAreaMult;
+      const _iceMaxHits = this._iceBane ? 3 : 2;
+      const arcWidth = Math.PI * 1.5 * _iceAreaMult; // 270° base
       let hits = 0;
       // sort enemies by distance (closer hit first)
       const sorted = enemies.slice().sort((a,b)=>{
@@ -12981,7 +13475,7 @@ for(let i=0;i<3;i++){
         return da-db;
       });
       sorted.forEach(enemy=>{
-        if(hits>=2) return;
+        if(hits>=_iceMaxHits) return;
         const dx=enemy.x-this.x;
         const dy=enemy.y-this.y;
         const dist=Math.hypot(dx,dy);
@@ -12989,11 +13483,13 @@ for(let i=0;i<3;i++){
         let angleDiff=angle-attackAngle;
         while(angleDiff>Math.PI) angleDiff-=Math.PI*2;
         while(angleDiff<-Math.PI) angleDiff+=Math.PI*2;
-        if(dist < this.range && Math.abs(angleDiff) < arcWidth/2){
+        if(dist < _iceRange && Math.abs(angleDiff) < arcWidth/2){
           const superMult = (this.type==='bane' && this.baneSuperUntil && now < this.baneSuperUntil) ? (this.baneSuperAttackMult||1) : 1;
           const base = this.damage * this.attackBuffMultiplier * superMult;
           const dmg = applyEnemyDamage(enemy, base);
-          createParticles(enemy.x,enemy.y,'#c0392b',14,6);
+          const _ibPal2 = this._iceBane?(typeof getSkinFxPalette==='function'?getSkinFxPalette(this.type):null):null;
+          createParticles(enemy.x,enemy.y,(_ibPal2&&_ibPal2.attack)?_ibPal2.attack[0]:'#c0392b',14,6);
+          if(_ibPal2&&_ibPal2.particleExtra) createParticles(enemy.x,enemy.y,_ibPal2.particleExtra[0],6,3);
           showDamageNumber(enemy.x,enemy.y,dmg);
           hits++;
           if(enemy.hp<=0){
@@ -13070,13 +13566,14 @@ for(let i=0;i<3;i++){
           while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
 
           if(Math.abs(angleDiff) < arcWidth/2 + 0.20){
-            const base=15*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
+            const base=this.damage*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
             const dealt=applyEnemyDamage(enemy, base);
             createParticles(enemy.x,enemy.y,'#c8e6ff',8,4);
             showDamageNumber(enemy.x,enemy.y,dealt);
 
             if(enemy.hp<=0){
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
+              if(enemies[i]) window._lastKilledEnemyType = enemies[i].type;
               dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
@@ -13318,23 +13815,28 @@ else if(this.attackType==='hecateBow'){
   const vy=(dy/len)*speed;
 
   const mainDmg = Math.round(this.damage*1.25*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
-  const splitDmg = Math.round(mainDmg * 0.5); // frecce minori: metà del danno della freccia principale
+  const splitDmg = Math.round(mainDmg * 0.5);
+  const _hPal = (typeof getSkinFxPalette==='function') ? getSkinFxPalette(this.type) : null;
+  const _hArrowColor = (_hPal && _hPal.attack) ? _hPal.attack[0] : '#e0e0e0';
+  const _hParticleColor = (_hPal && _hPal.particleExtra) ? _hPal.particleExtra[0] : '#c5cae9';
 
   spawnProjectile({
     x:sx,y:sy,
     vx,vy,speed,
     damage:mainDmg,
     ttl:720,
-    color:'#e0e0e0',
+    color:_hArrowColor,
     radius:6,
     friendly:true,
     shape:'arrow',
     w:28,
     h:7,
     angle:Math.atan2(vy,vx),
+    _iceHecateArrow: !!(this._iceHecate),
     meta:{type:'hecateMain', splitDamage: splitDmg}
   });
-  createParticles(sx,sy,'#c5cae9',14,4);
+  createParticles(sx,sy,_hParticleColor,14,4);
+  if(_hPal && _hPal.isIce) createParticles(sx,sy,_hPal.attack[1]||'#b3e5fc',8,3);
 }
 else if(this.attackType==='tempostormLaser'){
   const assistTarget=this.findClosestEnemy(900);
@@ -14074,8 +14576,20 @@ else if(this.attackType==='tempostormLaser'){
 
 
   _baneSuperOnKill(){
-    // Kept for compatibility: Bane SUPER attack buff is now decided at activation
-    // based on current Kill count (see superAttack()).
+    // Track kills during super for ICE Bane mission
+    try{
+      if(this.type==='bane' && this.baneSuperUntil && Date.now() < this.baneSuperUntil){
+        if(typeof accountState!=='undefined' && accountState && accountState.stats){
+          accountState.stats.baneSuperKills = Math.max(0, Math.floor(accountState.stats.baneSuperKills||0)) + 1;
+          for(const m of accountState.missions){
+            if(!m.claimed && m.type==='baneSuperKills'){
+              m.progress = Math.min(m.target, accountState.stats.baneSuperKills);
+            }
+          }
+          try{ saveAccount(); }catch(e){}
+        }
+      }
+    }catch(e){}
     return;
   }
 
@@ -14090,7 +14604,7 @@ else if(this.attackType==='tempostormLaser'){
       this._preBaneSuperCooldown = undefined;
       this._baneSuperAppliedCooldown = false;
       // restore speed only if SUPER was the active boost (avoid downgrading other buffs)
-      const superSpeed = this._baseSpeed * 1.25;
+      const superSpeed = this._baseSpeed * (this._iceBane ? 1.40 : 1.25);
       if(this.speed <= superSpeed + 0.0001){
         this.speed = this._baseSpeed;
       }
@@ -14566,22 +15080,32 @@ const ang = (tx!==null) ? Math.atan2(ty-cy, tx-cx) : (this.facingRight?0:Math.PI
         const _sDrSlashC = _sDrIsRed ? 'rgba(229,57,53,0.95)' : 'rgba(241,196,15,0.95)';
         drawCircularSlash(this.x+this.width/2, this.y+this.height/2, this.range, angle, arcWidth, this.attackTime, 260, _sDrSlashC, !this.facingRight);
       }else if(this.attackType==='axeattack'){
-        // Visual area: Bane axe swing (270°)
-        const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.5;
-        ctx.fillStyle='rgba(231,76,60,0.20)';
-        ctx.strokeStyle='rgba(231,76,60,0.85)';
+        // Visual area: Bane axe swing (270°) — ICE Bane: bianco/azzurro
+        const angle=this.facingRight?0:Math.PI;
+        const _ibDrawMult = this._iceBane ? 1.30 : 1.0;
+        const arcWidth=Math.PI*1.5*_ibDrawMult;
+        const _ibRange = this.range*_ibDrawMult;
+        const _ibIsIce = !!(this._iceBane);
+        ctx.fillStyle   = _ibIsIce ? 'rgba(179,229,252,0.18)' : 'rgba(231,76,60,0.20)';
+        ctx.strokeStyle = _ibIsIce ? 'rgba(255,255,255,0.85)'  : 'rgba(231,76,60,0.85)';
         ctx.lineWidth=7;
         ctx.beginPath();
         ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
-        ctx.arc(this.x+this.width/2,this.y+this.height/2,this.range,angle-arcWidth/2,angle+arcWidth/2);
+        ctx.arc(this.x+this.width/2,this.y+this.height/2,_ibRange,angle-arcWidth/2,angle+arcWidth/2);
         ctx.closePath();
-        
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
-
-ctx.fill();
+        ctx.shadowColor = _ibIsIce ? '#90caf9' : '#000000';
+        ctx.shadowBlur = _ibIsIce ? 18 : 25;
+        ctx.fill();
         ctx.stroke();
-        drawCircularSlash(this.x+this.width/2, this.y+this.height/2, this.range, angle, arcWidth, this.attackTime, 260, 'rgba(231,76,60,0.95)', !this.facingRight);
+        const _ibSlashColor = _ibIsIce ? 'rgba(255,255,255,0.92)' : 'rgba(231,76,60,0.95)';
+        drawCircularSlash(this.x+this.width/2, this.y+this.height/2, _ibRange, angle, arcWidth, this.attackTime, 260, _ibSlashColor, !this.facingRight);
+        if(_ibIsIce){
+          // riflesso azzurro interno
+          ctx.strokeStyle='rgba(144,202,249,0.55)'; ctx.lineWidth=3;
+          ctx.beginPath();
+          ctx.arc(this.x+this.width/2,this.y+this.height/2,_ibRange*0.7,angle-arcWidth/2,angle+arcWidth/2);
+          ctx.stroke();
+        }
       }else if(this.attackType==='lucienBlade'){
         // Visual area: Lucien 4-hit close-range blade fan
         const angle=(typeof this._lucienAimAngle==='number')?this._lucienAimAngle:(this.facingRight?0:Math.PI);const arcWidth=Math.PI*1.05;
@@ -14859,6 +15383,36 @@ ctx.fill();
         ctx.restore();
       }
     }
+
+    // ── POISON FX sul player: tinting immagine (solo pixel non trasparenti) ──
+    try{
+      const _pnow = Date.now();
+      if(this.poisonUntil && _pnow < this.poisonUntil){
+        const _pImg = (typeof getPlayerSpriteImg==='function')
+          ? getPlayerSpriteImg(this.type, this.evolved)
+          : (images[this.type] || null);
+        if(_pImg && _pImg.complete){
+          ctx.save();
+          // Disegna l'immagine del player su se stessa con source-atop per colorare solo pixel non trasparenti
+          if(!this.facingRight){
+            ctx.translate(this.x + this.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(_pImg, 0, this.y, this.width, this.height);
+            ctx.globalCompositeOperation = 'source-atop';
+            ctx.globalAlpha = 0.38;
+            ctx.fillStyle = '#33cc00';
+            ctx.fillRect(0, this.y, this.width, this.height);
+          } else {
+            ctx.drawImage(_pImg, this.x, this.y, this.width, this.height);
+            ctx.globalCompositeOperation = 'source-atop';
+            ctx.globalAlpha = 0.38;
+            ctx.fillStyle = '#33cc00';
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+          }
+          ctx.restore();
+        }
+      }
+    }catch(_pfxErr){}
 
   }
 }
@@ -15221,36 +15775,65 @@ this.speed=cfg.enemySpeed;
     ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
-    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
-    try{
-      const now=Date.now();
-      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
-      if(isMarked){
-        ctx.save();
-        // RED skin: cerchio rosso con glow; default: pallino nero
-        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
-          ? this._salsyMarkColor : '#000';
-        const _mrkIsRed = _mrkColor !== '#000';
-        if(_mrkIsRed){
-          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
-          // cerchio esterno glow
-          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
-          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1;
-        }
-        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
-        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
-        ctx.fillStyle = _mrkColor;
-        ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
-        ctx.fill();
-        ctx.restore();
-      }
-    }catch(e){}
-  
+        // Mark indicators (Salsy/Cosmo/Solar)
+    try{ drawCosmoMarkOnEnemy(this); }catch(e){}
     // Mezzaluna mark (crescente luminosa)
     try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
+    // ── VELENO FX sui nemici ──────────────────────────────────────────
+    try{ drawEnemyPoisonFX(this); }catch(_efxErr){}
 }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   drawEnemyPoisonFX(enemy)
+   Colora l'immagine del nemico solo sui pixel non trasparenti (no cerchi/anelli/animazioni):
+   1. Veleno Glaciale → azzurro ciano
+   2. Veleno Plus     → viola
+   3. Nemico Veleno (passivo) → verde
+   ────────────────────────────────────────────────────────────────── */
+function drawEnemyPoisonFX(e){
+  const _enow = Date.now();
+  const imgKey = (e.type==='boss' || e.type==='boss1') ? 'boss1' : e.type;
+  const _eImg = enemyImages[imgKey];
+  if(!_eImg || !_eImg.complete) return;
+
+  let _tintColor = null;
+
+  // Priorità: glaciale > plus > veleno passivo
+  if(e._glacialPoisonUntil && _enow < e._glacialPoisonUntil){
+    _tintColor = '#00e5ff'; // azzurro ciano ghiaccio
+  } else if(e._poisonPlusUntil && _enow < e._poisonPlusUntil){
+    _tintColor = '#ce93d8'; // viola
+  } else if(e.type === 'veleno'){
+    _tintColor = '#69f0ae'; // verde tossico
+  }
+
+  if(!_tintColor) return;
+
+  ctx.save();
+  // Ridisegna l'immagine in un offscreen rect, poi sovrapponi il colore con source-atop
+  ctx.drawImage(_eImg, e.x, e.y, e.width, e.height);
+  ctx.globalCompositeOperation = 'source-atop';
+  ctx.globalAlpha = 0.35;
+  ctx.fillStyle = _tintColor;
+  ctx.fillRect(e.x, e.y, e.width, e.height);
+  ctx.restore();
+
+  // Icona sopra il nemico (mantenuta, piccola e senza glow)
+  ctx.save();
+  ctx.globalAlpha = 0.80;
+  ctx.font = '13px "Press Start 2P", monospace';
+  ctx.textAlign = 'center';
+  if(e._glacialPoisonUntil && _enow < e._glacialPoisonUntil){
+    ctx.fillStyle = '#b2ebf2';
+    ctx.fillText('❄', e.x + e.width/2, e.y - 6);
+  }
+  if(e._poisonPlusUntil && _enow < e._poisonPlusUntil){
+    ctx.fillStyle = '#e1bee7';
+    const _iconY = e.y - 6 - (e._glacialPoisonUntil && _enow < e._glacialPoisonUntil ? 16 : 0);
+    ctx.fillText('☠', e.x + e.width/2, _iconY);
+  }
+  ctx.restore();
 }
 
 class ShooterEnemy extends Enemy{
@@ -15308,32 +15891,8 @@ class ShooterEnemy extends Enemy{
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
 
-    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
-    try{
-      const now=Date.now();
-      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
-      if(isMarked){
-        ctx.save();
-        // RED skin: cerchio rosso con glow; default: pallino nero
-        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
-          ? this._salsyMarkColor : '#000';
-        const _mrkIsRed = _mrkColor !== '#000';
-        if(_mrkIsRed){
-          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
-          // cerchio esterno glow
-          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
-          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1;
-        }
-        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
-        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
-        ctx.fillStyle = _mrkColor;
-        ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
-        ctx.fill();
-        ctx.restore();
-      }
-    }catch(e){}  
+        // Mark indicators (Salsy/Cosmo/Solar)
+    try{ drawCosmoMarkOnEnemy(this); }catch(e){}
     // Mezzaluna mark (crescente luminosa)
     try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
 }
@@ -15412,32 +15971,8 @@ class ArcherEnemy extends Enemy{
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
 
-    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
-    try{
-      const now=Date.now();
-      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
-      if(isMarked){
-        ctx.save();
-        // RED skin: cerchio rosso con glow; default: pallino nero
-        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
-          ? this._salsyMarkColor : '#000';
-        const _mrkIsRed = _mrkColor !== '#000';
-        if(_mrkIsRed){
-          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
-          // cerchio esterno glow
-          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
-          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1;
-        }
-        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
-        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
-        ctx.fillStyle = _mrkColor;
-        ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
-        ctx.fill();
-        ctx.restore();
-      }
-    }catch(e){}  
+        // Mark indicators (Salsy/Cosmo/Solar)
+    try{ drawCosmoMarkOnEnemy(this); }catch(e){}
     // Mezzaluna mark (crescente luminosa)
     try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
 }
@@ -15446,174 +15981,371 @@ class ArcherEnemy extends Enemy{
 class GlacialEnemy extends Enemy{
   constructor(type,level){
     super(type,level);
-    this.attackCooldown=Math.max(2100, 3400 - level*35);
-    this.lastAttack=0;
-    this.coneDuration=2000;
-    this.coneRange=430;
-    this.coneAngle=Math.PI/6; // 30° total
-    this.coneActiveUntil=0;
-    this.coneDir=0;
-    this._coneInsideMs=0;
-    this._coneLastCheck=0;
-    this._coneLastTick=0;
-    this._lastRegenAt=0;
-    this.keepMin=280;
-    this.keepMax=440;
-    this.glacialBaseTick = (level===23 ? 20 : (level===24 ? 22 : Math.max(3, Math.round(this.damage*0.20))));
+    // Cooldown +20% rispetto al vecchio valore base
+    this.attackCooldown = Math.round(Math.max(2520, 3400 - level*35) * 1.20);
+    this.lastAttack = 0;
+    // Cono di ghiaccio: range +35% → 473 (239 per lvl 23-24), attivo 2s per ogni attivazione
+    this.flameRange = (level===23 || level===24) ? 276 : 554; // -10% lunghezza colpo
+    this.flameAngle = Math.PI / 5; // 36° — leggermente più largo di Kaerith
+    this.flameDuration = 2000;     // dura 2 secondi
+    this.flameActiveUntil = 0;
+    this.flameDir = 0;
+    this.flamePulseMs = 90;        // identico a Kaerith
+    this.flameLastPulse = 0;
+    this._lastRegenAt = 0;
+    // Posizionamento: si avvicina abbastanza da colpire sicuramente (keepMax < flameRange)
+    this.keepMin = 120;
+    this.keepMax = Math.round(this.flameRange * 0.78);
+    // Danno per tick: leggermente meno di Kaerith
+    this.glacialDmgBase = (level===23 ? 11 : (level===24 ? 13 : Math.max(4, Math.round(this.damage * 0.420)))); // -10% danno rispetto a prima
   }
   update(player){
-    if(Date.now()<this.spawnFreezeUntil)return;
-    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
-      this.vx = 0; this.vy = 0;
-      return;
-    }
+    if(Date.now() < this.spawnFreezeUntil) return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){ this.vx=0; this.vy=0; return; }
     player = getPreferredTarget(this, player);
-    const now=Date.now();
+    const now = Date.now();
 
-    // Regen: if not hit for 5s, heal 15 (can repeat every 5s)
-    const lastHit=this._lastHitAt||0;
+    // Regen: if not hit for 5s, heal 15
+    const lastHit = this._lastHitAt||0;
     if(now-lastHit>=5000 && now-(this._lastRegenAt||0)>=5000 && this.hp<this.maxHP){
-      this.hp=Math.min(this.maxHP, this.hp+15);
-      this._lastRegenAt=now;
-      createParticles(this.x+this.width/2,this.y+this.height/2,'#74b9ff',12,4);
+      this.hp = Math.min(this.maxHP, this.hp+15);
+      this._lastRegenAt = now;
+      createParticles(this.x+this.width/2, this.y+this.height/2, '#74b9ff', 12, 4);
     }
 
-    const dx=(player.x+player.width/2)-(this.x+this.width/2);
-    const dy=(player.y+player.height/2)-(this.y+this.height/2);
-    const dist=Math.hypot(dx,dy)||1;
+    const cx = this.x+this.width/2, cy = this.y+this.height/2;
+    const px = player.x+player.width/2, py = player.y+player.height/2;
+    const dx = px-cx, dy = py-cy;
+    const dist = Math.hypot(dx,dy)||1;
 
-    // Keep mid distance
+    // Movimento: mantieni distanza ottimale per colpire col cono
     if(dist < this.keepMin){
-      const nx=dx/dist, ny=dy/dist;
-      this.vx = -nx*this.speed*1.08;
-      this.vy = -ny*this.speed*1.08;
+      this.vx = -(dx/dist)*this.speed*1.1;
+      this.vy = -(dy/dist)*this.speed*1.1;
     } else if(dist > this.keepMax){
-      const nx=dx/dist, ny=dy/dist;
-      this.vx = nx*this.speed*0.92;
-      this.vy = ny*this.speed*0.92;
+      this.vx = (dx/dist)*this.speed*0.95;
+      this.vy = (dy/dist)*this.speed*0.95;
     } else {
-      this.vx*=0.92; this.vy*=0.92;
+      this.vx *= 0.90; this.vy *= 0.90;
+    }
+    this.x += this.vx; this.y += this.vy;
+    if(this.x<0)this.x=0; if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
+    if(this.y<0)this.y=0; if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
+
+    // Attiva il cono quando il cooldown è pronto
+    if(now - this.lastAttack > this.attackCooldown){
+      this.lastAttack = now;
+      this.flameActiveUntil = now + this.flameDuration;
+      this.flameDir = Math.atan2(dy, dx);
+      this.flameLastPulse = 0;
     }
 
-    this.x+=this.vx; this.y+=this.vy;
-    if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
+    // Cono attivo: tracking continuo verso il player + danni a tick
+    if(this.flameActiveUntil && now < this.flameActiveUntil){
+      // Aggiorna direzione verso il player ogni frame (tracking)
+      this.flameDir = Math.atan2(py - (this.y+this.height/2), px - (this.x+this.width/2));
 
-    // Start cone attack
-    if(now-this.lastAttack>this.attackCooldown){
-      this.lastAttack=now;
-      this.coneActiveUntil=now+this.coneDuration;
-      this.coneDir=Math.atan2(dy,dx);
-      this._coneInsideMs=0;
-      this._coneLastCheck=now;
-      this._coneLastTick=0;
-    }
-
-    // Cone damage while active
-    if(this.coneActiveUntil && now < this.coneActiveUntil){
-      const dt = now - (this._coneLastCheck || now);
-      this._coneLastCheck = now;
-
-      // Aimbot 360°: aggiorna la direzione del cono verso il player ogni frame
-      const ex=this.x+this.width/2, ey=this.y+this.height/2;
-      this.coneDir=Math.atan2((player.y+player.height/2)-ey,(player.x+player.width/2)-ex);
-
-      // check player inside cone
-      const px=player.x+player.width/2, py=player.y+player.height/2;
-      const vx=px-ex, vy=py-ey;
-      const pdist=Math.hypot(vx,vy)||1;
-      const ang=Math.atan2(vy,vx);
-      let diff=Math.abs(ang-this.coneDir);
-      if(diff>Math.PI) diff=2*Math.PI-diff;
-
-      const inside = (pdist<=this.coneRange) && (diff <= (this.coneAngle/2));
-
-      if(inside){
-        this._coneInsideMs += dt;
-        // damage ticks every 250ms, increasing while inside
-        if(!this._coneLastTick) this._coneLastTick = now;
-        if(now - this._coneLastTick >= 250){
-          this._coneLastTick = now;
-          const insideSec = this._coneInsideMs/1000;
-          const base = (this.glacialBaseTick!=null ? this.glacialBaseTick : Math.max(3, Math.round(this.damage*0.20)));
-          const ramp = Math.round(insideSec * 2.2); // gradual increase
-          const dmg = Math.min(22, base + ramp);
-          player.takeDamage(dmg, this);
-          createParticles(player.x,player.y,'#b2bec3',8,3);
+      if(now - this.flameLastPulse >= this.flamePulseMs){
+        this.flameLastPulse = now;
+        // Controlla se il player è dentro il cono
+        const ecx = this.x+this.width/2, ecy = this.y+this.height/2;
+        const vx2 = px-ecx, vy2 = py-ecy;
+        const pdist = Math.hypot(vx2,vy2);
+        if(pdist <= this.flameRange){
+          const ang = Math.atan2(vy2, vx2);
+          let diff = ang - this.flameDir;
+          while(diff >  Math.PI) diff -= Math.PI*2;
+          while(diff < -Math.PI) diff += Math.PI*2;
+          if(Math.abs(diff) <= this.flameAngle/2){
+            const dmg = this.glacialDmgBase;
+            try{ player.takeDamage(dmg, this); }catch(e2){}
+            createParticles(px, py, '#b3e5fc', 5, 3);
+          }
         }
-      } else {
-        this._coneInsideMs = 0;
       }
     }
   }
   draw(){
     const img = enemyImages['glacial'];
-    if(img && img.complete) ctx.drawImage(img,this.x,this.y,this.width*1.5,this.height*1.5);
+    if(img && img.complete) ctx.drawImage(img, this.x, this.y, this.width*1.5, this.height*1.5);
     else super.draw();
 
-    // Cone visual
-    const now=Date.now();
-    if(this.coneActiveUntil && now < this.coneActiveUntil){
-      const cx=this.x+this.width/2, cy=this.y+this.height/2;
-      const a0=this.coneDir - this.coneAngle/2;
-      const a1=this.coneDir + this.coneAngle/2;
-      ctx.save();
-      ctx.globalAlpha=0.28;
-      ctx.fillStyle='rgba(180,220,255,0.9)';
-      ctx.beginPath();
-      ctx.moveTo(cx,cy);
-      ctx.arc(cx,cy,this.coneRange,a0,a1,false);
-      ctx.closePath();
-      
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
+    // Visuale cono ghiaccio — stesso stile di Kaerith ma colori blu
+    const now = Date.now();
+    if(this.flameActiveUntil && now < this.flameActiveUntil){
+      const ecx = this.x+this.width/2, ecy = this.y+this.height/2;
+      const a0 = this.flameDir - this.flameAngle/2;
+      const a1 = this.flameDir + this.flameAngle/2;
+      const r  = this.flameRange;
+      const tIn = Math.max(0, Math.min(1, (now - (this.lastAttack||now))/220));
+      const pulse = 0.5 + 0.5*Math.sin(now/55);
 
-ctx.fill();
-      ctx.globalAlpha=0.12;
-      ctx.strokeStyle='rgba(180,220,255,0.9)';
-      ctx.lineWidth=4;
+      ctx.save();
+      // Clip al settore
       ctx.beginPath();
-      ctx.moveTo(cx,cy);
-      ctx.arc(cx,cy,this.coneRange,a0,a1,false);
+      ctx.moveTo(ecx,ecy);
+      ctx.arc(ecx,ecy,r,a0,a1,false);
+      ctx.closePath();
+      ctx.clip();
+
+      ctx.globalCompositeOperation='lighter';
+
+      // Base glow azzurro ghiaccio
+      ctx.globalAlpha = (0.10 + 0.12*tIn);
+      ctx.fillStyle='rgba(41,182,246,0.85)';
+      ctx.beginPath();
+      ctx.moveTo(ecx,ecy);
+      ctx.arc(ecx,ecy,r,a0,a1,false);
+      ctx.closePath();
+      ctx.fill();
+
+      // Nucleo bianco-azzurro brillante
+      const coreArc = this.flameAngle * 0.60;
+      const c0=this.flameDir-coreArc/2, c1=this.flameDir+coreArc/2;
+      ctx.globalAlpha = (0.16 + 0.18*pulse);
+      ctx.fillStyle='rgba(200,240,255,0.95)';
+      ctx.beginPath();
+      ctx.moveTo(ecx,ecy);
+      ctx.arc(ecx,ecy,r*0.88,c0,c1,false);
+      ctx.closePath();
+      ctx.fill();
+
+      // Cristalli di ghiaccio (stile lingue di fuoco di Kaerith)
+      const cosD=Math.cos(this.flameDir), sinD=Math.sin(this.flameDir);
+      const cosP=Math.cos(this.flameDir+Math.PI/2), sinP=Math.sin(this.flameDir+Math.PI/2);
+      for(let i=0;i<22;i++){
+        const u=Math.random();
+        const d=(0.18+u*0.82)*r;
+        const widthAt=Math.tan(this.flameAngle/2)*d;
+        const off=(Math.random()*2-1)*widthAt*0.75;
+        const x=ecx+cosD*d+cosP*off;
+        const y=ecy+sinD*d+sinP*off;
+        const sz=(2+Math.random()*4)*(0.4+0.6*u);
+        const col=Math.random()<0.5?'rgba(179,229,252,0.9)':'rgba(100,200,255,0.8)';
+        ctx.globalAlpha=(0.25+0.55*Math.random())*pulse;
+        ctx.fillStyle=col;
+        ctx.fillRect(x-sz/2,y-sz/2,sz,sz);
+      }
+
+      ctx.restore();
+
+      // Bordo cono
+      ctx.save();
+      ctx.globalAlpha=0.30;
+      ctx.strokeStyle='rgba(100,200,255,0.85)';
+      ctx.lineWidth=3;
+      ctx.beginPath();
+      ctx.moveTo(ecx,ecy);
+      ctx.arc(ecx,ecy,r,a0,a1,false);
       ctx.closePath();
       ctx.stroke();
       ctx.restore();
     }
 
     const hpPercent=this.hp/this.maxHP;
-    ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
+    ctx.fillStyle='#333'; ctx.fillRect(this.x,this.y-10,this.width,5);
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
-
-    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
-    try{
-      const now=Date.now();
-      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
-      if(isMarked){
-        ctx.save();
-        // RED skin: cerchio rosso con glow; default: pallino nero
-        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
-          ? this._salsyMarkColor : '#000';
-        const _mrkIsRed = _mrkColor !== '#000';
-        if(_mrkIsRed){
-          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
-          // cerchio esterno glow
-          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
-          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1;
-        }
-        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
-        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
-        ctx.fillStyle = _mrkColor;
-        ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
-        ctx.fill();
-        ctx.restore();
-      }
-    }catch(e){}  
-    // Mezzaluna mark (crescente luminosa)
+    try{ drawCosmoMarkOnEnemy(this); }catch(e){}
     try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
+  }
 }
+
+
+// ═══════════════════════════════════════════════════════════════
+// GOO ZONES — zone gelatinose create dai Gelatinus
+// Rallentano il player del 60% e infliggono 7 dmg/sec
+// ═══════════════════════════════════════════════════════════════
+let gooZones = []; // array di { x, y, radius, endsAt, lastTick, ownerRef }
+
+function spawnGooZone(x, y, ownerRef){
+  // Rimuovi zona precedente dello stesso owner se esiste
+  gooZones = gooZones.filter(z => z.ownerRef !== ownerRef);
+  gooZones.push({
+    x, y,
+    radius: 70,
+    endsAt: Date.now() + 5000,
+    lastTick: Date.now(),
+    ownerRef: ownerRef
+  });
+}
+
+function updateGooZones(now){
+  if(!gooZones.length) return;
+  // Rimuovi zone scadute
+  gooZones = gooZones.filter(z => now < z.endsAt);
+  if(!player) return;
+  const px = player.x + player.width/2;
+  const py = player.y + player.height/2;
+  for(const z of gooZones){
+    const d = Math.hypot(px - z.x, py - z.y);
+    if(d <= z.radius){
+      // Rallenta player 60%
+      player.applySlow(0.60, 300);
+      // 7 dmg/sec
+      if(now - z.lastTick >= 1000){
+        z.lastTick = now;
+        try{ player.takeDamage(7, null); }catch(e2){}
+        createParticles(px, py, '#f48fb1', 5, 2);
+      }
+    }
+  }
+}
+
+function drawGooZones(now){
+  for(const z of gooZones){
+    const alpha = Math.max(0, Math.min(0.55, (z.endsAt - now) / 5000 * 0.55));
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    const grad = ctx.createRadialGradient(z.x, z.y, 0, z.x, z.y, z.radius);
+    grad.addColorStop(0, 'rgba(255,105,180,0.85)');
+    grad.addColorStop(0.6, 'rgba(240,98,146,0.55)');
+    grad.addColorStop(1, 'rgba(233,30,99,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(z.x, z.y, z.radius, 0, Math.PI*2);
+    ctx.fill();
+    // bordo pulsante
+    ctx.globalAlpha = alpha * 0.7;
+    ctx.strokeStyle = '#f06292';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GELATINUS ENEMY — sputa gelatina, crea zone viscose
+// ═══════════════════════════════════════════════════════════════
+class GelatinoEnemy extends Enemy{
+  constructor(type, level){
+    super(type, level);
+    this.lastShoot = 0;
+    this.shootCooldown = 900;   // cooldown basso: sputa spesso
+    this.bulletSpeed = 5.5;
+    this._hasActiveZone = false; // ha già una zona attiva sul campo
+  }
+  update(player){
+    if(Date.now() < this.spawnFreezeUntil) return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){ this.vx=0; this.vy=0; return; }
+    player = getPreferredTarget(this, player);
+    const now = Date.now();
+    const dx = (player.x+player.width/2) - (this.x+this.width/2);
+    const dy = (player.y+player.height/2) - (this.y+this.height/2);
+    const dist = Math.hypot(dx,dy)||1;
+
+    // Mantieni distanza semi-lontana: 240-420px
+    if(dist < 240){
+      this.vx = -(dx/dist)*this.speed;
+      this.vy = -(dy/dist)*this.speed;
+    } else if(dist > 420){
+      this.vx = (dx/dist)*this.speed*0.85;
+      this.vy = (dy/dist)*this.speed*0.85;
+    } else {
+      this.vx *= 0.88; this.vy *= 0.88;
+    }
+    this.x += this.vx; this.y += this.vy;
+    if(this.x<0)this.x=0; if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
+    if(this.y<0)this.y=0; if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
+
+    // Controlla se la zona di questo gelatinus è ancora attiva
+    this._hasActiveZone = gooZones.some(z => z.ownerRef === this);
+
+    // Sparo sputo gelatinoso
+    if(now - this.lastShoot > this.shootCooldown){
+      this.lastShoot = now;
+      const len = dist||1;
+      const vx = (dx/len)*this.bulletSpeed;
+      const vy = (dy/len)*this.bulletSpeed;
+      const createZone = !this._hasActiveZone; // crea zona solo se non ne ha una attiva
+      spawnProjectile({
+        x: this.x+this.width/2, y: this.y+this.height/2,
+        vx, vy,
+        damage: Math.max(1, Math.round(this.damage)),
+        ttl: 2200,
+        color: '#f48fb1',
+        radius: 9,
+        friendly: false,
+        source: this,
+        _gelaSpitCreateZone: createZone,
+        _gelaOwner: this,
+        shape: 'circle'
+      });
+      // Particelle sparo
+      createParticles(this.x+this.width/2, this.y+this.height/2, '#f48fb1', 5, 3);
+    }
+  }
+  draw(){
+    const img = enemyImages['gelatinus'];
+    if(img && img.complete) ctx.drawImage(img, this.x, this.y, this.width, this.height);
+    else {
+      ctx.fillStyle='#f48fb1';
+      ctx.beginPath();
+      ctx.ellipse(this.x+this.width/2, this.y+this.height/2, this.width/2, this.height/2, 0, 0, Math.PI*2);
+      ctx.fill();
+    }
+    const hpPercent = this.hp/this.maxHP;
+    ctx.fillStyle='#333'; ctx.fillRect(this.x, this.y-10, this.width, 5);
+    ctx.fillStyle = hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
+    ctx.fillRect(this.x, this.y-10, this.width*hpPercent, 5);
+    try{ drawCosmoMarkOnEnemy(this); }catch(e){}
+    try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MINI GELATINUS — nasce dalla morte di un Gelatinus, attacca ravvicinato
+// ═══════════════════════════════════════════════════════════════
+class MiniGelatinoEnemy extends Enemy{
+  constructor(x, y, level){
+    const fakeCfg = { enemyType:'minigelatinus', enemyHP: 80, enemyDamage: 12, enemySpeed: 4.8, time: 60, enemyCount: 1 };
+    // Bypass normal constructor by calling Enemy with minigelatinus type
+    super('minigelatinus', level||26);
+    this.x = x; this.y = y;
+    this.maxHP = 80; this.hp = 80;
+    this.damage = 12;
+    this.speed = 4.8;
+    this._baseSpeed = 4.8;
+    this.width = Math.round(38); this.height = Math.round(38);
+    this.spawnFreezeUntil = Date.now() + 300;
+    this.attackCooldown = 1200;
+    this.lastAttack = 0;
+  }
+  update(player){
+    if(Date.now() < this.spawnFreezeUntil) return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){ this.vx=0; this.vy=0; return; }
+    player = getPreferredTarget(this, player);
+    const now = Date.now();
+    const dx = (player.x+player.width/2) - (this.x+this.width/2);
+    const dy = (player.y+player.height/2) - (this.y+this.height/2);
+    const dist = Math.hypot(dx,dy)||1;
+    // Insegui direttamente
+    this.vx = (dx/dist)*this.speed;
+    this.vy = (dy/dist)*this.speed;
+    this.x += this.vx; this.y += this.vy;
+    if(this.x<0)this.x=0; if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
+    if(this.y<0)this.y=0; if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
+    // Danno contatto
+    if(dist < 36 && now - this.lastAttack > this.attackCooldown){
+      this.lastAttack = now;
+      try{ player.takeDamage(this.damage, this); }catch(e2){}
+      createParticles(player.x+player.width/2, player.y+player.height/2, '#f48fb1', 6, 3);
+    }
+  }
+  draw(){
+    const img = enemyImages['minigelatinus'];
+    if(img && img.complete) ctx.drawImage(img, this.x, this.y, this.width, this.height);
+    else {
+      ctx.fillStyle='#f8bbd0';
+      ctx.beginPath();
+      ctx.arc(this.x+this.width/2, this.y+this.height/2, this.width/2, 0, Math.PI*2);
+      ctx.fill();
+    }
+    const hpPercent = this.hp/this.maxHP;
+    ctx.fillStyle='#333'; ctx.fillRect(this.x, this.y-10, this.width, 5);
+    ctx.fillStyle = hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
+    ctx.fillRect(this.x, this.y-10, this.width*hpPercent, 5);
+  }
 }
 
 
@@ -15680,32 +16412,8 @@ class AttackReturnEnemy extends Enemy{
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
 
-    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
-    try{
-      const now=Date.now();
-      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
-      if(isMarked){
-        ctx.save();
-        // RED skin: cerchio rosso con glow; default: pallino nero
-        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
-          ? this._salsyMarkColor : '#000';
-        const _mrkIsRed = _mrkColor !== '#000';
-        if(_mrkIsRed){
-          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
-          // cerchio esterno glow
-          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
-          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1;
-        }
-        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
-        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
-        ctx.fillStyle = _mrkColor;
-        ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
-        ctx.fill();
-        ctx.restore();
-      }
-    }catch(e){}  
+        // Mark indicators (Salsy/Cosmo/Solar)
+    try{ drawCosmoMarkOnEnemy(this); }catch(e){}
     // Mezzaluna mark (crescente luminosa)
     try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
 }
@@ -15773,32 +16481,8 @@ class BossEnemy extends Enemy{
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
 
-    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
-    try{
-      const now=Date.now();
-      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
-      if(isMarked){
-        ctx.save();
-        // RED skin: cerchio rosso con glow; default: pallino nero
-        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
-          ? this._salsyMarkColor : '#000';
-        const _mrkIsRed = _mrkColor !== '#000';
-        if(_mrkIsRed){
-          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
-          // cerchio esterno glow
-          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
-          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1;
-        }
-        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
-        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
-        ctx.fillStyle = _mrkColor;
-        ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
-        ctx.fill();
-        ctx.restore();
-      }
-    }catch(e){}  
+        // Mark indicators (Salsy/Cosmo/Solar)
+    try{ drawCosmoMarkOnEnemy(this); }catch(e){}
     // Mezzaluna mark (crescente luminosa)
     try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
 }
@@ -16020,32 +16704,8 @@ class Boss5Enemy extends Enemy{
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
 
-    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
-    try{
-      const now=Date.now();
-      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
-      if(isMarked){
-        ctx.save();
-        // RED skin: cerchio rosso con glow; default: pallino nero
-        const _mrkColor = (this.salsyMarkUntil && now < this.salsyMarkUntil && this._salsyMarkColor)
-          ? this._salsyMarkColor : '#000';
-        const _mrkIsRed = _mrkColor !== '#000';
-        if(_mrkIsRed){
-          ctx.shadowColor = _mrkColor; ctx.shadowBlur = 14;
-          // cerchio esterno glow
-          ctx.strokeStyle = _mrkColor; ctx.lineWidth = 2.2; ctx.globalAlpha = 0.75;
-          ctx.beginPath(); ctx.arc(this.x+this.width/2, this.y-18, 8, 0, Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1;
-        }
-        ctx.shadowColor = _mrkIsRed ? _mrkColor : '#000000';
-        ctx.shadowBlur = _mrkIsRed ? 10 : 25;
-        ctx.fillStyle = _mrkColor;
-        ctx.beginPath();
-        ctx.arc(this.x+this.width/2, this.y-18, _mrkIsRed ? 6 : 5, 0, Math.PI*2);
-        ctx.fill();
-        ctx.restore();
-      }
-    }catch(e){}
+    // Mark indicators (Salsy/Cosmo/Solar)
+    try{ drawCosmoMarkOnEnemy(this); }catch(e){}
     const now=Date.now();
     const cx=this.x+this.width/2, cy=this.y+this.height/2;
 
@@ -16108,6 +16768,7 @@ function spawnEnemiesForLevel(level){
     else if(cfg.enemyType==='attacker') e=new AttackReturnEnemy(cfg.enemyType,lvl);
     else if(cfg.enemyType==='archer') e=new ArcherEnemy(cfg.enemyType,lvl);
     else if(cfg.enemyType==='glacial') e=new GlacialEnemy(cfg.enemyType,lvl);
+    else if(cfg.enemyType==='gelatinus') e=new GelatinoEnemy(cfg.enemyType,lvl);
     else if(cfg.enemyType==='boss1' || cfg.enemyType==='boss2' || cfg.enemyType==='boss3') e=new BossEnemy(cfg.enemyType,lvl);
     else if(cfg.enemyType==='boss5') e=new Boss5Enemy(cfg.enemyType,lvl);
     else e=new Enemy(cfg.enemyType,lvl);
@@ -16117,14 +16778,20 @@ function spawnEnemiesForLevel(level){
 }
 
 function updateBackgroundForLevel(level){
-  // Levels 1-6: default bg, Levels 7-15: dark bg, Levels 16-20: final bg, Levels 21+: ice bg
+  // Levels 1-6: default, 7-15: dark, 16-20: final, 21-25: ice, 26+: gela
   let tier=0;
-  if(level>=21) tier=3;
+  if(level>=26) tier=4;
+  else if(level>=21) tier=3;
   else if(level>=16) tier=2;
   else if(level>=7) tier=1;
 
   const applyTier=()=>{
-    if(tier===3){
+    if(tier===4){
+      bgDark.style.backgroundImage=`url('${URL_GELA}')`;
+      bgDefault.style.opacity='0';
+      bgDark.style.opacity='1';
+    }
+    else if(tier===3){
       bgDark.style.backgroundImage=`url('${URL_ICE}')`;
       bgDefault.style.opacity='0';
       bgDark.style.opacity='1';
@@ -16257,13 +16924,53 @@ const SKIN_PASSIVES = {
       player._evilMarzCurse = true;
     },
   },
+  // ICE Bane: super +40% velocità (invece di 25%), area +30%, max 3 bersagli attacco base
+  bane_ice: {
+    label: 'ICE Bane',
+    bonuses: [
+      { desc: '❄️ AXEMASTER: attacco base colpisce fino a 3 bersagli (invece di 2)' },
+      { desc: '🌀 SUPER GELIDA: velocità +40% durante la super (invece di 25%), area ascia +30%' },
+    ],
+    apply(player){
+      if(player.type !== 'bane') return;
+      player._iceBane = true;
+    },
+  },
+  // ICE Hecate: frecce azzurre, rallenta nemici, lupi applicano veleno glaciale + stun
+  hecate_ice: {
+    label: 'ICE Hecate',
+    bonuses: [
+      { desc: '❄️ Frecce azzurre: ogni freccia rallenta i nemici colpiti del 20% per 2 secondi' },
+      { desc: '🐺 Lupi glaciali: i lupi applicano Veleno Glaciale (3 dmg/sec). Alla scadenza il veleno stordisce il nemico per 1 secondo' },
+    ],
+    apply(player){
+      if(player.type !== 'hecate') return;
+      player._iceHecate = true;
+    },
+  },
+  // SOLAR Cosmo: marchio solare + DoT + super potenziata
+  cosmo_solar: {
+    label: 'SOLAR Cosmo',
+    bonuses: [
+      { desc: '☀️ MARCHIO SOLARE: i nemici marchiati subiscono 25 danni ogni 0.5 sec fino alla scadenza del marchio' },
+      { desc: '🌞 SUPER SOLARE: singolarità più grande, attrazione maggiore, danni a tutto il campo' },
+    ],
+    apply(player){
+      if(player.type !== 'cosmo') return;
+      player._solarCosmo = true;
+    },
+  },
   // EVIL Kaerith: recolor viola su attacco base e super
   kaerith_evil: {
     label: 'EVIL Kaerith',
     bonuses: [
       { desc: '🟣 Attacco base e super con colori viola/magenta invece di rosso/arancio' },
+      { desc: '👿 ORDA INFERNALE: il danno della fiamma aumenta in base al numero di nemici in campo (+8% per ogni nemico, max +120%)' },
+      { desc: '🔮 ALTARE DEMONIACO: alla morte di un nemico, 3% di probabilità di far apparire un pickup speciale. Se raccolto, richiama tutti i nemici al centro e li colpisce con 4 fiamme viola convergenti.' },
     ],
-    apply(player){ /* solo recolor visivo */ },
+    apply(player){
+      player._evilKaerithHordePassive = true;
+    },
   },
   // METAL Jimmy: al jetpack spawna 5 MICO che stunnano i nemici
   jimmy_metal: {
@@ -16380,14 +17087,18 @@ function applySkinSlow(enemy, pct, durationMs){
     if(!enemy) return;
     const factor = 1 - Math.min(0.95, Math.max(0, pct));
     const until  = Date.now() + (durationMs||2000);
-    // stack: keep strongest/longest
-    if(enemy._skinSlowUntil && Date.now() < enemy._skinSlowUntil){
-      enemy._skinSlowUntil = Math.max(enemy._skinSlowUntil, until);
-      return;
+    // Save the ORIGINAL speed (before any slow) — use characterStats as ground truth
+    if(!enemy._skinSlowBase || enemy._skinSlowBase <= (enemy.speed||2)){
+      // Recover original speed from characterStats if possible
+      const _origSpd = (typeof characterStats!=='undefined' && characterStats && enemy.type && characterStats[enemy.type])
+        ? (characterStats[enemy.type].speed || enemy.speed || 2)
+        : (enemy._skinSlowBase && enemy._skinSlowBase > enemy.speed ? enemy._skinSlowBase : (enemy.speed || 2));
+      enemy._skinSlowBase = _origSpd;
     }
-    enemy._skinSlowBase  = enemy.speed;
-    enemy.speed          = Math.max(0.3, (enemy.speed||2) * factor);
-    enemy._skinSlowUntil = until;
+    enemy.speed          = Math.max(0.3, enemy._skinSlowBase * factor);
+    enemy._skinSlowUntil = Math.max(enemy._skinSlowUntil||0, until);
+    // ICE visual: particelle azzurro ghiaccio
+    try{ createParticles(enemy.x+enemy.width/2, enemy.y+enemy.height/2, '#b3e5fc', 6, 3); }catch(e2){}
   }catch(e){}
 }
 
@@ -16399,7 +17110,7 @@ function applySkinPoisonPlus(enemy){
     // extend if already active
     enemy._poisonPlusUntil    = Math.max(enemy._poisonPlusUntil||0, until);
     enemy._poisonPlusTick     = enemy._poisonPlusTick || 0;
-    enemy._poisonPlusDmg      = 3; // dmg per tick
+    enemy._poisonPlusDmg      = 10; // dmg per tick (aggiornato da 3)
     enemy._poisonPlusInterval = 1000; // 1s
   }catch(e){}
 }
@@ -16503,7 +17214,7 @@ function tickSkinEnemyPassives(now){
       if(!e._poisonPlusTick) e._poisonPlusTick = now;
       if(now - e._poisonPlusTick >= (e._poisonPlusInterval||1000)){
         e._poisonPlusTick = now;
-        const dmg = e._poisonPlusDmg || 3;
+        const dmg = e._poisonPlusDmg || 10;
         e.hp -= dmg;
         createParticles(e.x+e.width/2, e.y+e.height/2, '#76ff03', 4, 3);
         showDamageNumber(e.x+e.width/2, e.y+e.height/2, dmg);
@@ -16549,6 +17260,7 @@ function startGame(){
   enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];wolves=[];micos=[];
   bossRings=[];collanaLightnings=[];collanaOrbs=[];furiaWaves=[];
   magicZone=null;hendelCrush=null;
+  try{ gooZones=[]; }catch(_gz){}
   if(window.cosmoSingularity) window.cosmoSingularity=null;
   if(window.cosmoTrails) window.cosmoTrails=[];
   if(window._marzArcaneLinks) window._marzArcaneLinks=[];
@@ -16935,26 +17647,28 @@ function drawCosmoShots(now){
       const xB = s.x1 + ux*L*f1 + nx*off;
       const yB = s.y1 + uy*L*f1 + ny*off;
 
-      // Outer "void glow"
+      // Solar Cosmo: giallo/arancio/nero — default: blu scuro
+      const _isSolarShot = !!(typeof player!=='undefined' && player && player._solarCosmo);
+      // Outer glow
       ctx.globalAlpha = 0.55*a*(seg[3]||1);
-      ctx.shadowColor = 'rgba(40,90,255,0.18)';
+      ctx.shadowColor = _isSolarShot ? 'rgba(255,200,0,0.6)' : 'rgba(40,90,255,0.18)';
       ctx.shadowBlur = 22;
-      ctx.strokeStyle = 'rgba(6,10,22,0.78)'; // near-black navy
+      ctx.strokeStyle = _isSolarShot ? 'rgba(255,200,0,0.80)' : 'rgba(6,10,22,0.78)';
       ctx.lineWidth = 14 + 2*Math.sin((now-s.start)/29 + seg[2]);
       ctx.beginPath(); ctx.moveTo(xA,yA); ctx.lineTo(xB,yB); ctx.stroke();
 
-      // Inner rim (dark blue energy)
+      // Inner rim
       ctx.globalAlpha = 0.85*a*(seg[3]||1);
-      ctx.shadowColor = 'rgba(35,110,255,0.22)';
+      ctx.shadowColor = _isSolarShot ? 'rgba(255,150,0,0.5)' : 'rgba(35,110,255,0.22)';
       ctx.shadowBlur = 28;
-      ctx.strokeStyle = 'rgba(12,28,85,0.80)';
+      ctx.strokeStyle = _isSolarShot ? 'rgba(255,140,0,0.88)' : 'rgba(12,28,85,0.80)';
       ctx.lineWidth = 7.5;
       ctx.beginPath(); ctx.moveTo(xA,yA); ctx.lineTo(xB,yB); ctx.stroke();
 
-      // Core (almost black)
+      // Core (black for solar = black detail, navy for default)
       ctx.globalAlpha = 0.95*a*(seg[3]||1);
       ctx.shadowBlur = 0;
-      ctx.strokeStyle = 'rgba(3,6,18,0.96)';
+      ctx.strokeStyle = _isSolarShot ? 'rgba(10,5,0,0.96)' : 'rgba(3,6,18,0.96)';
       ctx.lineWidth = 2.4;
       ctx.beginPath(); ctx.moveTo(xA,yA); ctx.lineTo(xB,yB); ctx.stroke();
     }
@@ -17030,6 +17744,29 @@ function updateCosmoMarks(now){
     const m = e._cosmoMark;
     if(!m) continue;
 
+    // SOLAR Cosmo: DoT 25 dmg ogni 0.5 sec finché il marchio è attivo
+    if(player && player._solarCosmo && !m.triggerNow && now < (m.explodeAt||0)){
+      if(!m._solarLastTick) m._solarLastTick = now;
+      if(now - m._solarLastTick >= 500){
+        m._solarLastTick = now;
+        const _sDot = applyEnemyDamage(e, 25);
+        if(_sDot > 0) showDamageNumber(e.x, e.y, _sDot);
+        createParticles(e.x+e.width/2, e.y+e.height/2, '#ffd600', 6, 3);
+        if(e.hp <= 0){
+          const _siE = enemies.indexOf(e);
+          if(_siE >= 0){
+            createParticles(e.x, e.y, '#fff176', 30, 6);
+            if(enemies[_siE]) window._lastKilledEnemyType = enemies[_siE].type;
+            dropStellarBonusAtIndexIfNeeded(_siE);
+            enemies.splice(_siE, 1);
+            applyScore(100*currentLevel);
+            addKill();
+          }
+          continue;
+        }
+      }
+    }
+
     if(m.triggerNow || now >= (m.explodeAt||0)){
       const isMini = !!m.mini;
       const burst = !!m.triggerNow;
@@ -17052,6 +17789,16 @@ function updateCosmoMarks(now){
           const dist=Math.hypot(dx,dy);
           if(dist<=180 && !other._cosmoMark){
             other._cosmoMark = { applied: now, explodeAt: now+650, mini:true };
+            // Track chained mark for SOLAR Cosmo mission
+            try{
+              if(typeof accountState!=='undefined' && accountState && accountState.stats && typeof player!=='undefined' && player && player.type==='cosmo'){
+                accountState.stats.cosmoMarksApplied = Math.max(0, Math.floor(accountState.stats.cosmoMarksApplied||0)) + 1;
+                for(const _mm of accountState.missions){
+                  if(!_mm.claimed && _mm.type==='cosmoMarksApplied')
+                    _mm.progress = Math.min(_mm.target, accountState.stats.cosmoMarksApplied);
+                }
+              }
+            }catch(e2){}
           }
         }
       }
@@ -17071,6 +17818,7 @@ function spawnCosmoSingularity(px, py, dirX, dirY){
   const len=Math.hypot(dirX,dirY)||1;
   const ax=dirX/len, ay=dirY/len;
   const sp=1.8;
+  const _isSolarSuper = !!(typeof player!=='undefined' && player && player._solarCosmo);
   window.cosmoSingularity = {
     active:true,
     born:Date.now(),
@@ -17078,10 +17826,13 @@ function spawnCosmoSingularity(px, py, dirX, dirY){
     x:px, y:py,
     vx:ax*sp, vy:ay*sp,
     speed:sp,
-    r:34,
+    r: _isSolarSuper ? 58 : 34,         // SOLAR: più grande
     pullR:Math.hypot(canvas.width, canvas.height)+40,
-    dps:7,
+    dps: _isSolarSuper ? 18 : 7,        // SOLAR: dps maggiore
+    fieldDmg: _isSolarSuper ? 8 : 0,    // SOLAR: danno globale a tutto campo
+    isSolar: _isSolarSuper,
     lastTick:Date.now(),
+    lastFieldTick:Date.now(),
     absorbed:0,
     absorbedSet:{}
   };
@@ -17109,13 +17860,11 @@ function updateCosmoSingularity(now){
     const dist=Math.hypot(dx,dy);
 
     // Strong global attraction: field reaches the whole arena.
-    // (Set dynamically in case canvas size changes.)
     orb.pullR = Math.hypot(canvas.width, canvas.height) + 40;
     if(dist<=orb.pullR){
       const t = Math.max(0, 1 - dist/orb.pullR);
-      // Always-on pull even at long range, with aggressive ramp-up near the center.
-      // Enemies can still move, but the drag + ramp makes the center eventually win.
-      let pull = (0.12 + Math.pow(t, 1.32) * 3.2) * 2;
+      const _solarPullMult = orb.isSolar ? 1.7 : 1.0;  // SOLAR: attrazione +70%
+      let pull = (0.12 + Math.pow(t, 1.32) * 3.2) * 2 * _solarPullMult;
       // 1s before the super explodes, the attraction doubles
       const _timeLeft = (orb.until||0) - now2;
       if(_timeLeft <= 1000){ pull *= 2; }
@@ -17141,26 +17890,59 @@ function updateCosmoSingularity(now){
     }
   }
 
+  // SOLAR: danno globale a tutto campo ogni 300ms
+  if(orb.isSolar && orb.fieldDmg > 0){
+    if(!orb.lastFieldTick) orb.lastFieldTick = now2;
+    if(now2 - orb.lastFieldTick >= 300){
+      orb.lastFieldTick = now2;
+      for(let _fi=enemies.length-1; _fi>=0; _fi--){
+        const _fe = enemies[_fi];
+        const _fd = applyEnemyDamage(_fe, orb.fieldDmg);
+        if(_fd > 0) showDamageNumber(_fe.x, _fe.y, _fd);
+        createParticles(_fe.x+_fe.width/2, _fe.y+_fe.height/2, '#ffd600', 3, 2);
+        if(_fe.hp <= 0){
+          createParticles(_fe.x, _fe.y, '#fff176', 30, 6);
+          if(enemies[_fi]) window._lastKilledEnemyType = enemies[_fi].type;
+          dropStellarBonusAtIndexIfNeeded(_fi);
+          enemies.splice(_fi, 1);
+          applyScore(100*currentLevel);
+          addKill();
+        }
+      }
+    }
+  }
+
   // end -> explosion
   if(now2 >= orb.until){
     const base = 110;
     const bonus = Math.min(420, orb.absorbed * 35);
-    const aoe = 260;
+    const aoe = orb.isSolar ? 420 : 260;
     for(let i=enemies.length-1;i>=0;i--){
       const e=enemies[i];
       const ex=e.x+e.width/2, ey=e.y+e.height/2;
       const d=Math.hypot(ex-orb.x, ey-orb.y);
       if(d<=aoe){
         const dealt=applyEnemyDamage(e, base+bonus*(1-d/aoe));
-        createParticles(ex,ey,'#05000b',56,7);
-        createParticles(ex,ey,'#000000',38,8);
+        if(orb.isSolar){
+          createParticles(ex,ey,'#ffd600',56,7);
+          createParticles(ex,ey,'#ff9800',38,8);
+        } else {
+          createParticles(ex,ey,'#05000b',56,7);
+          createParticles(ex,ey,'#000000',38,8);
+        }
         showDamageNumber(e.x,e.y,dealt);
       }
     }
-    createCosmoExplosionFX(orb.x, orb.y, 2.25);
-    createParticles(orb.x,orb.y,'#05000b',160,6);
-    createParticles(orb.x,orb.y,'#000000',120,7);
-    shakeAmount = Math.max(shakeAmount, 16);
+    if(orb.isSolar){
+      createParticles(orb.x,orb.y,'#ffd600',200,7);
+      createParticles(orb.x,orb.y,'#ff9800',150,8);
+      createParticles(orb.x,orb.y,'#ffffff',80,6);
+    } else {
+      createCosmoExplosionFX(orb.x, orb.y, 2.25);
+      createParticles(orb.x,orb.y,'#05000b',160,6);
+      createParticles(orb.x,orb.y,'#000000',120,7);
+    }
+    shakeAmount = Math.max(shakeAmount, orb.isSolar ? 22 : 16);
     orb.active=false;
   }
 }
@@ -17174,12 +17956,38 @@ function drawCosmoSingularity(){
   ctx.save();
   ctx.globalAlpha = 0.95;
 
-  // central black sphere with "black luminous" pulsating glow
+  if(orb.isSolar){
+    // SOLAR: sole pulsante giallo-arancio
+    const glow = 22 + 28*pulse;
+    ctx.shadowColor = '#ffd600';
+    ctx.shadowBlur = glow;
+    const grad = ctx.createRadialGradient(orb.x, orb.y, orb.r*0.1, orb.x, orb.y, orb.r*2.5);
+    grad.addColorStop(0, 'rgba(255,255,200,1.0)');
+    grad.addColorStop(0.25, 'rgba(255,214,0,0.95)');
+    grad.addColorStop(0.55, 'rgba(255,152,0,0.70)');
+    grad.addColorStop(1, 'rgba(255,100,0,0)');
+    ctx.shadowColor = '#ffd600'; ctx.shadowBlur = 50; ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(orb.x, orb.y, orb.r*2.2, 0, Math.PI*2); ctx.fill();
+    // raggi solari rotanti
+    ctx.globalAlpha = 0.55 + 0.20*pulse;
+    ctx.strokeStyle = '#ff9800'; ctx.lineWidth = 3; ctx.shadowBlur = 18;
+    for(let _ri=0;_ri<12;_ri++){
+      const _ra = (_ri/12)*Math.PI*2 + now*0.0015;
+      const _r0 = orb.r*1.1, _r1 = orb.r*(1.8 + 0.4*Math.sin(now*0.005+_ri));
+      ctx.beginPath();
+      ctx.moveTo(orb.x+Math.cos(_ra)*_r0, orb.y+Math.sin(_ra)*_r0);
+      ctx.lineTo(orb.x+Math.cos(_ra)*_r1, orb.y+Math.sin(_ra)*_r1);
+      ctx.stroke();
+    }
+    ctx.restore();
+    return;
+  }
+
+  // original black singularity
   const glow = 14 + 18*pulse;
   ctx.shadowColor = 'rgba(0,0,0,0.92)';
   ctx.shadowBlur = glow;
 
-  // subtle dark aura (still only central sphere visible — no big circumference)
   const grad = ctx.createRadialGradient(orb.x, orb.y, Math.max(2, orb.r*0.25), orb.x, orb.y, orb.r + 18);
   grad.addColorStop(0, 'rgba(0,0,0,0.95)');
   grad.addColorStop(0.6, 'rgba(0,0,0,0.75)');
@@ -17292,9 +18100,11 @@ return;
   updateCosmoSingularity(now);
   updateCosmoTrails(now);
   updateWolves();
+  try{ updateGlacialPoison(); }catch(e){}
   try{ updateMicos(); }catch(e){}
   updateMagicZone(now);
   updatePdorOrbs(now);
+  try{ updateGooZones(now); }catch(_gze){}
   try{ tickSkinEnemyPassives(now); }catch(_te){}
   updateParticles();
   updateIraFX();
@@ -17307,15 +18117,29 @@ return;
   updateFuriaWaves();
   updateBossRings(now);
   if(player) updatePickups(player);
+  updateDemonicFlames(now);
 
   for(let i=enemies.length-1;i>=0;i--){
     if(enemies[i].hp<=0){
+      if(enemies[i]) window._lastKilledEnemyType = enemies[i].type;
       dropStellarBonusAtIndexIfNeeded(i);
       const dead=enemies.splice(i,1)[0];
       // Traccia uccisione boss per missioni
       try{ if(dead && dead.type && dead.type.startsWith('boss')) accountOnBossKilled(); }catch(e){}
       applyScore(100*currentLevel);
       addKill(); createParticles(dead.x,dead.y,'#fff176',30,6);
+      // Gelatinus: alla morte spawna 2 Mini Gelatinus
+      if(dead.type==='gelatinus'){
+        try{
+          const lvl = typeof currentLevel!=='undefined' ? currentLevel : 26;
+          for(let m=0;m<2;m++){
+            const offX = (m===0?-28:28);
+            const mini = new MiniGelatinoEnemy(dead.x+dead.width/2+offX-19, dead.y+dead.height/2-19, lvl);
+            enemies.push(mini);
+          }
+          createParticles(dead.x+dead.width/2, dead.y+dead.height/2, '#f48fb1', 20, 5);
+        }catch(_me){}
+      }
     }
   }
 
@@ -17362,6 +18186,7 @@ return;
   // draw Marz Super zone behind entities
   drawMagicZone(now);
   drawPdorOrbs(now);
+  try{ drawGooZones(now); }catch(_gze){}
   drawCosmoSingularity();
   drawCosmoTrails();
   drawRooneyAreaFX(now);
@@ -17385,8 +18210,7 @@ return;
   drawParticles();
   drawHendelCrush();
     drawPickups();
-
-  ctx.restore();
+  drawDemonicFlames(now);
 
   // IRA screen tint flash
   if(iraScreenFlash>0){
@@ -17421,6 +18245,23 @@ return;
     window._playerHealFlash -= 1;
     if(window._playerHealFlash < 0) window._playerHealFlash = 0;
   }
+
+  // POISON VIGNETTE: bordo schermo verde tossico pulsante quando il player è avvelenato
+  try{
+    if(typeof player !== 'undefined' && player && player.poisonUntil && Date.now() < player.poisonUntil){
+      ctx.save();
+      const _pvPulse = 0.5 + 0.5*Math.sin(Date.now()*0.004);
+      const _pvGrad = ctx.createRadialGradient(
+        canvas.width/2, canvas.height/2, canvas.width*0.28,
+        canvas.width/2, canvas.height/2, canvas.width*0.72
+      );
+      _pvGrad.addColorStop(0,'rgba(0,200,0,0)');
+      _pvGrad.addColorStop(1,`rgba(50,200,20,${0.14 + 0.10*_pvPulse})`);
+      ctx.fillStyle = _pvGrad;
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.restore();
+    }
+  }catch(_pvErr){}
 
   // VOLTRYX orange flash (impacts/super)
   if(voltryxScreenFlash>0){
@@ -17788,6 +18629,290 @@ function updateMenuStatsDisplay(char){
 
 }
 
+/* ================================================================
+   LOADING SCREEN — traccia immagini + sfondi, barra lenta
+   ================================================================ */
+(function(){
+  const ldScreen  = document.getElementById('loadingScreen');
+  const ldFill    = document.getElementById('loadingBarFill');
+  const ldPct     = document.getElementById('loadingPct');
+  const ldLabel   = document.getElementById('loadingLabel');
+  const ldCanvas  = document.getElementById('loadingCanvas');
+  const scoreEl   = document.getElementById('totalScoreDisplay');
+
+  if(!ldScreen) return;
+
+  // Nascondi punteggio totale durante il loading
+  if(scoreEl) scoreEl.style.display = 'none';
+
+  // ── Particelle sfondo loading ────────────────────────────────────
+  (function ldParticles(){
+    const c = ldCanvas;
+    if(!c) return;
+    const ctx2 = c.getContext('2d');
+    let W, H, pts = [], running = true;
+    function resize(){ W = c.width = window.innerWidth; H = c.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    function mkPt(){
+      return {
+        x: Math.random()*W, y: Math.random()*H,
+        vx: (Math.random()-0.5)*0.35, vy: (Math.random()-0.5)*0.35,
+        r: 1 + Math.random()*1.8,
+        life: 0.2 + Math.random()*0.8,
+        col: Math.random()<0.6 ? '#e74c3c' : (Math.random()<0.5 ? '#f39c12' : '#fff'),
+        decay: 0.0015 + Math.random()*0.002
+      };
+    }
+    for(let i=0;i<90;i++) pts.push(mkPt());
+    function drawLd(){
+      if(!running) return;
+      requestAnimationFrame(drawLd);
+      ctx2.clearRect(0,0,W,H);
+      if(Math.random()<0.006){
+        const y2 = Math.random()*H;
+        const eg = ctx2.createLinearGradient(0,y2,W,y2);
+        eg.addColorStop(0,'rgba(231,76,60,0)');
+        eg.addColorStop(0.45,'rgba(231,76,60,0.30)');
+        eg.addColorStop(0.55,'rgba(255,200,100,0.30)');
+        eg.addColorStop(1,'rgba(231,76,60,0)');
+        ctx2.fillStyle = eg; ctx2.fillRect(0,y2-1,W,2);
+      }
+      for(let i=pts.length-1;i>=0;i--){
+        const p = pts[i];
+        p.x += p.vx; p.y += p.vy; p.life -= p.decay;
+        if(p.life<=0||p.x<0||p.x>W||p.y<0||p.y>H){ pts.splice(i,1); pts.push(mkPt()); continue; }
+        ctx2.globalAlpha = p.life * 0.65;
+        ctx2.shadowColor = p.col; ctx2.shadowBlur = 8;
+        ctx2.fillStyle = p.col;
+        ctx2.beginPath(); ctx2.arc(p.x,p.y,p.r,0,Math.PI*2); ctx2.fill();
+      }
+      ctx2.globalAlpha = 1; ctx2.shadowBlur = 0;
+    }
+    drawLd();
+    window._stopLoadingCanvas = ()=>{ running = false; };
+  })();
+
+  // ── Raccolta immagini personaggi / nemici / pickup ───────────────
+  const imgSources = [];
+  function collectImgs(obj){
+    if(!obj) return;
+    Object.values(obj).forEach(v=>{ if(v instanceof HTMLImageElement) imgSources.push(v); });
+  }
+  try{ collectImgs(window.images); }catch(e){}
+  try{ collectImgs(window.imagesMetal); }catch(e){}
+  try{ collectImgs(window.imagesEvo); }catch(e){}
+  try{ collectImgs(window.enemyImages); }catch(e){}
+  try{ collectImgs(window.pickupImgs); }catch(e){}
+  ['imagesEvil','imagesSolar','imagesArcane','imagesIce','imagesRed','imagesEnergy','imagesJakeff'].forEach(n=>{
+    try{ collectImgs(window[n]); }catch(e){}
+  });
+  ['wolfImg','iceWolfImg','imageJakeff','micoImg'].forEach(n=>{
+    try{ if(window[n] instanceof HTMLImageElement) imgSources.push(window[n]); }catch(e){}
+  });
+
+  // ── Precaricamento passivo di tutti gli SFONDI livelli ───────────
+  const bgUrls = [
+    'https://i.postimg.cc/8CBFTKs4/Progetto-senza-titolo.png',      // URL_DEFAULT
+    'https://i.postimg.cc/JhpWH3jJ/Copilot-20251209-232827.png',    // URL_DARK
+    'https://i.postimg.cc/pTHFKHgz/Progetto-senza-titolo-(2).png',  // URL_FINAL
+    'https://i.postimg.cc/K8pgVhTx/icebiome1.png',                  // URL_ICE
+    'https://i.postimg.cc/NM6wXfVZ/Chat-GPT-Image-17-mar-2026-00-07-36.png' // URL_GELA
+  ];
+  const bgImgs = bgUrls.map(url=>{ const i=new Image(); i.src=url; return i; });
+  bgImgs.forEach(img=>imgSources.push(img));
+
+  // Deduplica
+  const allImgs = [...new Set(imgSources)];
+  const total   = Math.max(1, allImgs.length);
+
+  // ── Barra e label ────────────────────────────────────────────────
+  const labels = [
+    'Caricamento personaggi...',
+    'Caricamento nemici...',
+    'Caricamento sfondi...',
+    'Caricamento oggetti...',
+    'Inizializzazione motore...',
+    'Quasi pronto...'
+  ];
+
+  // Barra "reale" che sale con i load event, ma con smoothing lento
+  let realPct   = 0;   // percentuale reale (0-100)
+  let shownPct  = 0;   // percentuale mostrata (insegue realPct con rallentamento)
+  let loaded    = 0;
+  let finished  = false;
+
+  function setRealPct(p){
+    realPct = Math.min(100, p);
+  }
+
+  // Animazione barra: aggiornamento ogni frame, la barra insegue realPct velocemente
+  (function animBar(){
+    if(finished) return;
+    requestAnimationFrame(animBar);
+    // la barra segue realPct quasi in tempo reale, con solo un leggero smoothing estetico
+    const gap = realPct - shownPct;
+    const step = Math.max(0.5, gap * 0.18);  // veloce: raggiunge il reale in ~6 frame
+    if(gap > 0.1) shownPct = Math.min(realPct, shownPct + step);
+    else shownPct = realPct;
+
+    const p = Math.round(shownPct);
+    if(ldFill)  ldFill.style.width = shownPct.toFixed(1)+'%';
+    if(ldPct)   ldPct.textContent  = p+'%';
+    if(ldLabel) ldLabel.textContent = labels[Math.min(labels.length-1, Math.floor(p/18))];
+
+    if(shownPct >= 100 && realPct >= 100) finishLoading();
+  })();
+
+  function onImgDone(){
+    loaded++;
+    setRealPct((loaded / total) * 100);
+  }
+
+  let pending = 0;
+  allImgs.forEach(img=>{
+    if(img.complete && img.naturalWidth > 0){
+      loaded++;
+    } else {
+      pending++;
+      img.addEventListener('load',  onImgDone, {once:true});
+      img.addEventListener('error', onImgDone, {once:true});
+    }
+  });
+  setRealPct((loaded / total) * 100);
+
+  // Timeout di sicurezza: dopo 6s forza il 100%
+  const safetyTimer = setTimeout(()=>{ setRealPct(100); }, 6000);
+
+  let finishCalled = false;
+  function finishLoading(){
+    if(finishCalled) return;
+    finishCalled = true;
+    finished = true;
+    clearTimeout(safetyTimer);
+    if(ldLabel) ldLabel.textContent = 'Pronto!';
+    if(window._stopLoadingCanvas) window._stopLoadingCanvas();
+    setTimeout(()=>{
+      ldScreen.style.opacity = '0';
+      setTimeout(()=>{
+        ldScreen.style.display = 'none';
+        // Mostra totalScoreDisplay
+        if(scoreEl) scoreEl.style.display = '';
+
+        function showPlatformFn(){
+          const ps = document.getElementById('platformScreen');
+          if(ps){
+            ps.style.display = 'block';
+            ps.style.opacity = '0';
+            ps.style.transition = 'opacity 0.55s ease';
+            requestAnimationFrame(()=>requestAnimationFrame(()=>{ ps.style.opacity = '1'; }));
+          }
+        }
+
+        // Se il hook skip-platform è già registrato, usalo
+        if(typeof window._onLoadingComplete === 'function'){
+          window._onLoadingComplete(showPlatformFn);
+        } else {
+          showPlatformFn();
+        }
+      }, 500);
+    }, 200);
+  }
+
+  // Nascondi platformScreen finché loading non termina
+  const ps0 = document.getElementById('platformScreen');
+  if(ps0) ps0.style.display = 'none';
+
+})();
+
+/* ===== SKIP PLATFORM LOGIC ===== */
+(function(){
+  const SKIP_KEY = 'pf_skip_platform_v1';
+
+  function shouldSkipPlatform(){
+    try{ const v = localStorage.getItem(SKIP_KEY); return v && JSON.parse(v).skip === true; }
+    catch(e){ return false; }
+  }
+  function saveSkipPlatform(platform){
+    try{ localStorage.setItem(SKIP_KEY, JSON.stringify({skip:true, platform})); }catch(e){}
+  }
+  function clearSkipPlatform(){
+    try{ localStorage.removeItem(SKIP_KEY); }catch(e){}
+  }
+  function getSavedPlatform(){
+    try{ const v = localStorage.getItem(SKIP_KEY); if(v){ const o=JSON.parse(v); return o.platform||null; } }
+    catch(e){} return null;
+  }
+
+  const checkbox   = document.getElementById('skipPlatformCheck');
+  const kbBtn      = document.getElementById('platformKeyboard');
+  const mbBtn      = document.getElementById('platformMobile');
+  const resetBtn   = document.getElementById('resetPlatformSkipBtn');
+
+  // Se già salvato: salta direttamente la schermata dopo il loading
+  // Il loading IIFE mostra già il platformScreen — qui lo intercettiamo prima che appaia
+  if(shouldSkipPlatform()){
+    const savedPlatform = getSavedPlatform();
+    window._platformSkipPending = savedPlatform || 'keyboard';
+  }
+
+  // Hook: quando il loading finisce e sta per mostrare il platformScreen,
+  // controlliamo se dobbiamo saltarlo
+  const _origFinishLoading = window._onLoadingComplete;
+  window._onLoadingComplete = function(showPlatformFn){
+    if(shouldSkipPlatform()){
+      const saved = getSavedPlatform();
+      // Imposta la modalità senza mostrare la schermata
+      window._isMobile = (saved === 'mobile');
+      // Chiama direttamente showDifficultyFromPlatform se disponibile
+      if(typeof window._showDifficultyFromPlatform === 'function'){
+        window._showDifficultyFromPlatform();
+      } else {
+        // fallback: prova a cliccare il bottone giusto silenziosamente dopo che è visibile
+        setTimeout(()=>{
+          const btn = saved === 'mobile' ? mbBtn : kbBtn;
+          if(btn) btn.click();
+        }, 50);
+      }
+    } else {
+      if(showPlatformFn) showPlatformFn();
+    }
+  };
+
+  // Salva preferenza quando si clicca un bottone (se checkbox spuntata)
+  function handlePlatformClick(platform){
+    if(checkbox && checkbox.checked){
+      saveSkipPlatform(platform);
+    }
+  }
+  if(kbBtn) kbBtn.addEventListener('click', ()=>handlePlatformClick('keyboard'), true);
+  if(mbBtn) mbBtn.addEventListener('click', ()=>handlePlatformClick('mobile'),   true);
+
+  // Pulsante ripristina nelle impostazioni
+  if(resetBtn){
+    resetBtn.addEventListener('click', ()=>{
+      clearSkipPlatform();
+      if(checkbox) checkbox.checked = false;
+      resetBtn.textContent = '✓ RIPRISTINATA';
+      resetBtn.style.background   = '#2e7d32';
+      resetBtn.style.borderColor  = '#4caf50';
+      setTimeout(()=>{
+        resetBtn.textContent = 'RIPRISTINA SCHERMATA';
+        resetBtn.style.background  = '#555';
+        resetBtn.style.borderColor = '#888';
+      }, 2000);
+    });
+    // Mostra stato attuale nel pulsante
+    if(shouldSkipPlatform()){
+      const p = getSavedPlatform();
+      resetBtn.title = `Attivo: salto a ${p==='mobile'?'Mobile':'Tastiera'}`;
+      resetBtn.style.borderColor = '#e74c3c';
+      resetBtn.style.color = '#ffcdd2';
+    }
+  }
+})();
+/* ===== END SKIP PLATFORM LOGIC ===== */
+
 /* === Start screen: choose difficulty mode === */
 (function(){
   const startScreen=document.getElementById('startScreen');
@@ -17795,9 +18920,8 @@ function updateMenuStatsDisplay(char){
   const hardBtn=document.getElementById('modeHardBtn');
   const easyBtn=document.getElementById('modeEasyBtn');
   if(startScreen && mainMenu){
-    // default view - show platform selection first
+    // default view - platform screen shown after loading completes (see loading IIFE above)
     const platformScreen = document.getElementById('platformScreen');
-    if(platformScreen) platformScreen.style.display='block';
     startScreen.style.display='none';
     mainMenu.style.display='none';
     if(menuTopLeft) menuTopLeft.style.display='none';
@@ -17807,6 +18931,7 @@ function updateMenuStatsDisplay(char){
     // Platform selection logic
     window._isMobile = false;
     function showDifficultyFromPlatform(){
+      window._showDifficultyFromPlatform = showDifficultyFromPlatform; // esposto per skip-platform
       // Animate platform screen out
       if(platformScreen){
         platformScreen.style.transition='opacity 0.4s ease, transform 0.4s ease';
@@ -17931,7 +19056,12 @@ function updateMenuStatsDisplay(char){
       hideSettings();
     }
   });
+
 })();
+
+
+
+
 
 
 
@@ -18365,6 +19495,18 @@ function getSkinNameStyle(skinId){
   if(s==='jeff_jakeff'){
     // Argento riflettente
     return 'color:#e0e0e0;text-shadow:0 0 8px rgba(224,224,224,0.80),0 0 18px rgba(160,160,160,0.50);letter-spacing:1px;';
+  }
+  if(s==='bane_ice'){
+    // Bianco con riflessi azzurri
+    return 'color:#e3f2fd;text-shadow:0 0 8px rgba(144,202,249,0.90),0 0 18px rgba(255,255,255,0.55);letter-spacing:1px;';
+  }
+  if(s==='cosmo_solar'){
+    // Giallo solare luminoso
+    return 'color:#ffd600;text-shadow:0 0 8px rgba(255,214,0,0.95),0 0 18px rgba(255,152,0,0.65),0 0 28px rgba(255,214,0,0.35);letter-spacing:1px;';
+  }
+  if(s==='hecate_ice'){
+    // Azzurro ghiaccio
+    return 'color:#4fc3f7;text-shadow:0 0 8px rgba(79,195,247,0.90),0 0 18px rgba(179,229,252,0.55);letter-spacing:1px;';
   }
   if(s==='kaerith_evil'){
     // Viola brillante
@@ -19314,7 +20456,7 @@ Player.prototype.attack = function(){
         y:cy,
         vx:Math.cos(ang)*speed,
         vy:Math.sin(ang)*speed,
-        damage:Math.round(20*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
+        damage:Math.round(this.damage*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
         ttl:900,            // long life = looks like beam/flow
         color:'#b19cff',
         radius:14,          // thicker = stream feeling
@@ -19897,7 +21039,7 @@ const SKIN_CATALOGUE = [
   // ── Nuove skin Premium (500 frammenti d'etere) ─────────────────────────────
   { id:'voltryx_ice',      char:'voltryx',    name:'ICE Voltryx',      src:'https://i.postimg.cc/qM83CFKN/ICEvoltryx.png'         },
   { id:'tempostorm_energy',char:'tempostorm', name:'ENERGY Tempostorm',src:'https://i.postimg.cc/9ffRKFnm/ENERGYtempostorm.png'   },
-  { id:'marz_evil',        char:'marz',       name:'EVIL Marz',        src:'https://i.postimg.cc/9QbwLq11/EVILmarz.png'           },
+  { id:'marz_evil',        char:'marz',       name:'EVIL Marz',        src:'https://i.postimg.cc/g2LZVV27/EVILmarz-(2).png'           },
   { id:'salsy_red',        char:'salsy',      name:'RED Salsy',        src:'https://i.postimg.cc/W323BZPv/REDsalsy-(1).png'           },
   { id:'kouvagia_evil',    char:'kouvagia',   name:'EVIL Kouvagia',    src:'https://i.postimg.cc/DyhbTKjJ/EVILkouvagia.png'       },
   // ── METAL Skins (750 frammenti d'etere) ─────────────────────────────────────
@@ -19909,6 +21051,12 @@ const SKIN_CATALOGUE = [
   { id:'voltryx_arcane', char:'voltryx', name:'ARCANE Voltryx', src:'https://i.postimg.cc/pXmgsS8V/ARCANEvoltryx.png', cost:1000 },
   // ── EVIL Kaerith (1000 frammenti d'etere) ────────────────────────────────
   { id:'kaerith_evil', char:'kaerith', name:'EVIL Kaerith', src:'https://i.postimg.cc/Dyb2Y6bS/EVILkaerith.png', cost:1000 },
+  // ── ICE Hecate (750 frammenti d'etere) ────────────────────────────────────
+  { id:'hecate_ice', char:'hecate', name:'ICE Hecate', src:'https://i.postimg.cc/kRxYdZ3f/ICEhecate.png', cost:750 },
+  // ── ICE Bane (750 frammenti d'etere) ──────────────────────────────────────
+  { id:'bane_ice', char:'bane', name:'ICE Bane', src:'https://i.postimg.cc/2y4rQVfQ/ICEbane.png', cost:750 },
+  // ── SOLAR Cosmo (1000 frammenti d'etere) ─────────────────────────────────
+  { id:'cosmo_solar', char:'cosmo', name:'SOLAR Cosmo', src:'https://i.postimg.cc/3NXC72PQ/SOLARcosmo.png', cost:1000 },
 ];
 
 // Preload skin images
@@ -19930,6 +21078,30 @@ const SKIN_FX_PALETTES = {
     'super':       ['#5bc8e8','#a8e6f0','#e0f8ff'],
     ringColor:   '#5bc8e8',
     particleExtra: ['#cce8ff','#89d4f5'],
+  },
+  // ICE Bane — bianco con riflessi azzurri
+  bane_ice: {
+    attack:      ['#e3f2fd','#90caf9','#ffffff'],
+    'super':       ['#e3f2fd','#90caf9','#ffffff','#b3e5fc'],
+    ringColor:   '#90caf9',
+    particleExtra: ['#ffffff','#b3e5fc'],
+    isIceBane:   true,
+  },
+  // ICE Hecate — azzurro ghiaccio, bianco, ciano
+  hecate_ice: {
+    attack:      ['#4fc3f7','#b3e5fc','#e1f5fe'],
+    'super':       ['#4fc3f7','#b3e5fc','#81d4fa','#e1f5fe'],
+    ringColor:   '#4fc3f7',
+    particleExtra: ['#b3e5fc','#e1f5fe'],
+    isIce:       true,
+  },
+  // SOLAR Cosmo — giallo sole, arancio, nero dettagli
+  cosmo_solar: {
+    attack:      ['#ffd600','#ff9800','#fff176'],
+    'super':       ['#ffd600','#ff9800','#ffcc02','#ffe57f','#ff6d00'],
+    ringColor:   '#ffd600',
+    particleExtra: ['#fff176','#ff9800'],
+    isSolar:     true,
   },
   // EVIL Kaerith — viola profondo, magenta, lilla
   kaerith_evil: {
@@ -20870,6 +22042,7 @@ function spawnLocalEnemies(level){
     else if(t==='attacker') e = new AttackReturnEnemy(t, lvl);
     else if(t==='archer')   e = new ArcherEnemy(t, lvl);
     else if(t==='glacial')  e = new GlacialEnemy(t, lvl);
+    else if(t==='gelatinus') e = new GelatinoEnemy(t, lvl);
     else if(t==='boss1'||t==='boss2'||t==='boss3'||t==='boss4') e = new BossEnemy(t, lvl);
     else if(t==='boss5')    e = new Boss5Enemy(t, lvl);
     else                    e = new Enemy(t, lvl);
@@ -21255,8 +22428,10 @@ function _localRafLoop(){
   updateCosmoSingularity(now);
   updateCosmoTrails(now);
   updateWolves();
+  try{ updateGlacialPoison(); }catch(e){}
   try{ updateMicos(); }catch(e){}
   updateMagicZone(now);
+  try{ updateGooZones(now); }catch(_gze){}
   if(typeof updateCollana==='function') updateCollana(Date.now());
   updateVoltryxFX();
   updateCosmoExplosionFX();
@@ -21267,6 +22442,7 @@ function _localRafLoop(){
   updateBossRings(now);
 
   updateLocalPickups();
+  updateDemonicFlames(now);
 
   // Remove dead enemies
   for(let i=enemies.length-1; i>=0; i--){
@@ -21276,6 +22452,18 @@ function _localRafLoop(){
       applyScore(100*currentLevel);
       addKill();
       createParticles(dead.x, dead.y, '#fff176', 30, 6);
+      // Gelatinus: alla morte spawna 2 Mini Gelatinus
+      if(dead.type==='gelatinus'){
+        try{
+          const lvl = typeof currentLevel!=='undefined' ? currentLevel : 26;
+          for(let m=0;m<2;m++){
+            const offX = (m===0?-28:28);
+            const mini = new MiniGelatinoEnemy(dead.x+dead.width/2+offX-19, dead.y+dead.height/2-19, lvl);
+            enemies.push(mini);
+          }
+          createParticles(dead.x+dead.width/2, dead.y+dead.height/2, '#f48fb1', 20, 5);
+        }catch(_me){}
+      }
     }
   }
 
@@ -21305,6 +22493,7 @@ function _localRafLoop(){
   drawKaerithFireOverlay(now);
   drawMagicZone(now);
   drawPdorOrbs(now);
+  try{ drawGooZones(now); }catch(_gze){}
   drawCosmoSingularity();
   drawCosmoTrails();
   drawRooneyAreaFX(now);
@@ -21341,6 +22530,7 @@ function _localRafLoop(){
   drawParticles();
   drawHendelCrush();
   drawPickups();
+  drawDemonicFlames(now);
 
   ctx.restore();
 
@@ -21946,6 +23136,12 @@ function setCosmoUnlocked(){
         createParticles(px,py,'#ffffff', 55, 5, {glow:true, type:'star', speed:1.3, rise:0.3, life:1.5});
         addScreenFlash(255,255,255, 0.3, 0.055);
         break;
+      case 'altareDemoniaco':
+        createParticles(px,py,'#9c27b0', 70, 7, {glow:true, type:'star', speed:1.6, rise:0.4, life:1.5});
+        createParticles(px,py,'#ce93d8', 30, 5, {glow:true, speed:2.0, rise:0.5, life:1.2});
+        createParticles(px,py,'#4a148c', 25, 4, {glow:true, type:'spark', speed:2.5, life:0.6});
+        addScreenFlash(100,0,160, 0.32, 0.05);
+        break;
     }
   };
 
@@ -21976,13 +23172,34 @@ function setCosmoUnlocked(){
         speed:'#2979ff', shieldPickup:'#00e5ff', ira:'#ff6f00',
         letteraAmore:'chocolate', mezzaluna:'#90caf9', furia:'#ff00ff',
         ice:'#80deea', arcoAntico:'#c0c0c0', malus:'#8b0000',
-        stellar:'#ffffff'
+        stellar:'#ffffff', altareDemoniaco:'#ce93d8'
       };
       const glowColor = glowMap[p.type] || '#ffffff';
 
       c.save();
-      c.shadowColor = glowColor;
-      c.shadowBlur  = 18 + 6*Math.sin(age*0.004);
+      // Special extra-glow for altareDemoniaco
+      if(p.type === 'altareDemoniaco'){
+        c.shadowColor = '#ce93d8';
+        c.shadowBlur  = 32 + 14*Math.sin(age*0.006);
+        // Rotating aura ring
+        c.save();
+        c.translate(p.x, p.y);
+        c.rotate(age * 0.003);
+        c.strokeStyle = 'rgba(171,71,188,0.5)';
+        c.lineWidth = 3;
+        c.shadowColor = '#9c27b0';
+        c.shadowBlur = 20;
+        c.beginPath();
+        c.arc(0, 0, dw*0.62, 0, Math.PI * 1.4);
+        c.stroke();
+        c.beginPath();
+        c.arc(0, 0, dw*0.62, Math.PI, Math.PI * 2.4);
+        c.stroke();
+        c.restore();
+      } else {
+        c.shadowColor = glowColor;
+        c.shadowBlur  = 18 + 6*Math.sin(age*0.004);
+      }
       c.translate(p.x, p.y);
       c.scale(pulse, pulse);
 
