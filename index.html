@@ -37,7 +37,7 @@
       background-size:cover;background-position:center;
       transition:opacity 900ms ease;z-index:0;pointer-events:none
     }
-    #bgDefault{opacity:1}
+    #bgDefault{opacity:0}
     #bgDark{opacity:0}
 
     #fadeOverlay{position:absolute;left:0;top:0;width:100%;height:100%;background:#000;opacity:0;transition:opacity 650ms ease;z-index:3;pointer-events:none}
@@ -4980,6 +4980,33 @@ function drawHendelCrush(){
 const URL_FINAL='https://i.postimg.cc/pTHFKHgz/Progetto-senza-titolo-(2).png';
 const URL_ICE='https://i.postimg.cc/K8pgVhTx/icebiome1.png';
 const URL_GELA='https://i.postimg.cc/0QvsdDrK/GELA.png';
+
+// Cache di precaricamento sfondi: evita il "top-down loading" visibile
+const _bgPreloadCache = {};
+function _preloadBgThenShow(url, callback){
+  if(_bgPreloadCache[url] === true){
+    // Già caricata — mostra subito
+    callback();
+    return;
+  }
+  if(_bgPreloadCache[url] instanceof Image){
+    // In caricamento — accoda la callback
+    const prevOnload = _bgPreloadCache[url].onload;
+    _bgPreloadCache[url].onload = function(){ if(prevOnload) prevOnload(); callback(); _bgPreloadCache[url]=true; };
+    return;
+  }
+  // Prima volta: carica e aspetta
+  const img = new Image();
+  _bgPreloadCache[url] = img;
+  img.onload  = function(){ _bgPreloadCache[url]=true; callback(); };
+  img.onerror = function(){ _bgPreloadCache[url]=true; callback(); }; // fallback: mostra comunque
+  img.src = url;
+}
+
+// Pre-scarica tutti gli sfondi in background subito all'avvio (senza bloccare nulla)
+setTimeout(()=>{
+  [URL_DARK, URL_FINAL, URL_ICE, URL_GELA].forEach(u => _preloadBgThenShow(u, ()=>{}));
+}, 1000);
 const canvas=document.getElementById('gameCanvas');
 const ctx=canvas.getContext('2d');
 
@@ -5116,10 +5143,35 @@ const bgDark=document.getElementById('bgDark');
 const fadeOverlay=document.getElementById('fadeOverlay');
 let _bgTier=0; // 0=default,1=dark,2=final,3=ice
 
-bgDefault.style.backgroundImage=`url('${URL_DEFAULT}')`;
-bgDark.style.backgroundImage=`url('${URL_DARK}')`;
 bgDefault.style.backgroundSize=bgDark.style.backgroundSize='cover';
 bgDefault.style.backgroundPosition=bgDark.style.backgroundPosition='center';
+
+// Carica lo sfondo default silenziosamente — mostra solo DOPO caricamento completo
+// bgDefault rimane opacity:0 finché l'immagine non è pronta (evita rendering top-down)
+(function(){
+  // Colore placeholder scuro mentre l'immagine scarica
+  bgDefault.style.backgroundColor = '#0a0008';
+
+  // Usa _preloadBgThenShow se disponibile — stessa cache del loading screen, zero doppio download
+  function _applyBg(){
+    bgDefault.style.backgroundImage = `url('${URL_DEFAULT}')`;
+    bgDefault.style.transition = 'opacity 0.6s ease';
+    bgDefault.style.opacity = '1';
+  }
+
+  // _preloadBgThenShow è definita subito sotto — aspetta il prossimo tick
+  setTimeout(()=>{
+    if(typeof _preloadBgThenShow === 'function'){
+      _preloadBgThenShow(URL_DEFAULT, _applyBg);
+    } else {
+      const _bgImg = new Image();
+      _bgImg.onload = _applyBg;
+      _bgImg.onerror = ()=>{ bgDefault.style.opacity = '1'; };
+      _bgImg.src = URL_DEFAULT;
+    }
+  }, 0);
+  // bgDark rimane opacity:0 finché non serve (viene attivato da updateBackgroundForLevel)
+})();
 
 function resetMenuBackdrop(){
   // Clear last gameplay frame and restore default background when viewing menus.
@@ -5130,8 +5182,19 @@ function resetMenuBackdrop(){
   }catch(e){}
   try{
     if(typeof bgDefault!=='undefined' && bgDefault && typeof bgDark!=='undefined' && bgDark){
-      bgDefault.style.opacity='1';
-      bgDark.style.opacity='0';
+      // Mostra bgDefault solo se l'immagine è già caricata (evita top-down loading)
+      if(typeof _preloadBgThenShow === 'function'){
+        _preloadBgThenShow(URL_DEFAULT, ()=>{
+          bgDefault.style.backgroundImage=`url('${URL_DEFAULT}')`;
+          bgDefault.style.backgroundSize='cover';
+          bgDefault.style.backgroundPosition='center';
+          bgDefault.style.opacity='1';
+          bgDark.style.opacity='0';
+        });
+      } else {
+        bgDefault.style.opacity='1';
+        bgDark.style.opacity='0';
+      }
     }
     if(typeof fadeOverlay!=='undefined' && fadeOverlay) fadeOverlay.style.opacity='0';
     if(typeof _bgTier!=='undefined') _bgTier=0;
@@ -6735,10 +6798,10 @@ const levelConfigs=[
   {enemyType:'glacial',enemyHP:900,enemyDamage:20,enemySpeed:4.84,time:70,enemyCount:2}, // Level 23
   {enemyType:'glacial',enemyHP:1040,enemyDamage:20,enemySpeed:5.22,time:80,enemyCount:3}, // Level 24
   {enemyType:'boss5',enemyHP:3000,enemyDamage:63,enemySpeed:4.2,time:200,enemyCount:1}, // Level 25
-  {enemyType:'gelatinus',enemyHP:560,enemyDamage:10,enemySpeed:3.5,time:75,enemyCount:3}, // Level 26
-  {enemyType:'gelatinus',enemyHP:650,enemyDamage:12,enemySpeed:3.8,time:85,enemyCount:5}, // Level 27
-  {enemyType:'crystalThorn',enemyHP:820,enemyDamage:24,enemySpeed:3.1,time:90,enemyCount:3}, // Level 28
-  {enemyType:'crystalThorn',enemyHP:1050,enemyDamage:29,enemySpeed:3.4,time:100,enemyCount:5}, // Level 29
+  {enemyType:'gelatinus',enemyHP:952,enemyDamage:13,enemySpeed:3.5,time:75,enemyCount:3}, // Level 26
+  {enemyType:'gelatinus',enemyHP:1105,enemyDamage:16,enemySpeed:3.8,time:85,enemyCount:5}, // Level 27
+  {enemyType:'crystalThorn',enemyHP:1230,enemyDamage:24,enemySpeed:3.1,time:90,enemyCount:3}, // Level 28
+  {enemyType:'crystalThorn',enemyHP:1575,enemyDamage:29,enemySpeed:3.4,time:100,enemyCount:5}, // Level 29
   {enemyType:'boss6',enemyHP:4000,enemyDamage:70,enemySpeed:3.8,time:240,enemyCount:1}, // Level 30
 ];
 
@@ -12147,10 +12210,10 @@ if(p.aoeRadius>0){
     // Gelatinus sputo: controlla impatto con i bordi del campo
     if(p._gelaOwner && p._gelaSpit){
       const _wallMargin = 8;
-      const _hitLeft   = p.x - p.radius <= 0;
-      const _hitRight  = p.x + p.radius >= canvas.width;
-      const _hitTop    = p.y - p.radius <= 0;
-      const _hitBottom = p.y + p.radius >= canvas.height - 30;
+      const _hitLeft   = p.x - p.radius <= _wallMargin;
+      const _hitRight  = p.x + p.radius >= canvas.width  - _wallMargin;
+      const _hitTop    = p.y - p.radius <= _wallMargin;
+      const _hitBottom = p.y + p.radius >= canvas.height - 30 - _wallMargin;
       if(_hitLeft || _hitRight || _hitTop || _hitBottom){
         // Calcola punto di impatto clampato appena dentro il campo
         const _impX = Math.max(_wallMargin + p.radius, Math.min(canvas.width  - _wallMargin - p.radius, p.x));
@@ -12201,11 +12264,17 @@ if(p.aoeRadius>0){
 
     // Gelatinus sputo: crea zona gelatinosa dove atterra (scaduto o fuori bounds)
     if(!alive && p._gelaOwner && p._gelaSpitCreateZone){
-      try{ spawnGooZone(p.x, p.y, p._gelaOwner); p._gelaOwner._hasActiveZone = true; }catch(_ge){}
+      const _margin2 = 30;
+      const _gx = Math.max(_margin2, Math.min((canvas ? canvas.width : 800)  - _margin2, p.x));
+      const _gy = Math.max(_margin2, Math.min((canvas ? canvas.height : 600) - 30 - _margin2, p.y));
+      try{ spawnGooZone(_gx, _gy, p._gelaOwner); p._gelaOwner._hasActiveZone = true; }catch(_ge){}
     }
-    // Pozzanghera impatto anche a terra
+    // Pozzanghera impatto anche a terra (clampata dentro l'arena)
     if(!alive && p._gelaOwner){
-      try{ spawnImpactGooZone(p.x, p.y); }catch(_ige){}
+      const _margin = 30;
+      const _cx = Math.max(_margin, Math.min((canvas ? canvas.width : 800)  - _margin, p.x));
+      const _cy = Math.max(_margin, Math.min((canvas ? canvas.height : 600) - 30 - _margin, p.y));
+      try{ spawnImpactGooZone(_cx, _cy); }catch(_ige){}
     }
 
     return alive;
@@ -19838,7 +19907,7 @@ class GelatinoEnemy extends Enemy{
 // ═══════════════════════════════════════════════════════════════
 class MiniGelatinoEnemy extends Enemy{
   constructor(x, y, level){
-    const fakeCfg = { enemyType:'minigelatinus', enemyHP: 80, enemyDamage: 12, enemySpeed: 4.8, time: 60, enemyCount: 1 };
+    const fakeCfg = { enemyType:'minigelatinus', enemyHP: 120, enemyDamage: 12, enemySpeed: 4.8, time: 60, enemyCount: 1 };
     // Bypass normal constructor by calling Enemy with minigelatinus type
     super('minigelatinus', level||26);
     this.x = x; this.y = y;
@@ -20980,21 +21049,29 @@ function updateBackgroundForLevel(level){
       bgDefault.style.backgroundImage=`url('${URL_DEFAULT}')`;
       bgDefault.style.backgroundSize='cover'; bgDefault.style.backgroundPosition='center';
       if(tier===4){
-        bgDark.style.backgroundImage=`url('${URL_GELA}')`;
-        bgDark.style.backgroundSize='cover'; bgDark.style.backgroundPosition='center';
-        bgDefault.style.opacity='0'; bgDark.style.opacity='1';
+        _preloadBgThenShow(URL_GELA, ()=>{
+          bgDark.style.backgroundImage=`url('${URL_GELA}')`;
+          bgDark.style.backgroundSize='cover'; bgDark.style.backgroundPosition='center';
+          bgDefault.style.opacity='0'; bgDark.style.opacity='1';
+        });
       } else if(tier===3){
-        bgDark.style.backgroundImage=`url('${URL_ICE}')`;
-        bgDark.style.backgroundSize='cover'; bgDark.style.backgroundPosition='center';
-        bgDefault.style.opacity='0'; bgDark.style.opacity='1';
+        _preloadBgThenShow(URL_ICE, ()=>{
+          bgDark.style.backgroundImage=`url('${URL_ICE}')`;
+          bgDark.style.backgroundSize='cover'; bgDark.style.backgroundPosition='center';
+          bgDefault.style.opacity='0'; bgDark.style.opacity='1';
+        });
       } else if(tier===2){
-        bgDark.style.backgroundImage=`url('${URL_FINAL}')`;
-        bgDark.style.backgroundSize='cover'; bgDark.style.backgroundPosition='center';
-        bgDefault.style.opacity='0'; bgDark.style.opacity='1';
+        _preloadBgThenShow(URL_FINAL, ()=>{
+          bgDark.style.backgroundImage=`url('${URL_FINAL}')`;
+          bgDark.style.backgroundSize='cover'; bgDark.style.backgroundPosition='center';
+          bgDefault.style.opacity='0'; bgDark.style.opacity='1';
+        });
       } else if(tier===1){
-        bgDark.style.backgroundImage=`url('${URL_DARK}')`;
-        bgDark.style.backgroundSize='cover'; bgDark.style.backgroundPosition='center';
-        bgDefault.style.opacity='0'; bgDark.style.opacity='1';
+        _preloadBgThenShow(URL_DARK, ()=>{
+          bgDark.style.backgroundImage=`url('${URL_DARK}')`;
+          bgDark.style.backgroundSize='cover'; bgDark.style.backgroundPosition='center';
+          bgDefault.style.opacity='0'; bgDark.style.opacity='1';
+        });
       } else {
         bgDefault.style.opacity='1'; bgDark.style.opacity='0';
       }
@@ -23122,7 +23199,15 @@ function updateMenuStatsDisplay(char){
     'https://i.postimg.cc/K8pgVhTx/icebiome1.png',                  // URL_ICE
     'https://i.postimg.cc/NM6wXfVZ/Chat-GPT-Image-17-mar-2026-00-07-36.png' // URL_GELA
   ];
-  const bgImgs = bgUrls.map(url=>{ const i=new Image(); i.src=url; return i; });
+  const bgImgs = bgUrls.map(url=>{
+    const i=new Image();
+    i.onload = ()=>{
+      // Popola la cache _preloadBgThenShow se disponibile — evita doppio download degli sfondi
+      if(typeof _bgPreloadCache !== 'undefined') _bgPreloadCache[url] = true;
+    };
+    i.src=url;
+    return i;
+  });
   bgImgs.forEach(img=>imgSources.push(img));
 
   // Deduplica
@@ -23184,8 +23269,8 @@ function updateMenuStatsDisplay(char){
   });
   setRealPct((loaded / total) * 100);
 
-  // Timeout di sicurezza: dopo 6s forza il 100%
-  const safetyTimer = setTimeout(()=>{ setRealPct(100); }, 6000);
+  // Timeout di sicurezza: dopo 12s forza il 100% (aumentato per immagini di sfondo grandi)
+  const safetyTimer = setTimeout(()=>{ setRealPct(100); }, 12000);
 
   let finishCalled = false;
   function finishLoading(){
@@ -23195,31 +23280,46 @@ function updateMenuStatsDisplay(char){
     clearTimeout(safetyTimer);
     if(ldLabel) ldLabel.textContent = 'Pronto!';
     if(window._stopLoadingCanvas) window._stopLoadingCanvas();
-    setTimeout(()=>{
-      ldScreen.style.opacity = '0';
+
+    // Assicura che lo sfondo default sia in cache prima di procedere
+    function _proceedAfterBg(){
       setTimeout(()=>{
-        ldScreen.style.display = 'none';
-        // Mostra totalScoreDisplay
-        if(scoreEl) scoreEl.style.display = '';
+        ldScreen.style.opacity = '0';
+        setTimeout(()=>{
+          ldScreen.style.display = 'none';
+          if(scoreEl) scoreEl.style.display = '';
 
-        function showPlatformFn(){
-          const ps = document.getElementById('platformScreen');
-          if(ps){
-            ps.style.display = 'block';
-            ps.style.opacity = '0';
-            ps.style.transition = 'opacity 0.55s ease';
-            requestAnimationFrame(()=>requestAnimationFrame(()=>{ ps.style.opacity = '1'; }));
+          function showPlatformFn(){
+            const ps = document.getElementById('platformScreen');
+            if(ps){
+              ps.style.display = 'block';
+              ps.style.opacity = '0';
+              ps.style.transition = 'opacity 0.55s ease';
+              requestAnimationFrame(()=>requestAnimationFrame(()=>{ ps.style.opacity = '1'; }));
+            }
           }
-        }
 
-        // Se il hook skip-platform è già registrato, usalo
-        if(typeof window._onLoadingComplete === 'function'){
-          window._onLoadingComplete(showPlatformFn);
-        } else {
-          showPlatformFn();
-        }
-      }, 500);
-    }, 200);
+          if(typeof window._onLoadingComplete === 'function'){
+            window._onLoadingComplete(showPlatformFn);
+          } else {
+            showPlatformFn();
+          }
+        }, 500);
+      }, 200);
+    }
+
+    // Controlla se lo sfondo default è già in cache; se no, aspetta (max 3s)
+    const _bgUrl = typeof URL_DEFAULT !== 'undefined' ? URL_DEFAULT : null;
+    if(_bgUrl && typeof _preloadBgThenShow === 'function'){
+      // Timeout di sicurezza: non blocca più di 3s
+      let _bgDone = false;
+      const _bgTimeout = setTimeout(()=>{ if(!_bgDone){ _bgDone=true; _proceedAfterBg(); } }, 3000);
+      _preloadBgThenShow(_bgUrl, ()=>{
+        if(!_bgDone){ _bgDone=true; clearTimeout(_bgTimeout); _proceedAfterBg(); }
+      });
+    } else {
+      _proceedAfterBg();
+    }
   }
 
   // Nascondi platformScreen finché loading non termina
