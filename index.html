@@ -11070,6 +11070,18 @@ function applyEnemyDamage(enemy, baseDmg){
     }
   }catch(e){}
 
+  // BOSS6 SPLIT: alla morte si divide in 4 MiniBoss6 ai vertici di un quadrato
+  try{
+    if(enemy.hp<=0 && enemy.type==='boss6' && !enemy._miniBoss6SpawnDone){
+      enemy._miniBoss6SpawnDone = true;
+      if(!window._pendingMiniBoss6Spawns) window._pendingMiniBoss6Spawns = [];
+      window._pendingMiniBoss6Spawns.push({
+        x: enemy.x + enemy.width/2,
+        y: enemy.y + enemy.height/2
+      });
+    }
+  }catch(e){}
+
   // ESTASI (LETTERA D'AMORE): 7% dei danni inflitti cura il personaggio
   try{
     const now = Date.now();
@@ -11959,6 +11971,20 @@ function updateProjectiles(){
     }
     { const _dt=window._gameDt||1; p.x+=p.vx*_dt; p.y+=p.vy*_dt; }
 
+    // MiniBoss6 blob oscillante: si muove in traiettoria sinusoidale
+    if(p._miniBoss6Blob){
+      p._oscAng = (p._oscAng||0) + (p._oscFreq||0.055) * (window._gameDt||1);
+      const _baseVx = p._baseVx||p.vx;
+      const _baseVy = p._baseVy||p.vy;
+      const _baseLen = Math.hypot(_baseVx, _baseVy) || 1;
+      // Perpendicolare alla direzione di viaggio
+      const _perpX = -_baseVy / _baseLen;
+      const _perpY =  _baseVx / _baseLen;
+      const _osc = Math.sin(p._oscAng) * (p._oscAmp||3.2);
+      p.x += _perpX * _osc * (window._gameDt||1);
+      p.y += _perpY * _osc * (window._gameDt||1);
+    }
+
     // Gravità per proiettili con _gelaOwner (sputo parabolico)
     if(p._gelaOwner && p._gelaSpit){
       const _grav = (p._gelaGravity != null) ? p._gelaGravity : 0.10;
@@ -12170,6 +12196,28 @@ if(p.aoeRadius>0){
             player._crystalPoisonTick  = Date.now();
             createParticles(player.x+player.width/2, player.y+player.height/2, '#0077b6', 14, 4);
           }catch(_cp){}
+        }
+        // MiniBoss6 blob oscillante: mini-esplosione colorata + slow
+        if(p._miniBoss6Blob){
+          try{
+            const _bix = p.x, _biy = p.y;
+            // Esplosione visiva rosa-acqua
+            createParticles(_bix, _biy, '#f472b6', 14, 4);
+            createParticles(_bix, _biy, '#2dd4bf', 14, 4);
+            createParticles(_bix, _biy, '#ffffff', 6, 3);
+            spawnKillBurst(_bix, _biy, '#f472b6');
+            // Anello di espansione
+            setTimeout(()=>{
+              try{
+                createParticles(_bix, _biy, '#c084fc', 10, 5);
+                createParticles(_bix, _biy, '#2dd4bf', 8, 4);
+              }catch(e2){}
+            }, 80);
+            // Slow al player (20% per 2s)
+            if(!inv && typeof player.applySlow==='function'){
+              player.applySlow(0.20, 2000);
+            }
+          }catch(_mb6e){}
         }
         return false;
       }
@@ -12823,6 +12871,215 @@ ctx.globalAlpha = 1;
 
       ctx.restore();
       ctx.globalAlpha = 1;
+      return;
+    }
+
+    // MiniBoss6 blob oscillante — miscela rosa + verde acqua, forma gelatinosa
+    if(p._miniBoss6Blob){
+      const t   = (Date.now() - (p.created||0)) * 0.001;
+      const now = Date.now();
+      const pulse  = 0.5 + 0.5 * Math.sin(t * 5.5);
+      const pulse2 = 0.5 + 0.5 * Math.sin(t * 3.8 + 1.2);
+      const R = p.radius || 20;
+
+      // Direzione di volo (normalizzata)
+      const _bvx = p._baseVx || p.vx || 1;
+      const _bvy = p._baseVy || p.vy || 0;
+      const _blen = Math.hypot(_bvx, _bvy) || 1;
+      const _nx = _bvx / _blen; // versore avanzamento
+      const _ny = _bvy / _blen;
+      const _px = -_ny;          // perpendicolare
+      const _py =  _nx;
+      const _flightAng = Math.atan2(_bvy, _bvx);
+
+      // ── Inizializza dati persistenti ──────────────────────────
+      if(!p._blobPts){
+        p._blobPts = [];
+        const N = 14;
+        for(let i=0;i<N;i++){
+          const a = (i/N)*Math.PI*2;
+          const r = R*(0.58 + (Math.sin(i*1.7+2.3)*0.5+0.5)*0.55);
+          p._blobPts.push({ ang:a, r, s1:Math.random()*6.28, s2:Math.random()*6.28 });
+        }
+      }
+      // Goccioline satellite (generate una volta, orbitano)
+      if(!p._droplets){
+        p._droplets = [];
+        for(let d=0;d<5;d++){
+          p._droplets.push({
+            ang:  (d/5)*Math.PI*2 + Math.random()*0.4,
+            dist: R*(1.35 + Math.random()*0.55),
+            size: 2.5 + Math.random()*2.5,
+            speed:0.018 + Math.random()*0.022,
+            col:  d%2===0 ? 0 : 1  // 0=rosa, 1=acqua
+          });
+        }
+      }
+      // Traccia storica di posizioni (per scia sinusoidale vera)
+      if(!p._trail) p._trail = [];
+      p._trail.push({ x: p.x, y: p.y, t: now });
+      if(p._trail.length > 28) p._trail.shift();
+
+      ctx.save();
+
+      // ── 1. SCIA SINUSOIDALE COLORATA ─────────────────────────
+      // Disegna segmenti della trail con colore alternato rosa/acqua
+      if(p._trail.length > 2){
+        for(let i=1; i<p._trail.length; i++){
+          const frac = i / p._trail.length;
+          const prev = p._trail[i-1];
+          const curr = p._trail[i];
+          const alpha = frac * 0.55 * (0.6 + 0.4*pulse);
+          // Alterna colore rosa/acqua lungo la scia ogni ~4 punti
+          const colorFrac = (Math.sin(i * 0.65 + t*2)*0.5+0.5);
+          const r2 = Math.round(244*colorFrac + 45*(1-colorFrac));
+          const g2 = Math.round(114*colorFrac + 212*(1-colorFrac));
+          const b2 = Math.round(182*colorFrac + 191*(1-colorFrac));
+          const w  = R * frac * 0.65;
+          ctx.beginPath();
+          ctx.moveTo(prev.x, prev.y);
+          ctx.lineTo(curr.x, curr.y);
+          ctx.strokeStyle = `rgba(${r2},${g2},${b2},${alpha})`;
+          ctx.lineWidth = w;
+          ctx.lineCap = 'round';
+          ctx.shadowColor = `rgba(${r2},${g2},${b2},0.6)`;
+          ctx.shadowBlur   = w * 2.5;
+          ctx.stroke();
+        }
+      }
+
+      // ── 2. ALONE ESTERNO BICOLORE ─────────────────────────────
+      ctx.translate(p.x, p.y);
+      ctx.globalAlpha = 0.28 + 0.14*pulse2;
+      const auraGr = ctx.createRadialGradient(0,0,R*0.5,0,0,R*2.2);
+      auraGr.addColorStop(0,    'rgba(244,114,182,0)');
+      auraGr.addColorStop(0.30, `rgba(244,114,182,${0.38*pulse})`);
+      auraGr.addColorStop(0.55, `rgba(45,212,191,${0.28*pulse2})`);
+      auraGr.addColorStop(0.80, `rgba(45,212,191,${0.14*pulse})`);
+      auraGr.addColorStop(1,    'rgba(0,0,0,0)');
+      ctx.fillStyle = auraGr;
+      ctx.beginPath(); ctx.arc(0,0,R*2.2,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // ── 3. ANELLO ESTERNO ROTANTE ACQUA ─────────────────────
+      ctx.save();
+      ctx.rotate(t * 1.4);
+      ctx.globalAlpha = 0.45 + 0.20*pulse;
+      ctx.strokeStyle = `rgba(45,212,191,0.85)`;
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = '#2dd4bf';
+      ctx.shadowBlur  = 12;
+      ctx.setLineDash([8,6]);
+      ctx.lineDashOffset = t * 18;
+      ctx.beginPath(); ctx.arc(0,0,R*1.42,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+
+      // ── 4. ANELLO INTERNO ROTANTE ROSA (verso opposta) ────────
+      ctx.save();
+      ctx.rotate(-t * 2.1);
+      ctx.globalAlpha = 0.40 + 0.18*pulse2;
+      ctx.strokeStyle = `rgba(244,114,182,0.88)`;
+      ctx.lineWidth = 1.8;
+      ctx.shadowColor = '#f472b6';
+      ctx.shadowBlur  = 10;
+      ctx.setLineDash([5,9]);
+      ctx.lineDashOffset = -t * 22;
+      ctx.beginPath(); ctx.arc(0,0,R*1.18,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+
+      // ── 5. CORPO BLOB GELATINOSO ─────────────────────────────
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      const pts = p._blobPts;
+      const NN  = pts.length;
+      for(let i=0; i<NN; i++){
+        const pt = pts[i];
+        // Due frequenze di wobble diverse per aspetto più organico
+        const wobble = 1 + 0.13*Math.sin(t*4.8 + pt.s1) + 0.07*Math.sin(t*2.3 + pt.s2);
+        const r = pt.r * wobble;
+        const bx = Math.cos(pt.ang) * r;
+        const by = Math.sin(pt.ang) * r;
+        if(i===0) ctx.moveTo(bx,by); else ctx.lineTo(bx,by);
+      }
+      ctx.closePath();
+
+      // Gradient bicolore rosa → acqua con shift temporale
+      const colorShift = Math.sin(t * 1.6) * 0.5 + 0.5; // 0–1 alterna dominanza
+      const gr = ctx.createRadialGradient(R*0.08*Math.cos(t*2), -R*0.15, R*0.04, 0,0, R*1.08);
+      gr.addColorStop(0,   `rgba(255,235,255,0.98)`);
+      gr.addColorStop(0.18,`rgba(${Math.round(240-50*colorShift)},${Math.round(80+80*colorShift)},${Math.round(180-20*colorShift)},0.95)`);
+      gr.addColorStop(0.48,`rgba(${Math.round(100+100*colorShift)},${Math.round(200+20*(1-colorShift))},${Math.round(180+10*colorShift)},0.85)`);
+      gr.addColorStop(0.75,`rgba(45,212,191,0.65)`);
+      gr.addColorStop(1,   `rgba(20,120,110,0.20)`);
+      ctx.fillStyle   = gr;
+      ctx.shadowColor = `rgba(${Math.round(244-100*colorShift)},${Math.round(114+98*colorShift)},${Math.round(182+9*(1-colorShift))},0.90)`;
+      ctx.shadowBlur  = 18 + 12*pulse;
+      ctx.fill();
+
+      // ── 6. BORDO IRIDESCENTE ─────────────────────────────────
+      // Crea un gradiente conical imitato con due stroke sovrapposti
+      ctx.lineWidth = 2.2;
+      ctx.globalAlpha = 0.70 + 0.20*pulse;
+      ctx.strokeStyle = `rgba(45,212,191,${0.80+0.20*pulse})`;
+      ctx.shadowColor = '#2dd4bf';
+      ctx.shadowBlur  = 8 + 5*pulse;
+      ctx.stroke();
+      // Secondo bordo rosa sfasato
+      ctx.save();
+      ctx.rotate(t * 0.8);
+      ctx.globalAlpha = 0.40 + 0.18*pulse2;
+      ctx.strokeStyle = `rgba(244,114,182,0.75)`;
+      ctx.lineWidth   = 1.2;
+      ctx.shadowColor = '#f472b6';
+      ctx.shadowBlur  = 6;
+      ctx.stroke();
+      ctx.restore();
+      ctx.globalAlpha = 1;
+
+      // ── 7. NUCLEO LUMINOSO INTERNO ────────────────────────────
+      const coreGr = ctx.createRadialGradient(0,0,0,0,0,R*0.42);
+      coreGr.addColorStop(0,   `rgba(255,255,255,${0.85+0.15*pulse})`);
+      coreGr.addColorStop(0.40,`rgba(255,200,240,${0.55*pulse})`);
+      coreGr.addColorStop(0.75,`rgba(120,230,215,${0.30*pulse2})`);
+      coreGr.addColorStop(1,   'rgba(45,212,191,0)');
+      ctx.fillStyle = coreGr;
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur  = 14 + 8*pulse;
+      ctx.beginPath(); ctx.arc(0,0,R*0.42,0,Math.PI*2); ctx.fill();
+
+      // ── 8. RIFLESSO SPECULARE ────────────────────────────────
+      ctx.globalAlpha = 0.36 + 0.16*pulse;
+      ctx.fillStyle   = 'rgba(255,252,255,0.95)';
+      ctx.shadowBlur  = 0;
+      ctx.beginPath();
+      ctx.ellipse(-R*0.16, -R*0.21, R*0.15, R*0.066, -0.3, 0, Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // ── 9. GOCCIOLINE SATELLITE ORBITANTI ────────────────────
+      ctx.shadowBlur = 0;
+      for(const d of p._droplets){
+        d.ang += d.speed * (window._gameDt||1);
+        const dx2 = Math.cos(d.ang) * d.dist;
+        const dy2 = Math.sin(d.ang) * d.dist;
+        const dalpha = 0.55 + 0.35*Math.sin(d.ang*2 + t*3.5);
+        ctx.globalAlpha = dalpha;
+        if(d.col===0){
+          ctx.fillStyle = `rgba(244,114,182,0.90)`;
+          ctx.shadowColor = '#f472b6';
+        } else {
+          ctx.fillStyle = `rgba(45,212,191,0.90)`;
+          ctx.shadowColor = '#2dd4bf';
+        }
+        ctx.shadowBlur = d.size * 2.8;
+        ctx.beginPath();
+        ctx.arc(dx2, dy2, d.size*(0.75+0.25*pulse), 0, Math.PI*2);
+        ctx.fill();
+      }
+      ctx.shadowBlur  = 0;
+      ctx.globalAlpha = 1;
+
+      ctx.restore();
       return;
     }
 
@@ -20995,6 +21252,317 @@ class Boss6Enemy extends Enemy{
   }
 }
 
+// ================================================================
+//  MINIBOSS6 — 4 frammenti nati dalla morte del Boss6
+//  Si posizionano ai 4 vertici di un quadrato immaginario
+//  col player al centro. Attaccano con blob oscillante rosa-acqua.
+// ================================================================
+class MiniBoss6Enemy extends Enemy{
+  constructor(x, y, level){
+    super('miniboss6', level||30);
+    this.width  = 90;
+    this.height = 90;
+    this.x = x - this.width/2;
+    this.y = y - this.height/2;
+    this.maxHP = 600;
+    this.hp    = this.maxHP;
+    this.speed = 3.2;
+    this.damage = 30;
+
+    // Indice vertice (0-3) assegnato dall'esterno dopo lo spawn
+    this._cornerIdx = 0;
+    // Raggio del quadrato dal player
+    this._squareRadius = 210;
+
+    // Attacco blob oscillante
+    this._blobCooldown = 2800;
+    this._lastBlob = Date.now() - this._blobCooldown + 600;
+
+    // FX charge
+    this._chargeFxUntil = 0;
+    this._lastTouch = 0;
+
+    // Forma blob pre-generata
+    this._blobPts = null;
+  }
+
+  _fireOscBlob(player){
+    const cx = this.x + this.width/2;
+    const cy = this.y + this.height/2;
+    const px = player.x + player.width/2;
+    const py = player.y + player.height/2;
+    const ang = Math.atan2(py - cy, px - cx);
+    const speed = 3.2;
+
+    spawnProjectile({
+      x: cx, y: cy,
+      vx: Math.cos(ang) * speed,
+      vy: Math.sin(ang) * speed,
+      damage: 18,
+      ttl: 3400,
+      color: '#c084fc',
+      radius: 20,
+      friendly: false,
+      source: this,
+      _miniBoss6Blob: true,       // flag per draw oscillante
+      _oscAng: 0,                 // angolo oscillazione perpend.
+      _oscAmp: 3.2,               // ampiezza oscillazione px
+      _oscFreq: 0.055,            // frequenza oscillazione
+      _baseVx: Math.cos(ang) * speed,
+      _baseVy: Math.sin(ang) * speed,
+      shape: 'circle'
+    });
+
+    createParticles(cx, cy, '#f472b6', 10, 3);
+    createParticles(cx, cy, '#2dd4bf', 10, 3);
+  }
+
+  update(player){
+    if(Date.now() < (this.spawnFreezeUntil||0)) return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0; return;
+    }
+    player = getPreferredTarget(this, player);
+
+    const now = Date.now();
+    const px = player.x + player.width/2;
+    const py = player.y + player.height/2;
+
+    // Calcola il vertice target: quadrato intorno al player
+    const corners = [
+      { x: px - this._squareRadius, y: py - this._squareRadius },
+      { x: px + this._squareRadius, y: py - this._squareRadius },
+      { x: px + this._squareRadius, y: py + this._squareRadius },
+      { x: px - this._squareRadius, y: py + this._squareRadius },
+    ];
+    const target = corners[this._cornerIdx % 4];
+
+    const cx = this.x + this.width/2;
+    const cy = this.y + this.height/2;
+    const dx = target.x - cx;
+    const dy = target.y - cy;
+    const dist = Math.hypot(dx, dy) || 1;
+
+    if(dist > 22){
+      this.vx = (dx/dist) * this.speed;
+      this.vy = (dy/dist) * this.speed;
+    } else {
+      this.vx *= 0.7;
+      this.vy *= 0.7;
+    }
+
+    // Clamp dentro canvas
+    const _dt = window._gameDt || 1;
+    this.x += this.vx * _dt;
+    this.y += this.vy * _dt;
+    this.x = Math.max(20, Math.min(canvas.width  - this.width  - 20, this.x));
+    this.y = Math.max(40, Math.min(canvas.height - this.height - 20, this.y));
+
+    // Attacco blob oscillante
+    if(now - this._lastBlob >= this._blobCooldown){
+      this._lastBlob = now;
+      this._chargeFxUntil = now + 280;
+      this._fireOscBlob(player);
+    }
+
+    // FX carica
+    if(now < this._chargeFxUntil){
+      createParticles(cx, cy, '#f472b6', 2, 2);
+      createParticles(cx, cy, '#2dd4bf', 2, 2);
+    }
+
+    // Nessun danno da contatto: solo il blob oscillante fa danni
+  }
+
+  draw(){
+    const cx = this.x + this.width/2;
+    const cy = this.y + this.height/2;
+    const R  = this.width * 0.46;
+    const t  = Date.now() * 0.001;
+    // Due pulse sfasati per ogni cornerIdx (tutti e 4 pulsano diversamente)
+    const pulse  = 0.5 + 0.5*Math.sin(t * 3.4 + this._cornerIdx * 1.57);
+    const pulse2 = 0.5 + 0.5*Math.sin(t * 2.1 + this._cornerIdx * 1.57 + 1.0);
+    // Shift colore: il miniboss alterna dominanza rosa/acqua in base al suo cornerIdx
+    const cBase = this._cornerIdx % 2 === 0 ? 0 : 1; // 0=dominanza rosa, 1=dominanza acqua
+
+    // Genera punti blob una sola volta (due frequenze per forma più organica)
+    if(!this._blobPts){
+      this._blobPts = [];
+      const N = 14;
+      for(let i=0;i<N;i++){
+        const ang = (i/N)*Math.PI*2;
+        const r = R*(0.65 + (Math.sin(i*1.9+this._cornerIdx*0.9)*0.5+0.5)*0.45);
+        this._blobPts.push({ ang, r, s1: Math.random()*6.28, s2: Math.random()*6.28 });
+      }
+    }
+    // Tentacoli/code gelatinose (generate una volta)
+    if(!this._tentacles){
+      this._tentacles = [];
+      for(let k=0;k<4;k++){
+        this._tentacles.push({
+          baseAng: (k/4)*Math.PI*2 + Math.random()*0.5,
+          len: R*(0.55+Math.random()*0.35),
+          freq: 1.8+Math.random()*1.2,
+          phase: Math.random()*6.28,
+          col: k%2===0 ? 0 : 1
+        });
+      }
+    }
+
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    // ── 1. ALONE PULSANTE BICOLORE ────────────────────────────
+    ctx.globalAlpha = 0.20 + 0.12*pulse;
+    const auraGr = ctx.createRadialGradient(0,0,R*0.3,0,0,R*2.0);
+    const aC1 = cBase===0 ? `rgba(244,114,182,${0.40*pulse})` : `rgba(45,212,191,${0.40*pulse})`;
+    const aC2 = cBase===0 ? `rgba(45,212,191,${0.22*pulse2})` : `rgba(244,114,182,${0.22*pulse2})`;
+    auraGr.addColorStop(0,   'rgba(0,0,0,0)');
+    auraGr.addColorStop(0.35, aC1);
+    auraGr.addColorStop(0.70, aC2);
+    auraGr.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.fillStyle = auraGr;
+    ctx.beginPath(); ctx.arc(0,0,R*2.0,0,Math.PI*2); ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // ── 2. ANELLO ESTERNO TRATTEGGIATO ROTANTE ───────────────
+    ctx.save();
+    ctx.rotate(t * (cBase===0 ? 1.1 : -1.1));
+    ctx.globalAlpha = 0.50 + 0.20*pulse;
+    ctx.strokeStyle = cBase===0 ? `rgba(45,212,191,0.88)` : `rgba(244,114,182,0.88)`;
+    ctx.lineWidth = 2;
+    ctx.shadowColor = cBase===0 ? '#2dd4bf' : '#f472b6';
+    ctx.shadowBlur  = 10;
+    ctx.setLineDash([6,5]);
+    ctx.lineDashOffset = t * 15;
+    ctx.beginPath(); ctx.arc(0,0,R*1.55,0,Math.PI*2); ctx.stroke();
+    ctx.restore();
+
+    // ── 3. TENTACOLI GELATINOSI ───────────────────────────────
+    ctx.setLineDash([]);
+    for(const ten of this._tentacles){
+      const swayAng = ten.baseAng + Math.sin(t*ten.freq + ten.phase)*0.55;
+      const tx2 = Math.cos(swayAng)*(R + ten.len*(0.7+0.3*pulse));
+      const ty2 = Math.sin(swayAng)*(R + ten.len*(0.7+0.3*pulse));
+      const mx  = Math.cos(swayAng + 0.5)*R*0.95;
+      const my  = Math.sin(swayAng + 0.5)*R*0.95;
+      const col = ten.col===0 ? [244,114,182] : [45,212,191];
+      const tenAlpha = 0.35 + 0.20*pulse;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(ten.baseAng)*R*0.7, Math.sin(ten.baseAng)*R*0.7);
+      ctx.quadraticCurveTo(mx, my, tx2, ty2);
+      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${tenAlpha})`;
+      ctx.lineWidth = 4*(0.6+0.4*pulse);
+      ctx.lineCap = 'round';
+      ctx.shadowColor = `rgba(${col[0]},${col[1]},${col[2]},0.7)`;
+      ctx.shadowBlur  = 8;
+      ctx.stroke();
+      // Pallina in cima al tentacolo
+      ctx.globalAlpha = 0.65 + 0.25*pulse;
+      ctx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},0.88)`;
+      ctx.shadowBlur  = 6;
+      ctx.beginPath();
+      ctx.arc(tx2, ty2, 4*(0.8+0.2*pulse), 0, Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    // ── 4. CORPO BLOB PRINCIPALE ─────────────────────────────
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    const pts = this._blobPts;
+    const N   = pts.length;
+    for(let i=0;i<N;i++){
+      const pt = pts[i];
+      const wobble = 1 + 0.14*Math.sin(t*4.5+pt.s1) + 0.06*Math.sin(t*2.2+pt.s2);
+      const r = pt.r * wobble;
+      const bx = Math.cos(pt.ang)*r, by = Math.sin(pt.ang)*r;
+      if(i===0) ctx.moveTo(bx,by); else ctx.lineTo(bx,by);
+    }
+    ctx.closePath();
+
+    // Gradient bicolore con shift temporale
+    const cShift = Math.sin(t*1.4 + this._cornerIdx)*0.5+0.5;
+    const gr = ctx.createRadialGradient(R*0.06*Math.cos(t*1.8),-R*0.14,R*0.04, 0,0, R*1.08);
+    gr.addColorStop(0,   'rgba(255,240,255,0.98)');
+    gr.addColorStop(0.20,`rgba(${Math.round(244-90*cShift)},${Math.round(114+98*cShift)},${Math.round(182+9*(1-cShift))},0.95)`);
+    gr.addColorStop(0.50,`rgba(${Math.round(100+120*cShift)},${Math.round(200+12*(1-cShift))},${Math.round(180+11*cShift)},0.82)`);
+    gr.addColorStop(0.78,'rgba(45,212,191,0.60)');
+    gr.addColorStop(1,   'rgba(20,120,110,0.18)');
+    ctx.fillStyle   = gr;
+    const glowCol = cBase===0 ? '#f472b6' : '#2dd4bf';
+    ctx.shadowColor = glowCol;
+    ctx.shadowBlur  = 20 + 12*pulse;
+    ctx.fill();
+
+    // ── 5. BORDO IRIDESCENTE DOPPIO ──────────────────────────
+    ctx.lineWidth = 2.2;
+    ctx.globalAlpha = 0.75 + 0.18*pulse;
+    ctx.strokeStyle = cBase===0 ? `rgba(45,212,191,0.85)` : `rgba(244,114,182,0.85)`;
+    ctx.shadowColor = cBase===0 ? '#2dd4bf' : '#f472b6';
+    ctx.shadowBlur  = 9 + 5*pulse;
+    ctx.stroke();
+    ctx.save();
+    ctx.rotate(t*0.9);
+    ctx.globalAlpha = 0.32 + 0.15*pulse2;
+    ctx.strokeStyle = cBase===0 ? 'rgba(244,114,182,0.70)' : 'rgba(45,212,191,0.70)';
+    ctx.lineWidth = 1.1; ctx.shadowBlur = 5;
+    ctx.stroke();
+    ctx.restore();
+    ctx.globalAlpha = 1;
+
+    // ── 6. NUCLEO LUMINOSO ────────────────────────────────────
+    const coreGr = ctx.createRadialGradient(0,0,0,0,0,R*0.38);
+    coreGr.addColorStop(0,   `rgba(255,255,255,${0.88+0.12*pulse})`);
+    coreGr.addColorStop(0.35,cBase===0?`rgba(255,200,235,${0.55*pulse})`:`rgba(180,245,240,${0.55*pulse})`);
+    coreGr.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.fillStyle = coreGr;
+    ctx.shadowColor = '#ffffff'; ctx.shadowBlur = 12+8*pulse;
+    ctx.beginPath(); ctx.arc(0,0,R*0.38,0,Math.PI*2); ctx.fill();
+
+    // ── 7. "OCCHIO" al centro — simbolo del frammento ────────
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 0.70 + 0.25*pulse;
+    const eyeCol = cBase===0 ? 'rgba(45,212,191,0.95)' : 'rgba(244,114,182,0.95)';
+    ctx.fillStyle = eyeCol;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, R*0.14, R*0.08*(0.6+0.4*pulse), t*0.6, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(10,10,20,0.85)';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, R*0.06, R*0.06*(0.5+0.5*pulse), 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // ── 8. RIFLESSO SPECULARE ────────────────────────────────
+    ctx.globalAlpha = 0.32 + 0.14*pulse;
+    ctx.fillStyle = 'rgba(255,252,255,0.95)';
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.ellipse(-R*0.16,-R*0.20,R*0.14,R*0.063,-0.3,0,Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    ctx.restore();
+
+    // ── 9. HP BAR ─────────────────────────────────────────────
+    const hpPct = this.hp / this.maxHP;
+    {
+      const _hbX=this.x, _hbY=this.y-10, _hbW=this.width, _hbH=5;
+      ctx.save();
+      ctx.fillStyle='rgba(0,0,0,0.70)'; ctx.fillRect(_hbX-1,_hbY-1,_hbW+2,_hbH+2);
+      ctx.fillStyle='rgba(30,30,30,0.85)'; ctx.fillRect(_hbX,_hbY,_hbW,_hbH);
+      const _hbC=hpPct>0.5?['#2dd4bf','#0e9488']:hpPct>0.25?['#f472b6','#db2777']:['#ff4444','#c0392b'];
+      const _hbG=ctx.createLinearGradient(_hbX,_hbY,_hbX,_hbY+_hbH);
+      _hbG.addColorStop(0,_hbC[0]); _hbG.addColorStop(1,_hbC[1]);
+      ctx.fillStyle=_hbG; ctx.fillRect(_hbX,_hbY,_hbW*hpPct,_hbH);
+      ctx.restore();
+    }
+
+    try{ drawEnemyPoisonFX(this); }catch(e){}
+  }
+}
+
 
 function spawnEnemiesForLevel(level){
   enemies.length=0;
@@ -21543,6 +22111,7 @@ function startGame(){
   try{ _tiffanyBlobs=[]; }catch(_tb){}
   window._demonicFlames=[];
   window._pendingMiniSpawns=[];
+  window._pendingMiniBoss6Spawns=[];
   if(window.cosmoSingularity) window.cosmoSingularity=null;
   if(window.cosmoTrails) window.cosmoTrails=[];
   if(window._marzArcaneLinks) window._marzArcaneLinks=[];
@@ -22504,6 +23073,29 @@ return;
       });
     }
   }catch(_mge){}
+
+  // Processa spawn MiniBoss6 pendenti (Boss6 si divide in 4 al momento della morte)
+  try{
+    if(window._pendingMiniBoss6Spawns && window._pendingMiniBoss6Spawns.length){
+      const lvl = typeof currentLevel!=='undefined' ? currentLevel : 30;
+      for(const sp of window._pendingMiniBoss6Spawns){
+        for(let m=0;m<4;m++){
+          const mini = new MiniBoss6Enemy(sp.x, sp.y, lvl);
+          mini._cornerIdx = m;
+          mini._squareRadius = 210;
+          enemies.push(mini);
+        }
+        // FX split: esplosione colorata massiccia
+        createParticles(sp.x, sp.y, '#f472b6', 30, 6);
+        createParticles(sp.x, sp.y, '#2dd4bf', 30, 6);
+        createParticles(sp.x, sp.y, '#ffffff', 16, 5);
+        try{ spawnKillBurst(sp.x, sp.y, '#f472b6'); }catch(e2){}
+        setTimeout(()=>{ try{ spawnKillBurst(sp.x, sp.y, '#2dd4bf'); }catch(e2){} }, 100);
+        setTimeout(()=>{ try{ shakeScreen(); }catch(e2){} }, 60);
+      }
+      window._pendingMiniBoss6Spawns = [];
+    }
+  }catch(_mb6ge){}
 
   if(enemies.length===0){
     if(!levelAdvanceLock){
@@ -25538,6 +26130,7 @@ function _applyMarcusConfusion(enemy){
   wrap(typeof BossEnemy!=='undefined' && BossEnemy.prototype);
   wrap(typeof Boss5Enemy!=='undefined' && Boss5Enemy.prototype);
   wrap(typeof Boss6Enemy!=='undefined' && Boss6Enemy.prototype);
+  if(typeof MiniBoss6Enemy!=='undefined') wrap(MiniBoss6Enemy.prototype);
   wrap(typeof GelatinoEnemy!=='undefined' && GelatinoEnemy.prototype);
   wrap(typeof MiniGelatinoEnemy!=='undefined' && MiniGelatinoEnemy.prototype);
   wrap(typeof CrystalThornEnemy!=='undefined' && CrystalThornEnemy.prototype);
@@ -27471,6 +28064,28 @@ function _localRafLoop(){
       });
     }
   }catch(_mge){}
+
+  // Processa spawn MiniBoss6 pendenti — game loop co-op
+  try{
+    if(window._pendingMiniBoss6Spawns && window._pendingMiniBoss6Spawns.length){
+      const lvl = typeof currentLevel!=='undefined' ? currentLevel : 30;
+      for(const sp of window._pendingMiniBoss6Spawns){
+        for(let m=0;m<4;m++){
+          const mini = new MiniBoss6Enemy(sp.x, sp.y, lvl);
+          mini._cornerIdx = m;
+          mini._squareRadius = 210;
+          enemies.push(mini);
+        }
+        createParticles(sp.x, sp.y, '#f472b6', 30, 6);
+        createParticles(sp.x, sp.y, '#2dd4bf', 30, 6);
+        createParticles(sp.x, sp.y, '#ffffff', 16, 5);
+        try{ spawnKillBurst(sp.x, sp.y, '#f472b6'); }catch(e2){}
+        setTimeout(()=>{ try{ spawnKillBurst(sp.x, sp.y, '#2dd4bf'); }catch(e2){} }, 100);
+        setTimeout(()=>{ try{ shakeScreen(); }catch(e2){} }, 60);
+      }
+      window._pendingMiniBoss6Spawns = [];
+    }
+  }catch(_mb6ge2){}
 
   // Game over if both dead
   const p1dead = !player  || player.hp  <= 0;
